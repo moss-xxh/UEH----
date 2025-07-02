@@ -1,0 +1,41 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:modao.cc)",
+      "Bash(diff:*)",
+      "Bash(node:*)",
+      "Bash(rm:*)",
+      "Bash(ls:*)",
+      "Bash(rg:*)",
+      "WebFetch(domain:echarts.apache.org)",
+      "Bash(grep:*)",
+      "Bash(find:*)",
+      "Bash(python3:*)",
+      "Bash(cat:*)",
+      "Bash(sed:*)",
+      "Bash(cp:*)",
+      "Bash(touch:*)",
+      "Bash(awk:*)",
+      "Bash(mv:*)",
+      "Bash(open index.html)",
+      "Bash(open:*)",
+      "mcp__ide__getDiagnostics",
+      "WebFetch(domain:github.com)",
+      "Bash(curl:*)",
+      "WebFetch(domain:nemweb.com.au)",
+      "Bash(wget:*)",
+      "Bash(unzip:*)",
+      "Bash(python:*)",
+      "Bash(gh pr:*)",
+      "Bash(tmutil listlocalsnapshots:*)",
+      "Bash(tmutil listlocalsnapshotdates:*)",
+      "Bash(xattr:*)",
+      "Bash(tmutil restore:*)",
+      "Bash(git checkout:*)",
+      "Bash(git init:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)"
+    ],
+    "deny": []
+  }
+}

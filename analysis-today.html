@@ -1,0 +1,1353 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>今日实时分析 - U Energy</title>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <link rel="stylesheet" href="components/common-styles.css">
+    <link rel="stylesheet" href="components/i18n.css">
+    <link rel="stylesheet" href="components/notification-center.css">
+    <link rel="stylesheet" href="components/header-nav.css">
+    <link rel="stylesheet" href="components/standard-layout.css">
+    <script src="components/i18n.js"></script>
+    <script src="components/simple-message-icon.js"></script>
+    <script src="components/header-nav.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #000 !important;
+        }
+
+        .container {
+            max-width: 95%;
+            margin: 0 auto;
+            padding: 120px 10px 24px;
+            min-height: calc(100vh - 200px);
+        }
+
+        /* Page Header */
+        .page-header {
+            margin-bottom: 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .page-title {
+            font-size: 36px;
+            font-weight: 200;
+            color: var(--color-text);
+            margin: 0;
+            letter-spacing: -1px;
+        }
+
+        .current-time {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            color: var(--color-text);
+        }
+
+        .time-display {
+            font-size: 24px;
+            font-weight: 300;
+            color: var(--color-primary);
+        }
+
+        .date-display {
+            font-size: 16px;
+            color: rgba(255,255,255,0.6);
+        }
+
+        .analysis-toggle {
+            display: flex;
+            gap: 12px;
+        }
+
+        .toggle-btn {
+            padding: 10px 24px;
+            border: 1px solid rgba(255,255,255,0.2);
+            background: transparent;
+            color: var(--color-text);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+
+        .toggle-btn:hover {
+            background: rgba(255,255,255,0.05);
+            border-color: rgba(255,255,255,0.3);
+        }
+
+        .toggle-btn.active {
+            background: var(--color-primary);
+            border-color: var(--color-primary);
+            color: #fff;
+        }
+
+        /* Main Decision Panel */
+        .decision-panel {
+            background: var(--color-bg-card);
+            border: 1.5px solid var(--color-border);
+            border-radius: 24px;
+            padding: 32px;
+            margin-bottom: 24px;
+            text-align: center;
+            position: relative;
+        }
+
+        .decision-main {
+            display: flex;
+            align-items: stretch;
+            justify-content: space-between;
+            gap: 40px;
+        }
+
+        .decision-center {
+            flex: 1;
+            text-align: center;
+        }
+
+        .decision-side {
+            flex: 0 0 280px;
+            align-self: stretch;
+        }
+
+        .current-recommendation {
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--color-primary);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+        }
+
+        .confidence-meter {
+            margin: 20px 0;
+        }
+
+        .confidence-label {
+            font-size: 16px;
+            color: rgba(255,255,255,0.6);
+            margin-bottom: 8px;
+        }
+
+        .confidence-score {
+            font-size: 48px;
+            font-weight: 700;
+            color: var(--color-primary);
+            margin-bottom: 8px;
+        }
+
+        .confidence-bar {
+            height: 8px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 0 auto;
+            max-width: 300px;
+        }
+
+        .confidence-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--color-primary), #00ff88);
+            transition: width 0.5s ease;
+        }
+
+        .risk-opportunity-panel {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 16px;
+            padding: 20px;
+            height: 100%;
+            min-height: 240px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .panel-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .panel-items {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            flex: 1;
+        }
+
+        .panel-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        
+        .panel-item span:last-child {
+            flex: 1;
+            white-space: normal;
+            word-break: break-word;
+        }
+
+        .risk-item {
+            color: #ff9500;
+        }
+
+        .opportunity-item {
+            color: var(--color-primary);
+        }
+
+        .status-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .status-label {
+            font-size: 14px;
+            color: rgba(255,255,255,0.6);
+        }
+
+        .status-value {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--color-text);
+        }
+
+        .status-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .status-indicator.active {
+            background: var(--color-primary);
+        }
+
+        .status-indicator.warning {
+            background: #ff9500;
+        }
+
+        .status-indicator.danger {
+            background: #ff3b30;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.6; transform: scale(1.2); }
+        }
+
+        /* Dimension Cards */
+        .dimension-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 20px;
+            margin-bottom: 24px;
+        }
+
+        .dimension-card {
+            background: var(--color-bg-card);
+            border: 1.5px solid var(--color-border);
+            border-radius: 16px;
+            padding: 24px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .dimension-card:hover {
+            border-color: rgba(255,255,255,0.3);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+            transform: translateY(-2px);
+        }
+
+        .dimension-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .dimension-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--color-text);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .dimension-score {
+            font-size: 28px;
+            font-weight: 700;
+        }
+
+        .score-high {
+            color: var(--color-primary);
+        }
+
+        .score-medium {
+            color: #ff9500;
+        }
+
+        .score-low {
+            color: #ff3b30;
+        }
+
+        .dimension-content {
+            margin-bottom: 16px;
+        }
+
+        .factor-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            font-size: 14px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .factor-item:last-child {
+            border-bottom: none;
+        }
+
+        .factor-name {
+            color: rgba(255,255,255,0.7);
+        }
+
+        .factor-value {
+            color: var(--color-text);
+            font-weight: 500;
+        }
+
+        .dimension-conclusion {
+            background: rgba(255,255,255,0.03);
+            border-radius: 8px;
+            padding: 12px;
+            font-size: 14px;
+            color: rgba(255,255,255,0.9);
+            line-height: 1.6;
+            margin-bottom: 12px;
+        }
+
+        .dimension-bar {
+            height: 6px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .dimension-bar-fill {
+            height: 100%;
+            border-radius: 3px;
+            transition: width 0.5s ease;
+        }
+
+        /* Real-time Metrics */
+        .realtime-metrics {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .metric-box {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 12px;
+            padding: 16px;
+        }
+
+        .metric-label {
+            font-size: 13px;
+            color: rgba(255,255,255,0.6);
+            margin-bottom: 4px;
+        }
+
+        .metric-value {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--color-text);
+            display: flex;
+            align-items: baseline;
+            gap: 8px;
+        }
+
+        .metric-unit {
+            font-size: 14px;
+            font-weight: 400;
+            color: rgba(255,255,255,0.6);
+        }
+
+        .metric-trend {
+            font-size: 12px;
+            margin-top: 4px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .trend-up {
+            color: var(--color-primary);
+        }
+
+        .trend-down {
+            color: #ff3b30;
+        }
+
+        /* Operation Recommendations */
+        .operation-box {
+            background: linear-gradient(135deg, rgba(0,255,136,0.1), rgba(0,255,136,0.05));
+            border: 1.5px solid rgba(0,255,136,0.3);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .operation-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--color-primary);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .operation-content {
+            font-size: 14px;
+            line-height: 1.6;
+            color: var(--color-text);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .action-btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+        }
+
+        .action-btn.primary {
+            background: var(--color-primary);
+            color: #000;
+        }
+
+        .action-btn.primary:hover {
+            background: var(--color-primary-hover);
+            transform: translateY(-1px);
+        }
+
+        .action-btn.secondary {
+            background: transparent;
+            color: var(--color-text);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .action-btn.secondary:hover {
+            background: rgba(255,255,255,0.05);
+            border-color: rgba(255,255,255,0.3);
+        }
+
+        /* Chart Container */
+        .chart-container {
+            height: 300px;
+            margin-top: 16px;
+        }
+
+        /* Risk Alert */
+        .risk-alert {
+            background: rgba(255,59,48,0.1);
+            border: 1px solid rgba(255,59,48,0.3);
+            border-radius: 8px;
+            padding: 12px 16px;
+            margin-top: 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .risk-icon {
+            font-size: 20px;
+        }
+
+        .risk-text {
+            font-size: 14px;
+            color: #ff3b30;
+        }
+
+        /* Analysis Conclusion */
+        .conclusion-section {
+            background: var(--color-bg-card);
+            border: 1.5px solid var(--color-border);
+            border-radius: var(--radius);
+            padding: 32px;
+            margin-top: 32px;
+        }
+
+        .conclusion-header {
+            font-size: 24px;
+            font-weight: 500;
+            color: var(--color-text);
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .conclusion-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+        }
+
+        .conclusion-item {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 12px;
+            padding: 24px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .conclusion-item:hover {
+            border-color: rgba(255,255,255,0.2);
+            background: rgba(255,255,255,0.05);
+            transform: translateY(-2px);
+        }
+
+        .conclusion-label {
+            font-size: 16px;
+            color: rgba(255,255,255,0.7);
+            margin-bottom: 12px;
+            font-weight: 500;
+        }
+
+        .conclusion-value {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--color-primary);
+            margin-bottom: 8px;
+        }
+
+        .conclusion-desc {
+            font-size: 14px;
+            color: rgba(255,255,255,0.8);
+            line-height: 1.5;
+        }
+
+        /* Analysis Panel */
+        .analysis-panel {
+            background: var(--color-bg-card);
+            border: 1.5px solid var(--color-border);
+            border-radius: var(--radius);
+            padding: 32px;
+            margin-top: 24px;
+        }
+
+        .analysis-header {
+            font-size: 24px;
+            font-weight: 500;
+            color: var(--color-text);
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .dimension-grid {
+                grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            }
+            
+            .decision-main {
+                flex-direction: column;
+            }
+            
+            .decision-side {
+                flex: 1;
+                width: 100%;
+                max-width: 500px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 100px 10px 24px;
+            }
+
+            .page-header {
+                flex-direction: column;
+                gap: 16px;
+                align-items: flex-start;
+            }
+
+            .status-bar {
+                flex-direction: column;
+                gap: 16px;
+                align-items: flex-start;
+            }
+
+            .realtime-metrics {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Container -->
+    <div id="headerContainer"></div>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1 class="page-title">今日实时分析</h1>
+            <div style="display: flex; align-items: center; gap: 24px;">
+                <div class="analysis-toggle">
+                    <button class="toggle-btn" onclick="switchAnalysisMode('historical', this)">历史数据分析</button>
+                    <button class="toggle-btn active" onclick="switchAnalysisMode('realtime', this)">实时数据分析</button>
+                </div>
+                <div class="current-time">
+                    <div class="date-display" id="currentDate">2025年7月1日</div>
+                    <div class="time-display" id="currentTime">14:35:22</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Decision Panel -->
+        <div class="decision-panel">
+            <div class="decision-main">
+                <!-- Opportunity Panel Left -->
+                <div class="decision-side">
+                    <div class="risk-opportunity-panel">
+                        <div class="panel-title">
+                            <span>💡</span>
+                            <span>机会提示</span>
+                        </div>
+                        <div class="panel-items">
+                            <div class="panel-item opportunity-item">
+                                <span>✅</span>
+                                <span>高温天气，空调负荷激增</span>
+                            </div>
+                            <div class="panel-item opportunity-item">
+                                <span>✅</span>
+                                <span>工业用电高峰即将到来</span>
+                            </div>
+                            <div class="panel-item opportunity-item">
+                                <span>✅</span>
+                                <span>2个发电厂检修，供应紧张</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Center Decision -->
+                <div class="decision-center">
+                    <div class="current-recommendation">
+                        <span>⏰</span>
+                        <span>等待卖出</span>
+                    </div>
+                    <div class="confidence-meter">
+                        <div class="confidence-label">决策信心度</div>
+                        <div class="confidence-score">85%</div>
+                        <div class="confidence-bar">
+                            <div class="confidence-fill" style="width: 85%;"></div>
+                        </div>
+                    </div>
+                    <div style="margin-top: 24px; display: flex; justify-content: center; gap: 40px;">
+                        <div style="text-align: center;">
+                            <div style="font-size: 14px; color: rgba(255,255,255,0.6); margin-bottom: 8px;">预计等待时间</div>
+                            <div style="font-size: 28px; font-weight: 600; color: #ff9500;">3小时</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="font-size: 14px; color: rgba(255,255,255,0.6); margin-bottom: 8px;">预计价格</div>
+                            <div style="font-size: 28px; font-weight: 600; color: #00ff88;">$450</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="font-size: 14px; color: rgba(255,255,255,0.6); margin-bottom: 8px;">预计获利</div>
+                            <div style="font-size: 28px; font-weight: 600; color: #00ff88;">$2,925</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Opportunity Panel Right -->
+                <div class="decision-side">
+                    <div class="risk-opportunity-panel">
+                        <div class="panel-title">
+                            <span>💡</span>
+                            <span>机会提示</span>
+                        </div>
+                        <div class="panel-items">
+                            <div class="panel-item opportunity-item">
+                                <span>✅</span>
+                                <span>高温天气，空调负荷激增</span>
+                            </div>
+                            <div class="panel-item opportunity-item">
+                                <span>✅</span>
+                                <span>工业用电高峰即将到来</span>
+                            </div>
+                            <div class="panel-item opportunity-item">
+                                <span>✅</span>
+                                <span>2个发电厂检修，供应紧张</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dimension Analysis Grid -->
+        <div class="dimension-grid">
+            <!-- 价格维度 -->
+            <div class="dimension-card">
+                <div class="dimension-header">
+                    <div class="dimension-title">
+                        <span>💰</span>
+                        <span>价格维度</span>
+                    </div>
+                    <div class="dimension-score score-medium">65/100</div>
+                </div>
+                <div class="dimension-content">
+                    <div class="factor-item">
+                        <span class="factor-name">当前价格</span>
+                        <span class="factor-value">$275/MWh</span>
+                    </div>
+                    <div class="factor-item">
+                        <span class="factor-name">日内排位</span>
+                        <span class="factor-value">中等 (50%)</span>
+                    </div>
+                    <div class="factor-item">
+                        <span class="factor-name">预测最高价</span>
+                        <span class="factor-value">$450 (17:30)</span>
+                    </div>
+                    <div class="factor-item">
+                        <span class="factor-name">上涨空间</span>
+                        <span class="factor-value">+64%</span>
+                    </div>
+                </div>
+                <div class="dimension-conclusion">
+                    📢 现在价格一般，等晚高峰能赚更多
+                </div>
+                <div class="dimension-bar">
+                    <div class="dimension-bar-fill" style="width: 65%; background: #ff9500;"></div>
+                </div>
+            </div>
+
+            <!-- Today Performance Module -->
+            <div class="module-card">
+                <div class="module-header">
+                    <div class="module-title">
+                        <span>📊</span>
+                        <span>今天卖电情况</span>
+                    </div>
+                    <div class="module-status optimal" style="font-size: 18px; padding: 6px 16px;">表现不错</div>
+                </div>
+
+                <div class="realtime-metrics">
+                    <div class="metric-box">
+                        <div class="metric-label">已卖次数</div>
+                        <div class="metric-value">
+                            8次
+                        </div>
+                        <div class="metric-trend">
+                            <span>✅</span>
+                            <span>6次成功</span>
+                        </div>
+                    </div>
+                    <div class="metric-box">
+                        <div class="metric-label">成功率</div>
+                        <div class="metric-value" style="color: #00ff88;">
+                            75%
+                        </div>
+                        <div class="metric-trend">
+                            <span>😊</span>
+                            <span>不错</span>
+                        </div>
+                    </div>
+                    <div class="metric-box">
+                        <div class="metric-label">剩余电量</div>
+                        <div class="metric-value">
+                            65%
+                        </div>
+                        <div class="metric-trend">
+                            <span>🔋</span>
+                            <span>充足</span>
+                        </div>
+                    </div>
+                    <div class="metric-box">
+                        <div class="metric-label">今天已赚</div>
+                        <div class="metric-value" style="color: #00ff88;">
+                            $3,847
+                        </div>
+                        <div class="metric-trend">
+                            <span>💰</span>
+                            <span>继续加油</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="operation-box" style="background: rgba(0,255,136,0.1); border-color: rgba(0,255,136,0.3);">
+                    <div class="operation-title" style="color: #00ff88;">
+                        <span>✅</span>
+                        <span>今天表现分析</span>
+                    </div>
+                    <div class="operation-content">
+                        早上7-8点：✅ 卖得好，赚了$1,200<br>
+                        中午12-1点：❌ 卖早了，少赚$200<br>
+                        <strong>保持这个节奏，晚高峰再卖一次就完美了！</strong>
+                    </div>
+                </div>
+
+                <div class="chart-container" id="operationChart"></div>
+            </div>
+
+            <!-- Next Steps Module -->
+            <div class="module-card">
+                <div class="module-header">
+                    <div class="module-title">
+                        <span>🎯</span>
+                        <span>接下来怎么做？</span>
+                    </div>
+                    <div class="module-status optimal" style="font-size: 18px; padding: 6px 16px;">做得好</div>
+                </div>
+
+                <div class="operation-box" style="margin-bottom: 20px; background: linear-gradient(135deg, rgba(0,255,136,0.15), rgba(0,255,136,0.05)); border-color: rgba(0,255,136,0.3);">
+                    <div class="operation-title" style="color: #00ff88; font-size: 20px; margin-bottom: 16px;">
+                        <span>📋</span>
+                        <span>今天的计划</span>
+                    </div>
+                    <div class="operation-content" style="font-size: 16px; line-height: 2;">
+                        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+                            <span style="font-size: 20px;">✅</span>
+                            <span><strong>早上7-8点：</strong>已完成！卖了$420的高价 👍</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+                            <span style="font-size: 20px;">✅</span>
+                            <span><strong>中午12-1点：</strong>已完成，卖了$350（还行）</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+                            <span style="font-size: 20px;">⏰</span>
+                            <span><strong>下午5-6点：</strong>等待中... 预计$450（今天最高！）</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="realtime-metrics">
+                    <div class="metric-box">
+                        <div class="metric-label">还要等多久？</div>
+                        <div class="metric-value" style="color: #ff9500;">
+                            3小时
+                        </div>
+                        <div class="metric-trend">
+                            <span>⏱️</span>
+                            <span>耐心等待</span>
+                        </div>
+                    </div>
+                    <div class="metric-box">
+                        <div class="metric-label">等待值得吗？</div>
+                        <div class="metric-value" style="color: #00ff88;">
+                            值得！
+                        </div>
+                        <div class="metric-trend">
+                            <span>💰</span>
+                            <span>多赚64%</span>
+                        </div>
+                    </div>
+                    <div class="metric-box">
+                        <div class="metric-label">电池够用吗？</div>
+                        <div class="metric-value" style="color: #00ff88;">
+                            够用
+                        </div>
+                        <div class="metric-trend">
+                            <span>🔋</span>
+                            <span>还有65%</span>
+                        </div>
+                    </div>
+                    <div class="metric-box">
+                        <div class="metric-label">建议设置</div>
+                        <div class="metric-value">
+                            自动卖
+                        </div>
+                        <div class="metric-trend">
+                            <span>🤖</span>
+                            <span>$400触发</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="action-buttons" style="margin-top: 20px;">
+                    <button class="action-btn primary" style="font-size: 18px; padding: 14px 32px;">
+                        一键设置自动卖电
+                    </button>
+                    <button class="action-btn secondary">
+                        我要手动操作
+                    </button>
+                </div>
+            </div>
+
+            <!-- Safety Tips Module -->
+            <div class="module-card">
+                <div class="module-header">
+                    <div class="module-title">
+                        <span>🛡️</span>
+                        <span>安全提醒</span>
+                    </div>
+                    <div class="module-status moderate" style="font-size: 18px; padding: 6px 16px; background: rgba(255,149,0,0.2); color: #ff9500;">注意风险</div>
+                </div>
+
+                <div class="operation-box" style="margin-bottom: 20px; background: rgba(255,149,0,0.1); border-color: rgba(255,149,0,0.3);">
+                    <div class="operation-title" style="color: #ff9500; font-size: 18px;">
+                        <span>⚠️</span>
+                        <span>今天需要注意什么？</span>
+                    </div>
+                    <div class="operation-content" style="font-size: 16px; line-height: 1.8;">
+                        <div style="margin-bottom: 12px;">
+                            <strong>🌡️ 天气影响：</strong>今天很热，下午用电需求会增加，价格可能突然上涨
+                        </div>
+                        <div style="margin-bottom: 12px;">
+                            <strong>⚡ 供应紧张：</strong>有2个发电厂在维修，供应比平时少
+                        </div>
+                        <div>
+                            <strong>💰 价格预警：</strong>如果价格超过$500就要小心了，可能会突然下跌
+                        </div>
+                    </div>
+                </div>
+
+                <div class="realtime-metrics">
+                    <div class="metric-box">
+                        <div class="metric-label">今天安全吗？</div>
+                        <div class="metric-value" style="color: #ff9500;">
+                            较安全
+                        </div>
+                        <div class="metric-trend">
+                            <span>👍</span>
+                            <span>正常操作</span>
+                        </div>
+                    </div>
+                    <div class="metric-box">
+                        <div class="metric-label">系统正常吗？</div>
+                        <div class="metric-value" style="color: #00ff88;">
+                            正常
+                        </div>
+                        <div class="metric-trend">
+                            <span>✅</span>
+                            <span>运行良好</span>
+                        </div>
+                    </div>
+                    <div class="metric-box">
+                        <div class="metric-label">最大损失</div>
+                        <div class="metric-value">
+                            $1,200
+                        </div>
+                        <div class="metric-trend">
+                            <span>💸</span>
+                            <span>可以接受</span>
+                        </div>
+                    </div>
+                    <div class="metric-box">
+                        <div class="metric-label">应急电量</div>
+                        <div class="metric-value">
+                            留15%
+                        </div>
+                        <div class="metric-trend">
+                            <span>🔋</span>
+                            <span>以防万一</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="operation-box" style="background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.2);">
+                    <div class="operation-title" style="font-size: 16px;">
+                        <span>🔒</span>
+                        <span>保护措施（已自动开启）</span>
+                    </div>
+                    <div class="operation-content" style="font-size: 14px;">
+                        ✅ 价格超过$500自动停止卖电<br>
+                        ✅ 保留15%电量应急使用<br>
+                        ✅ 分批卖电，不要一次卖完
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Decision Radar Chart -->
+        <div class="analysis-panel">
+            <div class="analysis-header">
+                <span>📊</span>
+                <span>综合决策分析</span>
+            </div>
+            <div class="chart-container" id="decisionRadar" style="height: 400px;"></div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize HeaderNav
+            new HeaderNav({
+                currentPage: 'analysis-today',
+                showMessageCenter: true,
+                showUserAvatar: true,
+                showLanguageSelector: true
+            });
+
+            // Update time
+            updateTime();
+            setInterval(updateTime, 1000);
+
+            // Initialize charts
+            initializePriceChart();
+            initializeOperationChart();
+            initializeDecisionRadar();
+        });
+
+        // Switch between historical and realtime analysis
+        function switchAnalysisMode(mode, button) {
+            if (mode === 'historical') {
+                window.location.href = 'analysis-historical.html';
+            }
+            // If realtime, stay on current page
+        }
+
+        // Update current time
+        function updateTime() {
+            const now = new Date();
+            const timeStr = now.toLocaleTimeString('zh-CN', { hour12: false });
+            const dateStr = now.toLocaleDateString('zh-CN', { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            });
+            
+            document.getElementById('currentTime').textContent = timeStr;
+            document.getElementById('currentDate').textContent = dateStr;
+        }
+
+        // Initialize price trend chart
+        function initializePriceChart() {
+            const chart = echarts.init(document.getElementById('priceChart'));
+            
+            // Generate time points
+            const times = [];
+            const actualPrices = [];
+            const predictedPrices = [];
+            
+            for (let i = 0; i <= 24; i++) {
+                times.push(`${i}:00`);
+                
+                // Historical data (0-14)
+                if (i <= 14) {
+                    let price = 200;
+                    if (i >= 6 && i <= 8) price = 200 + (i === 7 ? 220 : 180);
+                    else if (i >= 11 && i <= 14) price = 250 + Math.random() * 50;
+                    actualPrices.push(price);
+                    predictedPrices.push(null);
+                } else {
+                    // Future predictions (15-24)
+                    actualPrices.push(null);
+                    let price = 300;
+                    if (i >= 17 && i <= 18) price = 400 + Math.random() * 50;
+                    else if (i >= 19) price = 250 - (i - 19) * 20;
+                    predictedPrices.push(price);
+                }
+            }
+            
+            const option = {
+                tooltip: {
+                    trigger: 'axis',
+                    backgroundColor: 'rgba(0,0,0,0.8)',
+                    borderColor: 'rgba(255,255,255,0.1)',
+                    textStyle: { color: '#fff' }
+                },
+                legend: {
+                    data: ['实际价格', '预测价格'],
+                    textStyle: { color: 'rgba(255,255,255,0.7)' },
+                    top: 10
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    top: '15%',
+                    containLabel: true
+                },
+                xAxis: {
+                    type: 'category',
+                    data: times,
+                    axisLine: { lineStyle: { color: 'rgba(255,255,255,0.1)' } },
+                    axisLabel: { 
+                        color: 'rgba(255,255,255,0.5)',
+                        interval: 2
+                    }
+                },
+                yAxis: {
+                    type: 'value',
+                    name: '价格 ($/MWh)',
+                    nameTextStyle: { color: 'rgba(255,255,255,0.5)' },
+                    axisLine: { lineStyle: { color: 'rgba(255,255,255,0.1)' } },
+                    axisLabel: { color: 'rgba(255,255,255,0.5)' },
+                    splitLine: { lineStyle: { color: 'rgba(255,255,255,0.05)' } }
+                },
+                series: [
+                    {
+                        name: '实际价格',
+                        type: 'line',
+                        data: actualPrices,
+                        smooth: true,
+                        lineStyle: { color: '#1e7fff', width: 3 },
+                        itemStyle: { color: '#1e7fff' },
+                        markLine: {
+                            data: [
+                                {
+                                    xAxis: 14,
+                                    lineStyle: {
+                                        color: '#ff9500',
+                                        type: 'dashed',
+                                        width: 2
+                                    },
+                                    label: {
+                                        formatter: '当前时间',
+                                        position: 'end'
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        name: '预测价格',
+                        type: 'line',
+                        data: predictedPrices,
+                        smooth: true,
+                        lineStyle: { 
+                            color: '#00ff88', 
+                            width: 3,
+                            type: 'dashed'
+                        },
+                        itemStyle: { color: '#00ff88' },
+                        areaStyle: {
+                            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                                { offset: 0, color: 'rgba(0,255,136,0.3)' },
+                                { offset: 1, color: 'rgba(0,255,136,0.05)' }
+                            ])
+                        }
+                    }
+                ]
+            };
+            
+            chart.setOption(option);
+            window.addEventListener('resize', () => chart.resize());
+        }
+
+        // Initialize operation performance chart
+        function initializeOperationChart() {
+            const chart = echarts.init(document.getElementById('operationChart'));
+            
+            const hours = [];
+            const operations = [];
+            const results = [];
+            
+            // Today's operations so far
+            const operationData = [
+                { hour: 7, action: 1, result: 1 },   // Morning peak - success
+                { hour: 8, action: -1, result: 1 },  // Stop - success
+                { hour: 10, action: 1, result: 0 },  // Mid-morning - fail
+                { hour: 11, action: -1, result: 0 }, // Stop - fail
+                { hour: 12, action: 1, result: 1 },  // Noon - success
+                { hour: 13, action: -1, result: 1 }  // Stop - success
+            ];
+            
+            for (let i = 0; i <= 24; i++) {
+                hours.push(`${i}:00`);
+                
+                const op = operationData.find(d => d.hour === i);
+                if (op) {
+                    operations.push({
+                        value: op.action,
+                        itemStyle: {
+                            color: op.result ? '#00ff88' : '#ff3b30'
+                        }
+                    });
+                    results.push(op.result ? 100 : -50);
+                } else {
+                    operations.push(0);
+                    results.push(null);
+                }
+            }
+            
+            const option = {
+                tooltip: {
+                    trigger: 'axis',
+                    backgroundColor: 'rgba(0,0,0,0.8)',
+                    borderColor: 'rgba(255,255,255,0.1)',
+                    textStyle: { color: '#fff' }
+                },
+                legend: {
+                    data: ['操作', '效果'],
+                    textStyle: { color: 'rgba(255,255,255,0.7)' },
+                    top: 10
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    top: '15%',
+                    containLabel: true
+                },
+                xAxis: {
+                    type: 'category',
+                    data: hours,
+                    axisLine: { lineStyle: { color: 'rgba(255,255,255,0.1)' } },
+                    axisLabel: { 
+                        color: 'rgba(255,255,255,0.5)',
+                        interval: 2
+                    }
+                },
+                yAxis: [
+                    {
+                        type: 'value',
+                        name: '操作',
+                        nameTextStyle: { color: 'rgba(255,255,255,0.5)' },
+                        axisLine: { lineStyle: { color: 'rgba(255,255,255,0.1)' } },
+                        axisLabel: { 
+                            color: 'rgba(255,255,255,0.5)',
+                            formatter: function(value) {
+                                if (value === 1) return '卖出';
+                                if (value === -1) return '停止';
+                                return '';
+                            }
+                        },
+                        splitLine: { show: false },
+                        min: -1.5,
+                        max: 1.5
+                    },
+                    {
+                        type: 'value',
+                        name: '效果',
+                        nameTextStyle: { color: 'rgba(255,255,255,0.5)' },
+                        position: 'right',
+                        axisLine: { lineStyle: { color: 'rgba(255,255,255,0.1)' } },
+                        axisLabel: { 
+                            color: 'rgba(255,255,255,0.5)',
+                            formatter: '{value}%'
+                        },
+                        splitLine: { lineStyle: { color: 'rgba(255,255,255,0.05)' } }
+                    }
+                ],
+                series: [
+                    {
+                        name: '操作',
+                        type: 'bar',
+                        data: operations,
+                        barWidth: '60%'
+                    },
+                    {
+                        name: '效果',
+                        type: 'line',
+                        yAxisIndex: 1,
+                        data: results,
+                        smooth: true,
+                        lineStyle: { color: '#ff9500', width: 2 },
+                        itemStyle: { color: '#ff9500' }
+                    }
+                ]
+            };
+            
+            chart.setOption(option);
+            window.addEventListener('resize', () => chart.resize());
+        }
+
+        // Initialize decision radar chart
+        function initializeDecisionRadar() {
+            const chart = echarts.init(document.getElementById('decisionRadar'));
+            
+            const option = {
+                backgroundColor: 'transparent',
+                radar: {
+                    indicator: [
+                        { name: '价格维度', max: 100 },
+                        { name: '供需维度', max: 100 },
+                        { name: '预测维度', max: 100 },
+                        { name: '风险维度', max: 100 },
+                        { name: '收益维度', max: 100 },
+                        { name: '操作维度', max: 100 }
+                    ],
+                    center: ['50%', '50%'],
+                    radius: '70%',
+                    axisName: {
+                        color: 'rgba(255,255,255,0.6)',
+                        fontSize: 14
+                    },
+                    splitLine: {
+                        lineStyle: {
+                            color: 'rgba(255,255,255,0.1)'
+                        }
+                    },
+                    splitArea: {
+                        areaStyle: {
+                            color: ['rgba(0,255,136,0.05)', 'rgba(0,255,136,0.1)']
+                        }
+                    },
+                    axisLine: {
+                        lineStyle: {
+                            color: 'rgba(255,255,255,0.2)'
+                        }
+                    }
+                },
+                series: [{
+                    type: 'radar',
+                    data: [{
+                        value: [65, 88, 82, 75, 90, 85],
+                        name: '当前决策评分',
+                        lineStyle: {
+                            color: '#00ff88',
+                            width: 3
+                        },
+                        areaStyle: {
+                            color: 'rgba(0, 255, 136, 0.3)'
+                        },
+                        itemStyle: {
+                            color: '#00ff88'
+                        }
+                    }]
+                }],
+                tooltip: {
+                    trigger: 'item',
+                    backgroundColor: 'rgba(0,0,0,0.8)',
+                    borderColor: 'rgba(255,255,255,0.1)',
+                    textStyle: { color: '#fff' }
+                }
+            };
+            
+            chart.setOption(option);
+            window.addEventListener('resize', () => chart.resize());
+        }
+    </script>
+</body>
+</html>

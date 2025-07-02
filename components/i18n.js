@@ -1,0 +1,3137 @@
+/**
+ * 国际化(i18n)组件
+ * 支持多语言切换、动态文本更新、本地存储等功能
+ */
+class I18n {
+    constructor(options = {}) {
+        this.defaultLanguage = options.defaultLanguage || 'zh';
+        this.supportedLanguages = options.supportedLanguages || {
+            'zh': { name: '中文', flag: '🇨🇳', nativeName: '中文' },
+            'en': { name: 'English', flag: '🇺🇸', nativeName: 'English' }
+        };
+        this.containerId = options.containerId || 'languageSelector';
+        this.storageKey = options.storageKey || 'app_language';
+        
+        this.currentLanguage = this.loadLanguageFromStorage() || this.defaultLanguage;
+        this.translations = {};
+        this.observers = new Set();
+        
+        this.init();
+    }
+    
+    init() {
+        this.loadTranslations();
+        this.createLanguageSelectorHTML();
+        this.bindEvents();
+        this.updatePageTexts();
+        
+        // 检查是否需要恢复页面状态（语言切换后）
+        if (sessionStorage.getItem('pageStateBeforeLanguageSwitch')) {
+            this.restorePageState();
+        }
+    }
+    
+    loadTranslations() {
+        // 定义多语言文本
+        this.translations = {
+            zh: {
+                nav: {
+                    home: "首页",
+                    profit: "获利",
+                    family: "家庭",
+                    analysis: "分析",
+                    organization: "组织",
+                    pushStrategy: "推送策略",
+                    operationLog: "操作记录",
+                    messageCenter: "消息中心"
+                },
+                home: "首页",
+                station: "电站管理",
+                highestPriceRegion: "最高价格区域：",
+                todayLow: "今日最低",
+                todayHigh: "今日最高",
+                charge: "充电",
+                discharge: "放电",
+                family: "家庭",
+                availableHomes: "家庭",
+                availablePower: "可放电量",
+                estimatedProfit: "获利",
+                todayDischargeHomes: "今日放电家庭",
+                discharged: "已放电量",
+                actualDischarge: "实际放电量",
+                profit: "获利($)",
+                actualProfit: "已获利",
+                todayData: "今日数据",
+                realtime: "实时",
+                market: "行情",
+                map: "地图",
+                autoSwitch: "自动切换",
+                dischargedFamilies: "已放电家庭",
+                dischargedEnergy: "已放电",
+                totalEarnings: "已获利($)",
+                comparedToYesterday: "比昨日",
+                installedCapacity: "装机量",
+                currentSpotPrice: "现货电价",
+                currentDemand: "当前需求",
+                forecastPrice: "预测价格",
+                forecastDemand: "预测需求",
+                demand: "需求",
+                generation: "发电",
+                averagePrice: "平均价格",
+                maxPrice: "最高价格",
+                minPrice: "最低价格",
+                priceFluctuation: "价格波动",
+                historicalPrice: "历史价格",
+                predictedPrice: "预测价格",
+                predictedDemand: "预测需求",
+                comparedYesterday: "较昨日",
+                within24h: "24小时内",
+                powerRevenueTrend: "放电与收益趋势",
+                dischargeAndProfit: "放电与获利",
+                timeFilter: "时间筛选",
+                today: "今日",
+                week: "本周",
+                month: "本月",
+                custom: "自定义",
+                day: "日",
+                year: "年",
+                cumulative: "累计",
+                refresh: "刷新",
+                charging: "充电中",
+                discharging: "放电中",
+                standby: "待机",
+                offline: "离线",
+                systemOverview: "系统概览",
+                totalCapacity: "总容量",
+                onlineDevices: "在线设备",
+                networkStatus: "网络状态",
+                normal: "正常",
+                totalDischarge: "累计放电",
+                totalRevenue: "累计收益",
+                totalHomes: "家庭",
+                totalInstall: "装机量",
+                totalActualDischarge: "累计实际放电",
+                totalProfit: "累计获利",
+                cumulativePrice: "累计价格",
+                currentCumulativePrice: "当前累计价格",
+                forecastCumulativePrice: "预测累计价格(5min)",
+                thresholdStatus: "阈值状态",
+                belowThreshold: "未超阈",
+                exceededThreshold: "已超阈",
+                executionEfficiency: "执行效率",
+                systemAvailability: "系统可用性",
+                actualDischargeRate: "实际放电率",
+                today: "今日",
+                week: "本周",
+                month: "本月",
+                custom: "自定义",
+                refresh: "刷新",
+                timeFilter: "时间筛选",
+                refreshData: "手动刷新数据",
+                dataRefreshed: "数据已刷新",
+                chartsLoadFailed: "个图表加载失败，请检查控制台",
+                allChartsLoaded: "所有图表加载成功",
+                filterError: "筛选出现错误，请刷新页面重试",
+                dataLoading: "数据加载中...",
+                currentTime: "当前时间",
+                userName1: "张明",
+                userName2: "李华",
+                userName3: "王伟",
+                adminUser: "管理员",
+                switchedTo: "已切换到",
+                tabSwitched: "标签页已切换",
+                saving: "保存中...",
+                deleting: "删除中...",
+                exporting: "导出中...",
+                selectDateRange: "请选择开始和结束日期",
+                invalidDateRange: "开始日期不能晚于结束日期",
+                dateRangeTooLong: "选择的时间范围不能超过1年",
+                customRangeApplied: "已应用自定义时间范围",
+                filterApplied: "已筛选显示",
+                noDataTable: "未找到数据表格",
+                exportSuccess: "成功导出",
+                exportFailed: "导出失败，请重试",
+                sortCancelled: "已取消排序",
+                sortApplied: "已按",
+                filterReset: "筛选已重置",
+                socRangeError: "SOC最小值不能大于最大值",
+                profitRangeError: "获利最小值不能大于最大值",
+                daysRangeError: "使用天数最小值不能大于最大值",
+                advancedFilterApplied: "高级筛选已应用",
+                exportedRecords: "已导出",
+                searchComplete: "搜索完成",
+                foundMatches: "找到",
+                matchingMessages: "条匹配消息",
+                resetComplete: "重置完成",
+                searchCleared: "已清空搜索条件",
+                noData: "暂无数据",
+                userName1: "张明",
+                userName2: "李华",
+                userName3: "王伟",
+                userName5: "张三",
+                adminUser: "管理员",
+                remark: {
+                    none: "-",
+                    testAccount: "测试账号",
+                    systemAdmin: "系统管理员",
+                    tempUser: "临时用户"
+                },
+                control: "控制",
+                monitor: "监控",
+                detail: "详情",
+                manage: "管理",
+                config: "配置",
+                searchComplete: "查询完成",
+                foundRecords: "找到 {count} 条匹配记录",
+                resetComplete: "重置完成",
+                clearedSearch: "已清空搜索条件",
+                exporting: "导出中",
+                exportSuccess: "数据已导出",
+                validationFailed: "验证失败",
+                fillRequired: "请填写所有必填字段",
+                saveSuccess: "保存成功",
+                userSaved: "用户信息已保存",
+                deleteSuccess: "删除成功",
+                userDeleted: "用户已被删除",
+                
+                // Device command modal translations
+                deviceCommand: "设备指令",
+                confirmOperation: "确认操作",
+                operationType: "操作类型",
+                targetDevices: "目标设备",
+                executionTime: "预计执行时间",
+                immediately: "立即",
+                minutes: "分钟",
+                operationWarning: "此操作将影响所有选中的设备，请确认后继续。",
+                confirmExecute: "确认执行",
+                cancel: "取消",
+                stop: "停止",
+                charging: "充电中",
+                discharging: "放电中",
+                idle: "空闲",
+                stopOperation: "停止操作",
+                operationSuccess: "操作成功",
+                operationFailed: "操作失败",
+                confirmCharge: "确认充电",
+                confirmDischarge: "确认放电",
+                confirmStop: "确认停止",
+                estimatedRevenue: "预计收益",
+                estimatedPower: "预计功率",
+                currentPrice: "当前电价",
+                confirmExecute: "确认执行",
+                confirmCharge: "确认充电",
+                confirmDischarge: "确认放电",
+                confirmStop: "确认停止",
+                stopWarning: "停止操作将立即终止所有设备的充电/放电状态，设备将恢复到待机模式。",
+                stopChargeWarning: "停止操作将立即终止所有设备的Charge状态，设备将恢复到待机模式。",
+                chargingCompleteMessage: "充电指令下发完成，以下是设备响应统计报告：",
+                dischargingCompleteMessage: "放电指令下发完成，以下是设备响应统计报告：",
+                stopWarning: "停止操作将立即终止所有设备的充电/放电状态，设备将恢复到待机模式。",
+                deviceResponseStatisticsTitle: "设备响应统计",
+                operationCompleteMessage: "指令下发完成，以下是设备响应统计报告：",
+                chargingCompleteMessage: "充电指令下发完成，以下是设备响应统计报告：",
+                dischargingCompleteMessage: "放电指令下发完成，以下是设备响应统计报告：",
+                
+                // Chart common translations
+                charts: {
+                    dischargeAmount: "放电量",
+                    profit: "获利",
+                    timeHour: "时间：时",
+                    socTrend: "SOC趋势",
+                    charge: "充电",
+                    stopCharge: "停止充电",
+                    discharge: "放电",
+                    stopDischarge: "停止放电",
+                    familyDistribution: "家庭分布",
+                    totalFamilies: "总家庭数",
+                    energyUsage: "能源使用",
+                    dailyRevenue: "日收益",
+                    cumulativeRevenue: "累计收益",
+                    deviceStatus: "设备状态",
+                    standby: "待机",
+                    offline: "离线",
+                    pvGeneration: "光伏发电",
+                    storageDischarge: "储能放电",
+                    powerLoad: "用电负荷",
+                    user: "用户",
+                    notParticipating: "未参与用户",
+                    maxValue: "最大值",
+                    minValue: "最小值",
+                    avgValue: "平均值",
+                    efficiency: "执行效率",
+                    availability: "系统可用性",
+                    device: "设备"
+                },
+                
+                months: {
+                    jan: "1月", feb: "2月", mar: "3月", apr: "4月",
+                    may: "5月", jun: "6月", jul: "7月", aug: "8月",
+                    sep: "9月", oct: "10月", nov: "11月", dec: "12月"
+                },
+                
+                weekdays: {
+                    mon: "周一", tue: "周二", wed: "周三", thu: "周四",
+                    fri: "周五", sat: "周六", sun: "周日"
+                },
+                charging: "充电中",
+                discharging: "放电中",
+                standby: "待机",
+                offline: "离线",
+                active: "激活",
+                device: "设备",
+                status: "状态", 
+                region: "区域",
+                state: "州",
+                deviceCount: "设备数量",
+                normalOperation: "正常运行",
+                price: "价格",
+                historicalPrice: "历史价格",
+                predictedPrice: "预测价格",
+                predictedDemand: "预测需求",
+                operationConfirm: "操作确认",
+                confirmMessage: "您确定要执行此操作吗？",
+                operationType: "操作类型",
+                targetDevices: "影响设备",
+                estimatedPower: "预计功率",
+                currentPrice: "当前电价",
+                estimatedDuration: "预计时长",
+                estimatedCost: "预计成本/收益",
+                cancel: "取消",
+                stop: "停止",
+                units: "个",
+                comparedToYesterday: "比昨日",
+                currentCumulativePrice: "当前累计价格",
+                forecastCumulativePrice5min: "预测累计价格(5min)",
+                thresholdStatus: "阈值状态",
+                notExceeded: "未超阈",
+                confirmExecute: "确认执行",
+                operationSuccess: "指令下发成功",
+                systemExecuting: "系统正在执行您的操作指令...",
+                devicesDispatched: "指令下发",
+                devicesReceived: "指令接收",
+                devicesActivated: "成功激活",
+                successRate: "成功率",
+                close: "关闭",
+                viewDetails: "查看详情",
+                totalDevices: "总设备数",
+                activated: "已下发",
+                progress: "执行进度",
+                currentOperation: "当前操作",
+                none: "无",
+                estimatedProfit: "预计获利",
+                devices: "设备",
+                operationDetails: "操作详情",
+                basicInfo: "基本信息",
+                executionStatus: "执行状态",
+                operationTime: "操作时间",
+                deviceResponseStatistics: "设备响应统计",
+                commandsSent: "指令下发",
+                commandsReceived: "指令接收",
+                commandSentSuccess: "指令下发成功",
+                systemAdmin: "系统管理员",
+                operatorA: "操作员A",
+                operatorB: "操作员B",
+                dischargeStatistics: "放电统计",
+                priceStatistics: "价格统计",
+                actualDischargeAmount: "实际放电量",
+                actualDischargeEfficiency: "实际放电率",
+                usersExceedingTarget: "超过目标用户",
+                usersNotExceedingTarget: "未达目标用户",
+                todaysPrice: "今日价格",
+                avgDischargePrice: "平均放电价格",
+                sellPrice: "卖电价",
+                todaysLowest: "今日最低",
+                todaysHighest: "今日最高",
+                refreshData: "手动刷新数据",
+                startDate: "开始日期",
+                endDate: "结束日期",
+                reset: "重置",
+                query: "查询",
+                quickSelect: "快速选择",
+                last7Days: "最近7天",
+                last30Days: "最近30天",
+                last90Days: "最近90天",
+                last6Months: "最近6个月",
+                last1Year: "最近1年",
+                dayReport: "日报",
+                monthReport: "月报",
+                yearReport: "年报",
+                totalReport: "累计",
+                selectTime: "选择时间",
+                energyManagementCenter: "能源管理中心",
+                unit: "个",
+                comparedToYesterdayPlus: "↑ 比昨日+",
+                estimatedDuration: "15-30分钟",
+                thisOperationWillAffectAll: "此操作将影响所有已连接设备，请确认后再继续。",
+                viewDetails: "查看详情",
+                successfullyActivated: "成功激活",
+                devicePrefix: "设备",
+                statusLabel: "状态",
+                regionLabel: "区域",
+                stateLabel: "州",
+                deviceCountLabel: "设备数量",
+                statusNormalOperation: "状态: 正常运行",
+                inactive: "待机",
+                minutes: "分钟",
+                confirmChargeOperation: "确认充电操作",
+                confirmDischargeOperation: "确认放电操作",
+                confirmChargeMessage: "您确定要执行充电操作吗？",
+                confirmDischargeMessage: "您确定要执行放电操作吗？",
+                chargeWarningMessage: "将开始对所有连接设备进行充电操作，此过程将消耗电网电力。",
+                dischargeWarningMessage: "将开始对所有连接设备进行放电操作，向电网输送电力以获取收益。",
+                confirmStopCharge: "确认停止充电",
+                confirmStopDischarge: "确认停止放电",
+                confirmStopChargeMessage: "您确定要停止充电操作吗？",
+                confirmStopDischargeMessage: "您确定要停止放电操作吗？",
+                stopCharge: "停止充电",
+                stopDischarge: "停止放电",
+                allDevices: "所有设备",
+                deviceResponseStatisticsTitle: "设备响应统计",
+                operationCommandCompleted: "指令下发完成，以下是设备响应统计报告：",
+                
+                // Operation Log translations
+                operationLog: {
+                    title: "操作记录",
+                    table: {
+                        time: "时间",
+                        command: "命令",
+                        operator: "操作人",
+                        stations: "下发电站",
+                        success: "成功",
+                        failed: "失败",
+                        action: "操作"
+                    },
+                    commands: {
+                        charge: "充电",
+                        discharge: "放电",
+                        stopCharge: "停止充电",
+                        stopDischarge: "停止放电"
+                    },
+                    placeholder: {
+                        operator: "请输入操作人员...",
+                        command: "全部命令",
+                        time: "请选择时间..."
+                    },
+                    buttons: {
+                        search: "🔍 查询",
+                        reset: "🔄 重置",
+                        clear: "📥 导出"
+                    },
+                    viewDetails: "查看详情",
+                    noData: "暂无数据",
+                    total: "共",
+                    perPage: "/页",
+                    goToPage: "前往",
+                    notFound: "找不到操作记录",
+                    
+                    // Detail drawer translations
+                    detailTitle: "操作记录详情",
+                    tabs: {
+                        basic: "基本信息",
+                        stations: "电站详情",
+                        timeline: "执行时间线"
+                    },
+                    overview: {
+                        title: "操作概览",
+                        totalStations: "总电站数",
+                        successCount: "成功数",
+                        failedCount: "失败数",
+                        successRate: "成功率"
+                    },
+                    basicInfo: {
+                        title: "基本信息",
+                        operationTime: "操作时间",
+                        operationCommand: "操作命令",
+                        operator: "操作人员",
+                        operationId: "操作编号",
+                        executionStatus: "执行状态",
+                        allSuccess: "全部成功",
+                        partialSuccess: "部分成功",
+                        mostlyFailed: "多数失败"
+                    },
+                    stationDetails: {
+                        title: "电站执行详情",
+                        success: "成功",
+                        failed: "失败",
+                        station: "电站",
+                        area: "区域"
+                    },
+                    timeline: {
+                        title: "执行时间线",
+                        commandCreated: "操作命令创建",
+                        validationPassed: "命令验证通过",
+                        executionStarted: "开始执行命令",
+                        stationsSuccess: "个电站执行成功",
+                        stationsFailed: "个电站执行失败",
+                        executionCompleted: "操作执行完成",
+                        normal: "正常",
+                        warning: "警告",
+                        error: "错误"
+                    }
+                },
+                
+                // Message Center translations
+                messageCenter: {
+                    title: "消息中心",
+                    tabs: {
+                        all: "全部",
+                        alert: "告警",
+                        system: "系统",
+                        operation: "操作"
+                    },
+                    placeholder: {
+                        searchKeyword: "请输入消息关键词..."
+                    },
+                    types: {
+                        chargeReminder: "充电提醒",
+                        dischargeReminder: "放电提醒"
+                    },
+                    status: {
+                        unread: "未读",
+                        read: "已读"
+                    },
+                    buttons: {
+                        search: "🔍 查询",
+                        reset: "🔄 重置",
+                        export: "📥 导出",
+                        delete: "删除"
+                    },
+                    markAsRead: "标记为已读",
+                    delete: "删除",
+                    noMessages: "暂无消息",
+                    loading: "加载中...",
+                    messages: {
+                        chargeAlert: "当前价格 {price} 元，低于预设阀值 {threshold} 元，请立即充电",
+                        dischargeAlert: "当前价格 {price} 元，超过预设阀值 {threshold} 元，请立即放电"
+                    },
+                    timeAgo: {
+                        justNow: "刚刚",
+                        minutesAgo: "{minutes}分钟前",
+                        hoursAgo: "{hours}小时前",
+                        daysAgo: "{days}天前"
+                    }
+                },
+                
+                // Common translations
+                page: "页",
+                items: "条",
+                messageContent: "消息内容",
+                description: "描述",
+                type: "预警",
+                time: "时间",
+                units: "条",
+                allTypes: "全部类型",
+                alertMessage: "告警消息",
+                systemMessage: "系统消息",
+                operationMessage: "操作消息",
+                warning: "预警",
+                noMessagesFound: "当前筛选条件下没有找到相关消息",
+                firstPage: "首页",
+                prevPage: "上一页",
+                nextPage: "下一页",
+                lastPage: "末页",
+                showingItems: "显示第",
+                error: "错误",
+                dateSelection: "日期选择",
+                dateSelected: "已选择日期",
+                go: "前往",
+                
+                // Profit page translations
+                profitAnalysis: "获利分析",
+                profitSubtitle: "实时监控和分析您的能源交易收益",
+                todayProfit: "今日获利",
+                weekProfit: "本周获利",
+                monthProfit: "本月获利",
+                comparedToLastWeek: "比上周",
+                comparedToLastMonth: "比上月",
+                yearToDate: "年初至今",
+                profitTrend: "获利趋势",
+                deviceProfitRanking: "设备获利排行",
+                energyRevenueComparison: "能耗收益对比",
+                profitDistribution: "获利分布",
+                hourlyProfitAnalysis: "时段获利分析",
+                dailyProfitComparison: "日获利对比",
+                energyConsumption: "能耗",
+                revenue: "收益",
+                profit: "获利",
+                chargingProfit: "充电获利",
+                dischargingProfit: "放电获利",
+                tradingProfit: "交易获利",
+                profitSource: "获利来源",
+                hourlyProfit: "时段获利",
+                thisWeek: "本周",
+                lastWeek: "上周",
+                thisMonth: "本月",
+                lastMonth: "上月",
+                monday: "周一",
+                tuesday: "周二",
+                wednesday: "周三",
+                thursday: "周四",
+                friday: "周五",
+                saturday: "周六",
+                sunday: "周日",
+                top10: "TOP 10",
+                bottom10: "BOTTOM 10",
+                searchDevice: "搜索设备",
+                search: "搜索",
+                deviceId: "设备ID",
+                location: "位置",
+                efficiency: "效率",
+                online: "在线",
+                offline: "离线",
+                overview: "总览",
+                dailyProfit: "日获利",
+                deviceProfit: "设备获利",
+                chartView: "图表视图",
+                tableView: "表格视图",
+                
+                // Analysis page translations
+                analysis: {
+                    title: "分析 - 日报",
+                    profit: "获利 (万元)",
+                    avgProfitPerPerson: "人均获利 (元)",
+                    dischargeStats: "放电统计",
+                    priceStats: "价格统计", 
+                    userStats: "用户统计",
+                    dischargeAnalysis: "放电分析",
+                    profitRatio: "获利占比",
+                    profitLabel: "获利",
+                    doubleRing: {
+                        userPerspective: "内环：活跃",
+                        profitPerspective: "外环：获利"
+                    },
+                    timeFilter: {
+                        label: "时间筛选",
+                        today: "今日",
+                        thisMonth: "本月", 
+                        thisYear: "本年"
+                    },
+                    metrics: {
+                        userCount: "用户数",
+                        activeUserRatio: "活跃用户占比",
+                        dischargeAmount: "放电量 (kWh)",
+                        actualDischargeEfficiency: "实际放电效率",
+                        exceedingUsers: "超过实际放电用户数",
+                        notExceedingUsers: "未超过实际放电用户数",
+                        todayPrice: "今日价格",
+                        avgDischargePrice: "放电平均价",
+                        actualDischargeAmount: "实际放电量",
+                        actualDischargeRate: "实际放电率",
+                        todayAvgDischargeRate: "今日平均放电率",
+                        todayAvgPrice: "今日平均价"
+                    },
+                    units: {
+                        yuan: "元",
+                        kwh: "kWh",
+                        percent: "%"
+                    },
+                    comparison: {
+                        increase: "▲",
+                        decrease: "▼",
+                        compared: "环比"
+                    },
+                    priceRange: {
+                        lowest: "最低",
+                        highest: "最高",
+                        sellPrice: "卖电价",
+                        todayLowest: "今日最低",
+                        todayHighest: "今日最高",
+                        currentPrice: "当前价格"
+                    },
+                    currency: {
+                        yuan: "元",
+                        dollar: "$"
+                    },
+                    userTypes: {
+                        active: "活跃",
+                        inactive: "非活跃", 
+                        notParticipating: "未参与"
+                    },
+                    chartLabels: {
+                        actualDischarge: "实际放电量",
+                        price: "价格",
+                        dischargeRate: "实际放电率"
+                    },
+                    userRatio: "用户数占比",
+                    userLabel: "用户",
+                    modal: {
+                        exceedingUsersDetail: "超过实际放电用户明细",
+                        notExceedingUsersDetail: "未超过实际放电用户明细",
+                        exceedingUsersTitle: "超过实际放电用户详情",
+                        notExceedingUsersTitle: "未超过实际放电用户详情"
+                    },
+                    table: {
+                        userName: "用户名称",
+                        dischargeAmount: "放电量(kWh)",
+                        efficiency: "效率(%)",
+                        profit: "获利($)"
+                    },
+                    profitTypes: {
+                        highProfit: "高获利",
+                        mediumProfit: "中获利",
+                        lowProfit: "低获利"
+                    }
+                },
+                
+                // Family page translations
+                family: {
+                    title: "家庭",
+                    subtitle: "管理和监控所有家庭的能源使用情况",
+                    deviceId: "设备ID",
+                    address: "地址",
+                    status: "状态",
+                    cumulativeDischarge: "累计放电",
+                    cumulativeRevenue: "累计收益",
+                    action: "操作",
+                    enabled: "启用",
+                    disabled: "禁用",
+                    totalFamilies: "家庭总数",
+                    totalRevenue: "累计收益",
+                    familyDistribution: "家庭分布统计",
+                    deviceStatus: "设备状态",
+                    deviceStatusDistribution: "设备状态分布",
+                    allDeviceStatus: "所有设备状态",
+                    activeFamilies: "活跃家庭",
+                    inactiveFamilies: "非活跃家庭",
+                    notParticipatingFamilies: "未参与家庭",
+                    foundFamilies: "共找到 {count} 个家庭",
+                    views: {
+                        grid: "🏠 网格视图",
+                        chart: "📊 图表视图",
+                        table: "📋 表格视图"
+                    },
+                    buttons: {
+                        search: "🔍 查询",
+                        reset: "🔄 重置", 
+                        export: "📥 导出",
+                        advancedFilter: "⚙️ 高级筛选",
+                        applyFilter: "应用高级筛选",
+                        cancel: "取消",
+                        clearAll: "清除所有筛选",
+                        viewDetails: "查看详情",
+                        details: "详情",
+                        all: "全部"
+                    },
+                    placeholder: {
+                        allStatus: "所有状态",
+                        allActivity: "所有活跃度",
+                        deviceStatus: "所有设备状态",
+                        userName: "请输入用户名称...",
+                        deviceCode: "请输入设备编码...",
+                        minValue: "最小值",
+                        maxValue: "最大值",
+                        allLocations: "所有地区",
+                        allDevices: "所有设备"
+                    },
+                    table: {
+                        user: "用户",
+                        userName: "用户名称",
+                        location: "地址",
+                        activity: "活跃度",
+                        todayProfit: "今日获利 ($)",
+                        totalProfit: "累计获利 ($)",
+                        cumulativeProfit: "累计获利 ($)",
+                        avgProfit: "日均获利 ($)",
+                        deviceCode: "设备编码",
+                        deviceStatus: "设备状态",
+                        soc: "SOC",
+                        todayDischarge: "今日放电 (kWh)",
+                        usageDays: "使用天数 (天)",
+                        activityStatus: "活跃度",
+                        action: "操作",
+                        actions: "操作"
+                    },
+                    activityStatus: {
+                        active: "活跃",
+                        inactive: "非活跃",
+                        notParticipating: "未参与"
+                    },
+                    deviceStates: {
+                        charging: "充电",
+                        discharging: "放电",
+                        standby: "待机",
+                        offline: "离线"
+                    },
+                    filters: {
+                        socRange: "SOC范围",
+                        profitRange: "今日获利范围",
+                        usageDaysRange: "使用天数范围",
+                        days: "天"
+                    },
+                    stats: {
+                        activeRate: "活跃率",
+                        avgDischarge: "平均放电量 (kWh)",
+                        monthlyNew: "本月新增",
+                        comparedLastMonth: "较上月",
+                        comparedYesterday: "较昨日",
+                        thisWeek: "本周"
+                    },
+                    charts: {
+                        activityTrend: "活跃度趋势",
+                        energyHeatmap: "能源使用热力图",
+                        revenueAnalysis: "收益分析",
+                        powerUsage: "用电量",
+                        dischargeAmount: "放电量",
+                        temperature: "温度",
+                        revenueTrend: "收益趋势",
+                        socTrend: "soc趋势",
+                        operatingDays: "运行天数",
+                        chargeCycles: "充放电次数",
+                        operatingData: "运行数据",
+                        dailyRevenue: "日收益",
+                        cumulativeRevenue: "累计收益"
+                    },
+                    metrics: {
+                        soc: "SOC",
+                        todayDischarge: "今日放电",
+                        todayProfit: "今日获利"
+                    },
+                    details: {
+                        device: "设备"
+                    },
+                    drawer: {
+                        title: "详情",
+                        tabs: {
+                            basicInfo: "基本信息",
+                            revenueInfo: "收益信息",
+                            operatingData: "运行数据"
+                        },
+                        basicInfo: "基本信息",
+                        userName: "用户名称",
+                        location: "地址",
+                        address: "地址",
+                        deviceCode: "设备编码",
+                        batteryCapacity: "电池容量",
+                        soc: "SOC",
+                        status: "状态",
+                        operatingDays: "运行天数",
+                        owner: "所属用户",
+                        todayProfit: "今日获利",
+                        avgProfit: "日均获利",
+                        totalRevenue: "累计收益",
+                        todayDischarge: "今日放电量",
+                        avgDischarge: "日均放电量",
+                        totalDischarge: "累计放电量",
+                        revenue: "收益",
+                        discharge: "放电",
+                        profitTrend: "收益趋势",
+                        operatingDataTitle: "运行数据",
+                        socTrend: "soc趋势",
+                        chargeCycles: "充放电次数",
+                        day: "日",
+                        month: "月",
+                        year: "年",
+                        stopCharging: "停止充电",
+                        charging: "充电",
+                        discharging: "放电",
+                        stopDischarging: "停止放电"
+                    },
+                    userName1: "张明",
+                    userName2: "李华",
+                    userName3: "王芳",
+                    userName4: "赵强",
+                    userName5: "陈晓",
+                    modal: {
+                        details: "详情",
+                        basicInfo: "基本信息",
+                        revenueInfo: "收益信息",
+                        operatingData: "运行数据",
+                        deviceCode: "设备编码",
+                        batteryCapacity: "电池容量",
+                        operatingDays: "运行天数",
+                        owner: "所属用户",
+                        todayProfit: "今日获利",
+                        avgDailyProfit: "日均获利",
+                        todayDischarge: "今日放电量",
+                        avgDailyDischarge: "日均放电量",
+                        cumulativeDischarge: "累计放电量"
+                    },
+                    timeFilters: {
+                        day: "日",
+                        month: "月",
+                        year: "年"
+                    },
+                    pagination: {
+                        total: "共 {total} 条",
+                        perPage10: "10条/页",
+                        perPage20: "20条/页",
+                        perPage50: "50条/页",
+                        perPage100: "100条/页"
+                    }
+                },
+                
+                // Profit page translations
+                profit: {
+                    title: "获利",
+                    pageTitle: "获利",
+                    subtitle: "实时监控和分析您的能源交易收益",
+                    views: {
+                        chart: "图表视图",
+                        table: "表格视图"
+                    },
+                    stats: {
+                        userCount: "用户数量",
+                        totalRevenue: "累计收益",
+                        avgProfit: "人均获利",
+                        maxStationProfit: "最大获利（电站）",
+                        minStationProfit: "最小获利（电站）",
+                        comparedYesterday: "比昨日"
+                    },
+                    charts: {
+                        userManagement: "用户管理",
+                        revenueDistribution: "收益分布",
+                        dischargeAndProfit: "放电与获利",
+                        profitRanking: "获利排名"
+                    },
+                    ranking: {
+                        top5: "前五",
+                        bottom5: "后五"
+                    },
+                    table: {
+                        userParticipation: "用户参与情况",
+                        date: "日期",
+                        user: "用户",
+                        status: "运行状态",
+                        dischargeAmount: "实际放电量 (kwh)",
+                        profit: "获利 ($)",
+                        dailyAvg: "日均",
+                        compareDaily: "对比日均 ($)"
+                    },
+                    filters: {
+                        all: "全部",
+                        active: "活跃",
+                        inactive: "非活跃",
+                        notParticipating: "未参与"
+                    },
+                    status: {
+                        active: "活跃",
+                        inactive: "非活跃",
+                        notParticipating: "未参与"
+                    },
+                    buttons: {
+                        exportData: "导出数据"
+                    }
+                },
+                
+                // Organization page translations
+                organization: {
+                    title: "组织",
+                    subtitle: "管理组织成员和权限设置",
+                    placeholder: {
+                        userName: "请输入用户名称...",
+                        userEmail: "请输入用户邮箱..."
+                    },
+                    buttons: {
+                        search: "🔍 查询",
+                        reset: "🔄 重置",
+                        export: "📥 导出",
+                        add: "新建"
+                    },
+                    table: {
+                        userName: "用户名称",
+                        userEmail: "用户邮箱",
+                        status: "状态",
+                        remarks: "备注",
+                        createdTime: "创建时间",
+                        action: "操作"
+                    },
+                    status: {
+                        active: "启用",
+                        inactive: "禁用",
+                        allStatus: "所有状态"
+                    },
+                    actions: {
+                        edit: "编辑",
+                        delete: "删除"
+                    },
+                    modal: {
+                        addMember: "添加成员",
+                        editMember: "编辑成员",
+                        addOrganization: "新建组织",
+                        userName: "用户名称",
+                        email: "邮箱", 
+                        password: "密码",
+                        status: "状态",
+                        remark: "备注",
+                        permissions: "权限",
+                        expandCollapse: "展开/折叠",
+                        selectAll: "全选/全不选",
+                        cancel: "取消",
+                        confirm: "确定",
+                        placeholders: {
+                            userName: "请输入用户名称",
+                            email: "请输入用户邮箱",
+                            password: "请输入密码",
+                            remark: "请输入备注"
+                        },
+                        permissionModules: {
+                            home: "首页",
+                            user: "用户",
+                            station: "电站"
+                        }
+                    },
+                    deleteConfirm: {
+                        title: "确认删除",
+                        message: "此操作不可撤销，请确认是否删除该用户",
+                        warning: "删除后该用户将无法访问系统，所有相关数据将被永久移除",
+                        cancel: "取消",
+                        confirm: "确认删除"
+                    },
+                    messages: {
+                        validationFailed: "验证失败",
+                        fillRequired: "请填写所有必填字段"
+                    },
+                    pagination: {
+                        total: "共 {total} 条",
+                        perPage10: "10条/页",
+                        perPage20: "20条/页",
+                        perPage50: "50条/页",
+                        perPage100: "100条/页",
+                        goTo: "前往"
+                    }
+                },
+                
+                // Push Strategy page translations
+                pushStrategy: {
+                    title: "推送策略",
+                    buttons: {
+                        edit: "编辑",
+                        save: "保存",
+                        cancel: "取消",
+                        confirm: "确定"
+                    },
+                    dischargePriceStrategy: "放电通知策略价格",
+                    chargePriceStrategy: "充电通知策略价格",
+                    descriptions: {
+                        dischargeDescription: "价格超过设定值，则进行提醒",
+                        chargeDescription: "价格低于设定值，则进行提醒"
+                    },
+                    reminderFrequency: "提醒频率",
+                    reminderDescription: "满足条件，无人响应，多久发送一次提醒",
+                    sendingMethod: "发送方式",
+                    selectUsers: "选择用户",
+                    methods: {
+                        inSiteMessage: "站内信",
+                        email: "邮件"
+                    },
+                    placeholder: {
+                        price: "价格"
+                    },
+                    table: {
+                        userName: "用户名称",
+                        userEmail: "用户邮箱",
+                        status: "状态"
+                    },
+                    status: {
+                        enabled: "启用",
+                        disabled: "禁用"
+                    },
+                    messages: {
+                        saveSuccess: "保存成功",
+                        strategyUpdated: "推送策略已成功更新",
+                        cancelled: "已取消",
+                        formReset: "表单已重置为原始状态",
+                        validationFailed: "验证失败",
+                        enterDischargePrice: "请输入放电通知策略价格",
+                        enterChargePrice: "请输入充电通知策略价格",
+                        invalidDischargePrice: "放电价格必须是有效的正数",
+                        invalidChargePrice: "充电价格必须是有效的正数",
+                        invalidFrequency: "提醒频率必须在1-60分钟之间"
+                    }
+                },
+                
+                // Pagination translations
+                pagination: {
+                    info: "共 {total} 条",
+                    itemsPerPage: "/页",
+                    showing: "显示第",
+                    to: "至",
+                    of: "条，共",
+                    total: "条",
+                    perPage: {
+                        "10": "10/页",
+                        "20": "20/页", 
+                        "50": "50/页",
+                        "100": "100/页"
+                    },
+                    goTo: "前往",
+                    page: "页"
+                },
+                
+                // Family page translations
+                family: {
+                    title: "家庭",
+                    subtitle: "管理和监控所有家庭的能源使用情况",
+                    views: {
+                        grid: "🏠 网格视图"
+                    },
+                    placeholder: {
+                        userName: "请输入用户名称...",
+                        allActivity: "所有活跃度",
+                        deviceCode: "请输入设备编码...",
+                        deviceStatus: "所有设备状态"
+                    },
+                    activityStatus: {
+                        active: "活跃",
+                        inactive: "非活跃",
+                        notParticipating: "未参与"
+                    },
+                    deviceStates: {
+                        charging: "充电",
+                        discharging: "放电",
+                        standby: "待机",
+                        offline: "离线"
+                    },
+                    buttons: {
+                        search: "查询",
+                        reset: "重置",
+                        export: "导出",
+                        viewDetails: "查看详情"
+                    },
+                    table: {
+                        user: "用户",
+                        activity: "活跃度",
+                        todayProfit: "今日获利 ($)",
+                        totalProfit: "累计获利 ($)",
+                        avgProfit: "日均获利 ($)",
+                        deviceCode: "设备编码",
+                        deviceStatus: "设备状态",
+                        soc: "SOC",
+                        location: "地址",
+                        usageDays: "使用天数 (天)",
+                        action: "操作"
+                    },
+                    drawer: {
+                        title: "详情",
+                        tabs: {
+                            basicInfo: "基本信息",
+                            revenueInfo: "收益信息",
+                            operatingData: "运行数据"
+                        },
+                        deviceCode: "设备编码",
+                        batteryCapacity: "电池容量",
+                        soc: "SOC",
+                        status: "状态",
+                        operatingDays: "运行天数",
+                        owner: "所属用户",
+                        address: "地址",
+                        day: "天",
+                        todayProfit: "今日获利",
+                        avgProfit: "日均获利",
+                        totalRevenue: "累计收益",
+                        todayDischarge: "今日放电量",
+                        avgDischarge: "日均放电量",
+                        totalDischarge: "累计放电量",
+                        profitTrend: "收益趋势",
+                        month: "月",
+                        year: "年",
+                        socTrend: "soc趋势",
+                        chargeCycles: "充放电次数",
+                        operatingDataTitle: "运行数据",
+                        charging: "充电",
+                        stopCharging: "停止充电",
+                        discharging: "放电",
+                        stopDischarging: "停止放电"
+                    },
+                    userName1: "张明",
+                    userName2: "李华",
+                    userName3: "王芳",
+                    userName4: "赵强",
+                    userName5: "陈晓",
+                    userName6: "刘静",
+                    userName7: "周涛",
+                    userName8: "吴敏",
+                    userName9: "郑伟",
+                    userName10: "林丽"
+                }
+            },
+            
+            en: {
+                nav: {
+                    home: "Home",
+                    profit: "Profit",
+                    family: "Family",
+                    analysis: "Analysis",
+                    organization: "Organization",
+                    pushStrategy: "Push Strategy",
+                    operationLog: "Operation Log",
+                    messageCenter: "Message Center"
+                },
+                home: "Home",
+                station: "Station Management",
+                highestPriceRegion: "Highest Price Region:",
+                todayLow: "Today's Low",
+                todayHigh: "Today's High",
+                charge: "Charge",
+                discharge: "Discharge",
+                stopChargeDischarge: "Stop Charge/Discharge",
+                family: "Families",
+                availableHomes: "Families",
+                availablePower: "Available Discharge",
+                estimatedProfit: "Profit",
+                todayDischargeHomes: "Discharge Homes Today",
+                discharged: "Discharged",
+                actualDischarge: "Actual Discharge",
+                profit: "Profit($)",
+                actualProfit: "Total Earnings",
+                todayData: "Today's Data",
+                realtime: "Realtime",
+                market: "Market",
+                map: "Map",
+                autoSwitch: "Auto Switch",
+                dischargedFamilies: "Discharged Families",
+                dischargedEnergy: "Discharged",
+                totalEarnings: "Total Earnings($)",
+                comparedToYesterday: "vs Yesterday",
+                installedCapacity: "Installed Capacity",
+                currentSpotPrice: "Current Spot Price",
+                currentDemand: "Current Demand",
+                forecastPrice: "Forecast Price",
+                forecastDemand: "Forecast Demand",
+                demand: "Demand",
+                generation: "Generation",
+                averagePrice: "Average Price",
+                maxPrice: "Highest Price",
+                minPrice: "Lowest Price",
+                priceFluctuation: "Price Fluctuation",
+                comparedYesterday: "Compared to yesterday",
+                within24h: "Within 24h",
+                powerRevenueTrend: "Discharge & Revenue Trend",
+                dischargeAndProfit: "Discharge & Profit",
+                timeFilter: "Time Filter",
+                today: "Today",
+                week: "This Week",
+                month: "This Month",
+                custom: "Custom",
+                day: "Day",
+                year: "Year",
+                cumulative: "Cumulative",
+                refresh: "Refresh",
+                last7Days: "Last 7 Days",
+                last30Days: "Last 30 Days",
+                last90Days: "Last 90 Days",
+                last6Months: "Last 6 Months",
+                last1Year: "Last 1 Year",
+                dayReport: "Daily",
+                monthReport: "Monthly",
+                yearReport: "Yearly",
+                totalReport: "Total",
+                selectTime: "Select Time",
+                startDate: "Start Date",
+                endDate: "End Date",
+                reset: "Reset",
+                query: "Query",
+                quickSelect: "Quick Select",
+                family: "Family",
+                systemOverview: "System Overview",
+                totalCapacity: "Total Capacity",
+                onlineDevices: "Online Devices",
+                networkStatus: "Network Status",
+                normal: "Normal",
+                totalDischarge: "Total Discharge",
+                totalRevenue: "Total Revenue",
+                totalHomes: "Family",
+                totalInstall: "Installed Capacity",
+                totalActualDischarge: "Total Actual Discharge",
+                totalProfit: "Total Profit",
+                cumulativePrice: "Cumulative Price",
+                currentCumulativePrice: "Current Cumulative Price",
+                forecastCumulativePrice: "Forecast Cumulative Price (5min)",
+                thresholdStatus: "Threshold Status",
+                belowThreshold: "Below Threshold",
+                exceededThreshold: "Exceeded",
+                executionEfficiency: "Execution Efficiency",
+                systemAvailability: "System Availability",
+                actualDischargeRate: "Actual Discharge Rate",
+                today: "Today",
+                week: "This Week",
+                month: "This Month",
+                custom: "Custom",
+                refresh: "Refresh",
+                timeFilter: "Time Filter",
+                charging: "Charging",
+                discharging: "Discharging",
+                standby: "Standby",
+                offline: "Offline",
+                active: "Active",
+                device: "Device",
+                status: "Status",
+                region: "Region", 
+                state: "State",
+                deviceCount: "Device Count",
+                normalOperation: "Normal Operation",
+                price: "Price",
+                historicalPrice: "Historical Price",
+                predictedPrice: "Predicted Price",
+                predictedDemand: "Predicted Demand",
+                operationConfirm: "Operation Confirmation",
+                confirmMessage: "Are you sure to perform this operation?",
+                operationType: "Operation Type",
+                targetDevices: "Target Devices",
+                estimatedPower: "Estimated Power",
+                currentPrice: "Current Price",
+                estimatedDuration: "Estimated Duration",
+                estimatedCost: "Estimated Cost/Benefit",
+                estimatedPower: "Estimated Power",
+                currentPrice: "Current Price",
+                confirmExecute: "Confirm Execute",
+                confirmCharge: "Confirm Charge",
+                confirmDischarge: "Confirm Discharge",
+                confirmStop: "Confirm Stop",
+                stopWarning: "Stop operation will immediately terminate the charging/discharging status of all devices, devices will return to standby mode.",
+                stopChargeWarning: "Stop operation will immediately terminate the charging status of all devices, devices will return to standby mode.",
+                chargeCompleteMessage: "Charging command completed. Here is the device response statistics report:",
+                dischargeCompleteMessage: "Discharging command completed. Here is the device response statistics report:",
+                chargingCompleteMessage: "Charging command completed. Here is the device response statistics report:",
+                dischargingCompleteMessage: "Discharging command completed. Here is the device response statistics report:",
+                stopCompleteMessage: "Stop command completed. Here is the device response statistics report:",
+                estimatedRevenue: "Estimated Revenue",
+                cancel: "Cancel",
+                stop: "Stop",
+                units: "",
+                comparedToYesterday: "vs Yesterday",
+                currentCumulativePrice: "Current Cumulative Price",
+                forecastCumulativePrice5min: "Forecast Cumulative Price (5min)",
+                thresholdStatus: "Threshold Status",
+                notExceeded: "Below Threshold",
+                confirmExecute: "Confirm",
+                operationSuccess: "Operation Successful",
+                systemExecuting: "System is executing your command...",
+                devicesDispatched: "Dispatched",
+                devicesReceived: "Received",
+                devicesActivated: "Activated",
+                successRate: "Success Rate",
+                close: "Close",
+                viewDetails: "View Details",
+                operationDetails: "Operation Details",
+                stationDetails: "Station Details",
+                executionTimeline: "Execution Timeline",
+                basicInfo: "Basic Information",
+                executionStatus: "Execution Status",
+                operationTime: "Operation Time",
+                deviceResponseStatistics: "Device Response Statistics", 
+                commandsSent: "Commands Sent",
+                commandsReceived: "Commands Received",
+                commandSentSuccess: "Command Sent Successfully",
+                totalDevices: "Total Devices",
+                deviceResponseStatistics: "Device Response Statistics",
+                activated: "Dispatched",
+                progress: "Progress",
+                currentOperation: "Current Operation",
+                none: "None",
+                estimatedProfit: "Estimated Profit",
+                devices: "devices",
+                refresh: "Refresh",
+                timeFilter: "Time Filter",
+                refreshData: "Manually refresh data",
+                dataRefreshed: "Data refreshed",
+                chartsLoadFailed: "charts failed to load, check console",
+                allChartsLoaded: "All charts loaded successfully",
+                filterError: "Filter error occurred, please refresh the page and try again",
+                dataLoading: "Loading data...",
+                currentTime: "Current Time",
+                userName1: "John Smith",
+                userName2: "Emily Davis",
+                userName3: "Michael Johnson",
+                userName5: "David Brown",
+                adminUser: "Administrator",
+                remark: {
+                    none: "-",
+                    testAccount: "Test Account",
+                    systemAdmin: "System Administrator",
+                    tempUser: "Temporary User"
+                },
+                control: "Control",
+                monitor: "Monitor",
+                detail: "Detail",
+                manage: "Manage",
+                config: "Config",
+                searchComplete: "Search Complete",
+                foundRecords: "Found {count} matching records",
+                resetComplete: "Reset Complete",
+                clearedSearch: "Search criteria cleared",
+                exporting: "Exporting",
+                exportSuccess: "Data exported successfully",
+                validationFailed: "Validation Failed",
+                fillRequired: "Please fill in all required fields",
+                saveSuccess: "Save Successful",
+                userSaved: "User information saved",
+                deleteSuccess: "Delete Successful",
+                userDeleted: "User has been deleted",
+                userName3: "Michael Johnson",
+                adminUser: "Administrator",
+                switchedTo: "Switched to",
+                tabSwitched: "Tab switched",
+                saving: "Saving...",
+                deleting: "Deleting...",
+                exporting: "Exporting...",
+                selectDateRange: "Please select start and end dates",
+                invalidDateRange: "Start date cannot be later than end date",
+                dateRangeTooLong: "Selected time range cannot exceed 1 year",
+                customRangeApplied: "Custom time range applied",
+                filterApplied: "Filtered showing",
+                noDataTable: "Data table not found",
+                exportSuccess: "Successfully exported",
+                exportFailed: "Export failed, please retry",
+                sortCancelled: "Sorting cancelled",
+                sortApplied: "Sorted by",
+                filterReset: "Filter reset",
+                socRangeError: "SOC minimum value cannot be greater than maximum value",
+                profitRangeError: "Profit minimum value cannot be greater than maximum value",
+                daysRangeError: "Usage days minimum value cannot be greater than maximum value",
+                advancedFilterApplied: "Advanced filter applied",
+                exportedRecords: "Exported",
+                searchComplete: "Search completed",
+                foundMatches: "Found",
+                matchingMessages: "matching messages",
+                resetComplete: "Reset completed",
+                searchCleared: "Search criteria cleared",
+                noData: "No data available",
+                
+                // Device command modal translations
+                deviceCommand: "Device Command",
+                confirmOperation: "Confirm Operation",
+                operationType: "Operation Type",
+                targetDevices: "Target Devices",
+                executionTime: "Estimated Execution Time",
+                immediately: "Immediately",
+                minutes: "minutes",
+                operationWarning: "This operation will affect all selected devices. Please confirm to continue.",
+                confirmExecute: "Confirm",
+                cancel: "Cancel",
+                stop: "Stop",
+                charging: "Charging",
+                discharging: "Discharging",
+                idle: "Idle",
+                stopOperation: "Stop Operation",
+                operationSuccess: "Operation Successful",
+                operationFailed: "Operation Failed",
+                confirmCharge: "Confirm Charge",
+                confirmDischarge: "Confirm Discharge",
+                confirmStop: "Confirm Stop",
+                estimatedRevenue: "Estimated Revenue",
+                stopWarning: "Stopping will immediately terminate all device Charge/Discharge status. Devices will return to standby mode.",
+                deviceResponseStatisticsTitle: "Device Response Statistics",
+                operationCompleteMessage: "command completed. Here is the device response statistics report:",
+                chargingCompleteMessage: "Charging command completed. Here is the device response statistics report:",
+                dischargingCompleteMessage: "Discharging command completed. Here is the device response statistics report:",
+                
+                // Chart common translations
+                charts: {
+                    dischargeAmount: "Discharge Amount",
+                    profit: "Profit",
+                    timeHour: "Time: Hour",
+                    socTrend: "SOC Trend",
+                    charge: "Charge",
+                    stopCharge: "Stop Charging",
+                    discharge: "Discharge",
+                    stopDischarge: "Stop Discharging", 
+                    familyDistribution: "Family Distribution",
+                    totalFamilies: "Total Families",
+                    energyUsage: "Energy Usage",
+                    dailyRevenue: "Daily Revenue",
+                    cumulativeRevenue: "Cumulative Revenue",
+                    deviceStatus: "Device Status",
+                    standby: "Standby",
+                    offline: "Offline",
+                    pvGeneration: "PV Generation",
+                    storageDischarge: "Storage Discharge",
+                    powerLoad: "Power Load",
+                    user: "User",
+                    notParticipating: "Not Participating",
+                    maxValue: "Maximum",
+                    minValue: "Minimum",
+                    avgValue: "Average",
+                    efficiency: "Efficiency",
+                    availability: "Availability",
+                    device: "Device"
+                },
+                
+                months: {
+                    jan: "Jan", feb: "Feb", mar: "Mar", apr: "Apr",
+                    may: "May", jun: "Jun", jul: "Jul", aug: "Aug",
+                    sep: "Sep", oct: "Oct", nov: "Nov", dec: "Dec"
+                },
+                
+                weekdays: {
+                    mon: "Mon", tue: "Tue", wed: "Wed", thu: "Thu",
+                    fri: "Fri", sat: "Sat", sun: "Sun"
+                },
+                systemAdmin: "System Administrator",
+                operatorA: "Operator A",
+                operatorB: "Operator B",
+                dischargeStatistics: "Discharge Statistics",
+                priceStatistics: "Price Statistics",
+                actualDischargeAmount: "Actual Discharge Amount",
+                actualDischargeEfficiency: "Actual Discharge Efficiency",
+                usersExceedingTarget: "Users Exceeding Target",
+                usersNotExceedingTarget: "Users Not Meeting Target",
+                todaysPrice: "Today's Price",
+                avgDischargePrice: "Average Discharge Price",
+                sellPrice: "Selling Price",
+                todaysLowest: "Today's Lowest",
+                todaysHighest: "Today's Highest",
+                startDate: "Start Date",
+                endDate: "End Date",
+                reset: "Reset",
+                query: "Query",
+                quickSelect: "Quick Select",
+                last7Days: "Last 7 days",
+                last30Days: "Last 30 days",
+                last90Days: "Last 90 days",
+                energyManagementCenter: "Energy Management Center",
+                unit: "",
+                comparedToYesterdayPlus: "↑ vs Yesterday +",
+                estimatedDuration: "15-30 minutes",
+                thisOperationWillAffectAll: "This operation will affect all connected devices. Please confirm to continue.",
+                viewDetails: "View Details",
+                successfullyActivated: "Successfully Activated",
+                devicePrefix: "Device",
+                statusLabel: "Status",
+                regionLabel: "Region",
+                stateLabel: "State",
+                deviceCountLabel: "Device Count",
+                statusNormalOperation: "Status: Normal Operation",
+                inactive: "Standby",
+                minutes: "minutes",
+                confirmChargeOperation: "Confirm Charge Operation",
+                confirmDischargeOperation: "Confirm Discharge Operation",
+                confirmChargeMessage: "Are you sure you want to start charging?",
+                confirmDischargeMessage: "Are you sure you want to start discharging?",
+                chargeWarningMessage: "This will start charging all connected devices, consuming power from the grid.",
+                dischargeWarningMessage: "This will start discharging all connected devices, supplying power to the grid for revenue.",
+                confirmStopCharge: "Confirm Stop Charge",
+                confirmStopDischarge: "Confirm Stop Discharge",
+                confirmStopChargeMessage: "Are you sure you want to stop charging?",
+                confirmStopDischargeMessage: "Are you sure you want to stop discharging?",
+                stopCharge: "Stop Charge",
+                stopDischarge: "Stop Discharge",
+                allDevices: "All Devices",
+                deviceResponseStatisticsTitle: "Device Response Statistics",
+                operationCommandCompleted: "Command dispatched successfully. Here are the device response statistics:",
+                
+                // Operation Log translations
+                operationLog: {
+                    title: "Operation Log",
+                    table: {
+                        time: "Time",
+                        command: "Command",
+                        operator: "Operator",
+                        stations: "Stations",
+                        success: "Success",
+                        failed: "Failed",
+                        action: "Action"
+                    },
+                    commands: {
+                        charge: "Charge",
+                        discharge: "Discharge",
+                        stopCharge: "Stop Charge",
+                        stopDischarge: "Stop Discharge"
+                    },
+                    placeholder: {
+                        operator: "Enter operator name...",
+                        command: "All Commands",
+                        time: "Select time..."
+                    },
+                    buttons: {
+                        search: "🔍 Search",
+                        reset: "🔄 Reset",
+                        clear: "📥 Export"
+                    },
+                    viewDetails: "View Details",
+                    noData: "No data",
+                    total: "Total",
+                    perPage: "/page",
+                    goToPage: "Go to page",
+                    notFound: "Operation record not found",
+                    
+                    // Detail drawer translations
+                    detailTitle: "Operation Log Details",
+                    tabs: {
+                        basic: "Basic Info",
+                        stations: "Station Details",
+                        timeline: "Execution Timeline"
+                    },
+                    overview: {
+                        title: "Operation Overview",
+                        totalStations: "Total Stations",
+                        successCount: "Success Count",
+                        failedCount: "Failed Count",
+                        successRate: "Success Rate"
+                    },
+                    basicInfo: {
+                        title: "Basic Information",
+                        operationTime: "Operation Time",
+                        operationCommand: "Operation Command",
+                        operator: "Operator",
+                        operationId: "Operation ID",
+                        executionStatus: "Execution Status",
+                        allSuccess: "All Success",
+                        partialSuccess: "Partial Success",
+                        mostlyFailed: "Mostly Failed"
+                    },
+                    stationDetails: {
+                        title: "Station Execution Details",
+                        success: "Success",
+                        failed: "Failed",
+                        station: "Station",
+                        area: "Area"
+                    },
+                    timeline: {
+                        title: "Execution Timeline",
+                        commandCreated: "Command Created",
+                        validationPassed: "Validation Passed",
+                        executionStarted: "Execution Started",
+                        stationsSuccess: " stations executed successfully",
+                        stationsFailed: " stations failed",
+                        executionCompleted: "Execution Completed",
+                        normal: "Normal",
+                        warning: "Warning",
+                        error: "Error"
+                    }
+                },
+                
+                // Message Center translations
+                messageCenter: {
+                    title: "Message Center",
+                    tabs: {
+                        all: "All",
+                        alert: "Alert",
+                        system: "System",
+                        operation: "Operation"
+                    },
+                    placeholder: {
+                        searchKeyword: "Enter message keywords..."
+                    },
+                    types: {
+                        chargeReminder: "Charge Reminder",
+                        dischargeReminder: "Discharge Reminder"
+                    },
+                    status: {
+                        unread: "Unread",
+                        read: "Read"
+                    },
+                    buttons: {
+                        search: "🔍 Search",
+                        reset: "🔄 Reset",
+                        export: "📥 Export",
+                        delete: "Delete"
+                    },
+                    markAsRead: "Mark as read",
+                    delete: "Delete",
+                    noMessages: "No messages",
+                    loading: "Loading...",
+                    messages: {
+                        chargeAlert: "Current price {price} yuan, below preset threshold {threshold} yuan, please charge immediately",
+                        dischargeAlert: "Current price {price} yuan, above preset threshold {threshold} yuan, please discharge immediately"
+                    },
+                    timeAgo: {
+                        justNow: "Just now",
+                        minutesAgo: "{minutes} minutes ago",
+                        hoursAgo: "{hours} hours ago",
+                        daysAgo: "{days} days ago"
+                    }
+                },
+                
+                // Common translations
+                page: "page",
+                items: "items",
+                messageContent: "Message Content",
+                description: "Description",
+                type: "Warning",
+                time: "Time",
+                units: "items",
+                allTypes: "All Types",
+                alertMessage: "Alert Message",
+                systemMessage: "System Message",
+                operationMessage: "Operation Message",
+                warning: "Warning",
+                noMessagesFound: "No messages found with current filters",
+                firstPage: "First",
+                prevPage: "Previous",
+                nextPage: "Next",
+                lastPage: "Last",
+                showingItems: "Showing",
+                error: "Error",
+                dateSelection: "Date Selection",
+                dateSelected: "Date selected",
+                go: "Go",
+                
+                // Profit page translations
+                profitAnalysis: "Profit Analysis",
+                profitSubtitle: "Real-time monitoring and analysis of your energy trading profits",
+                todayProfit: "Today's Profit",
+                weekProfit: "This Week's Profit",
+                monthProfit: "This Month's Profit",
+                comparedToLastWeek: "vs Last Week",
+                comparedToLastMonth: "vs Last Month",
+                yearToDate: "Year to Date",
+                profitTrend: "Profit Trend",
+                deviceProfitRanking: "Device Profit Ranking",
+                energyRevenueComparison: "Energy vs Revenue Comparison",
+                profitDistribution: "Profit Distribution",
+                hourlyProfitAnalysis: "Hourly Profit Analysis",
+                dailyProfitComparison: "Daily Profit Comparison",
+                energyConsumption: "Energy Consumption",
+                revenue: "Revenue",
+                profit: "Profit",
+                chargingProfit: "Charging Profit",
+                dischargingProfit: "Discharging Profit",
+                tradingProfit: "Trading Profit",
+                profitSource: "Profit Source",
+                hourlyProfit: "Hourly Profit",
+                thisWeek: "This Week",
+                lastWeek: "Last Week",
+                thisMonth: "This Month",
+                lastMonth: "Last Month",
+                monday: "Monday",
+                tuesday: "Tuesday",
+                wednesday: "Wednesday",
+                thursday: "Thursday",
+                friday: "Friday",
+                saturday: "Saturday",
+                sunday: "Sunday",
+                top10: "TOP 10",
+                bottom10: "BOTTOM 10",
+                searchDevice: "Search Device",
+                search: "Search",
+                deviceId: "Device ID",
+                location: "Location",
+                efficiency: "Efficiency",
+                online: "Online",
+                offline: "Offline",
+                overview: "Overview",
+                dailyProfit: "Daily Profit",
+                deviceProfit: "Device Profit",
+                chartView: "Chart View",
+                tableView: "Table View",
+                
+                // Analysis page translations
+                analysis: {
+                    title: "Analysis - Daily Report",
+                    profit: "Profit (10K Yuan)",
+                    avgProfitPerPerson: "Avg Profit Per Person (Yuan)",
+                    dischargeStats: "Discharge Statistics",
+                    priceStats: "Price Statistics", 
+                    userStats: "User Statistics",
+                    dischargeAnalysis: "Discharge Analysis",
+                    profitRatio: "Profit Ratio",
+                    profitLabel: "Profit",
+                    doubleRing: {
+                        userPerspective: "Inner Ring: Active",
+                        profitPerspective: "Outer Ring: Profit"
+                    },
+                    timeFilter: {
+                        label: "Time Filter",
+                        today: "Today",
+                        thisMonth: "This Month", 
+                        thisYear: "This Year"
+                    },
+                    metrics: {
+                        userCount: "User Count",
+                        activeUserRatio: "Active User Ratio",
+                        dischargeAmount: "Discharge Amount (kWh)",
+                        actualDischargeEfficiency: "Actual Discharge Efficiency",
+                        exceedingUsers: "Users Exceeding Target",
+                        notExceedingUsers: "Users Not Exceeding Target",
+                        todayPrice: "Today's Price",
+                        avgDischargePrice: "Avg Discharge Price",
+                        actualDischargeAmount: "Actual Discharge Amount",
+                        actualDischargeRate: "Actual Discharge Rate",
+                        todayAvgDischargeRate: "Today Avg Discharge Rate",
+                        todayAvgPrice: "Today Avg Price"
+                    },
+                    units: {
+                        yuan: "Yuan",
+                        kwh: "kWh",
+                        percent: "%"
+                    },
+                    comparison: {
+                        increase: "▲",
+                        decrease: "▼",
+                        compared: "vs prev"
+                    },
+                    priceRange: {
+                        lowest: "Lowest",
+                        highest: "Highest",
+                        sellPrice: "Sell Price",
+                        todayLowest: "Today's Lowest",
+                        todayHighest: "Today's Highest",
+                        currentPrice: "Current Price"
+                    },
+                    currency: {
+                        yuan: "Yuan",
+                        dollar: "$"
+                    },
+                    userTypes: {
+                        active: "Active",
+                        inactive: "Inactive", 
+                        notParticipating: "Not Participating"
+                    },
+                    chartLabels: {
+                        actualDischarge: "Actual Discharge",
+                        price: "Price",
+                        dischargeRate: "Discharge Rate"
+                    },
+                    userRatio: "User Ratio",
+                    userLabel: "Users",
+                    modal: {
+                        exceedingUsersDetail: "Users Exceeding Target Details",
+                        notExceedingUsersDetail: "Users Not Exceeding Target Details",
+                        exceedingUsersTitle: "Users Exceeding Target Details",
+                        notExceedingUsersTitle: "Users Not Exceeding Target Details"
+                    },
+                    table: {
+                        userName: "User Name",
+                        dischargeAmount: "Discharge Amount (kWh)",
+                        efficiency: "Efficiency (%)",
+                        profit: "Profit ($)"
+                    },
+                    profitTypes: {
+                        highProfit: "High Profit",
+                        mediumProfit: "Medium Profit",
+                        lowProfit: "Low Profit"
+                    }
+                },
+                
+                // Family page translations
+                family: {
+                    title: "Family",
+                    subtitle: "Manage and monitor energy usage for all families",
+                    deviceId: "Device ID",
+                    address: "Address",
+                    status: "Status",
+                    cumulativeDischarge: "Cumulative Discharge",
+                    cumulativeRevenue: "Cumulative Revenue",
+                    action: "Action",
+                    enabled: "Enabled",
+                    disabled: "Disabled",
+                    totalFamilies: "Total Families",
+                    totalRevenue: "Total Revenue",
+                    familyDistribution: "Family Distribution Statistics",
+                    deviceStatus: "Device Status",
+                    deviceStatusDistribution: "Device Status Distribution",
+                    allDeviceStatus: "All Device Status",
+                    activeFamilies: "Active Families",
+                    inactiveFamilies: "Inactive Families",
+                    notParticipatingFamilies: "Non-participating Families",
+                    foundFamilies: "Found {count} families",
+                    views: {
+                        grid: "🏠 Grid View",
+                        chart: "📊 Chart View",
+                        table: "📋 Table View"
+                    },
+                    buttons: {
+                        search: "🔍 Search",
+                        reset: "🔄 Reset", 
+                        export: "📥 Export",
+                        advancedFilter: "⚙️ Advanced Filter",
+                        applyFilter: "Apply Advanced Filter",
+                        cancel: "Cancel",
+                        clearAll: "Clear All Filters",
+                        viewDetails: "View Details",
+                        details: "Details",
+                        all: "All"
+                    },
+                    placeholder: {
+                        allStatus: "All Status",
+                        allActivity: "All Activity",
+                        deviceStatus: "All Device Status",
+                        userName: "Enter user name...",
+                        deviceCode: "Enter device code...",
+                        minValue: "Min Value",
+                        maxValue: "Max Value",
+                        allLocations: "All Locations",
+                        allDevices: "All Devices"
+                    },
+                    table: {
+                        user: "User",
+                        userName: "User Name",
+                        location: "Location",
+                        activity: "Activity",
+                        todayProfit: "Today's Profit ($)",
+                        totalProfit: "Total Profit ($)",
+                        cumulativeProfit: "Cumulative Profit ($)",
+                        avgProfit: "Avg Daily Profit ($)",
+                        deviceCode: "Device Code",
+                        deviceStatus: "Device Status",
+                        soc: "SOC",
+                        todayDischarge: "Today's Discharge (kWh)",
+                        usageDays: "Usage Days",
+                        activityStatus: "Activity Status",
+                        action: "Action",
+                        actions: "Actions"
+                    },
+                    activityStatus: {
+                        active: "Active",
+                        inactive: "Inactive",
+                        notParticipating: "Not Participating"
+                    },
+                    deviceStates: {
+                        charging: "Charging",
+                        discharging: "Discharging",
+                        standby: "Standby",
+                        offline: "Offline"
+                    },
+                    filters: {
+                        socRange: "SOC Range",
+                        profitRange: "Today's Profit Range",
+                        usageDaysRange: "Usage Days Range",
+                        days: "Days"
+                    },
+                    stats: {
+                        activeRate: "Active Rate",
+                        avgDischarge: "Avg Discharge (kWh)",
+                        monthlyNew: "New This Month",
+                        comparedLastMonth: "vs Last Month",
+                        comparedYesterday: "vs Yesterday",
+                        thisWeek: "This Week"
+                    },
+                    charts: {
+                        activityTrend: "Activity Trend",
+                        energyHeatmap: "Energy Usage Heatmap",
+                        revenueAnalysis: "Revenue Analysis",
+                        powerUsage: "Power Usage",
+                        dischargeAmount: "Discharge Amount",
+                        temperature: "Temperature",
+                        revenueTrend: "Revenue Trend",
+                        socTrend: "SOC Trend",
+                        operatingDays: "Operating Days",
+                        chargeCycles: "Charge/Discharge Cycles",
+                        operatingData: "Operating Data",
+                        dailyRevenue: "Daily Revenue",
+                        cumulativeRevenue: "Cumulative Revenue"
+                    },
+                    metrics: {
+                        soc: "SOC",
+                        todayDischarge: "Today's Discharge",
+                        todayProfit: "Today's Profit"
+                    },
+                    details: {
+                        device: "Device"
+                    },
+                    drawer: {
+                        title: "Details",
+                        tabs: {
+                            basicInfo: "Basic Info",
+                            revenueInfo: "Revenue Info",
+                            operatingData: "Operating Data"
+                        },
+                        basicInfo: "Basic Information",
+                        userName: "User Name",
+                        location: "Location",
+                        address: "Address",
+                        deviceCode: "Device Code",
+                        batteryCapacity: "Battery Capacity",
+                        soc: "SOC",
+                        status: "Status",
+                        operatingDays: "Operating Days",
+                        owner: "Owner",
+                        todayProfit: "Today's Profit",
+                        avgProfit: "Avg Daily Profit",
+                        totalRevenue: "Total Revenue",
+                        todayDischarge: "Today's Discharge",
+                        avgDischarge: "Avg Discharge",
+                        totalDischarge: "Total Discharge",
+                        revenue: "Revenue",
+                        discharge: "Discharge",
+                        profitTrend: "Profit Trend",
+                        operatingDataTitle: "Operating Data",
+                        socTrend: "SOC Trend",
+                        chargeCycles: "Charge/Discharge Cycles",
+                        day: "Day",
+                        month: "Month",
+                        year: "Year",
+                        stopCharging: "Stop Charging",
+                        charging: "Charging",
+                        discharging: "Discharging",
+                        stopDischarging: "Stop Discharging"
+                    },
+                    userName1: "John Smith",
+                    userName2: "Michael Lee",
+                    userName3: "Emily Wang",
+                    userName4: "David Zhao",
+                    userName5: "Sarah Chen",
+                    modal: {
+                        details: "Details",
+                        basicInfo: "Basic Information",
+                        revenueInfo: "Revenue Information",
+                        operatingData: "Operating Data",
+                        deviceCode: "Device Code",
+                        batteryCapacity: "Battery Capacity",
+                        operatingDays: "Operating Days",
+                        owner: "Owner",
+                        todayProfit: "Today's Profit",
+                        avgDailyProfit: "Avg Daily Profit",
+                        todayDischarge: "Today's Discharge",
+                        avgDailyDischarge: "Avg Daily Discharge",
+                        cumulativeDischarge: "Cumulative Discharge"
+                    },
+                    timeFilters: {
+                        day: "Day",
+                        month: "Month",
+                        year: "Year"
+                    },
+                    pagination: {
+                        total: "Total {total} items",
+                        perPage10: "10/page",
+                        perPage20: "20/page",
+                        perPage50: "50/page",
+                        perPage100: "100/page"
+                    }
+                },
+                
+                // Organization page translations
+                organization: {
+                    title: "Organization",
+                    subtitle: "Manage organization members and permissions",
+                    placeholder: {
+                        userName: "Enter user name...",
+                        userEmail: "Enter user email..."
+                    },
+                    buttons: {
+                        search: "🔍 Search",
+                        reset: "🔄 Reset",
+                        export: "📥 Export",
+                        add: "Add New"
+                    },
+                    table: {
+                        userName: "User Name",
+                        userEmail: "User Email",
+                        status: "Status",
+                        remarks: "Remarks",
+                        createdTime: "Created Time",
+                        action: "Action"
+                    },
+                    status: {
+                        active: "Enabled",
+                        inactive: "Disabled",
+                        allStatus: "All Status"
+                    },
+                    actions: {
+                        edit: "Edit",
+                        delete: "Delete"
+                    },
+                    modal: {
+                        addMember: "Add Member",
+                        editMember: "Edit Member",
+                        addOrganization: "Add Organization",
+                        userName: "User Name",
+                        email: "Email", 
+                        password: "Password",
+                        status: "Status",
+                        remark: "Remark",
+                        permissions: "Permissions",
+                        expandCollapse: "Expand/Collapse",
+                        selectAll: "Select All/None",
+                        cancel: "Cancel",
+                        confirm: "Confirm",
+                        placeholders: {
+                            userName: "Enter user name",
+                            email: "Enter user email",
+                            password: "Enter password",
+                            remark: "Enter remark"
+                        },
+                        permissionModules: {
+                            home: "Home",
+                            user: "User",
+                            station: "Station"
+                        }
+                    },
+                    deleteConfirm: {
+                        title: "Confirm Delete",
+                        message: "This operation cannot be undone. Are you sure you want to delete this user?",
+                        warning: "After deletion, the user will not be able to access the system, and all related data will be permanently removed",
+                        cancel: "Cancel",
+                        confirm: "Confirm Delete"
+                    },
+                    messages: {
+                        validationFailed: "Validation Failed",
+                        fillRequired: "Please fill in all required fields"
+                    },
+                    pagination: {
+                        total: "Total {total} items",
+                        perPage10: "10/page",
+                        perPage20: "20/page",
+                        perPage50: "50/page",
+                        perPage100: "100/page",
+                        goTo: "Go to"
+                    }
+                },
+                
+                // Push Strategy page translations
+                pushStrategy: {
+                    title: "Push Strategy",
+                    buttons: {
+                        edit: "Edit",
+                        save: "Save",
+                        cancel: "Cancel",
+                        confirm: "Confirm"
+                    },
+                    dischargePriceStrategy: "Discharge Notification Price Strategy",
+                    chargePriceStrategy: "Charge Notification Price Strategy",
+                    descriptions: {
+                        dischargeDescription: "Send reminder when price exceeds set value",
+                        chargeDescription: "Send reminder when price falls below set value"
+                    },
+                    reminderFrequency: "Reminder Frequency",
+                    reminderDescription: "When conditions are met and no response, how often to send reminders",
+                    sendingMethod: "Sending Method",
+                    selectUsers: "Select Users",
+                    methods: {
+                        inSiteMessage: "In-site Message",
+                        email: "Email"
+                    },
+                    placeholder: {
+                        price: "Price"
+                    },
+                    table: {
+                        userName: "User Name",
+                        userEmail: "User Email",
+                        status: "Status"
+                    },
+                    status: {
+                        enabled: "Enabled",
+                        disabled: "Disabled"
+                    },
+                    messages: {
+                        saveSuccess: "Save Successful",
+                        strategyUpdated: "Push strategy updated successfully",
+                        cancelled: "Cancelled",
+                        formReset: "Form has been reset to original state",
+                        validationFailed: "Validation Failed",
+                        enterDischargePrice: "Please enter discharge notification strategy price",
+                        enterChargePrice: "Please enter charge notification strategy price",
+                        invalidDischargePrice: "Discharge price must be a valid positive number",
+                        invalidChargePrice: "Charge price must be a valid positive number",
+                        invalidFrequency: "Reminder frequency must be between 1-60 minutes"
+                    }
+                },
+                
+                // Profit page translations
+                profit: {
+                    title: "Profit",
+                    pageTitle: "Profit",
+                    subtitle: "Real-time monitoring and analysis of your energy trading revenue",
+                    views: {
+                        chart: "Chart View",
+                        table: "Table View"
+                    },
+                    stats: {
+                        userCount: "User Count",
+                        totalRevenue: "Total Revenue",
+                        avgProfit: "Avg Profit per User",
+                        maxStationProfit: "Max Station Profit",
+                        minStationProfit: "Min Station Profit",
+                        comparedYesterday: "vs Yesterday"
+                    },
+                    charts: {
+                        userManagement: "User Management",
+                        revenueDistribution: "Revenue Distribution",
+                        dischargeAndProfit: "Discharge & Profit",
+                        profitRanking: "Profit Ranking"
+                    },
+                    ranking: {
+                        top5: "Top 5",
+                        bottom5: "Bottom 5"
+                    },
+                    table: {
+                        userParticipation: "User Participation",
+                        date: "Date",
+                        user: "User",
+                        status: "Operating Status",
+                        dischargeAmount: "Actual Discharge (kwh)",
+                        profit: "Profit ($)",
+                        dailyAvg: "Daily Avg",
+                        compareDaily: "Compare Daily Avg ($)"
+                    },
+                    filters: {
+                        all: "All",
+                        active: "Active",
+                        inactive: "Inactive",
+                        notParticipating: "Not Participating"
+                    },
+                    status: {
+                        active: "Active",
+                        inactive: "Inactive",
+                        notParticipating: "Not Participating"
+                    },
+                    buttons: {
+                        exportData: "Export Data"
+                    }
+                },
+                
+                // Pagination translations
+                pagination: {
+                    info: "Total {total} items",
+                    itemsPerPage: "/page",
+                    showing: "Showing",
+                    to: "to",
+                    of: "of",
+                    total: "items",
+                    perPage: {
+                        "10": "10/page",
+                        "20": "20/page",
+                        "50": "50/page", 
+                        "100": "100/page"
+                    },
+                    goTo: "Go to",
+                    page: "page"
+                },
+                
+                // Family page translations
+                family: {
+                    title: "Family",
+                    subtitle: "Manage and monitor energy usage for all families",
+                    views: {
+                        grid: "🏠 Grid View"
+                    },
+                    placeholder: {
+                        userName: "Enter user name...",
+                        allActivity: "All Activity",
+                        deviceCode: "Enter device code...",
+                        deviceStatus: "All Device Status"
+                    },
+                    activityStatus: {
+                        active: "Active",
+                        inactive: "Inactive",
+                        notParticipating: "Not Participating"
+                    },
+                    deviceStates: {
+                        charging: "Charging",
+                        discharging: "Discharging",
+                        standby: "Standby",
+                        offline: "Offline"
+                    },
+                    buttons: {
+                        search: "Search",
+                        reset: "Reset",
+                        export: "Export",
+                        viewDetails: "View Details"
+                    },
+                    table: {
+                        user: "User",
+                        activity: "Activity",
+                        todayProfit: "Today's Profit ($)",
+                        totalProfit: "Total Profit ($)",
+                        avgProfit: "Avg Daily Profit ($)",
+                        deviceCode: "Device Code",
+                        deviceStatus: "Device Status",
+                        soc: "SOC",
+                        location: "Location",
+                        usageDays: "Usage Days",
+                        action: "Action"
+                    },
+                    drawer: {
+                        title: "Details",
+                        tabs: {
+                            basicInfo: "Basic Info",
+                            revenueInfo: "Revenue Info",
+                            operatingData: "Operating Data"
+                        },
+                        deviceCode: "Device Code",
+                        batteryCapacity: "Battery Capacity",
+                        soc: "SOC",
+                        status: "Status",
+                        operatingDays: "Operating Days",
+                        owner: "Owner",
+                        address: "Address",
+                        day: "days",
+                        todayProfit: "Today's Profit",
+                        avgProfit: "Avg Daily Profit",
+                        totalRevenue: "Total Revenue",
+                        todayDischarge: "Today's Discharge",
+                        avgDischarge: "Avg Daily Discharge",
+                        totalDischarge: "Total Discharge",
+                        profitTrend: "Profit Trend",
+                        month: "Month",
+                        year: "Year",
+                        socTrend: "SOC Trend",
+                        chargeCycles: "Charge/Discharge Cycles",
+                        operatingDataTitle: "Operating Data",
+                        charging: "Charging",
+                        stopCharging: "Stop Charging",
+                        discharging: "Discharging",
+                        stopDischarging: "Stop Discharging"
+                    },
+                    userName1: "John Smith",
+                    userName2: "Sarah Johnson",
+                    userName3: "Michael Brown",
+                    userName4: "Emma Davis",
+                    userName5: "James Wilson",
+                    userName6: "Lisa Anderson",
+                    userName7: "Robert Taylor",
+                    userName8: "Jennifer Martin",
+                    userName9: "David Lee",
+                    userName10: "Mary White"
+                }
+            },
+            
+            ja: {
+                // ナビゲーション
+                nav: {
+                    home: 'ホーム',
+                    profit: '利益',
+                    family: 'ファミリー',
+                    analysis: '分析',
+                    organization: '組織',
+                    pushStrategy: 'プッシュ戦略',
+                    operationLog: '操作ログ',
+                    messageCenter: 'メッセージセンター'
+                },
+                
+                // ホームページ
+                home: "ホーム",
+                station: "ステーション管理",
+                highestPriceRegion: "最高価格地域：",
+                todayLow: "本日最低",
+                todayHigh: "本日最高",
+                charge: "充電",
+                discharge: "放電",
+                family: "家庭",
+                availableHomes: "家庭",
+                availablePower: "放電可能量",
+                estimatedProfit: "利益",
+                todayDischargeHomes: "本日放電家庭",
+                discharged: "放電済み",
+                actualDischarge: "実際放電量",
+                profit: "利益($)",
+                market: "市場",
+                map: "マップ",
+                autoSwitch: "自動切替",
+                currentSpotPrice: "現在のスポット価格",
+                currentDemand: "現在の需要",
+                forecastPrice: "予測価格",
+                forecastDemand: "予測需要",
+                demand: "需要",
+                generation: "発電",
+                averagePrice: "平均価格",
+                maxPrice: "最高価格",
+                minPrice: "最低価格",
+                priceFluctuation: "価格変動",
+                comparedYesterday: "昨日比",
+                within24h: "24時間以内",
+                powerRevenueTrend: "放電と収益トレンド",
+                systemOverview: "システム概要",
+                totalCapacity: "総容量",
+                onlineDevices: "オンラインデバイス",
+                networkStatus: "ネットワーク状態",
+                normal: "正常",
+                totalDischarge: "累計放電",
+                totalRevenue: "累計収益",
+                totalHomes: "家庭",
+                totalInstall: "設置容量",
+                totalActualDischarge: "累計実際放電",
+                totalProfit: "累計利益",
+                cumulativePrice: "累積価格",
+                actualDischargeRate: "実際放電率",
+                today: "今日",
+                week: "今週",
+                month: "今月",
+                custom: "カスタム",
+                refresh: "更新",
+                charging: "充電中",
+                discharging: "放電中",
+                standby: "待機",
+                offline: "オフライン",
+                active: "アクティブ",
+                device: "デバイス",
+                status: "状態",
+                region: "地域",
+                state: "州",
+                deviceCount: "デバイス数",
+                normalOperation: "正常動作",
+                price: "価格",
+                historicalPrice: "履歴価格",
+                predictedPrice: "予測価格",
+                predictedDemand: "予測需要",
+                operationConfirm: "操作確認",
+                confirmMessage: "この操作を実行してもよろしいですか？",
+                operationType: "操作タイプ",
+                targetDevices: "対象デバイス",
+                estimatedPower: "予想電力",
+                currentPrice: "現在価格",
+                estimatedDuration: "予想時間",
+                estimatedCost: "予想コスト/利益",
+                cancel: "キャンセル",
+                stop: "停止",
+                units: "個",
+                comparedToYesterday: "昨日比",
+                currentCumulativePrice: "現在の累積価格",
+                forecastCumulativePrice5min: "予測累積価格（5分）",
+                thresholdStatus: "閾値状態",
+                notExceeded: "閾値未満",
+                confirmExecute: "実行確認",
+                operationSuccess: "指令送信成功",
+                systemExecuting: "システムが操作指令を実行中...",
+                devicesDispatched: "指令送信",
+                devicesReceived: "指令受信",
+                devicesActivated: "アクティベート成功",
+                successRate: "成功率",
+                close: "閉じる",
+                viewDetails: "詳細表示",
+                totalDevices: "総デバイス数",
+                activated: "送信済み",
+                progress: "実行進捗",
+                currentOperation: "現在の操作",
+                none: "なし",
+                family: "家庭",
+                
+                // 通知センター
+                notification: {
+                    center: '通知センター',
+                    all: 'すべて',
+                    alert: 'アラート',
+                    system: 'システム',
+                    operation: '操作',
+                    markAllRead: 'すべて既読',
+                    clear: 'クリア',
+                    viewMore: 'もっと見る',
+                    markRead: '既読にする',
+                    delete: '削除',
+                    noMessages: 'メッセージがありません',
+                    justNow: 'たった今',
+                    minutesAgo: '分前',
+                    hoursAgo: '時間前'
+                },
+                
+                // 操作ログページ
+                operationLog: {
+                    title: '操作ログ',
+                    operator: 'オペレーター',
+                    selectTime: '時間選択',
+                    operationCommand: '操作コマンド',
+                    placeholder: {
+                        operator: 'オペレーター名を入力',
+                        time: '時間を選択',
+                        command: 'コマンドを選択'
+                    },
+                    commands: {
+                        charge: '充電',
+                        discharge: '放電',
+                        stopCharge: '充電停止',
+                        stopDischarge: '放電停止'
+                    },
+                    table: {
+                        time: '時間',
+                        command: 'コマンド',
+                        operator: 'オペレーター',
+                        stations: 'ステーション',
+                        success: '成功',
+                        failed: '失敗',
+                        action: 'アクション',
+                        details: '詳細'
+                    },
+                    buttons: {
+                        search: '検索',
+                        reset: 'リセット',
+                        clear: 'クリア',
+                        confirm: '確認'
+                    },
+                    pagination: {
+                        total: '合計 {count} 件',
+                        page: 'ページ',
+                        goto: 'ジャンプ'
+                    },
+                    drawer: {
+                        title: '操作詳細',
+                        basicInfo: '基本情報',
+                        stationDetails: 'ステーション詳細',
+                        timeline: 'タイムライン',
+                        overview: '操作概要',
+                        totalStations: '総ステーション数',
+                        successCount: '成功数',
+                        failedCount: '失敗数',
+                        successRate: '成功率',
+                        operationTime: '操作時間',
+                        operationCommand: '操作コマンド',
+                        operationNumber: '操作番号',
+                        executionStatus: '実行状態',
+                        stationExecution: 'ステーション実行詳細',
+                        executionTimeline: '実行タイムライン',
+                        success: '成功',
+                        failed: '失敗',
+                        allSuccess: 'すべて成功',
+                        partialSuccess: '部分成功',
+                        mostlyFailed: 'ほとんど失敗'
+                    },
+                    toast: {
+                        searchComplete: '検索完了',
+                        resetComplete: 'リセット完了',
+                        foundRecords: '{count} 件見つかりました',
+                        searchCleared: '検索条件をクリアしました',
+                        dateSelected: '日付選択: {date}',
+                        error: 'エラー',
+                        notFound: '操作記録が見つかりません'
+                    }
+                },
+                
+                // 日付ピッカー
+                datePicker: {
+                    weekdays: ['日', '月', '火', '水', '木', '金', '土'],
+                    months: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
+                    clear: 'クリア',
+                    confirm: '確認',
+                    selectDate: '日付選択'
+                }
+            },
+            
+            ko: {
+                // 내비게이션
+                nav: {
+                    home: '홈',
+                    profit: '수익',
+                    family: '가족',
+                    analysis: '분석',
+                    organization: '조직',
+                    pushStrategy: '푸시 전략',
+                    operationLog: '작업 로그',
+                    messageCenter: '메시지 센터'
+                },
+                
+                // 홈페이지
+                home: "홈",
+                station: "스테이션 관리",
+                highestPriceRegion: "최고 가격 지역:",
+                todayLow: "오늘 최저",
+                todayHigh: "오늘 최고",
+                charge: "충전",
+                discharge: "방전",
+                family: "가족",
+                availableHomes: "가족",
+                availablePower: "방전 가능량",
+                estimatedProfit: "수익",
+                todayDischargeHomes: "오늘 방전 가정",
+                discharged: "방전됨",
+                actualDischarge: "실제 방전량",
+                profit: "수익($)",
+                market: "시장",
+                map: "지도",
+                autoSwitch: "자동 전환",
+                currentSpotPrice: "현재 현물 가격",
+                currentDemand: "현재 수요",
+                forecastPrice: "예측 가격",
+                forecastDemand: "예측 수요",
+                demand: "수요",
+                generation: "발전",
+                averagePrice: "평균 가격",
+                maxPrice: "최고 가격",
+                minPrice: "최저 가격",
+                priceFluctuation: "가격 변동",
+                comparedYesterday: "어제 대비",
+                within24h: "24시간 이내",
+                powerRevenueTrend: "방전 및 수익 동향",
+                systemOverview: "시스템 개요",
+                totalCapacity: "총 용량",
+                onlineDevices: "온라인 장치",
+                networkStatus: "네트워크 상태",
+                normal: "정상",
+                totalDischarge: "누적 방전",
+                totalRevenue: "누적 수익",
+                totalHomes: "가족",
+                totalInstall: "설치 용량",
+                totalActualDischarge: "누적 실제 방전",
+                totalProfit: "누적 수익",
+                cumulativePrice: "누적 가격",
+                actualDischargeRate: "실제 방전율",
+                today: "오늘",
+                week: "이번 주",
+                month: "이번 달",
+                custom: "사용자 정의",
+                refresh: "새로고침",
+                charging: "충전 중",
+                discharging: "방전 중",
+                standby: "대기",
+                offline: "오프라인",
+                active: "활성",
+                device: "장치",
+                status: "상태",
+                region: "지역",
+                state: "주",
+                deviceCount: "장치 수",
+                normalOperation: "정상 작동",
+                price: "가격",
+                historicalPrice: "과거 가격",
+                predictedPrice: "예측 가격",
+                predictedDemand: "예측 수요",
+                operationConfirm: "작업 확인",
+                confirmMessage: "이 작업을 실행하시겠습니까?",
+                operationType: "작업 유형",
+                targetDevices: "대상 장치",
+                estimatedPower: "예상 전력",
+                currentPrice: "현재 가격",
+                estimatedDuration: "예상 시간",
+                estimatedCost: "예상 비용/수익",
+                cancel: "취소",
+                stop: "중지",
+                units: "개",
+                comparedToYesterday: "어제대비",
+                currentCumulativePrice: "현재 누적 가격",
+                forecastCumulativePrice5min: "예측 누적 가격 (5분)",
+                thresholdStatus: "임계값 상태",
+                notExceeded: "임계값 미만",
+                confirmExecute: "실행 확인",
+                operationSuccess: "명령 전송 성공",
+                systemExecuting: "시스템이 작업 명령을 실행 중...",
+                devicesDispatched: "명령 전송",
+                devicesReceived: "명령 수신",
+                devicesActivated: "활성화 성공",
+                successRate: "성공률",
+                close: "닫기",
+                viewDetails: "세부정보 보기",
+                totalDevices: "총 장치 수",
+                activated: "전송됨",
+                progress: "실행 진행률",
+                currentOperation: "현재 작업",
+                none: "없음",
+                family: "가족",
+                
+                // 알림 센터
+                notification: {
+                    center: '알림 센터',
+                    all: '전체',
+                    alert: '경고',
+                    system: '시스템',
+                    operation: '작업',
+                    markAllRead: '모두 읽음',
+                    clear: '지우기',
+                    viewMore: '더 보기',
+                    markRead: '읽음 표시',
+                    delete: '삭제',
+                    noMessages: '메시지가 없습니다',
+                    justNow: '방금',
+                    minutesAgo: '분 전',
+                    hoursAgo: '시간 전'
+                },
+                
+                // 작업 로그 페이지
+                operationLog: {
+                    title: '작업 로그',
+                    operator: '운영자',
+                    selectTime: '시간 선택',
+                    operationCommand: '작업 명령',
+                    placeholder: {
+                        operator: '운영자 이름 입력',
+                        time: '시간 선택',
+                        command: '명령 선택'
+                    },
+                    commands: {
+                        charge: '충전',
+                        discharge: '방전',
+                        stopCharge: '충전 중지',
+                        stopDischarge: '방전 중지'
+                    },
+                    table: {
+                        time: '시간',
+                        command: '명령',
+                        operator: '운영자',
+                        stations: '스테이션',
+                        success: '성공',
+                        failed: '실패',
+                        action: '작업',
+                        details: '세부정보'
+                    },
+                    buttons: {
+                        search: '검색',
+                        reset: '재설정',
+                        clear: '지우기',
+                        confirm: '확인'
+                    },
+                    pagination: {
+                        total: '총 {count} 항목',
+                        page: '페이지',
+                        goto: '이동'
+                    },
+                    drawer: {
+                        title: '작업 세부정보',
+                        basicInfo: '기본 정보',
+                        stationDetails: '스테이션 세부정보',
+                        timeline: '타임라인',
+                        overview: '작업 개요',
+                        totalStations: '총 스테이션 수',
+                        successCount: '성공 수',
+                        failedCount: '실패 수',
+                        successRate: '성공률',
+                        operationTime: '작업 시간',
+                        operationCommand: '작업 명령',
+                        operationNumber: '작업 번호',
+                        executionStatus: '실행 상태',
+                        stationExecution: '스테이션 실행 세부정보',
+                        executionTimeline: '실행 타임라인',
+                        success: '성공',
+                        failed: '실패',
+                        allSuccess: '모두 성공',
+                        partialSuccess: '부분 성공',
+                        mostlyFailed: '대부분 실패'
+                    },
+                    toast: {
+                        searchComplete: '검색 완료',
+                        resetComplete: '재설정 완료',
+                        foundRecords: '{count}개 레코드 찾음',
+                        searchCleared: '검색 조건 클리어',
+                        dateSelected: '날짜 선택: {date}',
+                        error: '오류',
+                        notFound: '작업 기록을 찾을 수 없음'
+                    }
+                },
+                
+                // 날짜 선택기
+                datePicker: {
+                    weekdays: ['일', '월', '화', '수', '목', '금', '토'],
+                    months: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
+                    clear: '지우기',
+                    confirm: '확인',
+                    selectDate: '날짜 선택'
+                }
+            }
+        };
+    }
+    
+    createLanguageSelectorHTML() {
+        const selectorHTML = `
+            <div class="language-selector" id="${this.containerId}">
+                <div class="language-current" onclick="window.i18n.toggle()">
+                    <span class="language-flag">${this.supportedLanguages[this.currentLanguage].flag}</span>
+                    <span class="language-name" id="currentLanguageName">${this.supportedLanguages[this.currentLanguage].nativeName}</span>
+                    <span class="language-arrow">▼</span>
+                </div>
+                <div class="language-dropdown" id="languageDropdown" style="display: none;">
+                    ${Object.keys(this.supportedLanguages).map(code => `
+                        <div class="language-option ${code === this.currentLanguage ? 'active' : ''}" 
+                             onclick="window.i18n.setLanguage('${code}')">
+                            <span class="language-flag">${this.supportedLanguages[code].flag}</span>
+                            <span class="language-name">${this.supportedLanguages[code].nativeName}</span>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+        `;
+        
+        // 插入到header-right中message-center前面
+        const headerRight = document.querySelector('.header-right');
+        if (headerRight) {
+            const messageCenter = headerRight.querySelector('.message-center');
+            if (messageCenter) {
+                messageCenter.insertAdjacentHTML('beforebegin', selectorHTML);
+            } else {
+                headerRight.insertAdjacentHTML('afterbegin', selectorHTML);
+            }
+        }
+        
+        // 设置全局实例引用
+        window.i18n = this;
+    }
+    
+    bindEvents() {
+        // 点击外部区域关闭下拉框
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.language-selector')) {
+                this.closeDropdown();
+            }
+        });
+        
+        // ESC键关闭下拉框
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                this.closeDropdown();
+            }
+        });
+    }
+    
+    toggle() {
+        const dropdown = document.getElementById('languageDropdown');
+        if (!dropdown) return;
+        
+        if (dropdown.style.display === 'none') {
+            dropdown.style.display = 'block';
+            setTimeout(() => dropdown.classList.add('show'), 10);
+        } else {
+            this.closeDropdown();
+        }
+    }
+    
+    closeDropdown() {
+        const dropdown = document.getElementById('languageDropdown');
+        if (!dropdown) return;
+        
+        dropdown.classList.remove('show');
+        setTimeout(() => {
+            dropdown.style.display = 'none';
+        }, 300);
+    }
+    
+    setLanguage(language) {
+        if (!this.supportedLanguages[language]) {
+            console.warn(`Language ${language} is not supported`);
+            return;
+        }
+        
+        const oldLanguage = this.currentLanguage;
+        this.currentLanguage = language;
+        
+        // 保存到本地存储
+        this.saveLanguageToStorage(language);
+        
+        // 更新UI
+        this.updateLanguageSelector();
+        this.updatePageTexts();
+        this.closeDropdown();
+        
+        // 通知观察者
+        this.notifyObservers(language, oldLanguage);
+        
+        // 重新渲染需要多语言的组件
+        this.reloadComponents();
+
+        // 新增：切换语言时同步刷新导航栏
+        if (window.headerNav && typeof window.headerNav.updateTexts === 'function') {
+            window.headerNav.updateTexts();
+        }
+        
+        // 新增：保存当前页面状态并刷新页面以确保所有内容都正确翻译
+        this.refreshPageWithState();
+    }
+    
+    updateLanguageSelector() {
+        const currentName = document.getElementById('currentLanguageName');
+        const currentFlag = document.querySelector('.language-current .language-flag');
+        
+        if (currentName) {
+            currentName.textContent = this.supportedLanguages[this.currentLanguage].nativeName;
+        }
+        
+        if (currentFlag) {
+            currentFlag.textContent = this.supportedLanguages[this.currentLanguage].flag;
+        }
+        
+        // 更新选项状态
+        document.querySelectorAll('.language-option').forEach(option => {
+            option.classList.remove('active');
+        });
+        
+        const activeOption = document.querySelector(`[onclick="window.i18n.setLanguage('${this.currentLanguage}')"]`);
+        if (activeOption) {
+            activeOption.classList.add('active');
+        }
+    }
+    
+    updatePageTexts() {
+        // 更新所有标记了 data-i18n 的元素
+        document.querySelectorAll('[data-i18n]').forEach(element => {
+            const key = element.getAttribute('data-i18n');
+            const text = this.getText(key);
+            if (text !== key) { // 只有找到翻译时才更新
+                if (element.tagName === 'INPUT' && (element.type === 'text' || element.type === 'search')) {
+                    element.placeholder = text;
+                } else {
+                    element.textContent = text;
+                }
+            }
+        });
+
+        // 新增：批量替换所有 data-i18n-key
+        document.querySelectorAll('[data-i18n-key]').forEach(el => {
+            const key = el.getAttribute('data-i18n-key');
+            const text = this.getText(key);
+            if (text !== key) {
+                el.textContent = text;
+            }
+        });
+        
+        // 新增：处理 data-i18n-placeholder
+        document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+            const key = el.getAttribute('data-i18n-placeholder');
+            const text = this.getText(key);
+            if (text !== key) {
+                el.placeholder = text;
+            }
+        });
+        
+        // 处理 select option 的翻译
+        document.querySelectorAll('option[data-i18n]').forEach(option => {
+            const key = option.getAttribute('data-i18n');
+            const text = this.getText(key);
+            if (text !== key) {
+                option.textContent = text;
+            }
+        });
+
+        // 更新页面标题
+        const pageTitle = this.getText('operationLog.title');
+        if (pageTitle && pageTitle !== 'operationLog.title') {
+            document.title = `${pageTitle} - U Energy`;
+        }
+    }
+    
+    getText(key, params = {}) {
+        const keys = key.split('.');
+        let text = this.translations[this.currentLanguage];
+        
+        for (const k of keys) {
+            if (text && typeof text === 'object' && k in text) {
+                text = text[k];
+            } else {
+                // fallback to default language
+                text = this.translations[this.defaultLanguage];
+                for (const fallbackKey of keys) {
+                    if (text && typeof text === 'object' && fallbackKey in text) {
+                        text = text[fallbackKey];
+                    } else {
+                        return key; // 返回原始key作为fallback
+                    }
+                }
+                break;
+            }
+        }
+        
+        if (typeof text !== 'string') {
+            return key;
+        }
+        
+        // 替换参数
+        return text.replace(/{(\w+)}/g, (match, param) => {
+            return params[param] !== undefined ? params[param] : match;
+        });
+    }
+    
+    // 添加观察者
+    addObserver(callback) {
+        this.observers.add(callback);
+    }
+    
+    // 移除观察者
+    removeObserver(callback) {
+        this.observers.delete(callback);
+    }
+    
+    // 通知所有观察者
+    notifyObservers(newLanguage, oldLanguage) {
+        this.observers.forEach(callback => {
+            try {
+                callback(newLanguage, oldLanguage);
+            } catch (error) {
+                console.error('Error in i18n observer:', error);
+            }
+        });
+    }
+    
+    // 重新加载组件
+    reloadComponents() {
+        // 重新渲染消息中心
+        if (window.notificationCenter) {
+            window.notificationCenter.updateTexts();
+        }
+        
+        // 重新渲染抽屉组件
+        if (window.operationDrawer) {
+            window.operationDrawer.updateTexts();
+        }
+        
+        // 更新行情图表语言
+        if (window.updateMarketChartLanguage) {
+            window.updateMarketChartLanguage();
+        }
+        
+        // 更新放电与获利图表语言
+        if (window.updatePowerRevenueChartLanguage) {
+            window.updatePowerRevenueChartLanguage();
+        }
+        
+        // 更新其他图表
+        if (window.marketChart) {
+            window.marketChart.resize();
+        }
+        if (window.mapChart) {
+            window.mapChart.resize();
+        }
+        if (window.powerRevenueChart) {
+            window.powerRevenueChart.resize();
+        }
+    }
+    
+    // 保存语言设置到本地存储
+    saveLanguageToStorage(language) {
+        try {
+            localStorage.setItem(this.storageKey, language);
+        } catch (error) {
+            console.warn('Failed to save language to localStorage:', error);
+        }
+    }
+    
+    // 从本地存储加载语言设置
+    loadLanguageFromStorage() {
+        try {
+            return localStorage.getItem(this.storageKey);
+        } catch (error) {
+            console.warn('Failed to load language from localStorage:', error);
+            return null;
+        }
+    }
+    
+    // 获取当前语言
+    getCurrentLanguage() {
+        return this.currentLanguage;
+    }
+    
+    // 获取支持的语言列表
+    getSupportedLanguages() {
+        return this.supportedLanguages;
+    }
+    
+    // 格式化时间（支持多语言）
+    formatTime(date, options = {}) {
+        const localeMap = {
+            'zh': 'zh-CN',
+            'en': 'en-US',
+            'ja': 'ja-JP',
+            'ko': 'ko-KR'
+        };
+        
+        const locale = localeMap[this.currentLanguage] || 'zh-CN';
+        
+        if (options.relative) {
+            const now = new Date();
+            const diff = now - date;
+            
+            if (diff < 60000) { // 1分钟内
+                return this.getText('notification.justNow');
+            } else if (diff < 3600000) { // 1小时内
+                const minutes = Math.floor(diff / 60000);
+                return `${minutes} ${this.getText('notification.minutesAgo')}`;
+            } else if (diff < 86400000) { // 24小时内
+                const hours = Math.floor(diff / 3600000);
+                return `${hours} ${this.getText('notification.hoursAgo')}`;
+            }
+        }
+        
+        return date.toLocaleDateString(locale, options);
+    }
+    
+    // 刷新页面同时保持状态
+    refreshPageWithState() {
+        try {
+            // 保存当前页面状态
+            const pageState = {
+                // 保存当前菜单状态
+                currentPage: window.headerNav ? window.headerNav.currentPage : null,
+                
+                // 保存分页状态
+                currentPageNum: window.currentPage || 1,
+                pageSize: window.pageSize || 20,
+                
+                // 保存搜索/筛选状态
+                searchInputs: {},
+                selectValues: {}
+            };
+            
+            // 保存所有搜索输入框的值
+            document.querySelectorAll('input[type="text"], input[type="email"], input[type="search"]').forEach((input, index) => {
+                if (input.value) {
+                    pageState.searchInputs[`input_${index}`] = {
+                        value: input.value,
+                        id: input.id,
+                        placeholder: input.placeholder
+                    };
+                }
+            });
+            
+            // 保存所有下拉选择框的值
+            document.querySelectorAll('select').forEach((select, index) => {
+                if (select.value) {
+                    pageState.selectValues[`select_${index}`] = {
+                        value: select.value,
+                        id: select.id
+                    };
+                }
+            });
+            
+            // 将状态保存到sessionStorage
+            sessionStorage.setItem('pageStateBeforeLanguageSwitch', JSON.stringify(pageState));
+            
+            // 延迟刷新页面，确保语言设置已保存
+            setTimeout(() => {
+                window.location.reload();
+            }, 100);
+            
+        } catch (error) {
+            console.warn('Failed to save page state before language switch:', error);
+            // 即使保存状态失败，也要刷新页面以确保语言切换正确
+            setTimeout(() => {
+                window.location.reload();
+            }, 100);
+        }
+    }
+    
+    // 恢复页面状态
+    restorePageState() {
+        try {
+            const savedState = sessionStorage.getItem('pageStateBeforeLanguageSwitch');
+            if (!savedState) return;
+            
+            const pageState = JSON.parse(savedState);
+            
+            // 清除已使用的状态
+            sessionStorage.removeItem('pageStateBeforeLanguageSwitch');
+            
+            // 延迟恢复状态，确保页面已完全加载
+            setTimeout(() => {
+                // 恢复搜索输入框的值
+                Object.entries(pageState.searchInputs || {}).forEach(([key, inputData]) => {
+                    const input = inputData.id ? 
+                        document.getElementById(inputData.id) : 
+                        document.querySelector(`input[placeholder*="${inputData.placeholder}"]`);
+                    if (input) {
+                        input.value = inputData.value;
+                    }
+                });
+                
+                // 恢复下拉选择框的值
+                Object.entries(pageState.selectValues || {}).forEach(([key, selectData]) => {
+                    const select = selectData.id ? 
+                        document.getElementById(selectData.id) : 
+                        null;
+                    if (select) {
+                        select.value = selectData.value;
+                    }
+                });
+                
+                // 恢复分页状态
+                if (pageState.currentPageNum && window.currentPage !== pageState.currentPageNum) {
+                    window.currentPage = pageState.currentPageNum;
+                }
+                if (pageState.pageSize && window.pageSize !== pageState.pageSize) {
+                    window.pageSize = pageState.pageSize;
+                    const pageSizeSelect = document.getElementById('pageSize');
+                    if (pageSizeSelect) {
+                        pageSizeSelect.value = pageState.pageSize;
+                    }
+                }
+                
+                // 触发搜索/刷新以应用恢复的状态
+                if (typeof window.searchUsers === 'function') {
+                    window.searchUsers();
+                } else if (typeof window.applyFilters === 'function') {
+                    window.applyFilters();
+                } else if (typeof window.updateTableDisplay === 'function') {
+                    window.updateTableDisplay();
+                    if (typeof window.updatePaginationDisplay === 'function') {
+                        window.updatePaginationDisplay();
+                    }
+                } else if (typeof window.renderMessages === 'function') {
+                    window.renderMessages();
+                    if (typeof window.updatePagination === 'function') {
+                        window.updatePagination();
+                    }
+                }
+            }, 500);
+            
+        } catch (error) {
+            console.warn('Failed to restore page state after language switch:', error);
+        }
+    }
+}
+
+// 导出供其他文件使用
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = I18n;
+}

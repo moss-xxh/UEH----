@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>ECharts Test</title>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+</head>
+<body>
+    <h1>ECharts Test Page</h1>
+    <div id="testChart" style="width: 600px; height: 400px; border: 1px solid red;"></div>
+    
+    <script>
+        console.log('ECharts version:', echarts.version);
+        
+        // 初始化图表
+        var myChart = echarts.init(document.getElementById('testChart'));
+        
+        // 指定图表的配置项和数据
+        var option = {
+            title: {
+                text: 'ECharts 测试'
+            },
+            tooltip: {},
+            xAxis: {
+                data: ['A', 'B', 'C', 'D', 'E', 'F']
+            },
+            yAxis: {},
+            series: [{
+                name: '销量',
+                type: 'bar',
+                data: [5, 20, 36, 10, 10, 20]
+            }]
+        };
+        
+        // 使用配置项和数据显示图表
+        myChart.setOption(option);
+        
+        console.log('Chart initialized:', myChart);
+    </script>
+</body>
+</html>

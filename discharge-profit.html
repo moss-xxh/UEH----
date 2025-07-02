@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VPP - Discharge & Profit</title>
+    <link rel="stylesheet" href="discharge-profit.css">
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+</head>
+<body>
+    <!-- Background Layer with VPP Elements -->
+    <div class="background-layer">
+        <!-- Grid Pattern -->
+        <div class="grid-pattern"></div>
+        
+        <!-- VPP Elements -->
+        <div class="vpp-elements">
+            <!-- Solar Panel -->
+            <div class="vpp-element solar-panel">
+                <svg viewBox="0 0 100 100" fill="none" stroke="currentColor">
+                    <rect x="10" y="30" width="80" height="50" rx="2" stroke-width="2"/>
+                    <line x1="10" y1="45" x2="90" y2="45" stroke-width="1.5"/>
+                    <line x1="10" y1="60" x2="90" y2="60" stroke-width="1.5"/>
+                    <line x1="30" y1="30" x2="30" y2="80" stroke-width="1.5"/>
+                    <line x1="50" y1="30" x2="50" y2="80" stroke-width="1.5"/>
+                    <line x1="70" y1="30" x2="70" y2="80" stroke-width="1.5"/>
+                </svg>
+            </div>
+            
+            <!-- Wind Turbine -->
+            <div class="vpp-element wind-turbine">
+                <svg viewBox="0 0 100 100" fill="none" stroke="currentColor">
+                    <line x1="50" y1="40" x2="50" y2="85" stroke-width="3"/>
+                    <circle cx="50" cy="40" r="3" fill="currentColor"/>
+                    <path class="turbine-blade" d="M50 40 L50 15 Q48 10 45 12 Q42 14 45 20 L50 40" stroke-width="2" fill="currentColor" opacity="0.3"/>
+                    <path class="turbine-blade" d="M50 40 L70 50 Q75 52 73 55 Q71 58 65 55 L50 40" stroke-width="2" fill="currentColor" opacity="0.3"/>
+                    <path class="turbine-blade" d="M50 40 L30 50 Q25 52 27 55 Q29 58 35 55 L50 40" stroke-width="2" fill="currentColor" opacity="0.3"/>
+                </svg>
+            </div>
+            
+            <!-- Battery -->
+            <div class="vpp-element battery">
+                <svg viewBox="0 0 100 100" fill="none" stroke="currentColor">
+                    <rect x="25" y="20" width="50" height="60" rx="4" stroke-width="2"/>
+                    <rect x="35" y="12" width="30" height="8" rx="2" stroke-width="2" fill="currentColor" opacity="0.3"/>
+                    <rect x="35" y="30" width="30" height="10" fill="currentColor" opacity="0.5" class="battery-level"/>
+                    <rect x="35" y="45" width="30" height="10" fill="currentColor" opacity="0.5" class="battery-level"/>
+                    <rect x="35" y="60" width="30" height="10" fill="currentColor" opacity="0.5" class="battery-level"/>
+                </svg>
+            </div>
+            
+            <!-- Energy Grid -->
+            <div class="vpp-element energy-grid">
+                <svg viewBox="0 0 100 100" fill="none" stroke="currentColor">
+                    <circle cx="50" cy="50" r="30" stroke-width="2" stroke-dasharray="5 5" opacity="0.3"/>
+                    <circle cx="50" cy="50" r="20" stroke-width="2" stroke-dasharray="3 3" opacity="0.5"/>
+                    <circle cx="50" cy="50" r="10" stroke-width="2" opacity="0.7"/>
+                    <circle cx="50" cy="50" r="3" fill="currentColor" class="pulse"/>
+                </svg>
+            </div>
+        </div>
+        
+        <!-- Energy Particles -->
+        <div class="energy-particles">
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+        </div>
+    </div>
+
+    <!-- Language Switcher -->
+    <div class="language-switcher">
+        <button class="lang-btn" id="langSwitcher">
+            <span class="lang-text" data-lang="en">EN</span>
+            <span class="lang-separator">|</span>
+            <span class="lang-text" data-lang="zh">中文</span>
+        </button>
+    </div>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Header -->
+        <header class="page-header">
+            <h1 class="page-title" data-i18n="pageTitle">Discharge & Profit</h1>
+            
+            <!-- Time Selector -->
+            <div class="time-selector">
+                <button class="time-btn active" data-period="day" data-i18n="day">Day</button>
+                <button class="time-btn" data-period="month" data-i18n="month">Month</button>
+                <button class="time-btn" data-period="year" data-i18n="year">Year</button>
+                <button class="time-btn" data-period="total" data-i18n="total">Total</button>
+            </div>
+        </header>
+
+        <!-- Date Picker -->
+        <div class="date-picker-container" id="datePickerContainer">
+            <div class="date-picker" id="datePicker">
+                <input type="date" id="dateInput" class="date-input">
+                <span class="date-display" id="dateDisplay" data-i18n="today">Today</span>
+            </div>
+        </div>
+
+        <!-- Content Grid -->
+        <div class="content-grid">
+            <!-- Discharge Section -->
+            <div class="section-card glass-card">
+                <h2 class="section-title" data-i18n="dischargeTitle">Discharge Overview</h2>
+                
+                <!-- Stats Cards -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-label" data-i18n="totalDischarge">Total Discharge</div>
+                        <div class="stat-value">1,250 <span class="stat-unit">kWh</span></div>
+                        <div class="stat-change positive">+12.5%</div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-label" data-i18n="peakPower">Peak Power</div>
+                        <div class="stat-value">450 <span class="stat-unit">kW</span></div>
+                        <div class="stat-change positive">+8.2%</div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-label" data-i18n="avgEfficiency">Avg Efficiency</div>
+                        <div class="stat-value">92.5<span class="stat-unit">%</span></div>
+                        <div class="stat-change negative">-0.5%</div>
+                    </div>
+                </div>
+
+                <!-- Discharge Chart -->
+                <div class="chart-container">
+                    <div id="dischargeChart" class="chart-placeholder">
+                        <div class="chart-loading">
+                            <div class="loading-spinner"></div>
+                            <span data-i18n="loadingChart">Loading chart...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Profit Section -->
+            <div class="section-card glass-card">
+                <h2 class="section-title" data-i18n="profitTitle">Profit Analysis</h2>
+                
+                <!-- Stats Cards -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-label" data-i18n="totalRevenue">Total Revenue</div>
+                        <div class="stat-value">$2,580</div>
+                        <div class="stat-change positive">+15.3%</div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-label" data-i18n="avgPrice">Avg Price</div>
+                        <div class="stat-value">$0.206 <span class="stat-unit">/kWh</span></div>
+                        <div class="stat-change positive">+2.5%</div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-label" data-i18n="profitMargin">Profit Margin</div>
+                        <div class="stat-value">68.5<span class="stat-unit">%</span></div>
+                        <div class="stat-change positive">+3.2%</div>
+                    </div>
+                </div>
+
+                <!-- Profit Chart -->
+                <div class="chart-container">
+                    <div id="profitChart" class="chart-placeholder">
+                        <div class="chart-loading">
+                            <div class="loading-spinner"></div>
+                            <span data-i18n="loadingChart">Loading chart...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Summary Section -->
+        <div class="summary-section glass-card">
+            <h3 class="summary-title" data-i18n="summaryTitle">Performance Summary</h3>
+            
+            <div class="summary-grid">
+                <div class="summary-item">
+                    <span class="summary-label" data-i18n="operatingHours">Operating Hours</span>
+                    <span class="summary-value">18.5h</span>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-label" data-i18n="gridContribution">Grid Contribution</span>
+                    <span class="summary-value">85%</span>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-label" data-i18n="co2Saved">CO₂ Saved</span>
+                    <span class="summary-value">950 kg</span>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-label" data-i18n="systemStatus">System Status</span>
+                    <span class="summary-value status-online" data-i18n="online">Online</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="discharge-profit.js"></script>
+</body>
+</html>
