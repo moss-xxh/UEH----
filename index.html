@@ -295,9 +295,8 @@
         .power-station-container {
             display: flex;
             flex-direction: column;
-            padding: 15px;
-            min-height: auto;
-            max-height: 85vh;
+            padding: 12px;
+            height: 100%;
             overflow: hidden;
         }
 
@@ -305,8 +304,8 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 12px;
-            padding-bottom: 8px;
+            margin-bottom: 6px;
+            padding-bottom: 4px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
 
@@ -2397,14 +2396,12 @@
     </style>
     <style>
         .custom-card {
-            height: 700px;
-            min-height: 700px;
-            max-height: 700px;
+            height: 100%;
             background: rgba(255,255,255,0.03);
             border-radius: 20px;
             border: 1px solid rgba(255,255,255,0.08);
             box-shadow: 0 4px 24px rgba(0,255,136,0.04);
-            margin-bottom: 40px;
+            margin-bottom: 20px;
             display: flex;
             flex-direction: column;
         }
@@ -2483,7 +2480,7 @@
                     <h3 class="station-title">
                         <span data-i18n-key="station">电站管理</span>
                     </h3>
-                    <span id="regionStatusText" style="font-size: 14px; color: #00ff88; font-weight: 500; padding: 6px 16px; background: rgba(255, 255, 255, 0.05); border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.1);"></span>
+                    <span id="regionStatusText" style="font-size: 12px; color: #00ff88; font-weight: 500; padding: 4px 12px; background: rgba(255, 255, 255, 0.05); border-radius: 16px; border: 1px solid rgba(255, 255, 255, 0.1);"></span>
                 </div>
                 
                                                  <!-- Main Price Circle with Side Info -->
@@ -2517,75 +2514,75 @@
                 </div>
                 
                 <!-- 优化后：一排3个小毛玻璃卡片 -->
-                <div style="display:flex; gap:12px; margin: 14px 0 14px 0;">
-                    <div class="card" style="flex:1; min-width:0; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:10px 0 8px 0; border-radius:12px; min-width:0; background:var(--color-bg-card); border:1px solid var(--color-border); box-shadow:var(--color-shadow);">
-                        <div class="stat-icon" style="font-size:18px; margin-bottom:2px;">🏠</div>
-                        <div class="stat-label" style="font-size:13px; color:#bfc6d1; font-weight:500; margin-bottom:1px; text-align:center; width:100%;"><span data-i18n-key="availableHomes">可放电家庭</span></div>
-                        <div class="stat-value" style="font-size:16px; font-weight:700; color:#fff;" id="totalFamiliesCard">235</div>
+                <div style="display:flex; gap:6px; margin: 6px 0;">
+                    <div class="card" style="flex:1; min-width:0; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:6px 0 4px 0; border-radius:10px; min-width:0; background:var(--color-bg-card); border:1px solid var(--color-border); box-shadow:var(--color-shadow);">
+                        <div class="stat-icon" style="font-size:14px; margin-bottom:0;">🏠</div>
+                        <div class="stat-label" style="font-size:10px; color:#bfc6d1; font-weight:500; margin-bottom:0; text-align:center; width:100%;"><span data-i18n-key="availableHomes">可放电家庭</span></div>
+                        <div class="stat-value" style="font-size:13px; font-weight:700; color:#fff;" id="totalFamiliesCard">235</div>
                     </div>
-                    <div class="card" style="flex:1; min-width:0; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:10px 0 8px 0; border-radius:12px; min-width:0; background:var(--color-bg-card); border:1px solid var(--color-border); box-shadow:var(--color-shadow);">
-                        <div class="stat-icon" style="font-size:18px; margin-bottom:2px;">⚡</div>
-                        <div class="stat-label" style="font-size:13px; color:#bfc6d1; font-weight:500; margin-bottom:1px; text-align:center; width:100%;"><span data-i18n-key="availablePower">可放电量</span></div>
-                        <div class="stat-value" style="font-size:16px; font-weight:700; color:#fff;">23761kWh</div>
+                    <div class="card" style="flex:1; min-width:0; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:6px 0 4px 0; border-radius:10px; min-width:0; background:var(--color-bg-card); border:1px solid var(--color-border); box-shadow:var(--color-shadow);">
+                        <div class="stat-icon" style="font-size:14px; margin-bottom:0;">⚡</div>
+                        <div class="stat-label" style="font-size:10px; color:#bfc6d1; font-weight:500; margin-bottom:0; text-align:center; width:100%;"><span data-i18n-key="availablePower">可放电量</span></div>
+                        <div class="stat-value" style="font-size:13px; font-weight:700; color:#fff;">23761kWh</div>
                     </div>
-                    <div class="card" style="flex:1; min-width:0; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:10px 0 8px 0; border-radius:12px; min-width:0; background:var(--color-bg-card); border:1px solid var(--color-border); box-shadow:var(--color-shadow);">
-                        <div class="stat-icon" style="font-size:18px; margin-bottom:2px;">💰</div>
-                        <div class="stat-label" style="font-size:13px; color:#bfc6d1; font-weight:500; margin-bottom:1px;"><span data-i18n-key="estimatedProfit">预计获利</span></div>
-                        <div class="stat-value" style="font-size:16px; font-weight:700; color:#fff;">$12344</div>
+                    <div class="card" style="flex:1; min-width:0; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:6px 0 4px 0; border-radius:10px; min-width:0; background:var(--color-bg-card); border:1px solid var(--color-border); box-shadow:var(--color-shadow);">
+                        <div class="stat-icon" style="font-size:14px; margin-bottom:0;">💰</div>
+                        <div class="stat-label" style="font-size:10px; color:#bfc6d1; font-weight:500; margin-bottom:0;"><span data-i18n-key="estimatedProfit">预计获利</span></div>
+                        <div class="stat-value" style="font-size:13px; font-weight:700; color:#fff;">$12344</div>
                     </div>
                 </div>
                 
 
                 <!-- Today's Data Card -->
-                <div style="margin-top:12px; margin-bottom:15px;">
-                    <div class="card" style="padding:24px 14px; border-radius:10px; background:var(--color-bg-card); border:1px solid var(--color-border); box-shadow:var(--color-shadow); overflow:hidden;">
-                        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;">
-                            <h4 style="margin:0; font-size:14px; font-weight:600; color:#fff; display:flex; align-items:center; gap:6px;">
-                                <span style="font-size:16px;">📊</span>
+                <div style="margin-top:6px; margin-bottom:0;">
+                    <div class="card" style="padding:10px 10px; border-radius:10px; background:var(--color-bg-card); border:1px solid var(--color-border); box-shadow:var(--color-shadow); overflow:hidden;">
+                        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:6px;">
+                            <h4 style="margin:0; font-size:12px; font-weight:600; color:#fff; display:flex; align-items:center; gap:3px;">
+                                <span style="font-size:12px;">📊</span>
                                 <span data-i18n-key="todayData">今日数据</span>
                             </h4>
-                            <span style="font-size:10px; color:rgba(255,255,255,0.4); background:rgba(255,255,255,0.05); padding:2px 8px; border-radius:10px;" data-i18n-key="realtime">实时</span>
+                            <span style="font-size:9px; color:rgba(255,255,255,0.4); background:rgba(255,255,255,0.05); padding:1px 6px; border-radius:8px;" data-i18n-key="realtime">实时</span>
                         </div>
                         <div style="display:flex; align-items:center; justify-content:space-around;">
                             <!-- 已放电家庭 -->
-                            <div style="flex:1; text-align:center; padding:20px 0;">
-                                <div style="font-size:18px; margin-bottom:2px;">🏠</div>
-                                <div style="font-size:13px; color:#bfc6d1; font-weight:500; margin-bottom:1px;" data-i18n-key="dischargedFamilies">已放电家庭</div>
-                                <div style="font-size:16px; font-weight:700; color:#fff; margin-bottom:4px;">235</div>
-                                <div style="display:flex; align-items:center; justify-content:center; gap:2px;">
-                                    <span style="font-size:12px; color:#00ff88;">↑</span>
-                                    <span style="font-size:10px; color:rgba(255,255,255,0.5);" data-i18n-key="comparedToYesterday">比昨日</span>
-                                    <span style="font-size:11px; font-weight:600; color:#00ff88;">+21%</span>
+                            <div style="flex:1; text-align:center; padding:8px 0;">
+                                <div style="font-size:14px; margin-bottom:0;">🏠</div>
+                                <div style="font-size:10px; color:#bfc6d1; font-weight:500; margin-bottom:0;" data-i18n-key="dischargedFamilies">已放电家庭</div>
+                                <div style="font-size:13px; font-weight:700; color:#fff; margin-bottom:1px;">235</div>
+                                <div style="display:flex; align-items:center; justify-content:center; gap:1px;">
+                                    <span style="font-size:9px; color:#00ff88;">↑</span>
+                                    <span style="font-size:8px; color:rgba(255,255,255,0.5);" data-i18n-key="comparedToYesterday">比昨日</span>
+                                    <span style="font-size:9px; font-weight:600; color:#00ff88;">+21%</span>
                                 </div>
                             </div>
                             <!-- 分割线 -->
-                            <div style="width:1px; height:60px; background:rgba(255,255,255,0.1);"></div>
+                            <div style="width:1px; height:45px; background:rgba(255,255,255,0.1);"></div>
                             <!-- 已放电量 -->
-                            <div style="flex:1; text-align:center; padding:20px 0;">
-                                <div style="font-size:18px; margin-bottom:2px;">⚡</div>
-                                <div style="font-size:13px; color:#bfc6d1; font-weight:500; margin-bottom:1px;">
+                            <div style="flex:1; text-align:center; padding:8px 0;">
+                                <div style="font-size:14px; margin-bottom:0;">⚡</div>
+                                <div style="font-size:10px; color:#bfc6d1; font-weight:500; margin-bottom:0;">
                                     <span data-i18n-key="discharged">已放电量</span>
                                 </div>
-                                <div style="font-size:16px; font-weight:700; color:#fff; margin-bottom:4px;">23547kWh</div>
-                                <div style="display:flex; align-items:center; justify-content:center; gap:2px;">
-                                    <span style="font-size:12px; color:#00ff88;">↑</span>
-                                    <span style="font-size:10px; color:rgba(255,255,255,0.5);" data-i18n-key="comparedToYesterday">比昨日</span>
-                                    <span style="font-size:11px; font-weight:600; color:#00ff88;">+21%</span>
+                                <div style="font-size:13px; font-weight:700; color:#fff; margin-bottom:1px;">23547kWh</div>
+                                <div style="display:flex; align-items:center; justify-content:center; gap:1px;">
+                                    <span style="font-size:9px; color:#00ff88;">↑</span>
+                                    <span style="font-size:8px; color:rgba(255,255,255,0.5);" data-i18n-key="comparedToYesterday">比昨日</span>
+                                    <span style="font-size:9px; font-weight:600; color:#00ff88;">+21%</span>
                                 </div>
                             </div>
                             <!-- 分割线 -->
-                            <div style="width:1px; height:60px; background:rgba(255,255,255,0.1);"></div>
+                            <div style="width:1px; height:45px; background:rgba(255,255,255,0.1);"></div>
                             <!-- 已获利 -->
-                            <div style="flex:1; text-align:center; padding:20px 0;">
-                                <div style="font-size:18px; margin-bottom:2px;">💰</div>
-                                <div style="font-size:13px; color:#bfc6d1; font-weight:500; margin-bottom:1px;">
+                            <div style="flex:1; text-align:center; padding:8px 0;">
+                                <div style="font-size:14px; margin-bottom:0;">💰</div>
+                                <div style="font-size:10px; color:#bfc6d1; font-weight:500; margin-bottom:0;">
                                     <span data-i18n-key="actualProfit">已获利($)</span>
                                 </div>
-                                <div style="font-size:16px; font-weight:700; color:#fff; margin-bottom:4px;">$23547</div>
-                                <div style="display:flex; align-items:center; justify-content:center; gap:2px;">
-                                    <span style="font-size:12px; color:#00ff88;">↑</span>
-                                    <span style="font-size:10px; color:rgba(255,255,255,0.5);" data-i18n-key="comparedToYesterday">比昨日</span>
-                                    <span style="font-size:11px; font-weight:600; color:#00ff88;">+21%</span>
+                                <div style="font-size:13px; font-weight:700; color:#fff; margin-bottom:1px;">$23547</div>
+                                <div style="display:flex; align-items:center; justify-content:center; gap:1px;">
+                                    <span style="font-size:9px; color:#00ff88;">↑</span>
+                                    <span style="font-size:8px; color:rgba(255,255,255,0.5);" data-i18n-key="comparedToYesterday">比昨日</span>
+                                    <span style="font-size:9px; font-weight:600; color:#00ff88;">+21%</span>
                                 </div>
                             </div>
                         </div>
@@ -2595,7 +2592,7 @@
             </div>
             <!-- 右侧卡片区 -->
             <div style="display: flex; flex-direction: column; width: 100%; height: 100%;">
-                <div class="right-panel-scroll" style="flex:1; overflow-y:auto; height:calc(100vh - 240px); padding-right:2px;">
+                <div class="right-panel-scroll" style="flex:1; overflow-y:auto; height:100%; padding-right:2px;">
                     <!-- 自定义卡片 -->
                     <div class="custom-card">
                         <div style="padding: 20px; position: relative; height: 100%; display: flex; flex-direction: column;">
