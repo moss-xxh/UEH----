@@ -50,6 +50,8 @@
         /* Override for homepage specific styles */
         body {
             background: #000 !important;
+            overflow: hidden;
+            height: 100vh;
         }
         
         .container {
@@ -248,7 +250,11 @@
         .container {
             max-width: 95%;
             margin: 0 auto;
-            padding: 120px 10px 40px; /* 增加顶部间距适应固定头部 */
+            padding: 120px 10px 0; /* 移除底部padding避免遮挡 */
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
         }
 
         /* Page Header */
@@ -269,6 +275,8 @@
             margin-bottom: 0;
             padding-right: 0;
             height: 600px;
+            position: relative;
+            overflow: hidden;
         }
 
         /* Market Section */
@@ -295,7 +303,7 @@
             display: flex;
             flex-direction: column;
             padding: 12px;
-            height: 600px;
+            height: 100%;
             overflow: hidden;
         }
 
@@ -2417,6 +2425,15 @@
         }
     </style>
     <style>
+        /* 右侧内容可滚动 */
+        .right-panel-content {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+        
         /* 隐藏右侧滚动条但允许滚动 */
         .right-panel-scroll {
             scrollbar-width: none; /* Firefox */
@@ -2472,7 +2489,7 @@
         <!-- Top Stats Row -->
         <div class="stats-row">
             <!-- Power Station Management -->
-            <div class="card power-station-container">
+            <div class="card power-station-container" style="height: 600px;">
                 <!-- Module Header -->
                 <div class="station-header" style="display: flex; justify-content: space-between; align-items: center;">
                     <h3 class="station-title">
@@ -2589,10 +2606,10 @@
 
             </div>
             <!-- 右侧卡片区 -->
-            <div style="display: flex; flex-direction: column; width: 100%; height: 100%;">
-                <div class="right-panel-scroll" style="flex:1; overflow-y:auto; height:100%; padding-right:2px;">
+            <div style="display: flex; flex-direction: column; width: 100%; height: 100%; overflow: hidden;">
+                <div class="right-panel-scroll" style="flex:1; overflow-y:auto; height:100%; padding-right:10px; padding-bottom: 20px;">
                     <!-- 自定义卡片 -->
-                    <div class="custom-card">
+                    <div class="custom-card" style="height: 600px;">
                         <div style="padding: 20px; position: relative; height: 100%; display: flex; flex-direction: column; overflow: hidden;">
                             <!-- Tab Controls -->
                             <div class="panel-tabs">
@@ -2671,7 +2688,7 @@
                                 </div>
 
                                 <!-- Market Chart -->
-                                <div id="marketChart" style="height: 450px; width: 100%; margin-top: 40px; margin-bottom: 10px;"></div>
+                                <div id="marketChart" style="height: 400px; width: 100%; margin-top: 40px; margin-bottom: 10px;"></div>
 
                                 <!-- Status Bar -->
                                 <div style="margin-top: 20px; display: flex; justify-content: space-between; align-items: center;"></div>
@@ -4590,7 +4607,7 @@
                 // Force container to have proper dimensions
                 if (container.offsetWidth === 0 || container.offsetHeight === 0) {
                     container.style.width = '100%';
-                    container.style.height = '450px';
+                    container.style.height = '400px';
                 }
             
             const hours = [];
