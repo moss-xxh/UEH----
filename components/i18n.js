@@ -710,6 +710,9 @@ class I18n {
                         search: "🔍 查询",
                         reset: "🔄 重置", 
                         export: "📥 导出",
+                        refresh: "刷新",
+                        expand: "展开",
+                        collapse: "收起",
                         advancedFilter: "⚙️ 高级筛选",
                         applyFilter: "应用高级筛选",
                         cancel: "取消",
@@ -727,6 +730,7 @@ class I18n {
                         minValue: "最小值",
                         maxValue: "最大值",
                         allLocations: "所有地区",
+                        allRegions: "所有地区",
                         allDevices: "所有设备"
                     },
                     table: {
@@ -2202,7 +2206,8 @@ class I18n {
                         userName: "Enter user name...",
                         allActivity: "All Activity",
                         deviceCode: "Enter device code...",
-                        deviceStatus: "All Device Status"
+                        deviceStatus: "All Device Status",
+                        allRegions: "All Regions"
                     },
                     activityStatus: {
                         active: "Active",
@@ -2219,6 +2224,9 @@ class I18n {
                         search: "Search",
                         reset: "Reset",
                         export: "Export",
+                        refresh: "Refresh",
+                        expand: "Expand",
+                        collapse: "Collapse",
                         viewDetails: "View Details"
                     },
                     table: {

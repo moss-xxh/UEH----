@@ -113,10 +113,43 @@
             padding: 20px;
             margin-bottom: 20px;
             margin-top: 34px;  /* 再向下移动6px，从28px改为34px */
+        }
+        
+        /* Filter rows container */
+        .filter-rows-container {
             display: flex;
+            flex-direction: column;
             gap: 16px;
+        }
+        
+        /* First row - main filters */
+        .filter-row-main {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            flex-wrap: nowrap;
+        }
+        
+        /* Second row - action buttons */
+        .filter-row-actions {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+        
+        /* Collapsible filters */
+        .filter-row-extra {
+            display: none;
+            gap: 12px;
             align-items: center;
             flex-wrap: wrap;
+            padding-top: 16px;
+            margin-top: 16px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .filter-row-extra.expanded {
+            display: flex;
         }
 
         .search-input {
@@ -217,6 +250,73 @@
 
         .filter-btn.export:hover {
             background: rgba(30, 127, 255, 0.15);
+        }
+
+        .filter-btn.refresh {
+            background: rgba(0, 255, 136, 0.1);
+            border: 1px solid rgba(0, 255, 136, 0.3);
+            color: #00ff88;
+        }
+
+        .filter-btn.refresh:hover {
+            background: rgba(0, 255, 136, 0.15);
+            border-color: rgba(0, 255, 136, 0.4);
+            transform: translateY(-1px);
+        }
+        
+        .filter-btn.toggle {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: rgba(255, 255, 255, 0.6);
+        }
+        
+        .filter-btn.toggle:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: rgba(255, 255, 255, 0.8);
+        }
+        
+        .filter-btn.toggle .toggle-icon {
+            transition: transform 0.3s ease;
+        }
+        
+        .filter-btn.toggle.expanded .toggle-icon {
+            transform: rotate(180deg);
+        }
+
+        /* 查询区域内容过多时的响应式布局 */
+        @media (max-width: 1400px) {
+            .filter-row-main {
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+            
+            .filter-row-main .filter-select,
+            .filter-row-main .search-input {
+                flex: 1 1 calc(25% - 10px);
+                min-width: 180px;
+            }
+            
+            .filter-row-main .filter-btn {
+                flex: 0 0 auto;
+            }
+        }
+        
+        @media (max-width: 1000px) {
+            .filter-row-main .filter-select,
+            .filter-row-main .search-input {
+                flex: 1 1 calc(50% - 10px);
+            }
+        }
+        
+        @media (max-width: 600px) {
+            .filter-row-main .filter-select,
+            .filter-row-main .search-input {
+                flex: 1 1 100%;
+            }
+            
+            .filter-row-actions {
+                justify-content: center;
+            }
         }
 
         /* Table Styles */
@@ -974,38 +1074,69 @@
         <div id="gridViewContent">
             <!-- Search and Filter Section -->
             <div class="search-filter-section">
-                <input type="text" class="search-input" id="searchInput" data-i18n-placeholder="family.placeholder.userName" placeholder="请输入用户名称..." onkeyup="handleSearch(this.value)">
-                
-                <select class="filter-select" id="activityFilter" onchange="handleActivityFilter(this.value)">
-                    <option value="" data-i18n-key="family.placeholder.allActivity">所有活跃度</option>
-                    <option value="active" data-i18n-key="family.activityStatus.active">活跃</option>
-                    <option value="inactive" data-i18n-key="family.activityStatus.inactive">非活跃</option>
-                    <option value="not-participating" data-i18n-key="family.activityStatus.notParticipating">未参与</option>
-                </select>
-                
-                <input type="text" class="search-input" id="deviceCodeInput" data-i18n-placeholder="family.placeholder.deviceCode" placeholder="请输入设备编码..." onkeyup="handleDeviceCodeSearch(this.value)">
-                
-                <select class="filter-select" id="deviceStatusFilter" onchange="handleDeviceStatusFilter(this.value)">
-                    <option value="" data-i18n-key="family.placeholder.deviceStatus">所有设备状态</option>
-                    <option value="charging" data-i18n-key="family.deviceStates.charging">充电</option>
-                    <option value="discharging" data-i18n-key="family.deviceStates.discharging">放电</option>
-                    <option value="standby" data-i18n-key="family.deviceStates.standby">待机</option>
-                    <option value="offline" data-i18n-key="family.deviceStates.offline">离线</option>
-                </select>
-                
-                <div class="filter-actions">
-                    <button class="filter-btn primary" onclick="applyFilters()">
-                        <span>🔍</span>
-                        <span data-i18n-key="family.buttons.search">查询</span>
-                    </button>
-                    <button class="filter-btn secondary" onclick="resetFilters()">
-                        <span>🔄</span>
-                        <span data-i18n-key="family.buttons.reset">重置</span>
-                    </button>
-                    <button class="filter-btn export" onclick="exportData()">
-                        <span>📥</span>
-                        <span data-i18n-key="family.buttons.export">导出</span>
-                    </button>
+                <div class="filter-rows-container">
+                    <!-- First Row: Main filters -->
+                    <div class="filter-row-main">
+                        <!-- Region Select as First Filter -->
+                        <select class="filter-select" id="regionFilter" onchange="handleRegionFilter(this.value)">
+                            <option value="" data-i18n-key="family.placeholder.allRegions">所有地区</option>
+                            <option value="NSW">NSW - 新南威尔士州</option>
+                            <option value="VIC">VIC - 维多利亚州</option>
+                            <option value="QLD">QLD - 昆士兰州</option>
+                            <option value="SA">SA - 南澳大利亚州</option>
+                            <option value="WA">WA - 西澳大利亚州</option>
+                            <option value="TAS">TAS - 塔斯马尼亚州</option>
+                            <option value="NT">NT - 北领地</option>
+                            <option value="ACT">ACT - 首都领地</option>
+                        </select>
+                        
+                        <input type="text" class="search-input" id="searchInput" data-i18n-placeholder="family.placeholder.userName" placeholder="请输入用户名称..." onkeyup="handleSearch(this.value)">
+                        
+                        <select class="filter-select" id="activityFilter" onchange="handleActivityFilter(this.value)">
+                            <option value="" data-i18n-key="family.placeholder.allActivity">所有活跃度</option>
+                            <option value="active" data-i18n-key="family.activityStatus.active">活跃</option>
+                            <option value="inactive" data-i18n-key="family.activityStatus.inactive">非活跃</option>
+                            <option value="not-participating" data-i18n-key="family.activityStatus.notParticipating">未参与</option>
+                        </select>
+                        
+                        <input type="text" class="search-input" id="deviceCodeInput" data-i18n-placeholder="family.placeholder.deviceCode" placeholder="请输入设备编码..." onkeyup="handleDeviceCodeSearch(this.value)">
+                        
+                        <button class="filter-btn primary" onclick="applyFilters()">
+                            <span>🔍</span>
+                            <span data-i18n-key="family.buttons.search">查询</span>
+                        </button>
+                        <button class="filter-btn secondary" onclick="resetFilters()">
+                            <span>↺</span>
+                            <span data-i18n-key="family.buttons.reset">重置</span>
+                        </button>
+                        <button class="filter-btn toggle" id="toggleFiltersBtn" onclick="toggleExtraFilters()">
+                            <span class="toggle-icon">▼</span>
+                            <span data-i18n-key="family.buttons.expand">展开</span>
+                        </button>
+                    </div>
+                    
+                    <!-- Second Row: Action buttons -->
+                    <div class="filter-row-actions">
+                        <button class="filter-btn export" onclick="exportData()">
+                            <span>📥</span>
+                            <span data-i18n-key="family.buttons.export">导出</span>
+                        </button>
+                        <button class="filter-btn refresh" onclick="refreshData()">
+                            <span>🔄</span>
+                            <span data-i18n-key="family.buttons.refresh">刷新</span>
+                        </button>
+                    </div>
+                    
+                    <!-- Extra filters (collapsed by default) -->
+                    <div class="filter-row-extra" id="extraFilters">
+                        <select class="filter-select" id="deviceStatusFilter" onchange="handleDeviceStatusFilter(this.value)">
+                            <option value="" data-i18n-key="family.placeholder.deviceStatus">所有设备状态</option>
+                            <option value="charging" data-i18n-key="family.deviceStates.charging">充电</option>
+                            <option value="discharging" data-i18n-key="family.deviceStates.discharging">放电</option>
+                            <option value="standby" data-i18n-key="family.deviceStates.standby">待机</option>
+                            <option value="offline" data-i18n-key="family.deviceStates.offline">离线</option>
+                        </select>
+                    </div>
                 </div>
             </div>
 
@@ -1604,6 +1735,11 @@
             console.log('Device status filter:', value);
         }
 
+        function handleRegionFilter(value) {
+            console.log('Region filter:', value);
+            // 可以在这里添加地区筛选的逻辑
+        }
+
         function applyFilters() {
             // Apply all filters and reload data
             console.log('Applying filters...');
@@ -1611,7 +1747,38 @@
             loadFamilyCards();
         }
 
+        function refreshData() {
+            // Refresh data without changing filters
+            console.log('Refreshing data...');
+            loadFamilyCards();
+            // 显示刷新提示
+            const timestamp = new Date().toLocaleTimeString();
+            console.log('Data refreshed at:', timestamp);
+        }
+        
+        function toggleExtraFilters() {
+            const extraFilters = document.getElementById('extraFilters');
+            const toggleBtn = document.getElementById('toggleFiltersBtn');
+            const toggleIcon = toggleBtn.querySelector('.toggle-icon');
+            const toggleText = toggleBtn.querySelector('span:last-child');
+            
+            if (extraFilters.classList.contains('expanded')) {
+                // Collapse
+                extraFilters.classList.remove('expanded');
+                toggleBtn.classList.remove('expanded');
+                toggleText.setAttribute('data-i18n-key', 'family.buttons.expand');
+                toggleText.textContent = window.i18n ? window.i18n.getText('family.buttons.expand') : '展开';
+            } else {
+                // Expand
+                extraFilters.classList.add('expanded');
+                toggleBtn.classList.add('expanded');
+                toggleText.setAttribute('data-i18n-key', 'family.buttons.collapse');
+                toggleText.textContent = window.i18n ? window.i18n.getText('family.buttons.collapse') : '收起';
+            }
+        }
+
         function resetFilters() {
+            document.getElementById('regionFilter').value = '';
             document.getElementById('searchInput').value = '';
             document.getElementById('activityFilter').value = '';
             document.getElementById('deviceCodeInput').value = '';

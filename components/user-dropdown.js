@@ -37,6 +37,11 @@ class UserDropdown {
                     <img src="${avatarSrc}" alt="用户头像" class="user-avatar" id="headerUserAvatar" style="width: 36px; height: 36px; border-radius: 50%; cursor: pointer;">
                 </div>
                 <div class="user-dropdown-menu">
+                    <div class="dropdown-user-info">
+                        <div class="dropdown-user-name">${this.userData.name}</div>
+                        <div class="dropdown-user-email">${this.userData.email}</div>
+                    </div>
+                    <div class="dropdown-divider"></div>
                     <div class="dropdown-item" onclick="userDropdown.openSettings()">
                         <span class="dropdown-item-icon">⚙️</span>
                         <span>设置</span>
@@ -89,8 +94,8 @@ class UserDropdown {
                             </div>
                             
                             <div class="settings-form-group">
-                                <label class="settings-label">用户名</label>
-                                <input type="text" class="settings-input" id="userNameInput" value="${this.userData.name}" placeholder="请输入用户名">
+                                <label class="settings-label">昵称</label>
+                                <input type="text" class="settings-input" id="userNameInput" value="${this.userData.name}" placeholder="请输入昵称">
                                 <span class="error-message" id="nameError"></span>
                             </div>
                         </div>

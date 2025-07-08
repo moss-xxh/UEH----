@@ -12,6 +12,7 @@ const translations = {
         username: "Username/Email",
         password: "Password",
         nickname: "Nickname",
+        account: "Account",
         email: "Email",
         confirmPassword: "Confirm Password",
         forgotPassword: "Forgot Password",
@@ -23,6 +24,7 @@ const translations = {
         usernamePlaceholder: "Please enter username/email",
         passwordPlaceholder: "Please enter password",
         nicknamePlaceholder: "Please enter nickname",
+        accountPlaceholder: "Please enter account",
         emailPlaceholder: "Please enter email",
         confirmPasswordPlaceholder: "Please confirm password",
         captcha: "Verification Code",
@@ -40,6 +42,7 @@ const translations = {
         invalidEmail: "Please enter a valid email address",
         passwordTooShort: "Password must be at least 8 characters",
         nicknameTooShort: "Nickname must be at least 3 characters",
+        accountTooShort: "Account must be at least 3 characters",
         invalidCaptcha: "Incorrect verification code",
     },
     zh: {
@@ -54,6 +57,7 @@ const translations = {
         username: "用户名/邮箱",
         password: "密码",
         nickname: "昵称",
+        account: "账号",
         email: "邮箱",
         confirmPassword: "确认密码",
         forgotPassword: "忘记密码",
@@ -65,6 +69,7 @@ const translations = {
         usernamePlaceholder: "请输入用户名/邮箱",
         passwordPlaceholder: "请输入密码",
         nicknamePlaceholder: "请输入昵称",
+        accountPlaceholder: "请输入账号",
         emailPlaceholder: "请输入邮箱",
         confirmPasswordPlaceholder: "请确认密码",
         captcha: "验证码",
@@ -82,6 +87,7 @@ const translations = {
         invalidEmail: "请输入有效的邮箱地址",
         passwordTooShort: "密码至少需要8个字符",
         nicknameTooShort: "昵称至少需要3个字符",
+        accountTooShort: "账号至少需要3个字符",
         invalidCaptcha: "验证码错误",
     }
 };
@@ -219,14 +225,14 @@ async function handleLogin(e) {
 async function handleRegister(e) {
     e.preventDefault();
     
-    const nickname = document.getElementById('registerNickname').value;
+    const account = document.getElementById('registerAccount').value;
     const email = document.getElementById('registerEmail').value;
     const password = document.getElementById('registerPassword').value;
     const confirmPassword = document.getElementById('confirmPassword').value;
     
     // Validation
-    if (nickname.length < 3) {
-        showMessage(translations[currentLang].nicknameTooShort, 'error');
+    if (account.length < 3) {
+        showMessage(translations[currentLang].accountTooShort || translations[currentLang].nicknameTooShort, 'error');
         return;
     }
     
