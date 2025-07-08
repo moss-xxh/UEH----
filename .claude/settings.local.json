@@ -45,7 +45,8 @@
       "Bash(./backup-script.sh)",
       "Bash(xxd:*)",
       "Bash(./restore-to-1322.sh:*)",
-      "mcp__ide__executeCode"
+      "mcp__ide__executeCode",
+      "Bash(git switch:*)"
     ],
     "deny": []
   }
