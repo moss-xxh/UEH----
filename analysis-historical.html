@@ -105,7 +105,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-top: 8px;
+            margin-top: 58px;
             margin-bottom: 20px;
             border-bottom: 1px solid rgba(255,255,255,0.1);
             padding-bottom: 16px;
@@ -1093,7 +1093,7 @@
     <div class="container">
         <!-- Page Header -->
         <div class="page-header">
-            <h1 class="page-title">虚拟电厂深度分析</h1>
+            <h1 class="page-title">分析</h1>
             <div class="analysis-toggle">
                 <button class="toggle-btn active" onclick="switchAnalysisMode('realtime', this)">实时分析</button>
                 <button class="toggle-btn" onclick="switchAnalysisMode('historical', this)">历史分析</button>
@@ -1755,7 +1755,7 @@
                 realtimeContent.style.display = 'none';
                 
                 // 更新页面标题
-                document.querySelector('.page-title').textContent = '虚拟电厂深度分析';
+                document.querySelector('.page-title').textContent = '分析';
                 
                 // 重新初始化历史数据图表
                 setTimeout(() => {
@@ -1767,7 +1767,7 @@
                 realtimeContent.style.display = 'block';
                 
                 // 更新页面标题
-                document.querySelector('.page-title').textContent = '虚拟电厂实时分析';
+                document.querySelector('.page-title').textContent = '分析';
             }
         }
 
