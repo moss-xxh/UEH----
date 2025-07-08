@@ -106,47 +106,25 @@
             margin-bottom: 0;  /* 移除额外间距，直接使用查询区域 */
         }
 
-        /* Search and Filter Section - Operation Log Standard */
+
+        /* Search and Filter Section - 复制自组织页面 */
         .search-filter-section {
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: 16px;
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: 0;
+            margin-bottom: 16px;
             padding: 20px;
-            margin-bottom: 20px;
-            margin-top: 34px;  /* 再向下移动6px，从28px改为34px */
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            backdrop-filter: blur(10px);
         }
         
-        /* Filter rows container */
-        .filter-rows-container {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-        
-        /* First row - main filters */
-        .filter-row-main {
-            display: flex;
-            gap: 12px;
-            align-items: center;
-            flex-wrap: nowrap;
-            width: 100%;
-        }
-        
-        /* Left side filters */
-        .filter-main-left {
-            display: flex;
-            gap: 12px;
-            align-items: center;
-            flex: 1 1 auto;
-        }
-        
-        /* Right side buttons */
-        .filter-main-right {
+        .filter-actions {
             display: flex;
             gap: 8px;
-            align-items: center;
-            flex-shrink: 0;
-            margin-left: auto; /* 确保靠右对齐 */
+            margin-left: auto;
         }
         
 
@@ -196,12 +174,6 @@
             padding: 8px;
         }
 
-        .filter-actions {
-            display: flex;
-            gap: 8px;
-            margin-left: auto;
-        }
-
         .filter-btn {
             padding: 10px 16px;
             border: 1px solid rgba(255, 255, 255, 0.1);
@@ -223,6 +195,16 @@
             font-weight: 500;
         }
 
+        .filter-btn.secondary {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .filter-btn.export {
+            background: rgba(30, 127, 255, 0.1);
+            border: 1px solid rgba(30, 127, 255, 0.3);
+            color: var(--color-accent);
+        }
+
         .filter-btn.primary:hover {
             background: #00e67a;
             border-color: #00e67a;
@@ -230,20 +212,10 @@
             box-shadow: 0 4px 12px rgba(0, 255, 136, 0.3);
         }
 
-        .filter-btn.secondary {
-            background: rgba(255, 255, 255, 0.05);
-        }
-
         .filter-btn.secondary:hover {
             background: rgba(255, 255, 255, 0.1);
             border-color: rgba(255, 255, 255, 0.2);
             color: #fff;
-        }
-
-        .filter-btn.export {
-            background: rgba(30, 127, 255, 0.1);
-            border: 1px solid rgba(30, 127, 255, 0.3);
-            color: var(--color-accent);
         }
 
         .filter-btn.export:hover {
@@ -263,47 +235,39 @@
         }
         
 
-        /* 查询区域内容过多时的响应式布局 */
-        @media (max-width: 1400px) {
-            .filter-main-left {
+        /* 响应式布局 - 复制自组织页面 */
+        @media (max-width: 1200px) {
+            .search-filter-section {
                 flex-wrap: wrap;
-                gap: 10px;
+                gap: 8px;
             }
             
-            .filter-main-left .filter-select,
-            .filter-main-left .search-input {
-                flex: 1 1 calc(50% - 10px);
-                min-width: 180px;
-            }
-        }
-        
-        @media (max-width: 1000px) {
-            .filter-row-main {
-                flex-direction: column;
-                gap: 16px;
+            .filter-select,
+            .search-input {
+                flex: 1 1 calc(50% - 8px);
+                min-width: 160px;
             }
             
-            .filter-main-left {
-                width: 100%;
-            }
-            
-            .filter-main-right {
-                width: 100%;
-                justify-content: flex-end;
-            }
-        }
-        
-        @media (max-width: 600px) {
-            .filter-main-left .filter-select,
-            .filter-main-left .search-input {
+            .filter-actions {
                 flex: 1 1 100%;
+                justify-content: flex-end;
+                margin-left: 0;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .search-filter-section {
+                flex-direction: column;
+                align-items: stretch;
             }
             
-            .filter-main-right {
-                justify-content: center;
+            .filter-select,
+            .search-input {
+                flex: none;
+                width: 100%;
             }
             
-            .filter-row-actions {
+            .filter-actions {
                 justify-content: center;
             }
         }
@@ -323,8 +287,9 @@
             padding: 20px 24px;
             border-bottom: 1px solid var(--color-border);
             display: flex;
-            justify-content: flex-end;
+            justify-content: flex-start;
             align-items: center;
+            transform: translateY(-25px);
         }
         
         .table-actions {
@@ -335,6 +300,12 @@
         .table-wrapper {
             padding: 0 24px 24px;
             overflow-x: auto;
+            transform: translateY(-25px);
+        }
+        
+        /* Pagination Container */
+        #paginationContainer {
+            transform: translateY(-25px);
         }
 
         .data-table {
@@ -1081,52 +1052,47 @@
         <div id="gridViewContent">
             <!-- Search and Filter Section -->
             <div class="search-filter-section">
-                <div class="filter-rows-container">
-                    <!-- First Row: Main filters -->
-                    <div class="filter-row-main">
-                        <div class="filter-main-left">
-                            <!-- Region Select as First Filter -->
-                            <select class="filter-select" id="regionFilter" onchange="handleRegionFilter(this.value)">
-                                <option value="" data-i18n-key="family.placeholder.allRegions">所有地区</option>
-                                <option value="NSW">NSW - 新南威尔士州</option>
-                                <option value="VIC">VIC - 维多利亚州</option>
-                                <option value="QLD">QLD - 昆士兰州</option>
-                                <option value="SA">SA - 南澳大利亚州</option>
-                                <option value="WA">WA - 西澳大利亚州</option>
-                                <option value="TAS">TAS - 塔斯马尼亚州</option>
-                                <option value="NT">NT - 北领地</option>
-                                <option value="ACT">ACT - 首都领地</option>
-                            </select>
-                            
-                            <input type="text" class="search-input" id="searchInput" data-i18n-placeholder="family.placeholder.userName" placeholder="请输入用户名称..." onkeyup="handleSearch(this.value)">
-                            
-                            <select class="filter-select" id="activityFilter" onchange="handleActivityFilter(this.value)">
-                                <option value="" data-i18n-key="family.placeholder.allActivity">所有活跃度</option>
-                                <option value="active" data-i18n-key="family.activityStatus.active">活跃</option>
-                                <option value="inactive" data-i18n-key="family.activityStatus.inactive">非活跃</option>
-                                <option value="not-participating" data-i18n-key="family.activityStatus.notParticipating">未参与</option>
-                            </select>
-                            
-                            <input type="text" class="search-input" id="deviceCodeInput" data-i18n-placeholder="family.placeholder.deviceCode" placeholder="请输入设备编码..." onkeyup="handleDeviceCodeSearch(this.value)">
-                            
-                            <select class="filter-select" id="deviceStatusFilter" onchange="handleDeviceStatusFilter(this.value)">
-                                <option value="" data-i18n-key="family.placeholder.deviceStatus">所有设备状态</option>
-                                <option value="charging" data-i18n-key="family.deviceStates.charging">充电</option>
-                                <option value="discharging" data-i18n-key="family.deviceStates.discharging">放电</option>
-                                <option value="standby" data-i18n-key="family.deviceStates.standby">待机</option>
-                                <option value="offline" data-i18n-key="family.deviceStates.offline">离线</option>
-                            </select>
-                        </div>
-                        
-                        <div class="filter-main-right">
-                            <button class="filter-btn primary" onclick="applyFilters()">
-                                <span data-i18n-key="family.buttons.search">查询</span>
-                            </button>
-                            <button class="filter-btn secondary" onclick="resetFilters()">
-                                <span data-i18n-key="family.buttons.reset">重置</span>
-                            </button>
-                        </div>
-                    </div>
+                <!-- Region Select as First Filter -->
+                <select class="filter-select" id="regionFilter" onchange="handleRegionFilter(this.value)">
+                    <option value="" data-i18n-key="family.placeholder.allRegions">所有地区</option>
+                    <option value="NSW">NSW - 新南威尔士州</option>
+                    <option value="VIC">VIC - 维多利亚州</option>
+                    <option value="QLD">QLD - 昆士兰州</option>
+                    <option value="SA">SA - 南澳大利亚州</option>
+                    <option value="WA">WA - 西澳大利亚州</option>
+                    <option value="TAS">TAS - 塔斯马尼亚州</option>
+                    <option value="NT">NT - 北领地</option>
+                    <option value="ACT">ACT - 首都领地</option>
+                </select>
+                
+                <input type="text" class="search-input" id="searchInput" data-i18n-placeholder="family.placeholder.userName" placeholder="请输入用户名称..." onkeyup="handleSearch(this.value)">
+                
+                <select class="filter-select" id="activityFilter" onchange="handleActivityFilter(this.value)">
+                    <option value="" data-i18n-key="family.placeholder.allActivity">所有活跃度</option>
+                    <option value="active" data-i18n-key="family.activityStatus.active">活跃</option>
+                    <option value="inactive" data-i18n-key="family.activityStatus.inactive">非活跃</option>
+                    <option value="not-participating" data-i18n-key="family.activityStatus.notParticipating">未参与</option>
+                </select>
+                
+                <input type="text" class="search-input" id="deviceCodeInput" data-i18n-placeholder="family.placeholder.deviceCode" placeholder="请输入设备编码..." onkeyup="handleDeviceCodeSearch(this.value)">
+                
+                <select class="filter-select" id="deviceStatusFilter" onchange="handleDeviceStatusFilter(this.value)">
+                    <option value="" data-i18n-key="family.placeholder.deviceStatus">所有设备状态</option>
+                    <option value="charging" data-i18n-key="family.deviceStates.charging">充电</option>
+                    <option value="discharging" data-i18n-key="family.deviceStates.discharging">放电</option>
+                    <option value="standby" data-i18n-key="family.deviceStates.standby">待机</option>
+                    <option value="offline" data-i18n-key="family.deviceStates.offline">离线</option>
+                </select>
+                
+                <div class="filter-actions">
+                    <button class="filter-btn primary" onclick="applyFilters()">
+                        <span>🔍</span>
+                        <span data-i18n-key="family.buttons.search">查询</span>
+                    </button>
+                    <button class="filter-btn secondary" onclick="resetFilters()">
+                        <span>🔄</span>
+                        <span data-i18n-key="family.buttons.reset">重置</span>
+                    </button>
                 </div>
             </div>
 
