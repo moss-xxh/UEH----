@@ -5,16 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title data-i18n-key="family.title">家庭 - U Energy</title>
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <link rel="stylesheet" href="components/common-styles.css">
     <link rel="stylesheet" href="components/i18n.css">
     <link rel="stylesheet" href="components/notification-center.css">
     <link rel="stylesheet" href="components/header-nav.css">
-    <link rel="stylesheet" href="components/time-selector.css">
     <link rel="stylesheet" href="components/pagination.css">
     <link rel="stylesheet" href="components/standard-layout.css">
+    <link rel="stylesheet" href="components/user-dropdown.css">
     <script src="components/i18n.js"></script>
+    <script src="components/user-menu-link.js"></script>
     <script src="components/simple-message-icon.js"></script>
     <script src="components/header-nav.js"></script>
-    <script src="components/time-selector.js"></script>
     <script src="components/pagination.js"></script>
     <style>
         * {
@@ -23,44 +24,14 @@
             box-sizing: border-box;
         }
 
-        :root {
-            --color-bg: #f7f8fa;
-            --color-bg-card: #fff;
-            --color-text: #1d2129;
-            --color-text-secondary: #4e5969;
-            --color-primary: #00b96b;
-            --color-accent: #1e7fff;
-            --color-border: #e5e6eb;
-            --color-shadow: 0 2px 8px rgba(0,0,0,0.06);
-            --radius: 12px;
-        }
-        
-        body.theme-dark {
-            --color-bg: #0a0f1b;
-            --color-bg-card: #1a1f2e;
-            --color-text: #f7f8fa;
-            --color-text-secondary: #86909c;
-            --color-primary: #00b96b;
-            --color-accent: #1e7fff;
-            --color-border: #2d3444;
-            --color-shadow: 0 2px 8px rgba(0,0,0,0.32);
-        }
-        
-        html, body {
-            background: var(--color-bg) !important;
-            width: 100vw;
-            min-height: 100vh;
-            margin: 0;
-            padding: 0;
-            overflow-x: hidden;
-            color: var(--color-text);
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        body {
+            background: #000 !important;
         }
 
         .container {
             max-width: 95%;
             margin: 0 auto;
-            padding: 120px 10px 24px;
+            padding: 100px 10px 24px;
             display: flex;
             flex-direction: column;
             gap: 24px;
@@ -72,17 +43,15 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 40px;
-            padding: 24px 0;
-            border-bottom: 1px solid var(--color-border);
+            margin-bottom: -24px;  /* 负间距，向上移动24px */
         }
 
         .page-title {
-            font-size: 36px;
-            font-weight: 700;
+            font-size: 48px;
+            font-weight: 500;
             color: var(--color-text);
             margin: 0;
-            letter-spacing: -1px;
+            letter-spacing: -2px;
         }
 
         .page-subtitle {
@@ -91,30 +60,59 @@
             margin-top: 4px;
         }
 
-        /* View Mode Tab - Only Grid View */
+        /* Tab-style view switcher */
         .page-view-tabs {
-            display: flex;
-            gap: 12px;
+            display: inline-flex;
+            background: var(--color-bg);
+            border: 1px solid var(--color-border);
+            border-radius: 12px;
+            padding: 4px;
+            gap: 4px;
         }
 
         .page-tab {
-            padding: 12px 24px;
-            background: var(--color-primary);
-            border: 1px solid var(--color-primary);
-            border-radius: 20px;
-            color: #fff;
+            position: relative;
+            background: rgba(255, 255, 255, 0.05);
+            color: rgba(255, 255, 255, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 10px 24px;
             font-size: 14px;
-            white-space: nowrap;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .page-tab:hover:not(.active) {
+            background: rgba(255, 255, 255, 0.08);
+            color: rgba(255, 255, 255, 0.8);
+            border-color: rgba(255, 255, 255, 0.15);
+        }
+
+        .page-tab.active {
+            background: #00ff88;
+            color: #000;
+            border-color: #00ff88;
+            box-shadow: 0 4px 12px rgba(0, 255, 136, 0.3);
+            font-weight: 600;
+        }
+
+        /* Override time selector margin for this page */
+        #timeSelectorContainer .time-filter-section {
+            margin-bottom: 0;  /* 移除额外间距，直接使用查询区域 */
         }
 
         /* Search and Filter Section - Operation Log Standard */
         .search-filter-section {
-            background: var(--color-bg-card);
-            border-radius: var(--radius);
-            box-shadow: var(--color-shadow);
-            border: 1.5px solid var(--color-border);
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
             padding: 20px;
-            margin-bottom: 40px;
+            margin-bottom: 20px;
+            margin-top: 34px;  /* 再向下移动6px，从28px改为34px */
             display: flex;
             gap: 16px;
             align-items: center;
@@ -188,13 +186,15 @@
         }
 
         .filter-btn.primary {
-            background: linear-gradient(135deg, rgba(0, 255, 136, 0.2), rgba(0, 170, 255, 0.2));
-            border-color: rgba(0, 255, 136, 0.5);
-            color: #fff;
+            background: #00ff88;
+            border-color: #00ff88;
+            color: #000;
+            font-weight: 500;
         }
 
         .filter-btn.primary:hover {
-            background: linear-gradient(135deg, rgba(0, 255, 136, 0.3), rgba(0, 170, 255, 0.3));
+            background: #00e67a;
+            border-color: #00e67a;
             transform: translateY(-1px);
             box-shadow: 0 4px 12px rgba(0, 255, 136, 0.3);
         }
@@ -227,7 +227,7 @@
             border: 1px solid var(--color-border);
             padding: 24px;
             overflow-x: auto;
-            margin-bottom: 24px;
+            margin-bottom: 16px;
         }
 
         .data-table {
@@ -257,6 +257,63 @@
 
         .data-table tr:hover td {
             background: var(--color-bg);
+        }
+
+        /* 排序按钮样式 - 优化设计 */
+        .sort-buttons {
+            margin-left: 6px;
+            display: inline-flex;
+            flex-direction: column;
+            gap: 2px;  /* 增加上下按钮间距 */
+            vertical-align: middle;
+            position: relative;
+            top: -2px;
+        }
+
+        .sort-btn {
+            background: transparent;
+            border: none;
+            color: rgba(255, 255, 255, 0.4);
+            width: 16px;
+            height: 14px;
+            cursor: pointer;
+            font-size: 11px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            padding: 0;
+            margin: 0;
+            line-height: 1;
+            opacity: 0.8;
+        }
+
+        .sort-btn:hover {
+            color: rgba(255, 255, 255, 0.8);
+            opacity: 1;
+            transform: scale(1.2);
+        }
+
+        .sort-btn.active {
+            color: var(--color-primary);
+            opacity: 1;
+            text-shadow: 0 0 8px rgba(0, 255, 136, 0.6);
+        }
+
+        .sort-btn.sort-asc {
+            transform: translateY(2px);
+        }
+
+        .sort-btn.sort-desc {
+            transform: translateY(-2px);
+        }
+
+        .sort-btn.active.sort-asc {
+            transform: translateY(2px) scale(1.2);
+        }
+
+        .sort-btn.active.sort-desc {
+            transform: translateY(-2px) scale(1.2);
         }
 
         /* Status Badge */
@@ -373,19 +430,18 @@
 
         .family-card {
             padding: 28px;
-            background: var(--color-bg-card);
-            border-radius: var(--radius);
-            box-shadow: var(--color-shadow);
-            border: 1px solid var(--color-border);
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
             overflow: hidden;
         }
 
         .family-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 12px 40px rgba(0, 185, 107, 0.15);
-            border-color: var(--color-primary);
+            transform: translateY(-2px);
+            border-color: rgba(255, 255, 255, 0.12);
+            background: rgba(255, 255, 255, 0.04);
         }
 
         .family-card::before {
@@ -579,7 +635,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 24px;
+            margin-bottom: 16px;
         }
 
         .chart-title {
@@ -600,7 +656,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0, 0, 0, 0.6);
+            background: rgba(0, 0, 0, 0.8);
             backdrop-filter: blur(3px);
             z-index: 2000;
             opacity: 0;
@@ -619,8 +675,9 @@
             right: 0;
             width: 480px;
             height: 100vh;
-            background: var(--color-bg-card);
-            border-left: 1px solid var(--color-border);
+            background: rgba(15, 15, 15, 0.98);
+            backdrop-filter: blur(20px);
+            border-left: 1px solid rgba(255, 255, 255, 0.1);
             box-shadow: -10px 0 30px rgba(0, 0, 0, 0.2);
             transform: translateX(100%);
             transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -798,7 +855,7 @@
             border: 1px solid var(--color-border);
             border-radius: 12px;
             padding: 20px;
-            margin-bottom: 24px;
+            margin-bottom: 16px;
         }
 
         .drawer-chart-header {
@@ -864,6 +921,7 @@
             }
         }
 
+
         @media (max-width: 768px) {
             .page-header {
                 flex-direction: column;
@@ -910,13 +968,7 @@
             <div>
                 <h1 class="page-title" data-i18n-key="family.title">家庭</h1>
             </div>
-            <div class="page-view-tabs">
-                <button class="page-tab" data-i18n-key="family.views.grid">🏠 网格视图</button>
-            </div>
         </div>
-
-        <!-- Time Selector Component -->
-        <div id="timeSelectorContainer"></div>
 
         <!-- Grid View Content -->
         <div id="gridViewContent">
@@ -964,14 +1016,38 @@
                         <tr>
                             <th data-i18n-key="family.table.user">用户</th>
                             <th data-i18n-key="family.table.activity">活跃度</th>
-                            <th data-i18n-key="family.table.todayProfit">今日获利 ($)</th>
-                            <th data-i18n-key="family.table.totalProfit">累计获利 ($)</th>
+                            <th>
+                                <span data-i18n-key="family.table.todayProfit">今日获利 ($)</span>
+                                <span class="sort-buttons">
+                                    <button class="sort-btn sort-asc" onclick="sortTable('todayProfit', 'asc', this)" title="升序">▲</button>
+                                    <button class="sort-btn sort-desc" onclick="sortTable('todayProfit', 'desc', this)" title="降序">▼</button>
+                                </span>
+                            </th>
+                            <th>
+                                <span data-i18n-key="family.table.totalProfit">累计获利 ($)</span>
+                                <span class="sort-buttons">
+                                    <button class="sort-btn sort-asc" onclick="sortTable('totalProfit', 'asc', this)" title="升序">▲</button>
+                                    <button class="sort-btn sort-desc" onclick="sortTable('totalProfit', 'desc', this)" title="降序">▼</button>
+                                </span>
+                            </th>
                             <th data-i18n-key="family.table.avgProfit">日均获利 ($)</th>
                             <th data-i18n-key="family.table.deviceCode">设备编码</th>
                             <th data-i18n-key="family.table.deviceStatus">设备状态</th>
-                            <th data-i18n-key="family.table.soc">SOC</th>
+                            <th>
+                                <span data-i18n-key="family.table.soc">SOC</span>
+                                <span class="sort-buttons">
+                                    <button class="sort-btn sort-asc" onclick="sortTable('soc', 'asc', this)" title="升序">▲</button>
+                                    <button class="sort-btn sort-desc" onclick="sortTable('soc', 'desc', this)" title="降序">▼</button>
+                                </span>
+                            </th>
                             <th data-i18n-key="family.table.location">地址</th>
-                            <th data-i18n-key="family.table.usageDays">使用天数 (天)</th>
+                            <th>
+                                <span data-i18n-key="family.table.usageDays">使用天数 (天)</span>
+                                <span class="sort-buttons">
+                                    <button class="sort-btn sort-asc" onclick="sortTable('usageDays', 'asc', this)" title="升序">▲</button>
+                                    <button class="sort-btn sort-desc" onclick="sortTable('usageDays', 'desc', this)" title="降序">▼</button>
+                                </span>
+                            </th>
                             <th data-i18n-key="family.table.action">操作</th>
                         </tr>
                     </thead>
@@ -1040,12 +1116,16 @@
         
         // Generate data immediately
         const familyData = generateFamilyData();
+        let currentPage = 1;
+        let pageSize = 20;
+        let filteredData = [...familyData];
+        let pagination = null;
         
         // Ensure data loads even if other methods fail
         window.onload = function() {
             setTimeout(() => {
                 if (document.getElementById('familyTableBody') && document.getElementById('familyTableBody').children.length === 0) {
-                    loadFamilyCards(1);
+                    loadFamilyCards();
                 }
             }, 100);
         };
@@ -1077,34 +1157,33 @@
             updateTitle();
             
             // Initialize header navigation
-            const headerNav = new HeaderNav({ 
-                currentPage: 'family',
-                messageCount: 0 
-            });
-            headerNav.mount(document.getElementById('headerContainer'));
+            if (typeof HeaderNav !== 'undefined') {
+                window.headerNav = new HeaderNav({
+                    containerId: 'headerContainer',
+                    currentPage: 'family'
+                });
+            }
 
-            // Initialize time selector
-            const timeSelector = new TimeSelector({
-                onTimeRangeChange: (range) => {
-                    console.log('Time range changed:', range);
-                    loadData(range);
+
+            // Initialize pagination for table view
+            pagination = new Pagination({
+                containerId: 'paginationContainer',
+                currentPage: currentPage,
+                pageSize: pageSize,
+                totalItems: familyData.length,
+                onPageChange: (page, size) => {
+                    currentPage = page;
+                    loadFamilyCards();
+                },
+                onPageSizeChange: (size) => {
+                    pageSize = size;
+                    currentPage = 1;
+                    loadFamilyCards();
                 }
             });
-            timeSelector.mount(document.getElementById('timeSelectorContainer'));
-
-            // Initialize pagination for grid view
-            const gridPagination = new Pagination({
-                currentPage: 1,
-                totalPages: 10,
-                onPageChange: (page) => {
-                    console.log('Grid page changed to:', page);
-                    loadFamilyCards(page);
-                }
-            });
-            gridPagination.mount(document.getElementById('paginationContainer'));
 
             // Load initial data immediately with multiple attempts
-            loadFamilyCards(1);
+            loadFamilyCards();
             
             // Fallback: ensure data is loaded
             setTimeout(() => {
@@ -1112,9 +1191,62 @@
                 if (tbody && tbody.children.length === 0) {
                     // Force load data if table is still empty
                     console.log('Force loading family data...');
-                    loadFamilyCards(1);
+                    loadFamilyCards();
+                }
+                
+                // 检查排序按钮是否存在
+                const sortButtons = document.querySelectorAll('.sort-btn');
+                console.log('找到排序按钮数量:', sortButtons.length);
+                
+                // 检查表格是否存在
+                const table = document.querySelector('.data-table');
+                console.log('表格存在:', !!table);
+                
+                // 检查表头是否存在
+                const tableHeaders = document.querySelectorAll('.data-table th');
+                console.log('表头数量:', tableHeaders.length);
+                
+                // 检查具体的排序按钮容器
+                const sortContainers = document.querySelectorAll('.sort-buttons');
+                console.log('排序按钮容器数量:', sortContainers.length);
+                
+                // 直接检查HTML内容
+                const tableContainer = document.querySelector('.table-container');
+                if (tableContainer) {
+                    console.log('表格容器HTML长度:', tableContainer.innerHTML.length);
+                }
+                
+                if (sortButtons.length === 0) {
+                    console.error('排序按钮未找到！请检查HTML结构');
+                } else {
+                    console.log('排序按钮已正确加载');
                 }
             }, 200);
+            
+            // 再次延迟检查，确保所有内容都加载完成
+            setTimeout(() => {
+                console.log('=== 延迟检查 (1秒后) ===');
+                const sortButtons2 = document.querySelectorAll('.sort-btn');
+                console.log('第二次检查 - 找到排序按钮数量:', sortButtons2.length);
+                
+                // 手动检查每个应该有排序按钮的列
+                const thElements = document.querySelectorAll('th');
+                thElements.forEach((th, index) => {
+                    const text = th.textContent.trim();
+                    const hasSortButtons = th.querySelector('.sort-buttons');
+                    console.log(`列${index}: ${text} - 有排序按钮: ${!!hasSortButtons}`);
+                });
+                
+                // 检查原始HTML模板
+                const tableHTML = document.querySelector('.table-container').innerHTML;
+                console.log('表格HTML包含sort-buttons:', tableHTML.includes('sort-buttons'));
+                console.log('表格HTML包含sort-btn:', tableHTML.includes('sort-btn'));
+                
+                // 获取第3个th的innerHTML（应该是"今日获利"）
+                if (thElements[2]) {
+                    console.log('今日获利列的HTML:', thElements[2].innerHTML);
+                }
+            }, 1000);
         });
 
         // Create family table row
@@ -1159,14 +1291,18 @@
         }
 
         // Load family table data
-        function loadFamilyCards(page) {
+        function loadFamilyCards() {
             const tbody = document.getElementById('familyTableBody');
-            if (!tbody) return;
+            if (!tbody) {
+                console.error('Table body not found');
+                return;
+            }
             
+            console.log('Loading family cards, data length:', filteredData.length);
             tbody.innerHTML = '';
 
             // Apply filters if any
-            let filteredData = [...familyData];
+            filteredData = [...familyData];
             
             // Apply search filter
             const searchValue = document.getElementById('searchInput').value.toLowerCase();
@@ -1189,23 +1325,108 @@
                 filteredData = filteredData.filter(family => family.deviceStatus === deviceStatusFilter);
             }
 
-            // Simulate pagination
-            const itemsPerPage = 10;
-            const start = (page - 1) * itemsPerPage;
-            const end = start + itemsPerPage;
-            const pageData = filteredData.slice(start, end);
-
             // Update pagination
-            const totalPages = Math.ceil(filteredData.length / itemsPerPage);
-            const pagination = document.querySelector('#paginationContainer .pagination-component');
             if (pagination) {
-                pagination.setAttribute('data-total-pages', totalPages);
+                pagination.updateTotal(filteredData.length);
+                pagination.currentPage = currentPage;
+                pagination.pageSize = pageSize;
+                pagination.refresh();
             }
+
+            // Get page data
+            const start = (currentPage - 1) * pageSize;
+            const end = start + pageSize;
+            const pageData = filteredData.slice(start, end);
 
             pageData.forEach(family => {
                 const row = createFamilyTableRow(family);
                 tbody.appendChild(row);
             });
+        }
+
+        // Table sorting with cancel functionality
+        let currentSortColumn = null;
+        let currentSortDirection = null;
+        
+        function sortTable(column, direction, element) {
+            // Check if clicking the same sort button
+            const isCurrentSort = currentSortColumn === column && currentSortDirection === direction;
+            
+            // Remove active class from all sort buttons
+            document.querySelectorAll('.sort-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            if (isCurrentSort) {
+                // Cancel sort - restore original order
+                currentSortColumn = null;
+                currentSortDirection = null;
+                
+                // Reset to original order
+                filteredData = [...familyData];
+                
+                // Reapply filters
+                const searchValue = document.getElementById('searchInput').value.toLowerCase();
+                if (searchValue) {
+                    filteredData = filteredData.filter(family => 
+                        family.name.toLowerCase().includes(searchValue) ||
+                        family.deviceCode.toLowerCase().includes(searchValue)
+                    );
+                }
+                
+                const activityFilter = document.getElementById('activityFilter').value;
+                if (activityFilter) {
+                    filteredData = filteredData.filter(family => family.status === activityFilter);
+                }
+                
+                const deviceStatusFilter = document.getElementById('deviceStatusFilter').value;
+                if (deviceStatusFilter) {
+                    filteredData = filteredData.filter(family => family.deviceStatus === deviceStatusFilter);
+                }
+            } else {
+                // Apply new sort
+                currentSortColumn = column;
+                currentSortDirection = direction;
+                
+                // Add active class to clicked button
+                element.classList.add('active');
+                
+                // Sort the data
+                filteredData.sort((a, b) => {
+                    let aVal, bVal;
+                    
+                    switch(column) {
+                        case 'todayProfit':
+                            aVal = parseFloat(a.todayProfit);
+                            bVal = parseFloat(b.todayProfit);
+                            break;
+                        case 'totalProfit':
+                            aVal = parseFloat(a.totalProfit);
+                            bVal = parseFloat(b.totalProfit);
+                            break;
+                        case 'soc':
+                            aVal = a.soc;
+                            bVal = b.soc;
+                            break;
+                        case 'usageDays':
+                            aVal = a.usageDays;
+                            bVal = b.usageDays;
+                            break;
+                        default:
+                            return 0;
+                    }
+                    
+                    if (direction === 'asc') {
+                        return aVal - bVal;
+                    } else {
+                        return bVal - aVal;
+                    }
+                });
+            }
+            
+            // Reset to first page and reload table
+            currentPage = 1;
+            loadFamilyCards();
         }
 
         // View family details
@@ -1386,7 +1607,8 @@
         function applyFilters() {
             // Apply all filters and reload data
             console.log('Applying filters...');
-            loadFamilyCards(1);
+            currentPage = 1;
+            loadFamilyCards();
         }
 
         function resetFilters() {
@@ -1394,7 +1616,8 @@
             document.getElementById('activityFilter').value = '';
             document.getElementById('deviceCodeInput').value = '';
             document.getElementById('deviceStatusFilter').value = '';
-            loadFamilyCards(1);
+            currentPage = 1;
+            loadFamilyCards();
         }
 
         function exportData() {

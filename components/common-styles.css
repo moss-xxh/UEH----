@@ -41,7 +41,7 @@ body {
 
 /* Main Content Container */
 .container {
-    padding: 120px 20px 40px;
+    padding: 80px 20px 40px;
     max-width: 1440px;
     margin: 0 auto;
 }
@@ -70,7 +70,7 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 32px;
+    margin-bottom: 20px;
     padding: 0;
 }
 
@@ -82,7 +82,7 @@ body {
     padding: 4px;
     border-radius: 24px;
     border: 1px solid var(--color-border);
-    margin-bottom: 32px;
+    margin-bottom: 20px;
 }
 
 .time-pill {

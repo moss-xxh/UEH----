@@ -11,10 +11,19 @@
     <link rel="stylesheet" href="components/notification-center.css">
     <link rel="stylesheet" href="components/header-nav.css">
     <link rel="stylesheet" href="components/standard-layout.css">
+    <link rel="stylesheet" href="components/pagination.css">
+    <link rel="stylesheet" href="components/user-dropdown.css">
     <script src="components/time-selector.js"></script>
+    <script src="components/user-menu-link.js"></script>
     <script src="components/i18n.js"></script>
     <script src="components/simple-message-icon.js"></script>
+    <script src="components/user-dropdown.js"></script>
+    <script src="components/user-dropdown-simple.js"></script>
+    <script src="components/user-dropdown-enhanced.js"></script>
+    <script src="components/user-menu.js"></script>
     <script src="components/header-nav.js"></script>
+    <script src="components/pagination.js"></script>
+    <script src="fix-profit-page.js" defer></script>
     <style>
         /* Profit page specific styles - most styles now inherit from common-styles.css */
 
@@ -23,7 +32,7 @@
             display: flex;
             align-items: center;
             gap: 12px;
-            margin-bottom: 32px;
+            margin-bottom: 20px;
             padding: 4px;
             background: var(--color-bg-card);
             border-radius: 24px;
@@ -116,12 +125,29 @@
 
         /* Ensure container width is maintained */
         .container {
-            max-width: 1440px;
-            padding: 120px 20px 40px;
+            max-width: 95%;
+            padding: 100px 10px 24px;
             margin: 0 auto;
         }
 
         /* Specific styles for profit page layout */
+        
+        /* Page header alignment */
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 36px;
+        }
+        
+        /* Page title to match other pages */
+        .page-title {
+            font-size: 48px;
+            font-weight: 500;
+            color: var(--color-text);
+            margin: 0;
+            letter-spacing: -2px;
+        }
 
         /* Stats Cards */
         .stats-grid {
@@ -291,6 +317,8 @@
             font-weight: 600;
             color: var(--color-text-secondary);
             border-bottom: 1px solid var(--color-border);
+            white-space: nowrap;
+            position: relative;
         }
 
         .data-table td {
@@ -303,40 +331,61 @@
             background: var(--color-bg);
         }
 
-        /* 排序按钮样式 */
+        /* 排序按钮样式 - 优化设计 */
         .sort-buttons {
-            margin-left: 8px;
+            margin-left: 6px;
             display: inline-flex;
-            gap: 4px;
+            flex-direction: column;
+            gap: 2px;  /* 增加上下按钮间距 */
             vertical-align: middle;
+            position: relative;
+            top: -2px;
         }
 
         .sort-btn {
-            background: var(--color-bg);
-            border: 1px solid var(--color-border);
-            color: var(--color-text-secondary);
-            width: 20px;
-            height: 20px;
-            border-radius: 3px;
+            background: transparent;
+            border: none;
+            color: rgba(255, 255, 255, 0.4);
+            width: 16px;
+            height: 14px;
             cursor: pointer;
-            font-size: 10px;
+            font-size: 11px;
             display: flex;
             align-items: center;
             justify-content: center;
             transition: all 0.2s ease;
             padding: 0;
+            margin: 0;
+            line-height: 1;
+            opacity: 0.8;
         }
 
         .sort-btn:hover {
-            background: var(--color-border);
-            color: var(--color-text);
+            color: rgba(255, 255, 255, 0.8);
+            opacity: 1;
+            transform: scale(1.2);
         }
 
         .sort-btn.active {
-            background: var(--color-primary);
-            color: #fff;
-            border-color: var(--color-primary);
-            box-shadow: 0 0 5px rgba(0, 185, 107, 0.5);
+            color: var(--color-primary);
+            opacity: 1;
+            text-shadow: 0 0 8px rgba(0, 255, 136, 0.6);
+        }
+
+        .sort-btn.sort-asc {
+            transform: translateY(2px);
+        }
+
+        .sort-btn.sort-desc {
+            transform: translateY(-2px);
+        }
+
+        .sort-btn.active.sort-asc {
+            transform: translateY(2px) scale(1.2);
+        }
+
+        .sort-btn.active.sort-desc {
+            transform: translateY(-2px) scale(1.2);
         }
 
         .table-section {
@@ -640,7 +689,7 @@
             <button class="time-pill" onclick="switchTimePeriod('year', this)" data-i18n-key="yearReport">年</button>
             <button class="time-pill" onclick="switchTimePeriod('total', this)" data-i18n-key="totalReport">累计</button>
             <input type="date" id="timeSelector" class="time-input" onchange="handleTimeInputChange()">
-            <button class="refresh-btn" onclick="refreshData()" data-i18n-key="refresh">🔄</button>
+            <button class="refresh-btn" onclick="refreshData()" data-i18n-key="refresh" title="刷新数据">🔄 刷新</button>
         </div>
 
         <!-- Stats Cards -->
@@ -731,7 +780,7 @@
                                 <button class="filter-tab active" onclick="filterByStatus('all', this)" id="statusAll" data-i18n-key="profit.filters.all">全部</button>
                                 <button class="filter-tab" onclick="filterByStatus('active', this)" id="statusActive" data-i18n-key="profit.filters.active">活跃</button>
                                 <button class="filter-tab" onclick="filterByStatus('inactive', this)" id="statusInactive" data-i18n-key="profit.filters.inactive">非活跃</button>
-                                <button class="filter-tab" onclick="filterByStatus('not-participating', this)" id="statusNotParticipating" data-i18n-key="profit.filters.notParticipating">未参与</button>
+                                <button class="filter-tab" onclick="filterByStatus('notParticipating', this)" id="statusNotParticipating" data-i18n-key="profit.filters.notParticipating">未参与</button>
                             </div>
                             <!-- 导出功能 -->
                             <button class="export-btn" onclick="exportTableData()">
@@ -744,135 +793,41 @@
                             <tr>
                                 <th data-i18n-key="profit.table.date">日期</th>
                                 <th data-i18n-key="profit.table.user">用户</th>
-                                <th data-i18n-key="profit.table.status">运行状态</th>
-                                <th data-i18n-key="profit.table.dischargeAmount">实际放电量 (kwh)
+                                <th data-i18n-key="profit.table.status">性质</th>
+                                <th>
+                                    <span data-i18n-key="profit.table.dischargeAmount">实际放电量 (kWh)</span>
                                     <span class="sort-buttons">
-                                        <button class="sort-btn sort-asc" onclick="sortTable('discharge', 'asc', this)" title="升序">↑</button>
-                                        <button class="sort-btn sort-desc" onclick="sortTable('discharge', 'desc', this)" title="降序">↓</button>
+                                        <button class="sort-btn sort-asc" onclick="sortTable('discharge', 'asc', this)" title="升序">▲</button>
+                                        <button class="sort-btn sort-desc" onclick="sortTable('discharge', 'desc', this)" title="降序">▼</button>
                                     </span>
                                 </th>
-                                <th data-i18n-key="profit.table.profit">获利 ($)
+                                <th>
+                                    <span data-i18n-key="profit.table.profit">获利 ($)</span>
                                     <span class="sort-buttons">
-                                        <button class="sort-btn sort-asc" onclick="sortTable('profit', 'asc', this)" title="升序">↑</button>
-                                        <button class="sort-btn sort-desc" onclick="sortTable('profit', 'desc', this)" title="降序">↓</button>
+                                        <button class="sort-btn sort-asc" onclick="sortTable('profit', 'asc', this)" title="升序">▲</button>
+                                        <button class="sort-btn sort-desc" onclick="sortTable('profit', 'desc', this)" title="降序">▼</button>
                                     </span>
                                 </th>
-                                <th data-i18n-key="profit.table.dailyAvg">日均</th>
-                                <th data-i18n-key="profit.table.compareDaily">对比日均 ($)
+                                <th data-i18n-key="profit.table.dailyAvg" id="avgHeader">日均
                                     <span class="sort-buttons">
-                                        <button class="sort-btn sort-asc" onclick="sortTable('comparison', 'asc', this)" title="升序">↑</button>
-                                        <button class="sort-btn sort-desc" onclick="sortTable('comparison', 'desc', this)" title="降序">↓</button>
+                                        <button class="sort-btn sort-asc" onclick="sortTable('dailyAvg', 'asc', this)" title="升序">▲</button>
+                                        <button class="sort-btn sort-desc" onclick="sortTable('dailyAvg', 'desc', this)" title="降序">▼</button>
+                                    </span>
+                                </th>
+                                <th data-i18n-key="profit.table.compareDaily" id="compareHeader">对比日均 ($)
+                                    <span class="sort-buttons">
+                                        <button class="sort-btn sort-asc" onclick="sortTable('comparison', 'asc', this)" title="升序">▲</button>
+                                        <button class="sort-btn sort-desc" onclick="sortTable('comparison', 'desc', this)" title="降序">▼</button>
                                     </span>
                                 </th>
                             </tr>
                         </thead>
                         <tbody id="userParticipationTableBody">
-                            <!-- Demo data for user participation -->
-                            <tr>
-                                <td rowspan="3" style="vertical-align: middle; font-weight: 500;">2024年12月25日</td>
-                                <td>Harvey Lee</td>
-                                <td class="status-active" data-i18n-key="profit.status.active">活跃</td>
-                                <td>45.5</td>
-                                <td class="profit-positive">85</td>
-                                <td>50</td>
-                                <td class="profit-positive">+35</td>
-                            </tr>
-                            <tr>
-                                <td>Lucas Wang</td>
-                                <td class="status-active" data-i18n-key="profit.status.active">活跃</td>
-                                <td>52.3</td>
-                                <td class="profit-positive">92</td>
-                                <td>50</td>
-                                <td class="profit-positive">+42</td>
-                            </tr>
-                            <tr>
-                                <td>David Zhang</td>
-                                <td class="status-inactive" data-i18n-key="profit.status.inactive">非活跃</td>
-                                <td>28.7</td>
-                                <td class="profit-positive">45</td>
-                                <td>50</td>
-                                <td class="profit-negative">-5</td>
-                            </tr>
-                            <tr>
-                                <td rowspan="4" style="vertical-align: middle; font-weight: 500;">2024年12月24日</td>
-                                <td>Fiona Liu</td>
-                                <td class="status-active" data-i18n-key="profit.status.active">活跃</td>
-                                <td>48.2</td>
-                                <td class="profit-positive">89</td>
-                                <td>50</td>
-                                <td class="profit-positive">+39</td>
-                            </tr>
-                            <tr>
-                                <td>Michael Chen</td>
-                                <td class="status-active" data-i18n-key="profit.status.active">活跃</td>
-                                <td>55.1</td>
-                                <td class="profit-positive">98</td>
-                                <td>50</td>
-                                <td class="profit-positive">+48</td>
-                            </tr>
-                            <tr>
-                                <td>Lisa Zhao</td>
-                                <td class="status-inactive" data-i18n-key="profit.status.inactive">非活跃</td>
-                                <td>32.4</td>
-                                <td class="profit-positive">58</td>
-                                <td>50</td>
-                                <td class="profit-positive">+8</td>
-                            </tr>
-                            <tr>
-                                <td>John Sun</td>
-                                <td class="status-not-participating" data-i18n-key="profit.status.notParticipating">未参与</td>
-                                <td>0</td>
-                                <td class="profit-negative">0</td>
-                                <td>50</td>
-                                <td class="profit-negative">-50</td>
-                            </tr>
-                            <tr>
-                                <td rowspan="3" style="vertical-align: middle; font-weight: 500;">2024年12月23日</td>
-                                <td>周敏</td>
-                                <td class="status-active" data-i18n-key="profit.status.active">活跃</td>
-                                <td>49.8</td>
-                                <td class="profit-positive">91</td>
-                                <td>50</td>
-                                <td class="profit-positive">+41</td>
-                            </tr>
-                            <tr>
-                                <td>吴强</td>
-                                <td class="status-active" data-i18n-key="profit.status.active">活跃</td>
-                                <td>43.6</td>
-                                <td class="profit-positive">78</td>
-                                <td>50</td>
-                                <td class="profit-positive">+28</td>
-                            </tr>
-                            <tr>
-                                <td>郑华</td>
-                                <td class="status-inactive" data-i18n-key="profit.status.inactive">非活跃</td>
-                                <td>25.9</td>
-                                <td class="profit-positive">42</td>
-                                <td>50</td>
-                                <td class="profit-negative">-8</td>
-                            </tr>
-                            <tr style="border-top: 2px solid var(--color-border); background: var(--color-bg);">
-                                <td colspan="3" style="text-align: center; font-weight: 600; color: var(--color-primary);">合计</td>
-                                <td style="font-weight: 600;">380.5</td>
-                                <td class="profit-positive" style="font-weight: 600;">678</td>
-                                <td>-</td>
-                                <td>-</td>
-                            </tr>
+                            <!-- Table data will be loaded dynamically -->
                         </tbody>
                     </table>
                     
-                    <div class="pagination">
-                        <div class="pagination-info">共 10 条</div>
-                        <select style="background: var(--color-bg); border: 1px solid var(--color-border); color: var(--color-text); padding: 4px 8px; border-radius: 4px;">
-                            <option>10/页</option>
-                            <option>20/页</option>
-                            <option>50/页</option>
-                        </select>
-                        <button class="pagination-btn" disabled>‹</button>
-                        <button class="pagination-btn active">1</button>
-                        <button class="pagination-btn" disabled>›</button>
-                        <button class="pagination-btn">前往 1 页</button>
-                    </div>
+                    <div id="paginationContainer"></div>
                 </div>
             </div>
         </div>
@@ -887,6 +842,14 @@
         let currentViewMode = 'chart';
         let currentProfitView = 'top5';
         let currentTimePeriod = 'day';
+        
+        // Table view variables
+        let tableData = [];
+        let filteredTableData = [];
+        let currentPage = 1;
+        let pageSize = 10;
+        let pagination = null;
+        let currentFilter = 'all';
 
         // Performance utilities 
         function throttle(func, limit) {
@@ -1019,6 +982,32 @@
 
                 // Initialize charts
                 initAllCharts();
+                
+                // 诊断图表问题
+                setTimeout(() => {
+                    const chartContainers = ['userManagementChart', 'revenueDistributionChart', 'powerRevenueChart', 'profitRankingChart'];
+                    chartContainers.forEach(id => {
+                        const container = document.getElementById(id);
+                        if (container) {
+                            const rect = container.getBoundingClientRect();
+                            console.log(`Chart container ${id}: width=${rect.width}, height=${rect.height}`);
+                            if (rect.width === 0 || rect.height === 0) {
+                                console.warn(`Chart container ${id} has zero size!`);
+                                // 强制设置高度
+                                container.style.height = '300px';
+                                container.style.minHeight = '300px';
+                            }
+                        } else {
+                            console.error(`Chart container ${id} not found!`);
+                        }
+                    });
+                    
+                    // 重新初始化图表
+                    chartManager.resizeAll();
+                }, 500);
+                
+                // Initialize table data even if not visible
+                generateTableData();
 
                 // Listen for language changes
                 if (window.i18n) {
@@ -1043,9 +1032,71 @@
             console.log('Time period changed:', period, selectedDate);
             refreshCharts();
         }
+        
+        // Update table headers based on time period
+        function updateTableHeaders(period) {
+            const avgHeader = document.getElementById('avgHeader');
+            const compareHeader = document.getElementById('compareHeader');
+            
+            if (avgHeader && compareHeader) {
+                switch(period) {
+                    case 'day':
+                        avgHeader.innerHTML = '日均' +
+                            '<span class="sort-buttons">' +
+                            '<button class="sort-btn sort-asc" onclick="sortTable(\'dailyAvg\', \'asc\', this)" title="升序">▲</button>' +
+                            '<button class="sort-btn sort-desc" onclick="sortTable(\'dailyAvg\', \'desc\', this)" title="降序">▼</button>' +
+                            '</span>';
+                        compareHeader.innerHTML = '对比日均 ($)' + 
+                            '<span class="sort-buttons">' +
+                            '<button class="sort-btn sort-asc" onclick="sortTable(\'comparison\', \'asc\', this)" title="升序">▲</button>' +
+                            '<button class="sort-btn sort-desc" onclick="sortTable(\'comparison\', \'desc\', this)" title="降序">▼</button>' +
+                            '</span>';
+                        break;
+                    case 'month':
+                        avgHeader.innerHTML = '月均' +
+                            '<span class="sort-buttons">' +
+                            '<button class="sort-btn sort-asc" onclick="sortTable(\'dailyAvg\', \'asc\', this)" title="升序">▲</button>' +
+                            '<button class="sort-btn sort-desc" onclick="sortTable(\'dailyAvg\', \'desc\', this)" title="降序">▼</button>' +
+                            '</span>';
+                        compareHeader.innerHTML = '对比月均 ($)' + 
+                            '<span class="sort-buttons">' +
+                            '<button class="sort-btn sort-asc" onclick="sortTable(\'comparison\', \'asc\', this)" title="升序">▲</button>' +
+                            '<button class="sort-btn sort-desc" onclick="sortTable(\'comparison\', \'desc\', this)" title="降序">▼</button>' +
+                            '</span>';
+                        break;
+                    case 'year':
+                        avgHeader.innerHTML = '年均' +
+                            '<span class="sort-buttons">' +
+                            '<button class="sort-btn sort-asc" onclick="sortTable(\'dailyAvg\', \'asc\', this)" title="升序">▲</button>' +
+                            '<button class="sort-btn sort-desc" onclick="sortTable(\'dailyAvg\', \'desc\', this)" title="降序">▼</button>' +
+                            '</span>';
+                        compareHeader.innerHTML = '对比年均 ($)' + 
+                            '<span class="sort-buttons">' +
+                            '<button class="sort-btn sort-asc" onclick="sortTable(\'comparison\', \'asc\', this)" title="升序">▲</button>' +
+                            '<button class="sort-btn sort-desc" onclick="sortTable(\'comparison\', \'desc\', this)" title="降序">▼</button>' +
+                            '</span>';
+                        break;
+                    case 'total':
+                        avgHeader.innerHTML = '历史均值' +
+                            '<span class="sort-buttons">' +
+                            '<button class="sort-btn sort-asc" onclick="sortTable(\'dailyAvg\', \'asc\', this)" title="升序">▲</button>' +
+                            '<button class="sort-btn sort-desc" onclick="sortTable(\'dailyAvg\', \'desc\', this)" title="降序">▼</button>' +
+                            '</span>';
+                        compareHeader.innerHTML = '对比历史均值 ($)' + 
+                            '<span class="sort-buttons">' +
+                            '<button class="sort-btn sort-asc" onclick="sortTable(\'comparison\', \'asc\', this)" title="升序">▲</button>' +
+                            '<button class="sort-btn sort-desc" onclick="sortTable(\'comparison\', \'desc\', this)" title="降序">▼</button>' +
+                            '</span>';
+                        break;
+                }
+            }
+        }
 
         // Time period switching
         function switchTimePeriod(period, element) {
+            console.log('[switchTimePeriod] ========== SWITCHING TIME PERIOD ==========');
+            console.log('[switchTimePeriod] From:', currentTimePeriod, 'To:', period);
+            console.log('[switchTimePeriod] Current view mode:', currentViewMode);
             currentTimePeriod = period;
             
             // Update pill states
@@ -1102,22 +1153,129 @@
                 }
             }
             
-            // Refresh data
-            refreshData();
+            // Force refresh data - both stats and table
+            console.log('[switchTimePeriod] Forcing data refresh');
+            
+            // Update table headers based on period
+            updateTableHeaders(period);
+            
+            // Reset sort state when switching time period
+            currentSortColumn = null;
+            currentSortDirection = null;
+            
+            // Force regenerate table data when time period changes
+            generateTableData();
+            
+            // If table view is active, update it immediately
+            const tableViewContent = document.getElementById('tableViewContent');
+            if (tableViewContent && tableViewContent.style.display !== 'none') {
+                console.log('[switchTimePeriod] Table view is active, updating table');
+                
+                // 重置当前页
+                currentPage = 1;
+                
+                // 清空表格
+                const tbody = document.getElementById('userParticipationTableBody');
+                if (tbody) {
+                    tbody.innerHTML = '<tr><td colspan="7" style="text-align: center;">加载中...</td></tr>';
+                }
+                
+                // 延迟加载新数据，确保UI更新
+                setTimeout(() => {
+                    if (pagination) {
+                        // 重新初始化分页
+                        pagination = new Pagination({
+                            containerId: 'paginationContainer',
+                            currentPage: 1,
+                            pageSize: pageSize,
+                            totalItems: tableData.length,
+                            onPageChange: (page, size) => {
+                                currentPage = page;
+                                loadTableData();
+                            },
+                            onPageSizeChange: (size) => {
+                                pageSize = size;
+                                currentPage = 1;
+                                loadTableData();
+                            }
+                        });
+                    }
+                    loadTableData();
+                }, 50);
+            }
+            
+            // Also refresh other data
+            setTimeout(() => {
+                refreshData();
+            }, 100);
         }
 
         function handleTimeInputChange() {
+            console.log('Time input changed, refreshing all data...');
             handleTimeChange();
             refreshData();
         }
 
-        // Refresh data
+        // Refresh data when time changes
         function refreshData() {
-            console.log('Refreshing data for period:', currentTimePeriod);
+            console.log('[refreshData] Current view mode:', currentViewMode);
+            console.log('[refreshData] Current time period:', currentTimePeriod);
+            
             // Update stats
             updateStats();
-            // Refresh charts
-            refreshCharts();
+            
+            // Check if table view is visible
+            const tableViewContent = document.getElementById('tableViewContent');
+            const isTableVisible = tableViewContent && tableViewContent.style.display !== 'none';
+            
+            console.log('[refreshData] Is table visible?', isTableVisible);
+            
+            // Always refresh table data if table view is active
+            if (currentViewMode === 'table' || isTableVisible) {
+                // Refresh table data
+                console.log('[refreshData] Refreshing table view');
+                refreshTableData();
+            } else {
+                // Refresh charts
+                refreshCharts();
+            }
+        }
+        
+        // Refresh table data specifically
+        function refreshTableData() {
+            console.log('[refreshTableData] Starting table refresh');
+            
+            // Generate new data based on current time selection
+            generateTableData();
+            console.log('[refreshTableData] Generated', tableData.length, 'rows');
+            
+            // Reset to first page
+            currentPage = 1;
+            
+            // Update pagination if it exists
+            if (pagination) {
+                console.log('[refreshTableData] Recreating pagination');
+                // 重新创建分页组件
+                pagination = new Pagination({
+                    containerId: 'paginationContainer',
+                    currentPage: 1,
+                    pageSize: pageSize,
+                    totalItems: tableData.length,
+                    onPageChange: (page, size) => {
+                        currentPage = page;
+                        loadTableData();
+                    },
+                    onPageSizeChange: (size) => {
+                        pageSize = size;
+                        currentPage = 1;
+                        loadTableData();
+                    }
+                });
+            }
+            
+            // Reload table
+            console.log('[refreshTableData] Loading table data');
+            loadTableData();
         }
 
         // Update stats based on current time period
@@ -1147,6 +1305,13 @@
                     minProfit: '$1,000'
                 },
                 cumulative: {
+                    userCount: '234,567',
+                    totalRevenue: '$457,000,000',
+                    avgProfit: '$1,950',
+                    maxProfit: '$5,000,000',
+                    minProfit: '$10,000'
+                },
+                total: {
                     userCount: '234,567',
                     totalRevenue: '$457,000,000',
                     avgProfit: '$1,950',
@@ -1183,9 +1348,21 @@
             if (mode === 'chart') {
                 document.getElementById('chartViewContent').style.display = 'block';
                 document.getElementById('tableViewContent').style.display = 'none';
+                refreshCharts();
             } else {
                 document.getElementById('chartViewContent').style.display = 'none';
                 document.getElementById('tableViewContent').style.display = 'block';
+                
+                // Initialize table when switching to table view
+                if (!pagination) {
+                    updateTableHeaders(currentTimePeriod);
+                    generateTableData();
+                    initializePagination();
+                } else {
+                    // Refresh table data
+                    updateTableHeaders(currentTimePeriod);
+                    refreshTableData();
+                }
             }
         }
 
@@ -1211,8 +1388,43 @@
             });
             element.classList.add('active');
             
-            // Filter table rows (implementation would depend on your data structure)
-            console.log('Filtering by status:', status);
+            // Reset sort state when filtering
+            currentSortColumn = null;
+            currentSortDirection = null;
+            document.querySelectorAll('.sort-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Re-generate data with filter
+            generateTableData();
+            
+            if (status !== 'all') {
+                tableData = tableData.filter(item => item.status === status);
+            }
+            
+            // Update pagination
+            if (pagination) {
+                // 重新创建分页组件
+                pagination = new Pagination({
+                    containerId: 'paginationContainer',
+                    currentPage: 1,
+                    pageSize: pageSize,
+                    totalItems: tableData.length,
+                    onPageChange: (page, size) => {
+                        currentPage = page;
+                        loadTableData();
+                    },
+                    onPageSizeChange: (size) => {
+                        pageSize = size;
+                        currentPage = 1;
+                        loadTableData();
+                    }
+                });
+            }
+            currentPage = 1;
+            
+            // Reload table
+            loadTableData();
         }
 
         // Initialize all charts
@@ -1579,24 +1791,351 @@
             }
         }
 
-        // Table sorting
+        // Table sorting with cancel functionality
+        let currentSortColumn = null;
+        let currentSortDirection = null;
+        
         function sortTable(column, direction, element) {
+            // Check if clicking the same sort button
+            const isCurrentSort = currentSortColumn === column && currentSortDirection === direction;
+            
             // Remove active class from all sort buttons
             document.querySelectorAll('.sort-btn').forEach(btn => {
                 btn.classList.remove('active');
             });
             
-            // Add active class to clicked button
-            element.classList.add('active');
+            if (isCurrentSort) {
+                // Cancel sort - restore original order
+                currentSortColumn = null;
+                currentSortDirection = null;
+                
+                // Regenerate data in original order
+                generateTableData();
+                
+                // Reset pagination
+                if (pagination) {
+                    currentPage = 1;
+                    pagination = new Pagination({
+                        containerId: 'paginationContainer',
+                        currentPage: 1,
+                        pageSize: pageSize,
+                        totalItems: tableData.length,
+                        onPageChange: (page, size) => {
+                            currentPage = page;
+                            loadTableData();
+                        },
+                        onPageSizeChange: (size) => {
+                            pageSize = size;
+                            currentPage = 1;
+                            loadTableData();
+                        }
+                    });
+                }
+            } else {
+                // Apply new sort
+                currentSortColumn = column;
+                currentSortDirection = direction;
+                
+                // Add active class to clicked button
+                element.classList.add('active');
+                
+                // Sort the data
+                tableData.sort((a, b) => {
+                    let aVal, bVal;
+                    
+                    switch(column) {
+                        case 'discharge':
+                            aVal = a.discharge;
+                            bVal = b.discharge;
+                            break;
+                        case 'profit':
+                            aVal = a.profit;
+                            bVal = b.profit;
+                            break;
+                        case 'dailyAvg':
+                            aVal = a.dailyAvg;
+                            bVal = b.dailyAvg;
+                            break;
+                        case 'comparison':
+                            aVal = a.comparison;
+                            bVal = b.comparison;
+                            break;
+                        default:
+                            return 0;
+                    }
+                    
+                    if (direction === 'asc') {
+                        return aVal - bVal;
+                    } else {
+                        return bVal - aVal;
+                    }
+                });
+            }
             
-            console.log(`Sorting table by ${column} in ${direction} order`);
-            // Implementation would depend on your data structure
+            // Reload table
+            loadTableData();
         }
 
         // Export functionality
         function exportTableData() {
             console.log('Exporting table data...');
             // Implementation for data export
+        }
+        
+        // Initialize pagination
+        function initializePagination() {
+            pagination = new Pagination({
+                containerId: 'paginationContainer',
+                currentPage: currentPage,
+                pageSize: pageSize,
+                totalItems: tableData.length,
+                onPageChange: (page, size) => {
+                    currentPage = page;
+                    loadTableData();
+                },
+                onPageSizeChange: (size) => {
+                    pageSize = size;
+                    currentPage = 1;
+                    loadTableData();
+                }
+            });
+            
+            // Load initial data
+            loadTableData();
+        }
+        
+        // Generate table data function that is called by other functions
+        function generateTableData() {
+            console.log('[generateTableData] Called, current time period:', currentTimePeriod);
+            const timeSelector = document.getElementById('timeSelector');
+            console.log('[generateTableData] Time selector value:', timeSelector ? timeSelector.value : 'null');
+            console.log('[generateTableData] Time selector type:', timeSelector ? timeSelector.type : 'null');
+            tableData = generateUserParticipationData();
+            console.log('[generateTableData] Generated', tableData.length, 'rows of data');
+            if (tableData.length > 0) {
+                console.log('[generateTableData] First row date:', tableData[0].date);
+            }
+        }
+        
+        // 生成表格数据 - 完全重写
+        function generateUserParticipationData() {
+            const users = ['Harvey Lee', 'Lucas Wang', 'David Zhang', 'Fiona Liu', 
+                          'Michael Chen', 'Lisa Zhao', 'John Sun', '周敏', '吴强', '郑华'];
+            const statuses = ['active', 'inactive', 'notParticipating'];
+            const data = [];
+            
+            // 获取时间选择器的值
+            const timeSelector = document.getElementById('timeSelector');
+            const selectedTime = timeSelector ? timeSelector.value : '';
+            
+            console.log('[generateUserParticipationData] Period:', currentTimePeriod, 'Selected time:', selectedTime);
+            
+            switch (currentTimePeriod) {
+                case 'day': {
+                    // 日报 - 显示选定日期
+                    const date = selectedTime ? new Date(selectedTime) : new Date();
+                    const dateStr = formatDate(date);
+                    
+                    // 生成5-8个用户数据
+                    const userCount = 5 + Math.floor(Math.random() * 4);
+                    for (let i = 0; i < userCount; i++) {
+                        data.push(createUserData(users[i % users.length], dateStr, statuses, 'day'));
+                    }
+                    break;
+                }
+                
+                case 'month': {
+                    // 月报 - 显示整月汇总数据
+                    let year, month;
+                    if (selectedTime && selectedTime.includes('-')) {
+                        [year, month] = selectedTime.split('-');
+                    } else {
+                        year = new Date().getFullYear();
+                        month = String(new Date().getMonth() + 1).padStart(2, '0');
+                    }
+                    
+                    // 为每个用户生成该月的汇总数据
+                    const dateStr = `${year}年${parseInt(month)}月`;
+                    const userCount = 8 + Math.floor(Math.random() * 3);
+                    
+                    for (let i = 0; i < userCount; i++) {
+                        data.push(createUserData(users[i % users.length], dateStr, statuses, 'month'));
+                    }
+                    break;
+                }
+                
+                case 'year': {
+                    // 年报 - 显示全年汇总数据
+                    const year = timeSelector && timeSelector.type === 'number' ? timeSelector.value : new Date().getFullYear();
+                    
+                    // 为每个用户生成该年的汇总数据
+                    const dateStr = `${year}年`;
+                    const userCount = 10;  // 显示所有10个用户
+                    
+                    for (let i = 0; i < userCount; i++) {
+                        data.push(createUserData(users[i], dateStr, statuses, 'year'));
+                    }
+                    break;
+                }
+                
+                case 'total': {
+                    // 累计 - 显示所有用户累计数据
+                    users.forEach(user => {
+                        data.push(createUserData(user, '累计', statuses, 'total'));
+                    });
+                    break;
+                }
+            }
+            
+            return data;
+        }
+        
+        // 创建单个用户数据
+        function createUserData(user, date, statuses, period) {
+            const status = statuses[Math.floor(Math.random() * statuses.length)];
+            let discharge = 0;
+            let dailyAvg = 50;
+            
+            if (status !== 'notParticipating') {
+                switch (period) {
+                    case 'day':
+                        discharge = 20 + Math.floor(Math.random() * 40);
+                        dailyAvg = 50;
+                        break;
+                    case 'month':
+                        discharge = 600 + Math.floor(Math.random() * 600);  // 月度汇总
+                        dailyAvg = 1500;
+                        break;
+                    case 'year':
+                        discharge = 7000 + Math.floor(Math.random() * 5000);  // 年度汇总
+                        dailyAvg = 18000;
+                        break;
+                    case 'total':
+                        discharge = 10000 + Math.floor(Math.random() * 5000);
+                        dailyAvg = 500;
+                        break;
+                }
+            }
+            
+            const profit = status === 'notParticipating' ? 0 : Math.floor(discharge * 1.8);
+            
+            return {
+                date: date,
+                user: user,
+                status: status,
+                discharge: discharge,
+                profit: profit,
+                dailyAvg: dailyAvg,
+                comparison: profit - dailyAvg
+            };
+        }
+        
+        // 格式化日期
+        function formatDate(date) {
+            return `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日`;
+        }
+        
+        // Load table data into the table
+        function loadTableData() {
+            console.log('[loadTableData] Starting with time period:', currentTimePeriod);
+            
+            const tbody = document.getElementById('userParticipationTableBody');
+            if (!tbody) {
+                console.error('[loadTableData] Table body not found');
+                return;
+            }
+            
+            // Clear table
+            tbody.innerHTML = '';
+            
+            // Check if we have data
+            if (!tableData || tableData.length === 0) {
+                console.log('[loadTableData] No data to display, generating new data...');
+                generateTableData();
+                
+                if (!tableData || tableData.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 40px; color: var(--color-text-secondary);">暂无数据</td></tr>';
+                    return;
+                }
+            }
+            
+            console.log('[loadTableData] Loading', tableData.length, 'rows for period:', currentTimePeriod);
+            
+            // Get current page data
+            const startIndex = (currentPage - 1) * pageSize;
+            const endIndex = Math.min(startIndex + pageSize, tableData.length);
+            const pageData = tableData.slice(startIndex, endIndex);
+            
+            // Group by date
+            const groupedData = {};
+            pageData.forEach(item => {
+                if (!groupedData[item.date]) {
+                    groupedData[item.date] = [];
+                }
+                groupedData[item.date].push(item);
+            });
+            
+            // Render rows
+            Object.entries(groupedData).forEach(([date, rows]) => {
+                rows.forEach((row, index) => {
+                    const tr = document.createElement('tr');
+                    
+                    // Add date cell for first row of each date
+                    if (index === 0) {
+                        const dateCell = document.createElement('td');
+                        dateCell.rowSpan = rows.length;
+                        dateCell.style.verticalAlign = 'middle';
+                        dateCell.style.fontWeight = '500';
+                        dateCell.textContent = date;
+                        tr.appendChild(dateCell);
+                    }
+                    
+                    // Add data cells
+                    tr.innerHTML += `
+                        <td>${row.user}</td>
+                        <td class="status-${row.status === 'notParticipating' ? 'not-participating' : row.status}">${getStatusText(row.status)}</td>
+                        <td>${row.discharge.toFixed(1)}</td>
+                        <td class="${row.profit > 0 ? 'profit-positive' : 'profit-negative'}">${row.profit}</td>
+                        <td>${row.dailyAvg}</td>
+                        <td class="${row.comparison >= 0 ? 'profit-positive' : 'profit-negative'}">${row.comparison >= 0 ? '+' : ''}${row.comparison}</td>
+                    `;
+                    
+                    tbody.appendChild(tr);
+                });
+            });
+            
+            // Add total row on last page
+            if (endIndex === tableData.length && tableData.length > 0) {
+                const totalDischarge = tableData.reduce((sum, item) => sum + item.discharge, 0);
+                const totalProfit = tableData.reduce((sum, item) => sum + item.profit, 0);
+                
+                const totalRow = document.createElement('tr');
+                totalRow.style.borderTop = '2px solid var(--color-border)';
+                totalRow.style.background = 'var(--color-bg)';
+                totalRow.innerHTML = `
+                    <td colspan="3" style="text-align: center; font-weight: 600; color: var(--color-primary);">合计</td>
+                    <td style="font-weight: 600;">${totalDischarge.toFixed(1)}</td>
+                    <td class="profit-positive" style="font-weight: 600;">${totalProfit}</td>
+                    <td>-</td>
+                    <td>-</td>
+                `;
+                tbody.appendChild(totalRow);
+            }
+        }
+        
+        // Get status text
+        function getStatusText(status) {
+            if (window.i18n) {
+                const key = `profit.status.${status}`;
+                return window.i18n.getText(key);
+            }
+            
+            switch(status) {
+                case 'active': return '活跃';
+                case 'inactive': return '非活跃';
+                case 'notParticipating': return '未参与';
+                default: return status;
+            }
         }
 
         // Refresh functions

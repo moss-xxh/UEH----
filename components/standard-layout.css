@@ -7,33 +7,33 @@
 .container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 120px 24px 40px; /* Standard: 120px top (for header), 24px sides, 40px bottom */
+    padding: 100px 24px 40px; /* Standard padding for header spacing */
     min-height: 100vh;
     box-sizing: border-box;
 }
 
 /* Page Header Standards */
 .page-header {
-    margin-bottom: 32px; /* Standard spacing from header to content */
+    margin-bottom: 20px; /* Standard spacing from header to content */
 }
 
 .page-title {
     font-size: 32px;
     font-weight: 700;
     color: var(--color-text);
-    margin: 0 0 20px 0; /* Standard spacing from title to tabs/controls */
+    margin: 0 0 36px 0; /* Standard 36px spacing from title to search/controls */
 }
 
 /* Tab/Control Section Standards */
 .page-view-tabs,
 .control-panel,
 .time-selector-group {
-    margin-bottom: 24px; /* Standard spacing from controls to content */
+    margin-bottom: 16px; /* Reduced spacing from controls to content */
 }
 
 /* Search/Filter Section Standards */
 .search-filter-section {
-    margin-bottom: 24px; /* Standard spacing from filters to content */
+    margin-bottom: 16px; /* Reduced spacing from filters to content */
     display: flex;
     gap: 12px;
     align-items: center;
@@ -43,42 +43,42 @@
 .stats-grid,
 .charts-section,
 .cards-grid {
-    margin-bottom: 32px; /* Standard spacing between major sections */
+    margin-bottom: 24px; /* Reduced spacing between major sections */
 }
 
 /* Table Section Standards */
 .table-section {
-    margin-bottom: 32px;
+    margin-bottom: 24px;
 }
 
 .table-container {
-    padding: 24px; /* Standard padding inside cards/containers */
+    padding: 20px; /* Reduced padding inside cards/containers */
 }
 
 /* Standard Responsive Breakpoints */
 @media (max-width: 1024px) {
     .container {
-        padding: 120px 20px 40px;
+        padding: 72px 20px 40px;
     }
 }
 
 @media (max-width: 768px) {
     .container {
-        padding: 120px 16px 40px;
+        padding: 64px 16px 40px;
     }
     
     .page-title {
-        font-size: 28px;
+        font-size: 24px;
     }
 }
 
 @media (max-width: 480px) {
     .container {
-        padding: 120px 12px 40px;
+        padding: 60px 12px 40px;
     }
     
     .page-title {
-        font-size: 24px;
+        font-size: 20px;
     }
 }
 

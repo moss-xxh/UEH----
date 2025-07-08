@@ -13,7 +13,10 @@
     <script src="components/simple-message-icon.js"></script>
     <link rel="stylesheet" href="components/header-nav.css">
     <link rel="stylesheet" href="components/standard-layout.css">
+    <link rel="stylesheet" href="components/pagination.css">
     <script src="components/header-nav.js"></script>
+    <script src="components/user-menu-link.js"></script>
+    <script src="components/pagination.js"></script>
     <style>
         /* Page-specific styles */
         html, body {
@@ -32,7 +35,7 @@
             min-height: 100vh;
             margin: 0 auto;
             box-sizing: border-box;
-            padding: 120px 24px 40px;
+            padding: 80px 24px 40px;
         }
         .card, .glass, .stat-card, .chart-container, .table-container {
             background: var(--color-bg-card);
@@ -75,17 +78,25 @@
         .data-table tr:hover td {
             background: var(--color-border);
         }
-        .page-header, .table-header {
+        .table-header {
             border-bottom: 1px solid var(--color-border);
         }
+        .page-header {
+            margin-bottom: -24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: -20px; /* 向上移动20px */
+        }
         .page-title {
-            font-size: 36px;
-            font-weight: 700;
+            font-size: 48px;
+            font-weight: 500;
             color: var(--color-text);
             margin: 0;
-            letter-spacing: -1px;
+            letter-spacing: -2px;
             background: none;
             -webkit-text-fill-color: unset;
+            margin-bottom: 0 !important; /* 移除底部间距 */
         }
         .header {
             background: var(--color-bg);
@@ -553,7 +564,7 @@
         .container {
             max-width: 95%;
             margin: 0 auto;
-            padding: 120px 10px 40px;
+            padding: 100px 10px 40px;
             min-height: calc(100vh - 200px);
         }
 
@@ -562,19 +573,20 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 40px;
+            margin-bottom: 36px;
             padding: 24px 0;
             border-bottom: 1px solid var(--color-border);
         }
 
         .page-title {
-            font-size: 36px;
-            font-weight: 700;
+            font-size: 48px;
+            font-weight: 500;
             color: var(--color-text);
             margin: 0;
-            letter-spacing: -1px;
+            letter-spacing: -2px;
             background: none;
             -webkit-text-fill-color: unset;
+            margin-bottom: 0 !important; /* 移除底部间距 */
         }
 
         .page-header + .search-filter-section {
@@ -588,7 +600,7 @@
             box-shadow: var(--color-shadow);
             border: 1.5px solid var(--color-border);
             padding: 20px;
-            margin-bottom: 40px;
+            margin-bottom: 36px;
         }
         .search-input {
             width: 220px;
@@ -1288,24 +1300,44 @@
             <h1 class="page-title" data-i18n="operationLog.title">操作记录</h1>
         </div>
 
-        <!-- 查询区域（同步消息中心） -->
-        <div class="search-filter-section" style="display:flex;align-items:center;gap:16px;margin-bottom:40px;">
-            <div class="search-box" style="position:relative;">
-                <div class="search-icon">🔍</div>
-                <input type="text" class="search-input" id="opSearchInput" data-i18n-placeholder="operationLog.placeholder.operator" placeholder="请输入操作人员...">
-            </div>
-            <select class="filter-select" id="opCommandFilter">
+        <!-- Search and Filter Section -->
+        <div class="search-filter-section" style="display: flex; align-items: center; gap: 12px; margin-top: -24px; margin-bottom: 16px; padding: 20px; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 16px; backdrop-filter: blur(10px);">
+            <input type="text" class="search-input" id="opSearchInput" 
+                   style="width: 240px; padding: 12px 16px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 10px; color: rgba(255, 255, 255, 0.9); font-size: 14px;"
+                   data-i18n-placeholder="operationLog.placeholder.operator" 
+                   placeholder="请输入操作人员...">
+            
+            <select class="filter-select" id="opCommandFilter"
+                    style="width: 180px; padding: 12px 16px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 10px; color: rgba(255, 255, 255, 0.9); font-size: 14px;">
                 <option value="" data-i18n-key="operationLog.placeholder.command">全部命令</option>
                 <option value="charge" data-i18n-key="operationLog.commands.charge">充电</option>
                 <option value="discharge" data-i18n-key="operationLog.commands.discharge">放电</option>
                 <option value="stop-charge" data-i18n-key="operationLog.commands.stopCharge">停止充电</option>
                 <option value="stop-discharge" data-i18n-key="operationLog.commands.stopDischarge">停止放电</option>
             </select>
-            <input type="text" class="search-input" id="opDateInput" data-i18n-placeholder="operationLog.placeholder.time" placeholder="请选择时间..." readonly style="cursor:pointer;">
-            <div class="filter-actions" style="margin-left:auto;display:flex;gap:8px;">
-                <button class="filter-btn primary" onclick="applyOpFilters()" data-i18n-key="operationLog.buttons.search">🔍 查询</button>
-                <button class="filter-btn secondary" onclick="resetOpFilters()" data-i18n-key="operationLog.buttons.reset">🔄 重置</button>
-                <button class="filter-btn secondary" onclick="exportOpLogs()" data-i18n-key="operationLog.buttons.clear">📥 导出</button>
+            
+            <input type="text" class="search-input" id="opDateInput" 
+                   style="width: 240px; padding: 12px 16px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 10px; color: rgba(255, 255, 255, 0.9); font-size: 14px; cursor: pointer;"
+                   data-i18n-placeholder="operationLog.placeholder.time" 
+                   placeholder="请选择时间..." 
+                   readonly>
+            
+            <div class="filter-actions" style="display: flex; gap: 8px; margin-left: auto;">
+                <button class="filter-btn primary" onclick="applyOpFilters()"
+                        style="background: #00ff88; border-color: #00ff88; color: #000; font-weight: 500;">
+                    <span></span>
+                    <span data-i18n-key="operationLog.buttons.search">查询</span>
+                </button>
+                <button class="filter-btn secondary" onclick="resetOpFilters()"
+                        style="background: rgba(255, 255, 255, 0.05);">
+                    <span></span>
+                    <span data-i18n-key="operationLog.buttons.reset">重置</span>
+                </button>
+                <button class="filter-btn export" onclick="exportOpLogs()"
+                        style="background: rgba(30, 127, 255, 0.1); border: 1px solid rgba(30, 127, 255, 0.3); color: var(--color-accent);">
+                    <span></span>
+                    <span data-i18n-key="operationLog.buttons.clear">导出</span>
+                </button>
             </div>
         </div>
 
@@ -1331,27 +1363,7 @@
             </div>
 
             <!-- Pagination -->
-            <div class="pagination-section">
-                <div class="pagination-info">
-                    <span id="paginationInfo">共 243</span>
-                </div>
-                <div class="pagination-controls">
-                    <div class="page-size-selector">
-                        <select class="page-size-select" id="pageSize" onchange="changePageSize()">
-                            <option value="10">10</option>
-                            <option value="20">20</option>
-                            <option value="50">50</option>
-                            <option value="100">100</option>
-                        </select>
-                    </div>
-                    <div class="pagination-buttons" id="paginationButtons">
-                        <!-- Pagination buttons will be generated here -->
-                    </div>
-                    <div class="page-jump">
-                        <input type="number" class="page-input" min="1" id="pageJumpInput" data-i18n-placeholder="go" placeholder="Go">
-                    </div>
-                </div>
-            </div>
+            <div id="operationLogPaginationContainer"></div>
         </div>
     </div>
 
@@ -1362,10 +1374,11 @@
         // Global variables
         let toastCounter = 0;
         let currentPage = 1;
-        let pageSize = 10;
+        let pageSize = 20;
         let totalRecords = 243;
         let totalPages = Math.ceil(totalRecords / pageSize);
         let filteredData = [];
+        let pagination = null;
         
         // Date picker variables
         let currentDate = new Date();
@@ -1544,83 +1557,12 @@
 
         // Update pagination display
         function updatePaginationDisplay() {
-            totalPages = Math.ceil(filteredData.length / pageSize);
-            
-            // Update pagination info
-            const paginationInfo = document.getElementById('paginationInfo');
-            const startRecord = filteredData.length === 0 ? 0 : (currentPage - 1) * pageSize + 1;
-            const endRecord = Math.min(currentPage * pageSize, filteredData.length);
-            paginationInfo.textContent = `${window.i18n && window.i18n.getCurrentLanguage() === 'en' ? 'Total' : '共'} ${filteredData.length}`;
-
-            // Update pagination buttons
-            const paginationButtons = document.getElementById('paginationButtons');
-            paginationButtons.innerHTML = '';
-
-            // Previous button
-            const prevBtn = document.createElement('button');
-            prevBtn.className = 'page-btn';
-            prevBtn.textContent = '<';
-            prevBtn.disabled = currentPage === 1;
-            prevBtn.onclick = () => goToPage('prev');
-            paginationButtons.appendChild(prevBtn);
-
-            // Page number buttons
-            const maxVisiblePages = 5;
-            let startPage = Math.max(1, currentPage - 2);
-            let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
-
-            if (endPage - startPage < maxVisiblePages - 1) {
-                startPage = Math.max(1, endPage - maxVisiblePages + 1);
+            if (pagination) {
+                pagination.updateTotal(filteredData.length);
+                pagination.currentPage = currentPage;
+                pagination.pageSize = pageSize;
+                pagination.refresh();
             }
-
-            for (let i = startPage; i <= endPage; i++) {
-                const pageBtn = document.createElement('button');
-                pageBtn.className = `page-btn ${i === currentPage ? 'active' : ''}`;
-                pageBtn.textContent = i;
-                pageBtn.onclick = () => goToPage(i);
-                paginationButtons.appendChild(pageBtn);
-            }
-
-            // Next button
-            const nextBtn = document.createElement('button');
-            nextBtn.className = 'page-btn';
-            nextBtn.textContent = '>';
-            nextBtn.disabled = currentPage === totalPages || totalPages === 0;
-            nextBtn.onclick = () => goToPage('next');
-            paginationButtons.appendChild(nextBtn);
-
-            // Update page jump input
-            const pageJumpInput = document.getElementById('pageJumpInput');
-            pageJumpInput.max = totalPages;
-        }
-
-        // Pagination navigation
-        function goToPage(page) {
-            if (page === 'prev') {
-                if (currentPage > 1) {
-                    currentPage--;
-                }
-            } else if (page === 'next') {
-                if (currentPage < totalPages) {
-                    currentPage++;
-                }
-            } else if (typeof page === 'number' && page >= 1 && page <= totalPages) {
-                currentPage = page;
-            } else {
-                return;
-            }
-
-            updateTableDisplay();
-            updatePaginationDisplay();
-        }
-
-        // Change page size
-        function changePageSize() {
-            const newPageSize = parseInt(document.getElementById('pageSize').value);
-            pageSize = newPageSize;
-            currentPage = 1;
-            updateTableDisplay();
-            updatePaginationDisplay();
         }
 
         // Remove old searchOperations and resetSearch, add new filter logic
@@ -1896,7 +1838,7 @@
                         <div style="position: relative; padding-left: 24px;">
                             <div style="position: absolute; left: 8px; top: 0; bottom: 0; width: 2px; background: rgba(255, 255, 255, 0.1);"></div>
                             ${timeline.map((item, index) => `
-                                <div style="position: relative; margin-bottom: 24px;">
+                                <div style="position: relative; margin-bottom: 16px;">
                                     <div style="position: absolute; left: -20px; top: 2px; width: 12px; height: 12px; border-radius: 50%; background: ${item.status === 'success' ? '#34c759' : item.status === 'warning' ? '#ff9500' : '#ff3b30'};"></div>
                                     <div class="detail-row" style="border: none; padding: 0; margin-bottom: 4px;">
                                         <span class="detail-label">${item.event}</span>
@@ -1933,16 +1875,6 @@
             operationDrawer.open(operation);
         }
 
-        // Page jump functionality
-        document.getElementById('pageJumpInput').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                const page = parseInt(this.value);
-                if (page >= 1 && page <= totalPages) {
-                    goToPage(page);
-                    this.value = '';
-                }
-            }
-        });
 
         // Date Picker Functions
         function initDatePicker() {
@@ -2113,6 +2045,23 @@
             const headerNav = new HeaderNav({
                 currentPage: 'operationLog',
                 containerId: 'headerContainer'
+            });
+            
+            // Initialize pagination
+            pagination = new Pagination({
+                containerId: 'operationLogPaginationContainer',
+                currentPage: currentPage,
+                pageSize: pageSize,
+                totalItems: filteredData.length,
+                onPageChange: (page, size) => {
+                    currentPage = page;
+                    updateTableDisplay();
+                },
+                onPageSizeChange: (size) => {
+                    pageSize = size;
+                    currentPage = 1;
+                    updateTableDisplay();
+                }
             });
             
             updateTableDisplay();

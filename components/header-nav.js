@@ -76,7 +76,7 @@ class HeaderNav {
             { href: 'index.html', i18nKey: 'nav.home', key: 'home' },
             { href: 'profit-new.html', i18nKey: 'nav.profit', key: 'profit' },
             { href: 'family-new.html', i18nKey: 'nav.family', key: 'family' },
-            { href: 'analysis-new.html', i18nKey: 'nav.analysis', key: 'analysis' },
+            { href: 'analysis-historical.html', i18nKey: 'nav.analysis', key: 'analysis' },
             { href: 'organization-new.html', i18nKey: 'nav.organization', key: 'organization' },
             { href: 'push-strategy-page.html', i18nKey: 'nav.pushStrategy', key: 'pushStrategy' },
             { href: 'operation-log-page.html', i18nKey: 'nav.operationLog', key: 'operationLog' }
@@ -97,7 +97,7 @@ class HeaderNav {
         `;
         const languageSelector = this.showLanguageSelector ? '<div id="headerLanguageSelector"></div>' : '';
         const themeToggleBtn = '';
-        const userAvatar = this.showUserAvatar ? '<div class="user-avatar">A</div>' : '';
+        const userAvatar = this.showUserAvatar ? '<div id="userDropdownContainer"></div>' : '';
         
         const currentLang = this.i18n ? this.i18n.getCurrentLanguage() : 'zh';
         const headerHTML = `
@@ -132,6 +132,44 @@ class HeaderNav {
             setTimeout(() => {
                 this.i18n.createLanguageSelectorHTML();
             }, 0);
+        }
+        
+        // 初始化用户下拉菜单
+        if (this.showUserAvatar) {
+            setTimeout(() => {
+                // 优先使用链接版用户菜单
+                if (typeof UserMenuLink !== 'undefined' && !window.userMenuLinkInstance) {
+                    window.userMenuLinkInstance = new UserMenuLink({
+                        containerId: 'userDropdownContainer'
+                    });
+                } else if (typeof UserMenuSimple !== 'undefined' && !window.userMenuSimpleInstance) {
+                    window.userMenuSimpleInstance = new UserMenuSimple({
+                        containerId: 'userDropdownContainer'
+                    });
+                } else if (typeof UserMenu !== 'undefined' && !window.userMenuInstance) {
+                    window.userMenuInstance = new UserMenu({
+                        containerId: 'userDropdownContainer'
+                    });
+                } else if (typeof UserDropdownEnhanced !== 'undefined' && !window.userDropdownEnhanced) {
+                    window.userDropdownEnhanced = new UserDropdownEnhanced({
+                        containerId: 'userDropdownContainer',
+                        onLogout: () => {
+                            window.location.href = 'vpp-login.html';
+                        }
+                    });
+                } else if (typeof UserDropdownSimple !== 'undefined' && !window.userDropdownSimple) {
+                    window.userDropdownSimple = new UserDropdownSimple({
+                        containerId: 'userDropdownContainer'
+                    });
+                } else if (typeof UserDropdown !== 'undefined' && !window.userDropdown) {
+                    window.userDropdown = new UserDropdown({
+                        containerId: 'userDropdownContainer',
+                        onLogout: () => {
+                            console.log('User logged out');
+                        }
+                    });
+                }
+            }, 100);
         }
         
         // 主题切换按钮事件委托，保证每次渲染都可用

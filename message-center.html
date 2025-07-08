@@ -16,23 +16,30 @@
     <link rel="stylesheet" href="components/header-nav.css">
     <link rel="stylesheet" href="components/standard-layout.css">
     <script src="components/header-nav.js"></script>
+    <script src="components/user-menu-link.js"></script>
     <style>
         /* Page-specific styles only - common styles are in common-styles.css */
 
         /* Override container for this page */
         .container {
             max-width: 95%;
-            padding: 120px 10px 40px;
+            padding: 100px 10px 40px;
         }
 
         /* Page Header */
         .page-header {
-            margin-bottom: 40px;
-            padding: 24px 0;
-            border-bottom: 1px solid var(--color-border);
+            margin-bottom: -24px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+        }
+
+        .page-title {
+            font-size: 48px;
+            font-weight: 500;
+            color: var(--color-text);
+            margin: 0;
+            letter-spacing: -2px;
         }
 
         .page-stats {
@@ -68,7 +75,8 @@
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 20px;
             padding: 30px;
-            margin-bottom: 40px;
+            margin-top: 48px;  /* 再增加20px，从28px改为48px */
+            margin-bottom: 36px;
         }
 
         .filter-row {
@@ -953,16 +961,29 @@
             <h1 class="page-title" data-i18n-key="messageCenter.title">消息中心</h1>
         </div>
 
-        <!-- 查询区域 -->
-        <div class="search-filter-section">
-            <div class="search-box" style="position: relative;">
-                <div class="search-icon">🔍</div>
-                <input type="text" class="search-input" id="msgSearchInput" data-i18n-placeholder="messageCenter.placeholder.searchKeyword" placeholder="请输入消息关键词...">
-            </div>
-            <div class="filter-actions">
-                <button class="filter-btn primary" onclick="applyFilters()" data-i18n-key="messageCenter.buttons.search">🔍 查询</button>
-                <button class="filter-btn secondary" onclick="resetFilters()" data-i18n-key="messageCenter.buttons.reset">🔄 重置</button>
-                <button class="filter-btn secondary" onclick="exportMessages()" data-i18n-key="messageCenter.buttons.export">📥 导出</button>
+        <!-- Search and Filter Section -->
+        <div class="search-filter-section" style="display: flex; align-items: center; gap: 12px; margin-top: 56px; margin-bottom: 16px; padding: 20px; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 16px; backdrop-filter: blur(10px);">
+            <input type="text" class="search-input" id="msgSearchInput" 
+                   style="width: 240px; padding: 12px 16px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 10px; color: rgba(255, 255, 255, 0.9); font-size: 14px;"
+                   data-i18n-placeholder="messageCenter.placeholder.searchKeyword" 
+                   placeholder="请输入消息关键词...">
+            
+            <div class="filter-actions" style="display: flex; gap: 8px; margin-left: auto;">
+                <button class="filter-btn primary" onclick="applyFilters()"
+                        style="background: #00ff88; border-color: #00ff88; color: #000; font-weight: 500;">
+                    <span></span>
+                    <span data-i18n-key="messageCenter.buttons.search">查询</span>
+                </button>
+                <button class="filter-btn secondary" onclick="resetFilters()"
+                        style="background: rgba(255, 255, 255, 0.05);">
+                    <span></span>
+                    <span data-i18n-key="messageCenter.buttons.reset">重置</span>
+                </button>
+                <button class="filter-btn export" onclick="exportMessages()"
+                        style="background: rgba(30, 127, 255, 0.1); border: 1px solid rgba(30, 127, 255, 0.3); color: var(--color-accent);">
+                    <span></span>
+                    <span data-i18n-key="messageCenter.buttons.export">导出</span>
+                </button>
             </div>
         </div>
 

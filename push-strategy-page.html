@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="components/header-nav.css">
     <link rel="stylesheet" href="components/standard-layout.css">
     <script src="components/header-nav.js"></script>
+    <script src="components/user-menu-link.js"></script>
     <style>
         :root {
             --color-bg: #f7f8fa;
@@ -25,17 +26,17 @@
             --radius: 12px;
         }
         body.theme-dark {
-            --color-bg: #181a1b;
-            --color-bg-card: #232324;
-            --color-text: #f7f8fa;
-            --color-text-secondary: #86909c;
-            --color-primary: #00b96b;
+            --color-bg: #000;
+            --color-bg-card: rgba(255, 255, 255, 0.03);
+            --color-text: rgba(255, 255, 255, 0.9);
+            --color-text-secondary: rgba(255, 255, 255, 0.6);
+            --color-primary: #00ff88;
             --color-accent: #1e7fff;
-            --color-border: #393b3d;
+            --color-border: rgba(255, 255, 255, 0.08);
             --color-shadow: 0 2px 8px rgba(0,0,0,0.32);
         }
         html, body {
-            background: var(--color-bg) !important;
+            background: #000 !important;
             width: 100vw;
             min-height: 100vh;
             margin: 0;
@@ -50,7 +51,7 @@
             min-height: 100vh;
             margin: 0 auto;
             box-sizing: border-box;
-            padding: 120px 24px 40px;
+            padding: 80px 24px 40px;
         }
         .card, .glass, .stat-card, .chart-container, .table-container {
             background: var(--color-bg-card);
@@ -68,9 +69,9 @@
             transition: background 0.3s, color 0.3s, border 0.3s;
         }
         .btn-primary {
-            background: var(--color-primary);
-            color: #fff;
-            border: none;
+            background: #00ff88;
+            border-color: #00ff88;
+            color: #000;
         }
         .btn-primary:hover {
             filter: brightness(1.1);
@@ -93,15 +94,15 @@
         .data-table tr:hover td {
             background: var(--color-border);
         }
-        .page-header, .table-header {
+        .table-header {
             border-bottom: 1px solid var(--color-border);
         }
         .page-title {
-            font-size: 36px;
-            font-weight: 700;
+            font-size: 48px;
+            font-weight: 500;
             color: var(--color-text);
             margin: 0;
-            letter-spacing: -1px;
+            letter-spacing: -2px;
             background: none;
             -webkit-text-fill-color: unset;
         }
@@ -159,7 +160,7 @@
         .container {
             max-width: 95%;
             margin: 0 auto;
-            padding: 120px 10px 40px;
+            padding: 100px 10px 40px;
             min-height: calc(100vh - 200px);
         }
 
@@ -168,9 +169,9 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid var(--color-border);
-            margin-bottom: 40px;
+            margin-bottom: -24px;
             padding: 24px 0;
+            margin-top: -20px; /* 向上移动20px */
         }
 
         .page-header + .search-filter-section {
@@ -183,7 +184,7 @@
             box-shadow: var(--color-shadow);
             border: 1.5px solid var(--color-border);
             padding: 20px;
-            margin-bottom: 48px;
+            margin-bottom: 36px;
         }
 
         .search-filter-section + .card,
@@ -197,9 +198,9 @@
         }
 
         .btn {
-            padding: 12px 24px;
-            border: none;
-            border-radius: 12px;
+            padding: 10px 16px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
             font-size: 14px;
             font-weight: 500;
             cursor: pointer;
@@ -207,12 +208,14 @@
             text-decoration: none;
             display: inline-flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
         }
 
         .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(0, 255, 136, 0.4);
+            background: #00e67a;
+            border-color: #00e67a;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 255, 136, 0.3);
         }
 
         .btn-secondary:hover {
@@ -229,6 +232,7 @@
             padding: 60px;
             position: relative;
             overflow: hidden;
+            margin-top: 28px;  /* 增加20px，从8px改为28px */
         }
 
         .strategy-form::before {
@@ -270,12 +274,12 @@
         .section-description {
             font-size: 13px;
             color: rgba(255, 255, 255, 0.5);
-            margin-bottom: 24px;
+            margin-bottom: 16px;
             line-height: 1.5;
         }
 
         .form-group {
-            margin-bottom: 32px;
+            margin-bottom: 20px;
         }
 
         .input-group {
@@ -298,11 +302,11 @@
             width: 100%;
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 16px;
-            padding: 16px 20px;
+            border-radius: 10px;
+            padding: 12px 16px;
             padding-left: 40px;
-            color: #fff;
-            font-size: 16px;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 14px;
             transition: all 0.3s ease;
         }
 
@@ -310,7 +314,6 @@
             outline: none;
             background: rgba(255, 255, 255, 0.08);
             border-color: rgba(0, 255, 136, 0.5);
-            box-shadow: 0 0 0 3px rgba(0, 255, 136, 0.1);
         }
 
         .form-input::placeholder {
@@ -413,7 +416,7 @@
         }
 
         .checkbox-input:checked {
-            background: linear-gradient(135deg, #00ff88, #00aaff);
+            background: #00ff88;
             border-color: #00ff88;
             box-shadow: 0 2px 8px rgba(0, 255, 136, 0.3);
         }
@@ -575,7 +578,7 @@
 
         /* Form Actions */
         .form-actions {
-            display: flex;
+            display: none;
             justify-content: flex-end;
             gap: 16px;
             margin-top: 60px;
@@ -743,7 +746,9 @@
         <div class="page-header">
             <h1 class="page-title" data-i18n-key="pushStrategy.title">推送策略</h1>
             <div class="page-actions">
-                <button class="btn btn-primary" onclick="saveStrategy()" data-i18n-key="pushStrategy.buttons.edit">编辑</button>
+                <button class="btn btn-primary" onclick="editStrategy()">
+                <span data-i18n-key="pushStrategy.buttons.edit">编辑</span>
+            </button>
             </div>
         </div>
 
@@ -969,6 +974,11 @@
             increaseBtn.disabled = newValue >= 60;
         }
 
+        // Edit Strategy
+        function editStrategy() {
+            toggleEditMode(true);
+        }
+
         // Form validation
         function validateForm() {
             const dischargePrice = document.getElementById('dischargePrice').value.trim();
@@ -1112,8 +1122,9 @@
                 editButton.style.display = 'none';
                 formActions.style.display = 'flex';
             } else {
-                editButton.style.display = 'block';
-                editButton.textContent = window.i18n ? window.i18n.getText('pushStrategy.buttons.edit') : 'Edit';
+                editButton.style.display = 'inline-flex';
+                editButton.innerHTML = '<span data-i18n-key="pushStrategy.buttons.edit">' + 
+                    (window.i18n ? window.i18n.getText('pushStrategy.buttons.edit') : '编辑') + '</span>';
                 editButton.disabled = false;
                 formActions.style.display = 'none';
             }
@@ -1166,7 +1177,7 @@
                 currentPage: 'pushStrategy',
                 containerId: 'headerContainer'
             });
-            // Initialize edit mode
+            // Initialize form in view mode (disabled)
             toggleEditMode(false);
             
             // Initialize frequency counter buttons

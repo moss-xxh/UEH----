@@ -173,8 +173,8 @@ class Pagination {
             }
             
             .page-size-select:focus {
-                border-color: rgba(0, 255, 136, 0.5);
-                background: rgba(255, 255, 255, 0.12);
+                border-color: #00ff88;
+                background: rgba(0, 255, 136, 0.05);
             }
             
             .page-size-select option {
@@ -205,16 +205,17 @@ class Pagination {
             }
             
             .page-btn:hover:not(:disabled):not(.disabled) {
-                background: rgba(255, 255, 255, 0.1);
-                color: #fff;
-                border-color: rgba(255, 255, 255, 0.2);
+                background: rgba(0, 255, 136, 0.1);
+                color: #00ff88;
+                border-color: rgba(0, 255, 136, 0.3);
             }
             
             .page-btn.active {
-                background: linear-gradient(135deg, #00ff88, #00aaff);
+                background: #00ff88;
                 border-color: #00ff88;
                 color: #000;
                 font-weight: 600;
+                box-shadow: 0 2px 8px rgba(0, 255, 136, 0.3);
             }
             
             .page-btn:disabled,
@@ -243,8 +244,8 @@ class Pagination {
             }
             
             .page-input:focus {
-                border-color: rgba(0, 255, 136, 0.5);
-                background: rgba(255, 255, 255, 0.12);
+                border-color: #00ff88;
+                background: rgba(0, 255, 136, 0.05);
             }
             
             .page-input::placeholder {
