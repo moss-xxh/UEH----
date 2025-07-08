@@ -160,12 +160,6 @@
             display: flex;
         }
         
-        /* Action buttons row */
-        .filter-row-actions {
-            display: flex;
-            gap: 12px;
-            align-items: center;
-        }
 
         .search-input {
             width: 220px;
@@ -352,9 +346,27 @@
             border-radius: var(--radius);
             box-shadow: var(--color-shadow);
             border: 1px solid var(--color-border);
-            padding: 24px;
             overflow-x: auto;
             margin-bottom: 16px;
+        }
+        
+        /* Table Header */
+        .table-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--color-border);
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+        }
+        
+        .table-actions {
+            display: flex;
+            gap: 12px;
+        }
+        
+        .table-wrapper {
+            padding: 0 24px 24px;
+            overflow-x: auto;
         }
 
         .data-table {
@@ -1154,9 +1166,14 @@
                             <option value="offline" data-i18n-key="family.deviceStates.offline">离线</option>
                         </select>
                     </div>
-                    
-                    <!-- Action buttons row -->
-                    <div class="filter-row-actions">
+                </div>
+            </div>
+
+            <!-- Table View -->
+            <div class="table-container">
+                <!-- Table Header with Actions -->
+                <div class="table-header">
+                    <div class="table-actions">
                         <button class="filter-btn export" onclick="exportData()">
                             <span>📥</span>
                             <span data-i18n-key="family.buttons.export">导出</span>
@@ -1167,11 +1184,8 @@
                         </button>
                     </div>
                 </div>
-            </div>
-
-            <!-- Table View -->
-            <div class="table-container">
-                <table class="data-table">
+                <div class="table-wrapper">
+                    <table class="data-table">
                     <thead>
                         <tr>
                             <th data-i18n-key="family.table.user">用户</th>
@@ -1215,6 +1229,7 @@
                         <!-- Table data will be dynamically generated -->
                     </tbody>
                 </table>
+                </div>
             </div>
 
             <!-- Pagination -->
