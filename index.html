@@ -61,14 +61,18 @@
         .btn {
             background: var(--color-primary);
             color: #fff;
-            border-radius: var(--radius);
+            border-radius: 22px;
             border: none;
             padding: 0 24px;
-            height: 40px;
+            height: 44px;
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
             transition: background 0.2s;
+            min-width: 100px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
         }
         .btn:hover {
             background: var(--color-accent);
@@ -1263,27 +1267,34 @@
         .modal {
             display: none;
             position: fixed;
-            z-index: 1000;
+            z-index: 10000;
             left: 0;
             top: 0;
             width: 100%;
             height: 100%;
             background-color: rgba(0, 0, 0, 0.8);
             backdrop-filter: blur(5px);
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal.show {
+            display: flex !important;
         }
 
         .modal-content {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
-            margin: 5% auto;
-            padding: 30px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 20px;
+            background: #1a1a2e;
+            margin: 0;
+            padding: 0;
+            border: none;
+            border-radius: 16px;
             width: 90%;
             max-width: 500px;
-            backdrop-filter: blur(20px);
             color: #fff;
             position: relative;
             animation: modalSlideIn 0.3s ease-out;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
         }
 
         @keyframes modalSlideIn {
@@ -1295,6 +1306,95 @@
                 opacity: 1;
                 transform: translateY(0);
             }
+        }
+
+        /* Modal Button Styles */
+        
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+            color: #fff;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #00ff88, #00cc6a);
+            color: #000;
+        }
+        
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #00cc6a, #00aa55);
+            transform: translateY(-1px);
+        }
+        
+        .btn-danger {
+            background: linear-gradient(135deg, #ff4444, #ff6b6b);
+            color: #fff;
+        }
+        
+        .btn-danger:hover {
+            background: linear-gradient(135deg, #ff3333, #ff5555);
+            transform: translateY(-1px);
+        }
+        
+        /* Operation Type Styling */
+        .operation-type {
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        
+        .operation-type.stop-charge,
+        .operation-type.stop-discharge {
+            background: rgba(255, 107, 107, 0.2);
+            color: #ff6b6b;
+            border: 1px solid rgba(255, 107, 107, 0.3);
+        }
+        
+        /* Info Row Styling */
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .info-row:last-child {
+            border-bottom: none;
+        }
+        
+        .info-row label {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .info-row span {
+            color: #fff;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        
+        /* Warning Message */
+        .warning-message {
+            background: rgba(255, 193, 7, 0.1);
+            border: 1px solid rgba(255, 193, 7, 0.3);
+            border-radius: 8px;
+            padding: 16px;
+            margin-top: 20px;
+            text-align: center;
+        }
+        
+        .warning-message span {
+            color: #ffc107;
+            font-size: 14px;
+            line-height: 1.5;
         }
 
         .modal-header {
@@ -1367,33 +1467,50 @@
         .modal-footer {
             display: flex;
             justify-content: flex-end;
-            gap: 15px;
+            align-items: center;
+            gap: 12px;
+            margin-top: 24px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .modal-btn {
+            flex: 0 0 auto;
+            min-width: 120px;
+            height: 44px;
             padding: 10px 25px;
             border: none;
-            border-radius: 25px;
+            border-radius: 22px;
             cursor: pointer;
             font-size: 14px;
-            font-weight: 500;
+            font-weight: 600;
             transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .modal-btn-primary {
-            background: #00ff88;
+            background: linear-gradient(135deg, #00ff88, #00cc6a);
             color: #000;
+        }
+
+        .modal-btn-primary:hover {
+            background: linear-gradient(135deg, #00cc6a, #00aa55);
+            transform: translateY(-1px);
+            box-shadow: 0 5px 15px rgba(0, 255, 136, 0.3);
         }
 
         .modal-btn-secondary {
             background: rgba(255, 255, 255, 0.1);
-            color: #fff;
+            color: rgba(255, 255, 255, 0.8);
             border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
-        .modal-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 255, 136, 0.3);
+        .modal-btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+            color: #fff;
+            transform: translateY(-1px);
         }
         
         /* Details Panel Styles */
@@ -2704,58 +2821,60 @@
     </div>
 
     <!-- Confirmation Modal for operation verification -->
-    <div id="confirmationModal" class="modal" style="display: none;">
-        <div class="modal-content">
-            <div class="modal-header" style="text-align: left; justify-content: flex-start;">
-                <div class="modal-icon warning">
-                    <span id="confirmIcon">⚠️</span>
+    <div id="confirmationModal" class="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.9); z-index: 9999; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(5px);">
+        <div class="modal-content" style="background: linear-gradient(145deg, #1e1e2e 0%, #252535 100%); border: none; padding: 0; overflow: hidden; width: 480px; max-width: 90%; border-radius: 24px; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8), 0 0 1px rgba(255, 255, 255, 0.1);">
+            <div class="modal-header" style="padding: 32px 36px 28px; border-bottom: 1px solid rgba(255, 255, 255, 0.08); display: flex; align-items: center; justify-content: flex-start; background: rgba(255, 255, 255, 0.02);">
+                <div class="modal-icon" style="width: 56px; height: 56px; background: linear-gradient(145deg, rgba(0, 255, 136, 0.15), rgba(0, 255, 136, 0.05)); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 20px; box-shadow: 0 4px 12px rgba(0, 255, 136, 0.15);">
+                    <span id="confirmIcon" style="font-size: 28px;">⚡</span>
                 </div>
-                <div style="margin-left: 12px;">
-                    <h3 class="modal-title" id="confirmTitle"><span data-i18n-key="operationConfirm">操作确认</span></h3>
-                </div>
+                <h3 class="modal-title" id="confirmTitle" style="margin: 0; font-size: 24px; font-weight: 700; color: #fff; letter-spacing: 0.5px;">确认充电操作</h3>
             </div>
             
-            <div class="modal-body">
-                <p id="confirmMessage"><span data-i18n-key="confirmMessage">您确定要执行此操作吗？</span></p>
+            <div class="modal-body" style="padding: 36px;">
+                <p id="confirmMessage" style="font-size: 16px; color: rgba(255, 255, 255, 0.7); margin: 0 0 32px 0; font-weight: 400; line-height: 1.6;">您确定要执行充电操作吗？</p>
                 
-                <div class="modal-info-grid" id="confirmInfoGrid">
-                    <div class="modal-info-item">
-                        <div class="modal-info-label" data-i18n-key="operationType">操作类型</div>
-                        <div class="modal-info-value" id="confirmOperationType">充电</div>
+                <div class="modal-info-grid" id="confirmInfoGrid" style="display: flex; flex-direction: column; gap: 0; margin-bottom: 32px;">
+                    <div style="display: flex; gap: 20px;">
+                        <div class="modal-info-item" style="flex: 1; background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 16px; padding: 20px 24px; transition: all 0.3s;">
+                            <div class="modal-info-label" style="color: rgba(255, 255, 255, 0.6); font-size: 14px; margin-bottom: 8px; font-weight: 400;">操作类型</div>
+                            <div class="modal-info-value" id="confirmOperationType" style="color: #00ff88; font-size: 20px; font-weight: 600; letter-spacing: 0.5px;">充电</div>
+                        </div>
+                        <div class="modal-info-item" style="flex: 1; background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 16px; padding: 20px 24px; transition: all 0.3s;">
+                            <div class="modal-info-label" style="color: rgba(255, 255, 255, 0.6); font-size: 14px; margin-bottom: 8px; font-weight: 400;">影响设备</div>
+                            <div class="modal-info-value" id="confirmTargetDevices" style="color: #fff; font-size: 20px; font-weight: 600;">500个</div>
+                        </div>
                     </div>
-                    <div class="modal-info-item">
-                        <div class="modal-info-label" data-i18n-key="targetDevices">影响设备</div>
-                        <div class="modal-info-value" id="confirmTargetDevices">500个</div>
-                    </div>
-                    <div class="modal-info-item">
+                    <div class="modal-info-item" style="display: none;">
                         <div class="modal-info-label" data-i18n-key="estimatedPower">预计功率</div>
                         <div class="modal-info-value" id="confirmEstimatedPower">3.0MW</div>
                     </div>
-                    <div class="modal-info-item">
+                    <div class="modal-info-item" style="display: none;">
                         <div class="modal-info-label" data-i18n-key="currentPrice">当前电价</div>
                         <div class="modal-info-value" id="confirmCurrentPrice">$85/MWh</div>
                     </div>
-                    <div class="modal-info-item">
+                    <div class="modal-info-item" style="display: none;">
                         <div class="modal-info-label" data-i18n-key="estimatedDuration">预计时间</div>
                         <div class="modal-info-value" id="confirmDuration">15-30分钟</div>
                     </div>
-                    <div class="modal-info-item">
+                    <div class="modal-info-item" style="display: none;">
                         <div class="modal-info-label" data-i18n-key="estimatedProfit">预计获利</div>
                         <div class="modal-info-value" id="confirmCostBenefit">+$178</div>
                     </div>
                 </div>
                 
-                <div class="warning-notice" style="margin-top: 20px; padding: 15px; background: rgba(255, 149, 0, 0.1); border: 1px solid rgba(255, 149, 0, 0.3); border-radius: 10px;">
-                    <div style="display: flex; align-items: center; gap: 10px; color: #ff9500; font-size: 14px;">
-                        <span style="font-size: 18px;">⚠️</span>
-                        <span id="warningText">此操作将影响所有已连接设备，请确认后再继续。</span>
+                <div class="warning-notice" style="padding: 20px; background: linear-gradient(145deg, rgba(255, 152, 0, 0.08), rgba(255, 152, 0, 0.04)); border: 1px solid rgba(255, 152, 0, 0.15); border-radius: 16px; backdrop-filter: blur(10px);">
+                    <div style="display: flex; align-items: flex-start; gap: 16px;">
+                        <div style="width: 32px; height: 32px; background: rgba(255, 152, 0, 0.15); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                            <span style="font-size: 18px;">⚠️</span>
+                        </div>
+                        <span id="warningText" style="color: rgba(255, 255, 255, 0.8); font-size: 14px; line-height: 1.8; flex: 1;">将开始对所有连接设备进行充电操作，此过程将消耗电网电力。</span>
                     </div>
                 </div>
             </div>
             
-            <div class="modal-footer">
-                <button class="modal-btn modal-btn-secondary" onclick="closeConfirmationModal()"><span data-i18n-key="cancel">取消</span></button>
-                <button class="modal-btn modal-btn-primary" onclick="executeConfirmedOperation()" id="confirmExecuteBtn"><span data-i18n-key="confirmExecute">确认执行</span></button>
+            <div class="modal-footer" style="padding: 28px 36px 32px; background: rgba(0, 0, 0, 0.2); border-top: 1px solid rgba(255, 255, 255, 0.08); display: flex; justify-content: flex-end; gap: 16px;">
+                <button class="modal-btn modal-cancel-btn" onclick="closeConfirmationModal()" style="background: rgba(255, 255, 255, 0.08); color: rgba(255, 255, 255, 0.8); border: 1px solid rgba(255, 255, 255, 0.1); padding: 14px 36px; border-radius: 999px; font-size: 15px; font-weight: 600; cursor: pointer; transition: all 0.3s; backdrop-filter: blur(10px); letter-spacing: 0.5px;" onmouseover="this.style.background='rgba(255, 255, 255, 0.12)'; this.style.borderColor='rgba(255, 255, 255, 0.2)'" onmouseout="this.style.background='rgba(255, 255, 255, 0.08)'; this.style.borderColor='rgba(255, 255, 255, 0.1)'">取消</button>
+                <button class="modal-btn modal-confirm-btn" onclick="executeConfirmedOperation()" id="confirmExecuteBtn" style="background: linear-gradient(135deg, #00ff88, #00dd77); color: #000; padding: 14px 36px; border-radius: 999px; font-size: 15px; font-weight: 700; cursor: pointer; transition: all 0.3s; border: none; box-shadow: 0 4px 16px rgba(0, 255, 136, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.3); letter-spacing: 0.5px;" onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 6px 20px rgba(0, 255, 136, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 16px rgba(0, 255, 136, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.3)'">确认充电</button>
             </div>
         </div>
     </div>
@@ -3062,10 +3181,10 @@
             });
             
             // Add click outside to close functionality
-            const confirmModal = document.getElementById('confirmationModal');
-            if (confirmModal) {
-                confirmModal.addEventListener('click', function(event) {
-                    if (event.target === confirmModal) {
+            const confirmationModal = document.getElementById('confirmationModal');
+            if (confirmationModal) {
+                confirmationModal.addEventListener('click', function(event) {
+                    if (event.target === confirmationModal) {
                         closeConfirmationModal();
                     }
                 });
@@ -3149,17 +3268,27 @@
                     // Force resize all charts after initialization
                     if (marketChart) {
                         console.log('Force resizing marketChart');
+                        if (marketChart && typeof marketChart.resize === 'function') {
+                            if (marketChart && typeof marketChart.resize === 'function') {
                         marketChart.resize();
+                    }
+                        }
                     }
                     if (mapChart) {
                         console.log('Force resizing mapChart');
-                        mapChart.resize();
+                        if (mapChart && typeof mapChart.resize === 'function') {
+                            mapChart.resize();
+                        }
                     }
                     if (powerChart) {
-                        powerChart.resize();
+                        if (powerChart && typeof powerChart.resize === 'function') {
+                            powerChart.resize();
+                        }
                     }
                     if (performanceChart) {
-                        performanceChart.resize();
+                        if (performanceChart && typeof performanceChart.resize === 'function') {
+                            performanceChart.resize();
+                        }
                     }
                 }, 300);
                 
@@ -3404,7 +3533,11 @@
             };
 
             performanceChart.setOption(option);
-            window.addEventListener('resize', throttle(() => performanceChart.resize(), 250));
+            window.addEventListener('resize', throttle(() => {
+                if (performanceChart && typeof performanceChart.resize === 'function') {
+                    performanceChart.resize();
+                }
+            }, 250));
         }
 
         // Discharge & Profit chart
@@ -3493,7 +3626,11 @@
             };
             
             powerRevenueChart.setOption(options);
-            window.addEventListener('resize', throttle(() => powerRevenueChart.resize(), 250));
+            window.addEventListener('resize', throttle(() => {
+                if (powerRevenueChart && typeof powerRevenueChart.resize === 'function') {
+                    powerRevenueChart.resize();
+                }
+            }, 250));
         }
 
 
@@ -3506,9 +3643,9 @@
                 'QLD': 'discharging',
                 'VIC': 'charging',
                 'SA': 'discharging',
-                'TAS': 'stopped'  // 停止状态
+                'TAS': 'none'  // 无状态（只显示充放电按钮）
             };
-            return regionStatus[region] || 'stopped';
+            return regionStatus[region] || 'none';
         }
 
         // 更新地区按钮状态指示器
@@ -3538,7 +3675,7 @@
                         statusElement.classList.add('discharging');
                         statusElement.textContent = '放';
                     } else {
-                        // 停止状态，移除状态元素并添加占位
+                        // 无状态，移除状态元素并添加占位
                         statusElement.remove();
                         const placeholder = document.createElement('span');
                         placeholder.style.width = '20px';
@@ -3546,7 +3683,7 @@
                     }
                 } else {
                     // 没有状态元素
-                    if (status !== 'stopped') {
+                    if (status !== 'none') {
                         // 创建新的状态元素
                         const newStatus = document.createElement('span');
                         newStatus.className = 'region-status ' + status;
@@ -3598,6 +3735,7 @@
                     statusText.style.color = '#ffd700';
                     statusText.style.display = 'inline-block';
                 } else {
+                    // 无状态时隐藏状态文字
                     statusText.textContent = '';
                     statusText.style.display = 'none';
                 }
@@ -3609,7 +3747,7 @@
                 switchPanel('map');
                 updateActionButtonsToStop();
             } else {
-                // 无标记的地区，显示行情，按钮显示充放电
+                // 无标记的地区（status === 'none'），显示行情，只显示充放电按钮
                 switchPanel('market');
                 updateActionButtonsToChargeDis();
             }
@@ -3635,6 +3773,7 @@
             
             // 检查是否已有停止按钮
             let stopBtn = document.querySelector('.stop-btn');
+            
             if (!stopBtn) {
                 stopBtn = document.createElement('button');
                 stopBtn.className = 'action-btn stop-btn';
@@ -4572,12 +4711,18 @@
                 
                 // Handle resize
                 window.addEventListener('resize', () => {
-                    marketChart && marketChart.resize();
+                    if (marketChart && typeof marketChart.resize === 'function') {
+                        if (marketChart && typeof marketChart.resize === 'function') {
+                        marketChart.resize();
+                    }
+                    }
                 });
                 
                 // Force initial resize
                 setTimeout(() => {
-                    marketChart.resize();
+                    if (marketChart && typeof marketChart.resize === 'function') {
+                        marketChart.resize();
+                    }
                 }, 100);
                 
                 console.log('Market chart initialized successfully');
@@ -4845,7 +4990,11 @@
             // Update status statistics
             updateMapStatistics();
             
-            window.addEventListener('resize', throttle(() => mapChart.resize(), 250));
+            window.addEventListener('resize', throttle(() => {
+                if (mapChart && typeof mapChart.resize === 'function') {
+                    mapChart.resize();
+                }
+            }, 250));
         }
         
 
@@ -5122,8 +5271,23 @@
             
             const operationColors = {
                 'charge': '#00ff88',
-                'discharge': '#00ff88'
+                'discharge': '#ffd700'
             };
+            
+            // Update modal icon and color based on operation type
+            const confirmIcon = document.getElementById('confirmIcon');
+            const modalIcon = confirmIcon.parentElement;
+            
+            if (operationType === 'charge') {
+                confirmIcon.textContent = '⚡';
+                modalIcon.style.background = 'linear-gradient(145deg, rgba(0, 255, 136, 0.15), rgba(0, 255, 136, 0.05))';
+                modalIcon.style.boxShadow = '0 4px 12px rgba(0, 255, 136, 0.15)';
+            } else if (operationType === 'discharge') {
+                confirmIcon.textContent = '🔋';
+                modalIcon.style.background = 'linear-gradient(145deg, rgba(255, 215, 0, 0.15), rgba(255, 215, 0, 0.05))';
+                modalIcon.style.boxShadow = '0 4px 12px rgba(255, 215, 0, 0.15)';
+                document.getElementById('confirmOperationType').style.color = '#ffd700';
+            }
             
             // 使用i18n获取警告消息
             const getWarningMessage = (type) => {
@@ -5184,6 +5348,18 @@
             };
             document.getElementById('confirmTargetDevices').textContent = deviceTexts[currentLang] || deviceTexts['zh'];
             
+            // 首先重置所有信息项为可见状态
+            const allInfoItems = confirmModal.querySelectorAll('.modal-info-item');
+            allInfoItems.forEach(item => {
+                item.style.display = 'flex';
+                item.style.flexDirection = 'column';
+            });
+            
+            // Remove any dynamically added rows from previous operations
+            const confirmInfoGrid = document.getElementById('confirmInfoGrid');
+            const dynamicRows = confirmInfoGrid.querySelectorAll('div[style*="margin-top"]');
+            dynamicRows.forEach(row => row.remove());
+            
             // Hide/show fields based on user requirements
             const estimatedPowerItem = document.getElementById('confirmEstimatedPower').parentElement;
             const currentPriceItem = document.getElementById('confirmCurrentPrice').parentElement;
@@ -5197,20 +5373,23 @@
                 durationItem.style.display = 'none';
                 costBenefitItem.style.display = 'none';
             } else if (operationType === 'discharge') {
-                // For discharge: remove 预计功率, 当前电价, 预计时间; keep 预计获利
+                // For discharge: show predicted profit in a new row
                 estimatedPowerItem.style.display = 'none';
                 currentPriceItem.style.display = 'none';
                 durationItem.style.display = 'none';
-                costBenefitItem.style.display = 'block';
+                costBenefitItem.style.display = 'none';
                 
-                // Calculate and show benefit
-                const priceValue = parseInt(currentPrice.replace('$', ''));
-                const benefit = `+$${Math.floor(estimatedPower * priceValue * 0.7)}`;
-                document.getElementById('confirmCostBenefit').textContent = benefit;
-                document.getElementById('confirmCostBenefit').style.color = '#00ff88';
-                
-                // Change label to 预计获利
-                costBenefitItem.querySelector('.modal-info-label').textContent = '预计获利';
+                // Add predicted profit as a new row
+                const profitRow = document.createElement('div');
+                profitRow.style.cssText = 'display: flex; gap: 20px; margin-top: 20px;';
+                profitRow.innerHTML = `
+                    <div class="modal-info-item" style="flex: 1; max-width: calc(50% - 10px); background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 16px; padding: 20px 24px; transition: all 0.3s; display: flex; flex-direction: column;">
+                        <div class="modal-info-label" style="color: rgba(255, 255, 255, 0.6); font-size: 14px; margin-bottom: 8px; font-weight: 400;">预计收益</div>
+                        <div class="modal-info-value" style="color: #ffd700; font-size: 20px; font-weight: 600;">+$${Math.floor(estimatedPower * parseInt(currentPrice.replace('$', '')) * 0.7)}</div>
+                    </div>
+                    <div style="flex: 1;"></div>
+                `;
+                confirmInfoGrid.appendChild(profitRow);
             }
             
             // Update warning message
@@ -5225,10 +5404,31 @@
                 'ko': `${operationName} 확인`
             };
             executeBtn.textContent = executeBtnTexts[currentLang] || executeBtnTexts['zh'];
-            executeBtn.style.background = `linear-gradient(135deg, ${operationColors[operationType]}, ${operationColors[operationType]}dd)`;
             
-            // Show modal
-            confirmModal.style.display = 'block';
+            if (operationType === 'discharge') {
+                executeBtn.style.background = 'linear-gradient(135deg, #ffd700, #ffcc00)';
+                executeBtn.style.color = '#000';
+                executeBtn.onmouseover = function() { 
+                    this.style.transform='translateY(-1px)'; 
+                    this.style.boxShadow='0 6px 20px rgba(255, 215, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3)';
+                };
+                executeBtn.onmouseout = function() { 
+                    this.style.transform='translateY(0)'; 
+                    this.style.boxShadow='0 4px 16px rgba(255, 215, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.3)';
+                };
+            } else {
+                executeBtn.style.background = 'linear-gradient(135deg, #00ff88, #00dd77)';
+                executeBtn.style.color = '#000';
+            }
+            
+            // Show modal with animation
+            confirmModal.classList.add('show');
+            confirmModal.style.display = 'flex';
+            
+            // Add fade-in animation
+            setTimeout(() => {
+                confirmModal.style.opacity = '1';
+            }, 10);
         }
 
         // Show stop operation confirmation
@@ -5317,13 +5517,24 @@
             executeBtn.textContent = confirmStopTexts[currentLang] || confirmStopTexts['zh'];
             executeBtn.style.background = 'linear-gradient(135deg, #00ff88, #00ff88dd)';
             
-            // Show modal
-            confirmModal.style.display = 'block';
+            // Show modal with animation
+            confirmModal.classList.add('show');
+            confirmModal.style.display = 'flex';
+            
+            // Add fade-in animation
+            setTimeout(() => {
+                confirmModal.style.opacity = '1';
+            }, 10);
         }
 
         // Close confirmation modal
         function closeConfirmationModal() {
-            document.getElementById('confirmationModal').style.display = 'none';
+            const modal = document.getElementById('confirmationModal');
+            if (modal) {
+                modal.classList.remove('show');
+                modal.style.display = 'none';
+                modal.style.opacity = '0';
+            }
             pendingOperation = null;
             
             // Don't change panel view when canceling - keep current state
@@ -5339,9 +5550,9 @@
             
             console.log('Executing confirmed operation:', operationType);
             
-            if (operationType.startsWith('stop_')) {
+            if (operationType === 'stop' || operationType.startsWith('stop_')) {
                 // Execute stop operation
-                stopOperation();
+                executeStopOperation();
             } else {
                 // Execute start operation
                 startOperation(operationType);
@@ -5463,7 +5674,9 @@
             // Resize charts after switching
             setTimeout(() => {
                 if (panel === 'market' && marketChart) {
-                    marketChart.resize();
+                    if (marketChart && typeof marketChart.resize === 'function') {
+                        marketChart.resize();
+                    }
                 } else if (panel === 'map' && mapChart) {
                     mapChart.resize();
                 }
@@ -5472,7 +5685,9 @@
             // Additional resize with longer delay to ensure proper rendering
             setTimeout(() => {
                 if (panel === 'market' && marketChart) {
-                    marketChart.resize();
+                    if (marketChart && typeof marketChart.resize === 'function') {
+                        marketChart.resize();
+                    }
                 } else if (panel === 'map' && mapChart) {
                     mapChart.resize();
                 }
@@ -5685,7 +5900,130 @@
 
         // 处理停止操作
         function handleStop() {
-            console.log('停止操作');
+            // 显示停止确认弹窗
+            showStopConfirmationModal();
+        }
+        
+        function showStopConfirmationModal() {
+            // 根据当前操作确定停止类型
+            const currentOp = currentOperation || 'charge'; // 默认为充电
+            const isCharging = currentOp === 'charge';
+            
+            // 使用 confirmationModal 以保持与充电弹窗一致的样式
+            const modal = document.getElementById('confirmationModal');
+            if (!modal) {
+                console.error('confirmationModal not found');
+                return;
+            }
+            
+            // 首先重置所有信息项为可见状态
+            const allInfoItems = modal.querySelectorAll('.modal-info-item');
+            allInfoItems.forEach(item => {
+                item.style.display = 'flex';
+            });
+            
+            // 设置弹窗内容
+            const confirmTitle = document.getElementById('confirmTitle');
+            const confirmMessage = document.getElementById('confirmMessage');
+            const confirmOperationType = document.getElementById('confirmOperationType');
+            const confirmTargetDevices = document.getElementById('confirmTargetDevices');
+            const warningText = document.getElementById('warningText');
+            const confirmExecuteBtn = document.getElementById('confirmExecuteBtn');
+            const confirmIcon = document.getElementById('confirmIcon');
+            
+            // 设置图标和标题
+            if (confirmIcon) confirmIcon.textContent = '🛑';
+            
+            // Update modal icon style for stop operation
+            const modalIcon = confirmIcon.parentElement;
+            if (modalIcon) {
+                modalIcon.style.background = 'linear-gradient(145deg, rgba(255, 68, 68, 0.15), rgba(255, 68, 68, 0.05))';
+                modalIcon.style.boxShadow = '0 4px 12px rgba(255, 68, 68, 0.15)';
+            }
+            
+            // Update operation type card color for stop
+            const operationTypeElement = document.getElementById('confirmOperationType');
+            if (operationTypeElement) {
+                operationTypeElement.style.color = '#ff4444';
+            }
+            
+            if (isCharging) {
+                if (confirmTitle) confirmTitle.textContent = '确认停止充电';
+                if (confirmMessage) confirmMessage.textContent = '您确定要停止充电操作吗？';
+                if (confirmOperationType) confirmOperationType.textContent = '停止充电';
+                if (confirmExecuteBtn) {
+                    confirmExecuteBtn.textContent = '确认停止充电';
+                    confirmExecuteBtn.style.background = 'linear-gradient(135deg, #ff4444, #ff3333)';
+                    confirmExecuteBtn.style.color = '#fff';
+                    confirmExecuteBtn.style.boxShadow = '0 4px 16px rgba(255, 68, 68, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.3)';
+                    confirmExecuteBtn.onmouseover = function() { 
+                        this.style.transform='translateY(-1px)'; 
+                        this.style.boxShadow='0 6px 20px rgba(255, 68, 68, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3)'; 
+                    };
+                    confirmExecuteBtn.onmouseout = function() { 
+                        this.style.transform='translateY(0)'; 
+                        this.style.boxShadow='0 4px 16px rgba(255, 68, 68, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.3)'; 
+                    };
+                }
+                if (warningText) warningText.textContent = '停止操作将立即终止所有设备的充电状态，设备将恢复到待机模式。';
+            } else {
+                if (confirmTitle) confirmTitle.textContent = '确认停止放电';
+                if (confirmMessage) confirmMessage.textContent = '您确定要停止放电操作吗？';
+                if (confirmOperationType) confirmOperationType.textContent = '停止放电';
+                if (confirmExecuteBtn) {
+                    confirmExecuteBtn.textContent = '确认停止放电';
+                    confirmExecuteBtn.style.background = 'linear-gradient(135deg, #ff4444, #ff3333)';
+                    confirmExecuteBtn.style.color = '#fff';
+                    confirmExecuteBtn.style.boxShadow = '0 4px 16px rgba(255, 68, 68, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.3)';
+                    confirmExecuteBtn.onmouseover = function() { 
+                        this.style.transform='translateY(-1px)'; 
+                        this.style.boxShadow='0 6px 20px rgba(255, 68, 68, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3)'; 
+                    };
+                    confirmExecuteBtn.onmouseout = function() { 
+                        this.style.transform='translateY(0)'; 
+                        this.style.boxShadow='0 4px 16px rgba(255, 68, 68, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.3)'; 
+                    };
+                }
+                if (warningText) warningText.textContent = '停止操作将立即终止所有设备的放电状态，设备将恢复到待机模式。';
+            }
+            
+            // 设置影响设备数量
+            if (confirmTargetDevices) confirmTargetDevices.textContent = '500个';
+            
+            // 隐藏其他不需要的信息项
+            const estimatedPowerItem = document.getElementById('confirmEstimatedPower');
+            const currentPriceItem = document.getElementById('confirmCurrentPrice');
+            const durationItem = document.getElementById('confirmDuration');
+            const costBenefitItem = document.getElementById('confirmCostBenefit');
+            
+            if (estimatedPowerItem && estimatedPowerItem.parentElement) {
+                estimatedPowerItem.parentElement.style.display = 'none';
+            }
+            if (currentPriceItem && currentPriceItem.parentElement) {
+                currentPriceItem.parentElement.style.display = 'none';
+            }
+            if (durationItem && durationItem.parentElement) {
+                durationItem.parentElement.style.display = 'none';
+            }
+            if (costBenefitItem && costBenefitItem.parentElement) {
+                costBenefitItem.parentElement.style.display = 'none';
+            }
+            
+            // 设置pending operation为停止操作
+            pendingOperation = 'stop';
+            
+            // 显示弹窗
+            modal.classList.add('show');
+            modal.style.display = 'flex';
+            
+            // 添加模态框打开动画
+            setTimeout(() => {
+                modal.style.opacity = '1';
+            }, 10);
+        }
+        
+        function executeStopOperation() {
+            console.log('执行停止操作');
             
             // 停止设备动画
             if (mapAnimationInterval) {
@@ -7888,22 +8226,20 @@
             line-height: 1.5;
         }
         
-        .modal-footer {
-            padding: 20px 24px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            display: flex;
-            justify-content: flex-end;
-            gap: 12px;
-        }
         
         .btn {
             padding: 10px 24px;
-            border-radius: 8px;
+            border-radius: 22px;
             font-size: 14px;
             font-weight: 500;
             cursor: pointer;
             transition: all 0.3s;
             border: none;
+            min-width: 100px;
+            height: 44px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
         }
         
         .btn-secondary {
@@ -8171,7 +8507,12 @@
         }
         
         function closeDeviceCommandModal() {
-            document.getElementById('deviceCommandModal').style.display = 'none';
+            const modal = document.getElementById('deviceCommandModal');
+            if (modal) {
+                modal.classList.remove('show');
+                modal.style.display = 'none';
+                modal.style.opacity = '0';
+            }
         }
         
         function executeDeviceCommand() {
@@ -8186,9 +8527,9 @@
             const actionButtons = document.querySelector('.action-buttons');
             
             if (operation === 'stop') {
-                // 停止操作直接强制刷新页面
-                console.log('Stop operation confirmed, force refreshing page...');
-                window.location.reload(true);
+                // 执行停止操作
+                console.log('Stop operation confirmed, executing stop...');
+                executeStopOperation();
             } else {
                 // Set active operation
                 isOperationActive = true;
@@ -8448,7 +8789,11 @@
                         mapPanel.style.display = 'none';
                         
                         if (marketChart) {
-                            marketChart.resize();
+                            if (marketChart && typeof marketChart.resize === 'function') {
+                            if (marketChart && typeof marketChart.resize === 'function') {
+                        marketChart.resize();
+                    }
+                        }
                         }
                         
                         console.log('Charts fixed!');
@@ -8551,7 +8896,11 @@
                         console.log('Market chart needs reinitialization');
                         initMarketChart();
                     } else if (marketChart) {
+                        if (marketChart && typeof marketChart.resize === 'function') {
+                            if (marketChart && typeof marketChart.resize === 'function') {
                         marketChart.resize();
+                    }
+                        }
                     }
                 }
             }, 1000);
