@@ -2593,7 +2593,7 @@
                 <div class="right-panel-scroll" style="flex:1; overflow-y:auto; height:100%; padding-right:2px;">
                     <!-- 自定义卡片 -->
                     <div class="custom-card">
-                        <div style="padding: 20px; position: relative; height: 100%; display: flex; flex-direction: column;">
+                        <div style="padding: 20px; position: relative; height: 100%; display: flex; flex-direction: column; overflow: hidden;">
                             <!-- Tab Controls -->
                             <div class="panel-tabs">
                                 <button class="panel-tab active" onclick="switchPanel('market', this)"><span data-i18n-key="market">行情</span></button>
@@ -2671,7 +2671,7 @@
                                 </div>
 
                                 <!-- Market Chart -->
-                                <div id="marketChart" style="flex: 1; min-height: 450px; height: 450px; width: 100%; margin-top: 55px; margin-bottom: 0;"></div>
+                                <div id="marketChart" style="flex: 1; min-height: 0; max-height: 350px; width: 100%; margin-top: 20px; margin-bottom: 10px;"></div>
 
                                 <!-- Status Bar -->
                                 <div style="margin-top: 20px; display: flex; justify-content: space-between; align-items: center;"></div>
@@ -2679,7 +2679,7 @@
 
                             <!-- Map Panel -->
                             <div id="mapPanel" class="panel-content">
-                                <div id="australiaMap" style="height: 500px;"></div>
+                                <div id="australiaMap" style="height: 400px; max-height: 400px;"></div>
                                 <div class="map-controls">
                                     <div class="map-stats">
                                         <div class="map-stat">
