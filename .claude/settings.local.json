@@ -44,7 +44,8 @@
       "Bash(./backup_manager.sh restore:*)",
       "Bash(./backup-script.sh)",
       "Bash(xxd:*)",
-      "Bash(./restore-to-1322.sh:*)"
+      "Bash(./restore-to-1322.sh:*)",
+      "mcp__ide__executeCode"
     ],
     "deny": []
   }

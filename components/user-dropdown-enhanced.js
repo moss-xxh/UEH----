@@ -9,7 +9,7 @@ class UserDropdownEnhanced {
         
         // 用户数据
         this.userData = {
-            name: localStorage.getItem('userName') || '用户',
+            name: localStorage.getItem('userName') || 'demo',
             email: localStorage.getItem('userEmail') || 'user@example.com',
             avatar: localStorage.getItem('userAvatar') || null
         };
@@ -85,15 +85,22 @@ class UserDropdownEnhanced {
                 visibility: hidden;
                 transform: translateY(-10px);
                 transition: all 0.3s ease;
-                z-index: 1000;
+                z-index: 9999 !important;
                 backdrop-filter: blur(20px);
                 box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
             }
             
             .user-dropdown-enhanced:hover .dropdown-menu-enhanced {
-                opacity: 1;
-                visibility: visible;
-                transform: translateY(0);
+                opacity: 1 !important;
+                visibility: visible !important;
+                transform: translateY(0) !important;
+            }
+            
+            /* 强制显示调试 */
+            .dropdown-menu-enhanced.debug-show {
+                opacity: 1 !important;
+                visibility: visible !important;
+                transform: translateY(0) !important;
             }
             
             /* 用户信息区 */
@@ -562,7 +569,6 @@ class UserDropdownEnhanced {
                 <div class="dropdown-menu-enhanced">
                     <div class="user-info-enhanced">
                         <div class="user-name-enhanced">${this.userData.name}</div>
-                        <div class="user-email-enhanced">${this.userData.email}</div>
                     </div>
                     
                     <button class="dropdown-item-enhanced" onclick="userDropdownEnhanced.openSettings()">

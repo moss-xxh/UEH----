@@ -6,8 +6,8 @@ class UserDropdown {
         this.containerId = options.containerId || 'userDropdownContainer';
         this.onLogout = options.onLogout || (() => {});
         this.userData = {
-            name: localStorage.getItem('userName') || '用户',
-            email: localStorage.getItem('userEmail') || 'user@example.com',
+            name: localStorage.getItem('userName') || 'demo',
+            email: localStorage.getItem('userEmail') || 'demo@example.com',
             avatar: localStorage.getItem('userAvatar') || null
         };
         
@@ -37,16 +37,12 @@ class UserDropdown {
                     <img src="${avatarSrc}" alt="用户头像" class="user-avatar" id="headerUserAvatar" style="width: 36px; height: 36px; border-radius: 50%; cursor: pointer;">
                 </div>
                 <div class="user-dropdown-menu">
-                    <div class="dropdown-user-info">
-                        <div class="dropdown-user-name">${this.userData.name}</div>
-                        <div class="dropdown-user-email">${this.userData.email}</div>
-                    </div>
+                    <div class="dropdown-user-name">${this.userData.name}</div>
                     <div class="dropdown-divider"></div>
                     <div class="dropdown-item" onclick="userDropdown.openSettings()">
                         <span class="dropdown-item-icon">⚙️</span>
                         <span>设置</span>
                     </div>
-                    <div class="dropdown-divider"></div>
                     <div class="dropdown-item" onclick="userDropdown.showLogoutConfirm()">
                         <span class="dropdown-item-icon">🚪</span>
                         <span>退出</span>

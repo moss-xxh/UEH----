@@ -137,37 +137,12 @@ class HeaderNav {
         // 初始化用户下拉菜单
         if (this.showUserAvatar) {
             setTimeout(() => {
-                // 优先使用链接版用户菜单
-                if (typeof UserMenuLink !== 'undefined' && !window.userMenuLinkInstance) {
-                    window.userMenuLinkInstance = new UserMenuLink({
+                // 使用新的简洁用户下拉菜单
+                if (typeof UserDropdownSimpleNew !== 'undefined' && !window.userDropdownSimpleNew) {
+                    window.userDropdownSimpleNew = new UserDropdownSimpleNew({
                         containerId: 'userDropdownContainer'
                     });
-                } else if (typeof UserMenuSimple !== 'undefined' && !window.userMenuSimpleInstance) {
-                    window.userMenuSimpleInstance = new UserMenuSimple({
-                        containerId: 'userDropdownContainer'
-                    });
-                } else if (typeof UserMenu !== 'undefined' && !window.userMenuInstance) {
-                    window.userMenuInstance = new UserMenu({
-                        containerId: 'userDropdownContainer'
-                    });
-                } else if (typeof UserDropdownEnhanced !== 'undefined' && !window.userDropdownEnhanced) {
-                    window.userDropdownEnhanced = new UserDropdownEnhanced({
-                        containerId: 'userDropdownContainer',
-                        onLogout: () => {
-                            window.location.href = 'vpp-login.html';
-                        }
-                    });
-                } else if (typeof UserDropdownSimple !== 'undefined' && !window.userDropdownSimple) {
-                    window.userDropdownSimple = new UserDropdownSimple({
-                        containerId: 'userDropdownContainer'
-                    });
-                } else if (typeof UserDropdown !== 'undefined' && !window.userDropdown) {
-                    window.userDropdown = new UserDropdown({
-                        containerId: 'userDropdownContainer',
-                        onLogout: () => {
-                            console.log('User logged out');
-                        }
-                    });
+                    console.log('UserDropdownSimpleNew initialized successfully');
                 }
             }, 100);
         }

@@ -15,10 +15,7 @@
     <script src="components/time-selector.js"></script>
     <script src="components/i18n.js"></script>
     <script src="components/simple-message-icon.js"></script>
-    <script src="components/user-dropdown.js"></script>
-    <script src="components/user-dropdown-simple.js"></script>
-    <script src="components/user-dropdown-enhanced.js"></script>
-    <script src="components/user-menu.js"></script>
+    <script src="components/user-dropdown-simple-new.js"></script>
     <script src="components/header-nav.js"></script>
     <script src="components/drawer-component.js"></script>
     <script src="fix-charts-dom-ready.js" defer></script>
@@ -2541,7 +2538,7 @@
                                                         <span style="font-size: 12px; color: rgba(255, 255, 255, 0.7);" data-i18n-key="demand">需求</span>
                                                         <span style="font-size: 15px; font-weight: 700; color: #fff;">9,692 <span style="font-size: 11px; font-weight: 500; color: rgba(255, 255, 255, 0.7);">kWh</span></span>
                                                     </div>
-                                                    <div style="height: 16px; background: rgba(255, 255, 255, 0.1); border-radius: 3px; overflow: hidden;">
+                                                    <div style="height: 16px; background: transparent; border-radius: 3px; overflow: hidden;">
                                                         <div style="width: 100%; height: 100%; background: rgba(0, 255, 136, 0.5); border-radius: 3px; display: flex; align-items: center; justify-content: center;">
                                                             <span style="font-size: 12px;">👤</span>
                                                         </div>
@@ -2553,7 +2550,7 @@
                                                         <span style="font-size: 12px; color: rgba(255, 255, 255, 0.7);" data-i18n-key="generation">发电</span>
                                                         <span style="font-size: 15px; font-weight: 700; color: #fff;">8,319 <span style="font-size: 11px; font-weight: 500; color: rgba(255, 255, 255, 0.7);">kWh</span></span>
                                                     </div>
-                                                    <div style="height: 16px; background: rgba(255, 255, 255, 0.1); border-radius: 3px; overflow: hidden; position: relative;">
+                                                    <div style="height: 16px; background: transparent; border-radius: 3px; overflow: hidden; position: relative;">
                                                         <!-- 闪电发电部分 60% -->
                                                         <div style="width: 60%; height: 100%; background: rgba(0, 170, 255, 0.5); position: absolute; left: 0; top: 0; display: flex; align-items: center; justify-content: center;">
                                                             <span style="font-size: 12px;">⚡</span>
@@ -2906,7 +2903,7 @@
             
             <div class="modal-footer" style="padding: 28px 36px 32px; background: rgba(0, 0, 0, 0.2); border-top: 1px solid rgba(255, 255, 255, 0.08); display: flex; justify-content: flex-end; gap: 16px;">
                 <button class="modal-btn modal-cancel-btn" onclick="closeConfirmationModal()" style="background: rgba(255, 255, 255, 0.08); color: rgba(255, 255, 255, 0.8); border: 1px solid rgba(255, 255, 255, 0.1); padding: 14px 36px; border-radius: 999px; font-size: 15px; font-weight: 600; cursor: pointer; transition: all 0.3s; backdrop-filter: blur(10px); letter-spacing: 0.5px;" onmouseover="this.style.background='rgba(255, 255, 255, 0.12)'; this.style.borderColor='rgba(255, 255, 255, 0.2)'" onmouseout="this.style.background='rgba(255, 255, 255, 0.08)'; this.style.borderColor='rgba(255, 255, 255, 0.1)'">取消</button>
-                <button class="modal-btn modal-confirm-btn" onclick="executeConfirmedOperation()" id="confirmExecuteBtn" style="background: linear-gradient(135deg, #00ff88, #00dd77); color: #000; padding: 14px 36px; border-radius: 999px; font-size: 15px; font-weight: 700; cursor: pointer; transition: all 0.3s; border: none; box-shadow: 0 4px 16px rgba(0, 255, 136, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.3); letter-spacing: 0.5px;" onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 6px 20px rgba(0, 255, 136, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 16px rgba(0, 255, 136, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.3)'">确认充电</button>
+                <button class="modal-btn modal-confirm-btn" onclick="executeConfirmedOperation()" id="confirmExecuteBtn" style="background: linear-gradient(135deg, #00ff88, #00dd77); color: #00ff88; padding: 14px 36px; border-radius: 999px; font-size: 15px; font-weight: 700; cursor: pointer; transition: all 0.3s; border: none; box-shadow: 0 4px 16px rgba(0, 255, 136, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.3); letter-spacing: 0.5px;" onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 6px 20px rgba(0, 255, 136, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 16px rgba(0, 255, 136, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.3)'">确认充电</button>
             </div>
         </div>
     </div>
@@ -3378,7 +3375,8 @@
             }
             
             // Start auto switch if enabled
-            if (document.getElementById('autoSwitch').checked) {
+            const autoSwitchElement = document.getElementById('autoSwitch');
+            if (autoSwitchElement && autoSwitchElement.checked) {
                 startAutoSwitch();
             }
             
@@ -3898,7 +3896,10 @@
             }
             
             // 更新最高价格区域显示
-            document.getElementById('highestPriceRegion').textContent = region;
+            const highestPriceRegionElement = document.getElementById('highestPriceRegion') || document.getElementById('highestPriceRegionDisplay');
+            if (highestPriceRegionElement) {
+                highestPriceRegionElement.textContent = region;
+            }
         }
         
         // 更新市场数据
@@ -7778,9 +7779,12 @@
         
 
         // 主题切换按钮逻辑
-        document.getElementById('themeToggle').onclick = function() {
-            document.body.classList.toggle('theme-dark');
-            this.textContent = document.body.classList.contains('theme-dark') ? '☀️' : '🌙';
+        const themeToggle = document.getElementById('themeToggle');
+        if (themeToggle) {
+            themeToggle.onclick = function() {
+                document.body.classList.toggle('theme-dark');
+                this.textContent = document.body.classList.contains('theme-dark') ? '☀️' : '🌙';
+            }
         }
         
         // 更新动态内容的函数
