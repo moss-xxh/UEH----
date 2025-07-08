@@ -129,7 +129,7 @@
             gap: 12px;
             align-items: center;
             flex-wrap: nowrap;
-            justify-content: space-between;
+            width: 100%;
         }
         
         /* Left side filters */
@@ -137,7 +137,7 @@
             display: flex;
             gap: 12px;
             align-items: center;
-            flex: 1;
+            flex: 1 1 auto;
         }
         
         /* Right side buttons */
@@ -146,6 +146,7 @@
             gap: 8px;
             align-items: center;
             flex-shrink: 0;
+            margin-left: auto; /* 确保靠右对齐 */
         }
         
 
@@ -202,7 +203,7 @@
         }
 
         .filter-btn {
-            padding: 10px 16px;
+            padding: 10px 20px;
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 10px;
             color: rgba(255, 255, 255, 0.8);
@@ -213,6 +214,8 @@
             display: flex;
             align-items: center;
             gap: 6px;
+            min-width: 80px;
+            justify-content: center;
         }
 
         .filter-btn.primary {
