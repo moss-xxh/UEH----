@@ -2821,7 +2821,7 @@
     </div>
 
     <!-- Confirmation Modal for operation verification -->
-    <div id="confirmationModal" class="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.9); z-index: 9999; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(5px);">
+    <div id="confirmationModal" class="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.9); z-index: 9999; align-items: center; justify-content: center; backdrop-filter: blur(5px);">
         <div class="modal-content" style="background: linear-gradient(145deg, #1e1e2e 0%, #252535 100%); border: none; padding: 0; overflow: hidden; width: 480px; max-width: 90%; border-radius: 24px; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8), 0 0 1px rgba(255, 255, 255, 0.1);">
             <div class="modal-header" style="padding: 32px 36px 28px; border-bottom: 1px solid rgba(255, 255, 255, 0.08); display: flex; align-items: center; justify-content: flex-start; background: rgba(255, 255, 255, 0.02);">
                 <div class="modal-icon" style="width: 56px; height: 56px; background: linear-gradient(145deg, rgba(0, 255, 136, 0.15), rgba(0, 255, 136, 0.05)); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 20px; box-shadow: 0 4px 12px rgba(0, 255, 136, 0.15);">
@@ -3634,18 +3634,23 @@
         }
 
 
+        // 地区操作状态存储
+        const regionOperationStatus = {
+            'NSW': 'charging',
+            'QLD': 'discharging',
+            'VIC': 'charging',
+            'SA': 'discharging',
+            'TAS': 'none'
+        };
+        
         // 获取地区操作状态
         function getRegionOperationStatus(region) {
-            // 模拟根据实时数据获取地区操作状态
-            // 实际应用中应该从后端API获取
-            const regionStatus = {
-                'NSW': 'charging',
-                'QLD': 'discharging',
-                'VIC': 'charging',
-                'SA': 'discharging',
-                'TAS': 'none'  // 无状态（只显示充放电按钮）
-            };
-            return regionStatus[region] || 'none';
+            return regionOperationStatus[region] || 'none';
+        }
+        
+        // 更新地区操作状态
+        function updateRegionOperationStatus(region, status) {
+            regionOperationStatus[region] = status;
         }
 
         // 更新地区按钮状态指示器
@@ -5148,6 +5153,26 @@
             // 设置当前操作
             currentOperation = operationType;
             
+            // 更新当前地区的操作状态
+            updateRegionOperationStatus(selectedMainRegion, operationType === 'charge' ? 'charging' : 'discharging');
+            
+            // 更新地区状态指示器
+            updateRegionStatusIndicators();
+            
+            // 更新电站管理标题的状态文字
+            const statusText = document.getElementById('regionStatusText');
+            if (statusText) {
+                if (operationType === 'charge') {
+                    statusText.textContent = '充电中';
+                    statusText.style.color = '#00ff88';
+                    statusText.style.display = 'inline-block';
+                } else if (operationType === 'discharge') {
+                    statusText.textContent = '放电中';
+                    statusText.style.color = '#ffd700';
+                    statusText.style.display = 'inline-block';
+                }
+            }
+            
             // 更新按钮状态
             updateButtonsForOperation(operationType);
             
@@ -5920,6 +5945,7 @@
             const allInfoItems = modal.querySelectorAll('.modal-info-item');
             allInfoItems.forEach(item => {
                 item.style.display = 'flex';
+                item.style.flexDirection = 'column';
             });
             
             // 设置弹窗内容
@@ -6043,8 +6069,27 @@
                 }
             }
             
+            // 清除当前操作状态
+            currentOperation = null;
+            
             // 恢复充放电按钮
             updateActionButtonsToChargeDis();
+            
+            // 切换到行情页面
+            switchPanel('market');
+            
+            // 更新地区状态 - 移除当前地区的充放电标记
+            updateRegionOperationStatus(selectedMainRegion, 'none');
+            
+            // 更新地区状态指示器
+            updateRegionStatusIndicators();
+            
+            // 清除电站管理标题的状态文字
+            const statusText = document.getElementById('regionStatusText');
+            if (statusText) {
+                statusText.textContent = '';
+                statusText.style.display = 'none';
+            }
             
             // 显示停止确认消息
             showNotification('操作已停止', 'success');
