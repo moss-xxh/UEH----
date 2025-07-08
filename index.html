@@ -2503,42 +2503,74 @@
                             <div id="marketPanel" class="panel-content active">
                                 <!-- Price Cards -->
                                 <div class="market-section">
-                                    <div class="price-cards">
-                                        <div class="price-card" onclick="updateMainChart('price')">
-                                            <div class="price-card-label" data-i18n-key="currentSpotPrice">CURRENT SPOT PRICE</div>
-                                            <div class="price-card-label">($/MWh)</div>
-                                            <div class="price-card-value" id="spotPrice">$162.73</div>
-                                        </div>
-                                        <div class="price-card" onclick="updateMainChart('demand')">
-                                            <div class="price-card-label" data-i18n-key="currentDemand">CURRENT DEMAND</div>
-                                            <div class="price-card-label">(MW)</div>
-                                            <div class="price-card-value" id="currentDemand">8,344</div>
-                                        </div>
-                                        <div class="price-card" onclick="updateMainChart('forecast')">
-                                            <div class="price-card-label" data-i18n-key="forecastPrice">FORECAST PRICE</div>
-                                            <div class="price-card-label">($/MWh - NEXT 30MIN)</div>
-                                            <div class="price-card-value" id="forecastPrice">$162.73</div>
-                                        </div>
-                                        <div class="price-card" onclick="updateMainChart('forecastDemand')">
-                                            <div class="price-card-label" data-i18n-key="forecastDemand">FORECAST DEMAND</div>
-                                            <div class="price-card-label">(MW - NEXT 30MIN)</div>
-                                            <div class="price-card-value" id="forecastDemand">8,202</div>
-                                        </div>
-                                        <div class="price-card demand-gen-card">
-                                            <div class="demand-gen-row demand-row">
-                                                <div class="demand-gen-label" data-i18n-key="demand">DEMAND</div>
-                                                <div class="demand-gen-value">2,292MW</div>
+                                    <div class="price-cards" style="display: flex; gap: 20px;">
+                                        <!-- Combined card for first 4 items -->
+                                        <div class="price-card" style="flex: 1; display: flex; flex-direction: column; padding: 0; overflow: hidden; min-height: 120px;">
+                                            <div style="display: flex; height: 100%;">
+                                                <div style="flex: 1; padding: 20px 24px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer;" onclick="updateMainChart('price')">
+                                                    <div class="price-card-label" data-i18n-key="currentSpotPrice" style="font-size: 13px; font-weight: 500;">CURRENT SPOT PRICE</div>
+                                                    <div class="price-card-label" style="font-size: 11px;">($/MWh)</div>
+                                                    <div class="price-card-value" id="spotPrice" style="font-size: 28px; font-weight: 700; margin-top: 8px;">$162.73</div>
+                                                </div>
+                                                <div style="width: 1px; background: rgba(255, 255, 255, 0.1); margin: 16px 0;"></div>
+                                                <div style="flex: 1; padding: 20px 24px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer;" onclick="updateMainChart('demand')">
+                                                    <div class="price-card-label" data-i18n-key="currentDemand" style="font-size: 13px; font-weight: 500;">CURRENT DEMAND</div>
+                                                    <div class="price-card-label" style="font-size: 11px;">(MW)</div>
+                                                    <div class="price-card-value" id="currentDemand" style="font-size: 28px; font-weight: 700; margin-top: 8px;">8,344</div>
+                                                </div>
+                                                <div style="width: 1px; background: rgba(255, 255, 255, 0.1); margin: 16px 0;"></div>
+                                                <div style="flex: 1; padding: 20px 24px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer;" onclick="updateMainChart('forecast')">
+                                                    <div class="price-card-label" data-i18n-key="forecastPrice" style="font-size: 13px; font-weight: 500;">FORECAST PRICE</div>
+                                                    <div class="price-card-label" style="font-size: 11px;">($/MWh - NEXT 30MIN)</div>
+                                                    <div class="price-card-value" id="forecastPrice" style="font-size: 28px; font-weight: 700; margin-top: 8px;">$162.73</div>
+                                                </div>
+                                                <div style="width: 1px; background: rgba(255, 255, 255, 0.1); margin: 16px 0;"></div>
+                                                <div style="flex: 1; padding: 20px 24px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer;" onclick="updateMainChart('forecastDemand')">
+                                                    <div class="price-card-label" data-i18n-key="forecastDemand" style="font-size: 13px; font-weight: 500;">FORECAST DEMAND</div>
+                                                    <div class="price-card-label" style="font-size: 11px;">(MW - NEXT 30MIN)</div>
+                                                    <div class="price-card-value" id="forecastDemand" style="font-size: 28px; font-weight: 700; margin-top: 8px;">8,202</div>
+                                                </div>
                                             </div>
-                                            <div class="demand-gen-row generation-row">
-                                                <div class="demand-gen-label" data-i18n-key="generation">GENERATION</div>
-                                                <div class="demand-gen-value">2,435MW</div>
+                                        </div>
+                                        <!-- Demand vs Generation card -->
+                                        <div class="price-card demand-gen-card" style="flex: 0 0 20%; padding: 16px 12px; display: flex; flex-direction: column; min-height: 120px;">
+                                            <div style="flex: 1; display: flex; flex-direction: column; justify-content: center;">
+                                                <!-- Demand Row -->
+                                                <div style="margin-bottom: 16px;">
+                                                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+                                                        <span style="font-size: 12px; color: rgba(255, 255, 255, 0.7);" data-i18n-key="demand">需求</span>
+                                                        <span style="font-size: 15px; font-weight: 700; color: #fff;">9,692 <span style="font-size: 11px; font-weight: 500; color: rgba(255, 255, 255, 0.7);">kWh</span></span>
+                                                    </div>
+                                                    <div style="height: 16px; background: rgba(255, 255, 255, 0.1); border-radius: 3px; overflow: hidden;">
+                                                        <div style="width: 100%; height: 100%; background: rgba(0, 255, 136, 0.5); border-radius: 3px; display: flex; align-items: center; justify-content: center;">
+                                                            <span style="font-size: 12px;">👤</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- Generation Row -->
+                                                <div>
+                                                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+                                                        <span style="font-size: 12px; color: rgba(255, 255, 255, 0.7);" data-i18n-key="generation">发电</span>
+                                                        <span style="font-size: 15px; font-weight: 700; color: #fff;">8,319 <span style="font-size: 11px; font-weight: 500; color: rgba(255, 255, 255, 0.7);">kWh</span></span>
+                                                    </div>
+                                                    <div style="height: 16px; background: rgba(255, 255, 255, 0.1); border-radius: 3px; overflow: hidden; position: relative;">
+                                                        <!-- 闪电发电部分 60% -->
+                                                        <div style="width: 60%; height: 100%; background: rgba(0, 170, 255, 0.5); position: absolute; left: 0; top: 0; display: flex; align-items: center; justify-content: center;">
+                                                            <span style="font-size: 12px;">⚡</span>
+                                                        </div>
+                                                        <!-- 风力发电部分 20% -->
+                                                        <div style="width: 20%; height: 100%; background: rgba(64, 224, 208, 0.5); position: absolute; left: 60%; top: 0; display: flex; align-items: center; justify-content: center;">
+                                                            <span style="font-size: 12px;">💨</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
 
                                 <!-- Market Chart -->
-                                <div id="marketChart" style="flex: 1; min-height: 450px; height: 450px; width: 100%; margin-top: 20px; margin-bottom: 0;"></div>
+                                <div id="marketChart" style="flex: 1; min-height: 450px; height: 450px; width: 100%; margin-top: 55px; margin-bottom: 0;"></div>
 
                                 <!-- Status Bar -->
                                 <div style="margin-top: 20px; display: flex; justify-content: space-between; align-items: center;"></div>
@@ -4560,11 +4592,11 @@
                         formatter: function(params) {
                             let result = `<div style="font-weight: bold; margin-bottom: 5px;">${params[0].axisValue}</div>`;
                             params.forEach(param => {
-                                if (param.value !== null) {
+                                if (param.value !== null && param.value !== undefined) {
                                     const color = param.color;
                                     const value = param.seriesName.includes(getText('price')) || param.seriesName.includes('Price') 
-                                        ? `$${param.value.toFixed(2)}` 
-                                        : `${param.value.toFixed(0)} MW`;
+                                        ? `$${param.value.toFixed ? param.value.toFixed(2) : param.value}` 
+                                        : `${param.value.toFixed ? param.value.toFixed(0) : param.value} MW`;
                                     result += `<div>${param.marker} ${param.seriesName}: <strong>${value}</strong></div>`;
                                 }
                             });
