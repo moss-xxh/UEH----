@@ -279,6 +279,11 @@
             color: rgba(255, 255, 255, 0.7);
             padding: 10px 12px;
             gap: 4px;
+            display: none; /* 默认隐藏 */
+        }
+        
+        .filter-btn.toggle.show {
+            display: flex; /* 有额外筛选项时显示 */
         }
         
         .filter-btn.toggle:hover {
@@ -1357,6 +1362,9 @@
                 }
             });
 
+            // Initialize expand button visibility
+            initExpandButton();
+            
             // Load initial data immediately with multiple attempts
             loadFamilyCards();
             
@@ -1807,17 +1815,29 @@
             const toggleText = toggleBtn.querySelector('span:first-child');
             
             if (extraFilters.classList.contains('expanded')) {
-                // Collapse
+                // Collapse - 收起时隐藏整个按钮
                 extraFilters.classList.remove('expanded');
                 toggleBtn.classList.remove('expanded');
+                toggleBtn.classList.remove('show');
                 toggleText.setAttribute('data-i18n-key', 'family.buttons.expand');
                 toggleText.textContent = '展开';
             } else {
-                // Expand
+                // Expand - 展开时显示收起按钮
                 extraFilters.classList.add('expanded');
                 toggleBtn.classList.add('expanded');
                 toggleText.setAttribute('data-i18n-key', 'family.buttons.collapse');
                 toggleText.textContent = '收起';
+            }
+        }
+        
+        // 初始化时检查是否需要显示展开按钮
+        function initExpandButton() {
+            const toggleBtn = document.getElementById('toggleFiltersBtn');
+            const extraFilters = document.getElementById('extraFilters');
+            
+            // 如果有额外筛选内容，显示展开按钮
+            if (extraFilters && extraFilters.children.length > 0) {
+                toggleBtn.classList.add('show');
             }
         }
 
