@@ -211,6 +211,11 @@ async function handleLogin(e) {
             await simulateApiCall();
             showMessage(translations[currentLang].loginSuccess, 'success');
             
+            // Store user information
+            localStorage.setItem('userName', 'Admin User');
+            localStorage.setItem('userEmail', email);
+            localStorage.setItem('isLoggedIn', 'true');
+            
             // Redirect to index page immediately
             window.location.href = 'index.html';
         } catch (error) {
