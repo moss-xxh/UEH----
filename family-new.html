@@ -148,25 +148,13 @@
             flex-shrink: 0;
         }
         
-        /* Collapsible filters */
-        .filter-row-extra {
-            display: none;
-            gap: 12px;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-        
-        .filter-row-extra.expanded {
-            display: flex;
-        }
-        
 
         .search-input {
-            width: 220px;
-            padding: 12px 16px;
+            width: 180px;
+            padding: 10px 14px;
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
+            border-radius: 10px;
             color: var(--color-text);
             font-size: 14px;
             transition: all 0.3s;
@@ -184,7 +172,7 @@
         }
 
         .filter-select {
-            padding: 10px 16px;
+            padding: 10px 14px;
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 10px;
@@ -192,7 +180,7 @@
             font-size: 14px;
             cursor: pointer;
             transition: all 0.3s;
-            width: 220px;
+            width: 180px;
         }
 
         .filter-select:focus {
@@ -273,32 +261,6 @@
             transform: translateY(-1px);
         }
         
-        .filter-btn.toggle {
-            background: transparent;
-            border: none;
-            color: rgba(255, 255, 255, 0.7);
-            padding: 10px 12px;
-            gap: 4px;
-            display: none; /* 默认隐藏 */
-        }
-        
-        .filter-btn.toggle.show {
-            display: flex; /* 有额外筛选项时显示 */
-        }
-        
-        .filter-btn.toggle:hover {
-            background: rgba(255, 255, 255, 0.05);
-            color: #fff;
-        }
-        
-        .filter-btn.toggle .toggle-icon {
-            transition: transform 0.3s ease;
-            font-size: 12px;
-        }
-        
-        .filter-btn.toggle.expanded .toggle-icon {
-            transform: rotate(180deg);
-        }
 
         /* 查询区域内容过多时的响应式布局 */
         @media (max-width: 1400px) {
@@ -1145,6 +1107,14 @@
                             </select>
                             
                             <input type="text" class="search-input" id="deviceCodeInput" data-i18n-placeholder="family.placeholder.deviceCode" placeholder="请输入设备编码..." onkeyup="handleDeviceCodeSearch(this.value)">
+                            
+                            <select class="filter-select" id="deviceStatusFilter" onchange="handleDeviceStatusFilter(this.value)">
+                                <option value="" data-i18n-key="family.placeholder.deviceStatus">所有设备状态</option>
+                                <option value="charging" data-i18n-key="family.deviceStates.charging">充电</option>
+                                <option value="discharging" data-i18n-key="family.deviceStates.discharging">放电</option>
+                                <option value="standby" data-i18n-key="family.deviceStates.standby">待机</option>
+                                <option value="offline" data-i18n-key="family.deviceStates.offline">离线</option>
+                            </select>
                         </div>
                         
                         <div class="filter-main-right">
@@ -1154,22 +1124,7 @@
                             <button class="filter-btn secondary" onclick="resetFilters()">
                                 <span data-i18n-key="family.buttons.reset">重置</span>
                             </button>
-                            <button class="filter-btn toggle" id="toggleFiltersBtn" onclick="toggleExtraFilters()">
-                                <span data-i18n-key="family.buttons.expand">展开</span>
-                                <span class="toggle-icon">▼</span>
-                            </button>
                         </div>
-                    </div>
-                    
-                    <!-- Extra filters (collapsed by default) -->
-                    <div class="filter-row-extra" id="extraFilters">
-                        <select class="filter-select" id="deviceStatusFilter" onchange="handleDeviceStatusFilter(this.value)">
-                            <option value="" data-i18n-key="family.placeholder.deviceStatus">所有设备状态</option>
-                            <option value="charging" data-i18n-key="family.deviceStates.charging">充电</option>
-                            <option value="discharging" data-i18n-key="family.deviceStates.discharging">放电</option>
-                            <option value="standby" data-i18n-key="family.deviceStates.standby">待机</option>
-                            <option value="offline" data-i18n-key="family.deviceStates.offline">离线</option>
-                        </select>
                     </div>
                 </div>
             </div>
@@ -1362,9 +1317,6 @@
                 }
             });
 
-            // Initialize expand button visibility
-            initExpandButton();
-            
             // Load initial data immediately with multiple attempts
             loadFamilyCards();
             
@@ -1808,38 +1760,6 @@
             console.log('Data refreshed at:', timestamp);
         }
         
-        function toggleExtraFilters() {
-            const extraFilters = document.getElementById('extraFilters');
-            const toggleBtn = document.getElementById('toggleFiltersBtn');
-            const toggleIcon = toggleBtn.querySelector('.toggle-icon');
-            const toggleText = toggleBtn.querySelector('span:first-child');
-            
-            if (extraFilters.classList.contains('expanded')) {
-                // Collapse - 收起时隐藏整个按钮
-                extraFilters.classList.remove('expanded');
-                toggleBtn.classList.remove('expanded');
-                toggleBtn.classList.remove('show');
-                toggleText.setAttribute('data-i18n-key', 'family.buttons.expand');
-                toggleText.textContent = '展开';
-            } else {
-                // Expand - 展开时显示收起按钮
-                extraFilters.classList.add('expanded');
-                toggleBtn.classList.add('expanded');
-                toggleText.setAttribute('data-i18n-key', 'family.buttons.collapse');
-                toggleText.textContent = '收起';
-            }
-        }
-        
-        // 初始化时检查是否需要显示展开按钮
-        function initExpandButton() {
-            const toggleBtn = document.getElementById('toggleFiltersBtn');
-            const extraFilters = document.getElementById('extraFilters');
-            
-            // 如果有额外筛选内容，显示展开按钮
-            if (extraFilters && extraFilters.children.length > 0) {
-                toggleBtn.classList.add('show');
-            }
-        }
 
         function resetFilters() {
             document.getElementById('regionFilter').value = '';
