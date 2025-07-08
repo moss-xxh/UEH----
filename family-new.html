@@ -129,13 +129,23 @@
             gap: 12px;
             align-items: center;
             flex-wrap: nowrap;
+            justify-content: space-between;
         }
         
-        /* Second row - action buttons */
-        .filter-row-actions {
+        /* Left side filters */
+        .filter-main-left {
             display: flex;
             gap: 12px;
             align-items: center;
+            flex: 1;
+        }
+        
+        /* Right side buttons */
+        .filter-main-right {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            flex-shrink: 0;
         }
         
         /* Collapsible filters */
@@ -144,13 +154,17 @@
             gap: 12px;
             align-items: center;
             flex-wrap: wrap;
-            padding-top: 16px;
-            margin-top: 16px;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
         }
         
         .filter-row-extra.expanded {
             display: flex;
+        }
+        
+        /* Action buttons row */
+        .filter-row-actions {
+            display: flex;
+            gap: 12px;
+            align-items: center;
         }
 
         .search-input {
@@ -266,18 +280,21 @@
         }
         
         .filter-btn.toggle {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            color: rgba(255, 255, 255, 0.6);
+            background: transparent;
+            border: none;
+            color: rgba(255, 255, 255, 0.7);
+            padding: 10px 12px;
+            gap: 4px;
         }
         
         .filter-btn.toggle:hover {
             background: rgba(255, 255, 255, 0.05);
-            color: rgba(255, 255, 255, 0.8);
+            color: #fff;
         }
         
         .filter-btn.toggle .toggle-icon {
             transition: transform 0.3s ease;
+            font-size: 12px;
         }
         
         .filter-btn.toggle.expanded .toggle-icon {
@@ -286,33 +303,42 @@
 
         /* 查询区域内容过多时的响应式布局 */
         @media (max-width: 1400px) {
-            .filter-row-main {
+            .filter-main-left {
                 flex-wrap: wrap;
                 gap: 10px;
             }
             
-            .filter-row-main .filter-select,
-            .filter-row-main .search-input {
-                flex: 1 1 calc(25% - 10px);
+            .filter-main-left .filter-select,
+            .filter-main-left .search-input {
+                flex: 1 1 calc(50% - 10px);
                 min-width: 180px;
-            }
-            
-            .filter-row-main .filter-btn {
-                flex: 0 0 auto;
             }
         }
         
         @media (max-width: 1000px) {
-            .filter-row-main .filter-select,
-            .filter-row-main .search-input {
-                flex: 1 1 calc(50% - 10px);
+            .filter-row-main {
+                flex-direction: column;
+                gap: 16px;
+            }
+            
+            .filter-main-left {
+                width: 100%;
+            }
+            
+            .filter-main-right {
+                width: 100%;
+                justify-content: flex-end;
             }
         }
         
         @media (max-width: 600px) {
-            .filter-row-main .filter-select,
-            .filter-row-main .search-input {
+            .filter-main-left .filter-select,
+            .filter-main-left .search-input {
                 flex: 1 1 100%;
+            }
+            
+            .filter-main-right {
+                justify-content: center;
             }
             
             .filter-row-actions {
@@ -1078,54 +1104,44 @@
                 <div class="filter-rows-container">
                     <!-- First Row: Main filters -->
                     <div class="filter-row-main">
-                        <!-- Region Select as First Filter -->
-                        <select class="filter-select" id="regionFilter" onchange="handleRegionFilter(this.value)">
-                            <option value="" data-i18n-key="family.placeholder.allRegions">所有地区</option>
-                            <option value="NSW">NSW - 新南威尔士州</option>
-                            <option value="VIC">VIC - 维多利亚州</option>
-                            <option value="QLD">QLD - 昆士兰州</option>
-                            <option value="SA">SA - 南澳大利亚州</option>
-                            <option value="WA">WA - 西澳大利亚州</option>
-                            <option value="TAS">TAS - 塔斯马尼亚州</option>
-                            <option value="NT">NT - 北领地</option>
-                            <option value="ACT">ACT - 首都领地</option>
-                        </select>
+                        <div class="filter-main-left">
+                            <!-- Region Select as First Filter -->
+                            <select class="filter-select" id="regionFilter" onchange="handleRegionFilter(this.value)">
+                                <option value="" data-i18n-key="family.placeholder.allRegions">所有地区</option>
+                                <option value="NSW">NSW - 新南威尔士州</option>
+                                <option value="VIC">VIC - 维多利亚州</option>
+                                <option value="QLD">QLD - 昆士兰州</option>
+                                <option value="SA">SA - 南澳大利亚州</option>
+                                <option value="WA">WA - 西澳大利亚州</option>
+                                <option value="TAS">TAS - 塔斯马尼亚州</option>
+                                <option value="NT">NT - 北领地</option>
+                                <option value="ACT">ACT - 首都领地</option>
+                            </select>
+                            
+                            <input type="text" class="search-input" id="searchInput" data-i18n-placeholder="family.placeholder.userName" placeholder="请输入用户名称..." onkeyup="handleSearch(this.value)">
+                            
+                            <select class="filter-select" id="activityFilter" onchange="handleActivityFilter(this.value)">
+                                <option value="" data-i18n-key="family.placeholder.allActivity">所有活跃度</option>
+                                <option value="active" data-i18n-key="family.activityStatus.active">活跃</option>
+                                <option value="inactive" data-i18n-key="family.activityStatus.inactive">非活跃</option>
+                                <option value="not-participating" data-i18n-key="family.activityStatus.notParticipating">未参与</option>
+                            </select>
+                            
+                            <input type="text" class="search-input" id="deviceCodeInput" data-i18n-placeholder="family.placeholder.deviceCode" placeholder="请输入设备编码..." onkeyup="handleDeviceCodeSearch(this.value)">
+                        </div>
                         
-                        <input type="text" class="search-input" id="searchInput" data-i18n-placeholder="family.placeholder.userName" placeholder="请输入用户名称..." onkeyup="handleSearch(this.value)">
-                        
-                        <select class="filter-select" id="activityFilter" onchange="handleActivityFilter(this.value)">
-                            <option value="" data-i18n-key="family.placeholder.allActivity">所有活跃度</option>
-                            <option value="active" data-i18n-key="family.activityStatus.active">活跃</option>
-                            <option value="inactive" data-i18n-key="family.activityStatus.inactive">非活跃</option>
-                            <option value="not-participating" data-i18n-key="family.activityStatus.notParticipating">未参与</option>
-                        </select>
-                        
-                        <input type="text" class="search-input" id="deviceCodeInput" data-i18n-placeholder="family.placeholder.deviceCode" placeholder="请输入设备编码..." onkeyup="handleDeviceCodeSearch(this.value)">
-                        
-                        <button class="filter-btn primary" onclick="applyFilters()">
-                            <span>🔍</span>
-                            <span data-i18n-key="family.buttons.search">查询</span>
-                        </button>
-                        <button class="filter-btn secondary" onclick="resetFilters()">
-                            <span>↺</span>
-                            <span data-i18n-key="family.buttons.reset">重置</span>
-                        </button>
-                        <button class="filter-btn toggle" id="toggleFiltersBtn" onclick="toggleExtraFilters()">
-                            <span class="toggle-icon">▼</span>
-                            <span data-i18n-key="family.buttons.expand">展开</span>
-                        </button>
-                    </div>
-                    
-                    <!-- Second Row: Action buttons -->
-                    <div class="filter-row-actions">
-                        <button class="filter-btn export" onclick="exportData()">
-                            <span>📥</span>
-                            <span data-i18n-key="family.buttons.export">导出</span>
-                        </button>
-                        <button class="filter-btn refresh" onclick="refreshData()">
-                            <span>🔄</span>
-                            <span data-i18n-key="family.buttons.refresh">刷新</span>
-                        </button>
+                        <div class="filter-main-right">
+                            <button class="filter-btn primary" onclick="applyFilters()">
+                                <span data-i18n-key="family.buttons.search">查询</span>
+                            </button>
+                            <button class="filter-btn secondary" onclick="resetFilters()">
+                                <span data-i18n-key="family.buttons.reset">重置</span>
+                            </button>
+                            <button class="filter-btn toggle" id="toggleFiltersBtn" onclick="toggleExtraFilters()">
+                                <span data-i18n-key="family.buttons.expand">展开</span>
+                                <span class="toggle-icon">▼</span>
+                            </button>
+                        </div>
                     </div>
                     
                     <!-- Extra filters (collapsed by default) -->
@@ -1137,6 +1153,18 @@
                             <option value="standby" data-i18n-key="family.deviceStates.standby">待机</option>
                             <option value="offline" data-i18n-key="family.deviceStates.offline">离线</option>
                         </select>
+                    </div>
+                    
+                    <!-- Action buttons row -->
+                    <div class="filter-row-actions">
+                        <button class="filter-btn export" onclick="exportData()">
+                            <span>📥</span>
+                            <span data-i18n-key="family.buttons.export">导出</span>
+                        </button>
+                        <button class="filter-btn refresh" onclick="refreshData()">
+                            <span>🔄</span>
+                            <span data-i18n-key="family.buttons.refresh">刷新</span>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -1761,7 +1789,7 @@
             const extraFilters = document.getElementById('extraFilters');
             const toggleBtn = document.getElementById('toggleFiltersBtn');
             const toggleIcon = toggleBtn.querySelector('.toggle-icon');
-            const toggleText = toggleBtn.querySelector('span:last-child');
+            const toggleText = toggleBtn.querySelector('span:first-child');
             
             if (extraFilters.classList.contains('expanded')) {
                 // Collapse

@@ -707,9 +707,9 @@ class I18n {
                         table: "📋 表格视图"
                     },
                     buttons: {
-                        search: "🔍 查询",
-                        reset: "🔄 重置", 
-                        export: "📥 导出",
+                        search: "查询",
+                        reset: "重置", 
+                        export: "导出",
                         refresh: "刷新",
                         expand: "展开",
                         collapse: "收起",
