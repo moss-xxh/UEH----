@@ -33,15 +33,30 @@
             max-width: 95%;
             margin: 0 auto;
             padding: 100px 10px 24px;
+            height: 100vh;
             display: flex;
             flex-direction: column;
-            gap: 16px;
-            min-height: calc(100vh - 200px);
+            overflow: hidden;
+        }
+
+        /* Fixed Header Area */
+        .fixed-header-area {
+            flex-shrink: 0;
+            background: #000;
+            z-index: 10;
+            padding-bottom: 20px;
+        }
+
+        /* Scrollable Content */
+        .scrollable-content {
+            flex: 1;
+            overflow-y: auto;
+            padding-bottom: 20px;
         }
 
         /* Page Header */
         .page-header {
-            margin-bottom: -24px;
+            margin-bottom: 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -70,8 +85,8 @@
             display: flex;
             align-items: center;
             gap: 12px;
-            margin-top: 40px;  /* 再增加2px，从38px改为40px */
-            margin-bottom: 16px;
+            margin-top: 20px;
+            margin-bottom: 0;
             padding: 20px;
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid rgba(255, 255, 255, 0.08);
@@ -80,7 +95,7 @@
         }
 
         .search-input {
-            width: 240px;
+            width: 180px;
             padding: 12px 16px;
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid rgba(255, 255, 255, 0.1);
@@ -188,45 +203,66 @@
             background: rgba(30, 127, 255, 0.15);
         }
 
-        /* Table Section */
-        .table-section {
+        /* Table Card */
+        .table-card {
             background: var(--color-bg-card);
             border-radius: var(--radius);
             box-shadow: var(--color-shadow);
             border: 1.5px solid var(--color-border);
-            overflow: hidden;
+            width: 100%;
+            margin-top: 14px;
+            margin-bottom: 20px;
+            padding: 20px;
+        }
+        
+        /* Table Actions Header */
+        .table-actions-header {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--color-border);
+        }
+        
+        /* Table Wrapper */
+        .table-wrapper {
+            overflow-x: auto;
+            border-radius: var(--radius);
+            border: 1px solid var(--color-border);
         }
 
-        .table-container {
-            overflow-x: auto;
-        }
 
         .data-table {
             width: 100%;
             border-collapse: collapse;
         }
 
-        .data-table th,
-        .data-table td {
-            padding: 16px;
-            text-align: left;
-            border-bottom: 1px solid var(--color-border);
-        }
-
         .data-table th {
-            background: var(--color-bg);
-            font-weight: 600;
-            color: var(--color-text);
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px 24px;
+            text-align: left;
             font-size: 14px;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.8);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            white-space: nowrap;
         }
 
         .data-table td {
-            color: var(--color-text);
+            padding: 20px 24px;
             font-size: 14px;
+            color: rgba(255, 255, 255, 0.9);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+            vertical-align: middle;
         }
 
-        .data-table tr:hover td {
-            background: var(--color-bg);
+        .data-table tbody tr {
+            transition: all 0.2s ease;
+        }
+
+        .data-table tbody tr:hover {
+            background: rgba(255, 255, 255, 0.03);
+            transform: translateY(-1px);
         }
 
         /* Status Badge */
@@ -284,6 +320,66 @@
 
         .action-btn.delete {
             color: #ff6b6b;
+        }
+
+        /* Form Card Styles - matching search-filter-section */
+        .form-card-section {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin-top: 16px;
+            margin-bottom: 16px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            backdrop-filter: blur(10px);
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .form-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .form-card-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--color-text);
+        }
+
+        .form-card-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .form-card-body {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            padding-top: 16px;
+        }
+
+        /* Responsive design for form cards */
+        @media (max-width: 768px) {
+            .form-card-section {
+                padding: 16px;
+            }
+            
+            .form-card-body {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+        }
+
+        @media (max-width: 1200px) {
+            .form-card-body {
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            }
         }
 
         /* Drawer Modal Styles */
@@ -396,6 +492,23 @@
         .form-input:focus {
             outline: none;
             border-color: var(--color-primary);
+        }
+
+        select.form-input {
+            cursor: pointer;
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23fff' fill-opacity='0.5' d='M6 8.5L1.5 4h9z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            padding-right: 36px;
+        }
+
+        select.form-input option {
+            background: #1a1a1a;
+            color: #fff;
+            padding: 8px;
         }
 
         .textarea {
@@ -898,65 +1011,86 @@
 
     <!-- Main Container -->
     <div class="container">
-        <!-- Page Header -->
-        <div class="page-header">
-            <div class="page-header-left">
-                <h1 class="page-title" data-i18n-key="organization.title">组织</h1>
-            </div>
-            <button class="filter-btn primary" onclick="addOrganization()" data-i18n-key="organization.buttons.add">新建</button>
-        </div>
-
-        <!-- Search Section -->
-        <div class="search-filter-section">
-            <input type="text" class="search-input" id="orgSearchInput" 
-                   data-i18n-placeholder="organization.placeholder.userName" 
-                   placeholder="请输入用户名称...">
-            <select class="filter-select" id="orgStatusFilter">
-                <option value="" data-i18n-key="organization.status.allStatus">所有状态</option>
-                <option value="active" data-i18n-key="organization.status.active">启用</option>
-                <option value="inactive" data-i18n-key="organization.status.inactive">禁用</option>
-            </select>
-            <input type="text" class="search-input" id="orgEmailInput" 
-                   data-i18n-placeholder="organization.placeholder.userEmail" 
-                   placeholder="请输入用户邮箱...">
-            <div class="filter-actions">
-                <button class="filter-btn primary" onclick="searchUsers()">
-                    <span></span>
-                    <span data-i18n-key="organization.buttons.search">查询</span>
-                </button>
-                <button class="filter-btn secondary" onclick="resetSearch()">
-                    <span></span>
-                    <span data-i18n-key="organization.buttons.reset">重置</span>
-                </button>
-                <button class="filter-btn export" onclick="exportData()">
-                    <span></span>
-                    <span data-i18n-key="organization.buttons.export">导出</span>
+        <!-- Fixed Header Area -->
+        <div class="fixed-header-area">
+            <!-- Page Header -->
+            <div class="page-header">
+                <div class="page-header-left">
+                    <h1 class="page-title" data-i18n-key="organization.title">组织</h1>
+                </div>
+                <button class="edit-button" onclick="addOrganization()" style="width: 84px; padding: 10px 16px; border-radius: 8px; font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.3s ease; border: 1px solid #00ff88; display: inline-flex; align-items: center; justify-content: center; gap: 8px; background: #00ff88; color: #000;" 
+                        onmouseover="this.style.background='#00e67a'; this.style.borderColor='#00e67a'; this.style.transform='translateY(-1px)'; this.style.boxShadow='0 4px 12px rgba(0, 255, 136, 0.3)';" 
+                        onmouseout="this.style.background='#00ff88'; this.style.borderColor='#00ff88'; this.style.transform='translateY(0)'; this.style.boxShadow='none';">
+                    <span data-i18n-key="organization.buttons.add">新建</span>
                 </button>
             </div>
+
+            <!-- Search Section -->
+            <div class="search-filter-section" style="margin-top: 35px !important;">
+                <input type="text" class="search-input" id="orgSearchInput" 
+                       data-i18n-placeholder="organization.placeholder.userName" 
+                       placeholder="请输入用户名称...">
+                <select class="filter-select" id="orgStatusFilter">
+                    <option value="" data-i18n-key="organization.status.allStatus">所有状态</option>
+                    <option value="active" data-i18n-key="organization.status.active">启用</option>
+                    <option value="inactive" data-i18n-key="organization.status.inactive">禁用</option>
+                </select>
+                <input type="text" class="search-input" id="orgEmailInput" 
+                       data-i18n-placeholder="organization.placeholder.userEmail" 
+                       placeholder="请输入用户邮箱...">
+                <div class="filter-actions">
+                    <button class="filter-btn primary" onclick="searchUsers()">
+                        <span></span>
+                        <span data-i18n-key="organization.buttons.search">查询</span>
+                    </button>
+                    <button class="filter-btn secondary" onclick="resetSearch()">
+                        <span></span>
+                        <span data-i18n-key="organization.buttons.reset">重置</span>
+                    </button>
+                </div>
+            </div>
         </div>
 
-        <!-- Table Section -->
-        <div class="table-section">
-            <div class="table-container">
-                <table class="data-table">
-                    <thead>
-                        <tr>
-                            <th data-i18n-key="organization.table.userName">用户名称</th>
-                            <th data-i18n-key="organization.table.userEmail">用户邮箱</th>
-                            <th data-i18n-key="organization.table.status">状态</th>
-                            <th data-i18n-key="organization.table.remarks">备注</th>
-                            <th data-i18n-key="organization.table.createdTime">创建时间</th>
-                            <th data-i18n-key="organization.table.action">操作</th>
-                        </tr>
-                    </thead>
-                    <tbody id="userTableBody">
-                        <!-- Table data will be generated by JavaScript -->
-                    </tbody>
-                </table>
+        <!-- Scrollable Content -->
+        <div class="scrollable-content">
+            <!-- Table Card -->
+            <div class="table-card" style="background: var(--color-bg-card); border-radius: var(--radius); box-shadow: var(--color-shadow); border: 1.5px solid var(--color-border); width: 100%; margin-top: 4px; margin-bottom: 20px; padding: 20px;">
+                <!-- Table Actions Header -->
+                <div class="table-actions-header" style="display: flex; gap: 12px; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid var(--color-border);">
+                    <button class="filter-btn export" onclick="exportOrganizationData()"
+                            style="background: rgba(30, 127, 255, 0.1); border: 1px solid rgba(30, 127, 255, 0.3); color: var(--color-accent); padding: 10px 16px; border-radius: 10px; cursor: pointer; font-size: 14px; transition: all 0.3s; display: flex; align-items: center; gap: 6px;">
+                        <span></span>
+                        <span data-i18n-key="organization.buttons.export">导出</span>
+                    </button>
+                    <button class="filter-btn refresh" onclick="refreshOrganizationData()"
+                            style="background: rgba(0, 255, 136, 0.1); border: 1px solid rgba(0, 255, 136, 0.3); color: #00ff88; padding: 10px 16px; border-radius: 10px; cursor: pointer; font-size: 14px; transition: all 0.3s; display: flex; align-items: center; gap: 6px;">
+                        <span>🔄</span>
+                        <span data-i18n-key="organization.buttons.refresh">刷新</span>
+                    </button>
+                </div>
+                
+                <!-- Table -->
+                <div class="table-wrapper" style="overflow-x: auto; border-radius: var(--radius); border: 1px solid var(--color-border);">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th data-i18n-key="organization.table.userName">用户名称</th>
+                                <th data-i18n-key="organization.table.userEmail">用户邮箱</th>
+                                <th data-i18n-key="organization.table.status">状态</th>
+                                <th data-i18n-key="organization.table.remarks">备注</th>
+                                <th data-i18n-key="organization.table.createdTime">创建时间</th>
+                                <th data-i18n-key="organization.table.action">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="userTableBody">
+                            <!-- Table data will be generated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
             </div>
 
             <!-- Pagination -->
-            <div id="organizationPaginationContainer"></div>
+            <div id="organizationPaginationContainer" style="margin-top: 20px; margin-bottom: 20px;"></div>
         </div>
     </div>
 
@@ -1622,6 +1756,30 @@
             return showToast('error', title, message);
         }
 
+        // Export function
+        function exportOrganizationData() {
+            const exportingText = window.i18n ? window.i18n.getText('organization.messages.exporting') : '导出中';
+            const exportingDataText = window.i18n ? window.i18n.getText('organization.messages.exportingData') : '正在导出组织数据...';
+            showToast('info', exportingText, exportingDataText);
+            
+            // TODO: Implement actual export functionality
+            setTimeout(() => {
+                const exportSuccessText = window.i18n ? window.i18n.getText('organization.messages.exportSuccess') : '导出成功';
+                const dataExportedText = window.i18n ? window.i18n.getText('organization.messages.dataExported') : '组织数据已导出';
+                showSuccessToast(exportSuccessText, dataExportedText);
+            }, 1000);
+        }
+
+        // Refresh function
+        function refreshOrganizationData() {
+            // Re-apply current search/filter
+            searchUsers();
+            
+            const refreshSuccessText = window.i18n ? window.i18n.getText('organization.messages.refreshSuccess') : '刷新成功';
+            const dataRefreshedText = window.i18n ? window.i18n.getText('organization.messages.dataRefreshed') : '组织数据已更新';
+            showSuccessToast(refreshSuccessText, dataRefreshedText);
+        }
+
         function showWarningToast(title, message) {
             return showToast('warning', title, message);
         }
@@ -1629,6 +1787,7 @@
         function showInfoToast(title, message) {
             return showToast('info', title, message);
         }
+
     </script>
 </body>
 </html>

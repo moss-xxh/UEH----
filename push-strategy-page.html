@@ -11,10 +11,12 @@
     <script src="components/simple-message-icon.js"></script>
     <link rel="stylesheet" href="components/header-nav.css">
     <link rel="stylesheet" href="components/standard-layout.css">
+    <link rel="stylesheet" href="components/user-dropdown.css">
     <script src="components/header-nav.js"></script>
     <script src="components/user-menu-link.js"></script>
     <script src="components/user-dropdown-simple-new.js"></script>
     <style>
+        /* 基础样式 */
         :root {
             --color-bg: #f7f8fa;
             --color-bg-card: #fff;
@@ -26,6 +28,7 @@
             --color-shadow: 0 2px 8px rgba(0,0,0,0.06);
             --radius: 12px;
         }
+
         body.theme-dark {
             --color-bg: #000;
             --color-bg-card: rgba(255, 255, 255, 0.03);
@@ -36,6 +39,7 @@
             --color-border: rgba(255, 255, 255, 0.08);
             --color-shadow: 0 2px 8px rgba(0,0,0,0.32);
         }
+
         html, body {
             background: #000 !important;
             width: 100vw;
@@ -46,354 +50,82 @@
             color: var(--color-text);
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }
+
         .container {
             background: var(--color-bg);
-            max-width: 1200px;
+            width: 100%;
+            max-width: 95%;
             min-height: 100vh;
             margin: 0 auto;
             box-sizing: border-box;
             padding: 80px 24px 40px;
         }
-        .card, .glass, .stat-card, .chart-container, .table-container {
-            background: var(--color-bg-card);
-            color: var(--color-text);
-            border-radius: var(--radius);
-            box-shadow: var(--color-shadow);
-            border: 1.5px solid var(--color-border);
-            transition: background 0.3s, color 0.3s, border 0.3s;
-        }
-        .btn, .export-btn, .search-btn {
-            background: var(--color-bg-card);
-            color: var(--color-text);
-            border: 1.5px solid var(--color-border);
-            border-radius: 8px;
-            transition: background 0.3s, color 0.3s, border 0.3s;
-        }
-        .btn-primary {
-            background: #00ff88;
-            border-color: #00ff88;
-            color: #000;
-        }
-        .btn-primary:hover {
-            filter: brightness(1.1);
-        }
-        .btn-secondary {
-            background: transparent;
-            color: var(--color-text-secondary);
-        }
-        .btn-secondary:hover {
-            background: var(--color-border);
-            color: var(--color-text);
-        }
-        .data-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        
-        .data-table td {
-            padding: 16px;
-            text-align: left;
-            border-bottom: 1px solid var(--color-border);
-        }
 
-        .data-table th {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 20px 24px;
-            text-align: left;
-            font-size: 14px;
-            font-weight: 500;
-            color: rgba(255, 255, 255, 0.8);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            white-space: nowrap;
-        }
-
-        .data-table td {
-            color: var(--color-text);
-            font-size: 14px;
-        }
-
-        .data-table tr:hover td {
-            background: var(--color-bg);
-        }
-        .data-table .btn {
-            padding: 6px 12px;
-            font-size: 13px;
-            margin-right: 8px;
-        }
-        .data-table .btn:last-child {
-            margin-right: 0;
-        }
-        
-        /* Filter Buttons - From family page */
-        .filter-btn {
-            padding: 10px 16px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            color: rgba(255, 255, 255, 0.8);
-            cursor: pointer;
-            font-size: 14px;
-            transition: all 0.3s;
-            white-space: nowrap;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .filter-btn.primary {
-            background: #00ff88;
-            border-color: #00ff88;
-            color: #000;
-            font-weight: 500;
-        }
-
-        .filter-btn.secondary {
-            background: rgba(255, 255, 255, 0.05);
-        }
-
-        .filter-btn.export {
-            background: rgba(30, 127, 255, 0.1);
-            border: 1px solid rgba(30, 127, 255, 0.3);
-            color: var(--color-accent);
-        }
-
-        .filter-btn.primary:hover {
-            background: #00e67a;
-            border-color: #00e67a;
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(0, 255, 136, 0.3);
-        }
-
-        .filter-btn.secondary:hover {
-            background: rgba(255, 255, 255, 0.1);
-            border-color: rgba(255, 255, 255, 0.2);
-            color: #fff;
-        }
-
-        .filter-btn.export:hover {
-            background: rgba(30, 127, 255, 0.15);
-        }
-
-        .filter-btn.refresh {
-            background: rgba(0, 255, 136, 0.1);
-            border: 1px solid rgba(0, 255, 136, 0.3);
-            color: #00ff88;
-        }
-
-        .filter-btn.refresh:hover {
-            background: rgba(0, 255, 136, 0.15);
-            border-color: rgba(0, 255, 136, 0.4);
-            transform: translateY(-1px);
-        }
-
-        /* Action Buttons - From family page */
-        .action-buttons {
-            display: flex;
-            gap: 12px;
-        }
-
-        .action-btn {
-            padding: 4px 12px;
-            border: none;
-            background: none;
-            font-size: 14px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            text-decoration: none;
-        }
-
-        .action-btn:hover {
-            opacity: 0.8;
-        }
-
-        .action-btn.edit {
-            color: #00ff88;
-        }
-
-        .action-btn.delete {
-            color: #ff6b6b;
-        }
-        .table-header {
-            border-bottom: 1px solid var(--color-border);
-        }
-        .page-title {
-            font-size: 48px;
-            font-weight: 500;
-            color: var(--color-text);
-            margin: 0;
-            letter-spacing: -2px;
-            background: none;
-            -webkit-text-fill-color: unset;
-        }
-        .header {
-            background: var(--color-bg);
-            color: var(--color-text);
-            transition: background 0.3s, color 0.3s;
-        }
-        .header .header-right {
-            display: flex;
-            align-items: center;
-            gap: 24px;
-            min-width: 160px;
-            flex-shrink: 0;
-            position: relative;
-            z-index: 10;
-        }
-        .theme-toggle-btn {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: var(--color-bg-card);
-            color: var(--color-text);
-            border: 1.5px solid var(--color-border);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-            cursor: pointer;
-            transition: background 0.3s, color 0.3s, border 0.3s;
-            box-shadow: var(--color-shadow);
-            outline: none;
-        }
-        .theme-toggle-btn:hover, .theme-toggle-btn:focus {
-            background: var(--color-border);
-            color: var(--color-primary);
-        }
-        .user-avatar {
-            background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
-            color: #fff;
-        }
-        * {
-            transition: background 0.3s, color 0.3s, border 0.3s;
-        }
-
-        /* Glass morphism effects */
-        .glass {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-        }
-
-        /* Main Container */
-        .container {
-            max-width: 95%;
-            margin: 0 auto;
-            padding: 100px 10px 40px;
-            min-height: calc(100vh - 200px);
-        }
-
-        /* Page Header */
+        /* 页面标题 */
         .page-header {
+            margin-bottom: 32px;
+            padding-top: 25px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: -24px;
-            padding: 24px 0;
-            margin-top: -20px; /* 向上移动20px */
         }
 
-        .page-header + .search-filter-section {
-            margin-top: 0;
+        .page-title {
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--color-text);
+            margin: 0;
+            letter-spacing: -1px;
+            background: none;
+            -webkit-text-fill-color: unset;
         }
 
-        .search-filter-section {
-            background: var(--color-bg-card);
-            border-radius: var(--radius);
-            box-shadow: var(--color-shadow);
-            border: 1.5px solid var(--color-border);
-            padding: 20px;
-            margin-bottom: 36px;
-        }
-
-        .search-filter-section + .card,
-        .search-filter-section + .table-container {
-            margin-top: 0;
-        }
-
-        .page-actions {
-            display: flex;
-            gap: 16px;
-        }
-
-        .btn {
-            padding: 10px 16px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
+        /* 编辑按钮样式 */
+        .edit-button {
+            padding: 10px 24px;
+            border-radius: 8px;
             font-size: 14px;
             font-weight: 500;
             cursor: pointer;
             transition: all 0.3s ease;
-            text-decoration: none;
+            border: 1px solid transparent;
             display: inline-flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
+            background: #00ff88;
+            color: #000;
+            border-color: #00ff88;
         }
 
-        .btn-primary:hover {
+        .edit-button:hover {
             background: #00e67a;
             border-color: #00e67a;
             transform: translateY(-1px);
             box-shadow: 0 4px 12px rgba(0, 255, 136, 0.3);
         }
 
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.1);
-            transform: translateY(-2px);
+        /* 策略内容区域 */
+        .strategy-content {
+            margin-top: 32px;
         }
 
-        /* Table Card - From family page */
-        .table-card {
-            background: var(--color-bg-card);
-            border-radius: var(--radius);
-            box-shadow: var(--color-shadow);
-            border: 1.5px solid var(--color-border);
-            width: 100%;
-            margin-bottom: 20px;
-            padding: 20px;
-        }
-        
-        /* Table Actions Header */
-        .table-actions-header {
-            display: flex;
-            gap: 12px;
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid var(--color-border);
-        }
-        
-        /* Table Wrapper */
-        .table-wrapper {
-            overflow-x: auto;
-            border-radius: var(--radius);
-            border: 1px solid var(--color-border);
+        /* 表单样式 */
+        .form-section {
+            margin-bottom: 32px;
         }
 
-        /* Strategy Table Container */
-        .strategy-table-container {
-            margin-top: 50px;  /* 上移10px，从60px改为50px */
+        .form-section:last-child {
+            margin-bottom: 0;
         }
-
-        /* Strategy Form */
-        .strategy-form {
-            margin-top: 18px;  /* 上移10px，从28px改为18px */
-        }
-
 
         .section-title {
             font-size: 16px;
             font-weight: 500;
             color: var(--color-text);
-            margin-bottom: 12px;
+            margin-bottom: 8px;
             display: flex;
             align-items: center;
             gap: 8px;
-        }
-        
-        .drawer-content .section-title {
-            color: rgba(255, 255, 255, 0.9);
-            font-size: 15px;
-            margin-bottom: 12px;
         }
 
         .required {
@@ -404,36 +136,20 @@
         .section-description {
             font-size: 13px;
             color: var(--color-text-secondary);
-            margin-bottom: 16px;
-            line-height: 1.5;
-        }
-        
-        .drawer-content .section-description {
-            color: rgba(255, 255, 255, 0.6);
-            font-size: 12px;
             margin-bottom: 20px;
-        }
-        
-        /* Section header inline layout */
-        .section-header {
-            display: flex;
-            align-items: baseline;
-            gap: 12px;
-            flex-wrap: wrap;
-            margin-bottom: 16px;
-        }
-        
-        .section-header .section-title {
-            margin-bottom: 0;
-        }
-        
-        .section-header .section-description {
-            margin-bottom: 0;
-            flex: 1;
+            line-height: 1.5;
         }
 
         .form-group {
             margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 14px;
+            color: var(--color-text);
+            margin-bottom: 8px;
+            font-weight: 500;
         }
 
         .input-group {
@@ -471,11 +187,68 @@
             box-shadow: 0 0 0 3px rgba(0, 255, 136, 0.1);
         }
 
-        .form-input::placeholder {
-            color: var(--color-text-secondary);
+        /* 地区价格表格 */
+        .region-table-wrapper {
+            overflow-x: auto;
+            border-radius: var(--radius);
+            border: 1px solid var(--color-border);
+            margin-bottom: 24px;
         }
 
-        /* Counter Input */
+        .region-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .region-table th {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 16px 20px;
+            text-align: left;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--color-text);
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .region-table td {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--color-border);
+            color: var(--color-text);
+            font-size: 14px;
+        }
+
+        .region-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .region-table tr:hover {
+            background: var(--color-bg);
+        }
+
+        .region-input {
+            background: var(--color-bg);
+            border: 1px solid var(--color-border);
+            border-radius: 6px;
+            padding: 8px 12px;
+            color: var(--color-text);
+            font-size: 14px;
+            width: 120px;
+            transition: all 0.3s ease;
+        }
+
+        .region-input:focus {
+            outline: none;
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 2px rgba(0, 255, 136, 0.1);
+        }
+
+        .region-input:disabled {
+            background: transparent;
+            cursor: not-allowed;
+            opacity: 0.8;
+        }
+
+        /* 频率控制 */
         .counter-input {
             display: flex;
             align-items: center;
@@ -524,17 +297,22 @@
             outline: none;
         }
 
+        .counter-value:disabled {
+            background: transparent;
+            cursor: not-allowed;
+            opacity: 0.8;
+        }
+
         .counter-unit {
             padding: 0 16px;
             color: var(--color-text-secondary);
             font-size: 14px;
         }
 
-        /* Checkbox Group */
+        /* 复选框 */
         .checkbox-group {
             display: flex;
             gap: 40px;
-            margin-top: 16px;
         }
 
         .checkbox-item {
@@ -542,17 +320,10 @@
             align-items: center;
             gap: 12px;
             cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .checkbox-item:hover {
-            transform: translateY(-1px);
         }
 
         .checkbox-input {
             appearance: none;
-            -webkit-appearance: none;
-            -moz-appearance: none;
             width: 18px;
             height: 18px;
             border-radius: 4px;
@@ -561,19 +332,11 @@
             cursor: pointer;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
-            outline: none;
-        }
-
-        .checkbox-input:hover {
-            background: var(--color-bg);
-            border-color: var(--color-primary);
-            box-shadow: 0 0 0 3px rgba(0, 255, 136, 0.1);
         }
 
         .checkbox-input:checked {
             background: #00ff88;
             border-color: #00ff88;
-            box-shadow: 0 2px 8px rgba(0, 255, 136, 0.3);
         }
 
         .checkbox-input:checked::before {
@@ -588,203 +351,139 @@
             transform: rotate(45deg);
         }
 
-        .checkbox-input:focus {
-            box-shadow: 0 0 0 3px rgba(0, 255, 136, 0.2);
-        }
-
         .checkbox-input:disabled {
-            opacity: 0.4;
             cursor: not-allowed;
-        }
-
-        .checkbox-input:disabled + .checkbox-label {
-            opacity: 0.4;
-            cursor: not-allowed;
+            opacity: 0.8;
         }
 
         .checkbox-label {
             color: var(--color-text);
             font-size: 15px;
-            font-weight: 400;
-            cursor: pointer;
-            transition: color 0.2s ease;
             user-select: none;
         }
 
-        .checkbox-item:hover .checkbox-label {
-            color: var(--color-text);
+        /* 用户选择表格 */
+        .user-table-wrapper {
+            overflow-x: auto;
+            border-radius: var(--radius);
+            border: 1px solid var(--color-border);
         }
 
-        /* Region Price Table */
-        .region-price-table {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 16px;
-            overflow: hidden;
-            margin-top: 20px;
-        }
-        
-        .region-price-table .data-table {
-            width: 100%;
-        }
-        
-        .region-price-table .form-input {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: rgba(255, 255, 255, 0.9);
-            padding: 8px 12px;
-            border-radius: 8px;
-            width: 150px;
-            margin: 0;
-            transition: all 0.3s ease;
-        }
-        
-        .region-price-table .form-input:focus {
-            outline: none;
-            background: rgba(255, 255, 255, 0.08);
-            border-color: rgba(0, 255, 136, 0.5);
-            box-shadow: 0 0 0 2px rgba(0, 255, 136, 0.1);
-        }
-        
-        .region-price-table .form-input:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            background: rgba(255, 255, 255, 0.03);
-        }
-        
-        .region-status {
-            font-weight: 500;
-            font-size: 13px;
-            transition: color 0.3s ease;
-        }
-
-        /* User Selection Table */
-        .user-selection {
-            margin-top: 32px;
-        }
-
-        .table-container {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 16px;
-            overflow: hidden;
-        }
-
-        .data-table {
+        .user-table {
             width: 100%;
             border-collapse: collapse;
         }
 
-        .data-table th {
+        .user-table th {
             background: rgba(255, 255, 255, 0.05);
-            padding: 20px 24px;
+            padding: 16px 20px;
             text-align: left;
             font-size: 14px;
             font-weight: 500;
-            color: rgba(255, 255, 255, 0.8);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            color: var(--color-text);
+            border-bottom: 1px solid var(--color-border);
         }
 
-        .data-table th:first-child {
+        .user-table th:first-child {
             width: 60px;
             text-align: center;
         }
 
-        .data-table td {
-            padding: 20px 24px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+        .user-table td {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--color-border);
+            color: var(--color-text);
             font-size: 14px;
-            color: rgba(255, 255, 255, 0.9);
-            vertical-align: middle;
         }
 
-        .data-table td:first-child {
+        .user-table td:first-child {
             text-align: center;
-            padding: 20px 12px;
         }
 
-        /* Table-specific checkbox styles */
-        .data-table .checkbox-input {
-            margin: 0;
+        .user-table tr:last-child td {
+            border-bottom: none;
         }
 
-        .data-table .checkbox-item {
-            justify-content: center;
-            margin: 0;
-            gap: 0;
+        .user-table tr:hover {
+            background: var(--color-bg);
         }
 
-        .data-table .checkbox-item:hover {
-            transform: none;
-        }
-
-        /* Enhanced status badges */
+        /* 状态标签 */
         .status-badge {
             display: inline-flex;
             align-items: center;
-            gap: 8px;
-            padding: 8px 16px;
-            border-radius: 24px;
+            gap: 6px;
+            padding: 4px 12px;
+            border-radius: 16px;
             font-size: 13px;
             font-weight: 500;
-            transition: all 0.2s ease;
         }
 
-        .status-active {
-            background: rgba(52, 199, 89, 0.15);
+        .status-badge.status-active {
+            background: rgba(52, 199, 89, 0.1);
             color: #34c759;
-            border: 1px solid rgba(52, 199, 89, 0.25);
         }
 
-        .status-active:hover {
-            background: rgba(52, 199, 89, 0.2);
-            transform: translateY(-1px);
-        }
-
-        .status-inactive {
-            background: rgba(255, 59, 48, 0.15);
+        .status-badge.status-inactive {
+            background: rgba(255, 59, 48, 0.1);
             color: #ff3b30;
-            border: 1px solid rgba(255, 59, 48, 0.25);
-        }
-
-        .status-inactive:hover {
-            background: rgba(255, 59, 48, 0.2);
-            transform: translateY(-1px);
         }
 
         .status-icon {
-            width: 8px;
-            height: 8px;
+            width: 6px;
+            height: 6px;
             border-radius: 50%;
             background: currentColor;
-            box-shadow: 0 0 4px currentColor;
         }
 
-        .data-table tbody tr {
-            transition: background-color 0.2s ease;
-        }
-
-        .data-table tbody tr {
-            cursor: pointer;
-        }
-
-        .data-table tbody tr:hover {
-            background: rgba(255, 255, 255, 0.03);
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        }
-
-        /* Form Actions */
+        /* 操作按钮 */
         .form-actions {
-            display: none;
+            display: flex;
             justify-content: flex-end;
             gap: 16px;
-            margin-top: 60px;
-            padding-top: 40px;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            margin-top: 40px;
+            padding-top: 32px;
+            border-top: 1px solid var(--color-border);
         }
 
-        /* Toast Notifications */
+        .btn {
+            padding: 10px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: #00ff88;
+            color: #000;
+            border-color: #00ff88;
+        }
+
+        .btn-primary:hover {
+            background: #00e67a;
+            border-color: #00e67a;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 255, 136, 0.3);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--color-text-secondary);
+            border: 1px solid var(--color-border);
+        }
+
+        .btn-secondary:hover {
+            background: var(--color-bg);
+            color: var(--color-text);
+        }
+
+        /* Toast 提示 */
         .toast-container {
             position: fixed;
             top: 100px;
@@ -810,8 +509,6 @@
             opacity: 0;
             transition: all 0.3s ease;
             pointer-events: auto;
-            position: relative;
-            overflow: hidden;
         }
 
         .toast.show {
@@ -838,16 +535,6 @@
 
         .toast.error .toast-icon {
             background: #ff3b30;
-            color: #fff;
-        }
-
-        .toast.warning .toast-icon {
-            background: #ff9500;
-            color: #000;
-        }
-
-        .toast.info .toast-icon {
-            background: #007aff;
             color: #fff;
         }
 
@@ -888,271 +575,10 @@
             background: rgba(255, 255, 255, 0.1);
             color: rgba(255, 255, 255, 0.8);
         }
-
-        .toast-progress {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            height: 3px;
-            background: linear-gradient(135deg, #00ff88, #00aaff);
-            transition: width linear;
-        }
-
-        /* Status Badge */
-        .status-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 4px 12px;
-            border-radius: 16px;
-            font-size: 13px;
-            font-weight: 500;
-        }
-
-        .status-badge.status-active {
-            background: rgba(52, 199, 89, 0.1);
-            color: #34c759;
-        }
-
-        .status-badge.status-inactive {
-            background: rgba(255, 59, 48, 0.1);
-            color: #ff3b30;
-        }
-
-        .status-icon {
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            background: currentColor;
-        }
-        
-        /* Toggle Switch - From organization page */
-        .switch {
-            position: relative;
-            display: inline-block;
-            width: 44px;
-            height: 24px;
-        }
-
-        .switch input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-
-        .slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: rgba(255, 59, 48, 0.3);
-            transition: 0.3s;
-            border-radius: 24px;
-        }
-
-        .slider:before {
-            position: absolute;
-            content: "";
-            height: 18px;
-            width: 18px;
-            left: 3px;
-            bottom: 3px;
-            background-color: #fff;
-            transition: 0.3s;
-            border-radius: 50%;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-        }
-
-        input:checked + .slider {
-            background-color: #34c759;
-        }
-
-        input:checked + .slider:before {
-            transform: translateX(20px);
-        }
-        
-        /* Drawer Styles */
-        .drawer-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(3px);
-            z-index: 2000;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s ease;
-        }
-
-        .drawer-overlay.show {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .drawer-container {
-            position: fixed;
-            top: 0;
-            right: 0;
-            width: 600px;
-            height: 100vh;
-            background: rgba(15, 15, 15, 0.98);
-            backdrop-filter: blur(20px);
-            border-left: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: -10px 0 30px rgba(0, 0, 0, 0.2);
-            transform: translateX(100%);
-            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .drawer-overlay.show .drawer-container {
-            transform: translateX(0);
-        }
-
-        .drawer-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 20px 24px;
-            border-bottom: 1px solid var(--color-border);
-            flex-shrink: 0;
-            background: rgba(0, 0, 0, 0.5);
-        }
-
-        .drawer-title {
-            font-size: 18px;
-            font-weight: 600;
-            color: var(--color-text);
-        }
-
-        .drawer-close {
-            width: 32px;
-            height: 32px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: transparent;
-            border: 1px solid var(--color-border);
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s;
-            color: var(--color-text-secondary);
-        }
-
-        .drawer-close:hover {
-            background: var(--color-bg);
-            color: var(--color-text);
-        }
-
-        .drawer-content {
-            padding: 28px 32px;
-            overflow-y: auto;
-            flex: 1;
-            background: rgba(0, 0, 0, 0.3);
-        }
-        
-        /* Form sections in drawer */
-        .drawer-content .form-section {
-            margin-bottom: 28px;
-        }
-        
-        .drawer-content .form-section:last-of-type {
-            margin-bottom: 0;
-        }
-        
-        /* Form inputs in drawer */
-        .drawer-content .form-input {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: rgba(255, 255, 255, 0.9);
-        }
-        
-        .drawer-content .form-input:focus {
-            background: rgba(255, 255, 255, 0.08);
-            border-color: var(--color-primary);
-        }
-        
-        .drawer-content .counter-input {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        .drawer-content .checkbox-input {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1.5px solid rgba(255, 255, 255, 0.2);
-        }
-        
-        .drawer-content .table-wrapper {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-        }
-        
-        /* Drawer Actions */
-        .drawer-actions {
-            position: sticky;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            padding: 20px 32px;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(10px);
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            display: flex;
-            justify-content: flex-end;
-            gap: 12px;
-            margin: 0 -32px -32px;
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .container {
-                padding: 100px 20px 60px;
-            }
-
-            .page-header {
-                flex-direction: column;
-                gap: 20px;
-                align-items: flex-start;
-            }
-
-            .page-actions {
-                width: 100%;
-                justify-content: center;
-            }
-
-            .drawer-container {
-                width: 100%;
-                max-width: 100%;
-            }
-
-            .checkbox-group {
-                flex-direction: column;
-                gap: 20px;
-            }
-
-            .drawer-actions {
-                flex-direction: column-reverse;
-                gap: 8px;
-            }
-
-            .drawer-actions .btn {
-                width: 100%;
-                justify-content: center;
-            }
-
-            .btn {
-                justify-content: center;
-            }
-        }
     </style>
 </head>
 <body>
-    <!-- Header Container for HeaderNav Component -->
+    <!-- Header Container -->
     <div id="headerContainer"></div>
 
     <!-- Main Container -->
@@ -1160,208 +586,149 @@
         <!-- Page Header -->
         <div class="page-header">
             <h1 class="page-title" data-i18n-key="pushStrategy.title">推送策略</h1>
-            <div class="page-actions">
-                <button class="btn btn-primary" onclick="addStrategy()">
-                    <span data-i18n-key="pushStrategy.buttons.add">新建</span>
-                </button>
-            </div>
+            <button class="edit-button" onclick="editStrategy()" data-i18n-key="pushStrategy.buttons.edit">编辑</button>
         </div>
 
-        <!-- Strategy Table -->
-        <div class="strategy-table-container" id="strategyTableView">
-            <div class="table-card">
-                <!-- Table Actions Header -->
-                <div class="table-actions-header">
-                    <button class="filter-btn export" onclick="exportData()">
-                        <span>📥</span>
-                        <span data-i18n-key="pushStrategy.buttons.export">导出</span>
-                    </button>
-                    <button class="filter-btn refresh" onclick="refreshData()">
-                        <span>🔄</span>
-                        <span data-i18n-key="pushStrategy.buttons.refresh">刷新</span>
-                    </button>
+        <!-- Strategy Content Area -->
+        <div class="strategy-content">
+            <!-- 地区价格设置 -->
+            <div class="form-section">
+                <div class="section-title">
+                    <span class="required">*</span>
+                    <span data-i18n-key="pushStrategy.regionPriceSettings">地区价格设置</span>
                 </div>
-                
-                <!-- Table -->
-                <div class="table-wrapper">
-                    <table class="data-table">
+                <div class="section-description" data-i18n-key="pushStrategy.descriptions.regionPriceDescription">
+                    为每个地区设置充电和放电通知策略价格
+                </div>
+                <div class="region-table-wrapper">
+                    <table class="region-table">
                         <thead>
                             <tr>
                                 <th data-i18n-key="pushStrategy.table.region">地区</th>
-                                <th data-i18n-key="pushStrategy.table.chargePrice">充电价格</th>
-                                <th data-i18n-key="pushStrategy.table.dischargePrice">放电价格</th>
-                                <th data-i18n-key="pushStrategy.table.status">状态</th>
-                                <th data-i18n-key="pushStrategy.table.actions">操作</th>
+                                <th data-i18n-key="pushStrategy.table.chargePrice">充电价格 ($)</th>
+                                <th data-i18n-key="pushStrategy.table.dischargePrice">放电价格 ($)</th>
                             </tr>
                         </thead>
-                        <tbody id="strategyTableBody">
-                            <!-- Table rows will be dynamically generated -->
+                        <tbody>
+                            <tr>
+                                <td>NSW</td>
+                                <td><input type="text" class="region-input" id="chargePrice_NSW" placeholder="0.00" value="0.35"></td>
+                                <td><input type="text" class="region-input" id="dischargePrice_NSW" placeholder="0.00" value="0.65"></td>
+                            </tr>
+                            <tr>
+                                <td>QLD</td>
+                                <td><input type="text" class="region-input" id="chargePrice_QLD" placeholder="0.00" value="0.30"></td>
+                                <td><input type="text" class="region-input" id="dischargePrice_QLD" placeholder="0.00" value="0.70"></td>
+                            </tr>
+                            <tr>
+                                <td>VIC</td>
+                                <td><input type="text" class="region-input" id="chargePrice_VIC" placeholder="0.00"></td>
+                                <td><input type="text" class="region-input" id="dischargePrice_VIC" placeholder="0.00"></td>
+                            </tr>
+                            <tr>
+                                <td>SA</td>
+                                <td><input type="text" class="region-input" id="chargePrice_SA" placeholder="0.00"></td>
+                                <td><input type="text" class="region-input" id="dischargePrice_SA" placeholder="0.00"></td>
+                            </tr>
+                            <tr>
+                                <td>TAS</td>
+                                <td><input type="text" class="region-input" id="chargePrice_TAS" placeholder="0.00"></td>
+                                <td><input type="text" class="region-input" id="dischargePrice_TAS" placeholder="0.00"></td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
             </div>
-        </div>
 
-    </div>
-
-    <!-- Strategy Drawer -->
-    <div class="drawer-overlay" id="strategyDrawer" onclick="handleDrawerClick(event)">
-        <div class="drawer-container">
-            <div class="drawer-header">
-                <div style="display: flex; align-items: center; gap: 20px; flex: 1;">
-                    <h3 class="drawer-title">
-                        <span data-i18n-key="pushStrategy.formTitle.edit">编辑推送策略</span> - <span id="formRegionName">NSW</span>
-                    </h3>
-                    <div class="status-toggle" style="display: flex; align-items: center; gap: 12px;">
-                        <span data-i18n-key="pushStrategy.status.title" style="font-size: 14px; color: var(--color-text-secondary);">状态：</span>
-                        <label class="switch">
-                            <input type="checkbox" id="strategyStatus" onchange="toggleStrategyStatus()">
-                            <span class="slider"></span>
-                        </label>
-                        <span id="statusText" class="status-badge status-inactive" data-status="disabled">
-                            <span class="status-icon"></span>
-                            <span class="status-text" data-i18n-key="pushStrategy.status.disabled">禁用</span>
-                        </span>
+            <!-- 提醒频率 -->
+            <div class="form-section">
+                <div class="section-title">
+                    <span class="required">*</span>
+                    <span data-i18n-key="pushStrategy.reminderFrequency">提醒频率</span>
+                </div>
+                <div class="section-description" data-i18n-key="pushStrategy.reminderDescription">
+                    满足条件，无人响应，多久发送一次提醒
+                </div>
+                <div class="form-group">
+                    <div class="counter-input">
+                        <button type="button" class="counter-btn" onclick="adjustFrequency(-1)">−</button>
+                        <input type="number" class="counter-value" value="5" min="1" max="60" id="frequency">
+                        <span class="counter-unit">min</span>
+                        <button type="button" class="counter-btn" onclick="adjustFrequency(1)">+</button>
                     </div>
                 </div>
-                <button class="drawer-close" onclick="closeStrategyDrawer()">✕</button>
             </div>
-            
-            <div class="drawer-content">
-                <!-- 放电通知策略价格 -->
-                <div class="form-section">
-                    <div class="section-header">
-                        <div class="section-title">
-                            <span class="required">*</span>
-                            <span data-i18n-key="pushStrategy.dischargePriceStrategy">放电通知策略价格</span>
-                        </div>
-                        <div class="section-description" data-i18n-key="pushStrategy.descriptions.dischargeDescription">价格超过设定值，则进行提醒</div>
-                    </div>
-                    <div class="form-group">
-                        <div class="input-group">
-                            <span class="input-prefix">$</span>
-                            <input type="text" class="form-input" data-i18n-placeholder="pushStrategy.placeholder.price" placeholder="价格" value="" id="dischargePrice">
-                        </div>
-                    </div>
-                </div>
 
-                <!-- 充电通知策略价格 -->
-                <div class="form-section">
-                    <div class="section-header">
-                        <div class="section-title">
-                            <span class="required">*</span>
-                            <span data-i18n-key="pushStrategy.chargePriceStrategy">充电通知策略价格</span>
-                        </div>
-                        <div class="section-description" data-i18n-key="pushStrategy.descriptions.chargeDescription">价格低于设定值，则进行提醒</div>
+            <!-- 发送方式 -->
+            <div class="form-section">
+                <div class="section-title">
+                    <span class="required">*</span>
+                    <span data-i18n-key="pushStrategy.sendingMethod">发送方式</span>
+                </div>
+                <div class="checkbox-group">
+                    <div class="checkbox-item">
+                        <input type="checkbox" class="checkbox-input" id="sendInApp" checked>
+                        <label class="checkbox-label" for="sendInApp" data-i18n-key="pushStrategy.methods.inSiteMessage">站内信</label>
                     </div>
-                    <div class="form-group">
-                        <div class="input-group">
-                            <span class="input-prefix">$</span>
-                            <input type="text" class="form-input" data-i18n-placeholder="pushStrategy.placeholder.price" placeholder="价格" value="" id="chargePrice">
-                        </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" class="checkbox-input" id="sendEmail">
+                        <label class="checkbox-label" for="sendEmail" data-i18n-key="pushStrategy.methods.email">邮件</label>
                     </div>
                 </div>
+            </div>
 
-                <!-- 提醒频率 -->
-                <div class="form-section">
-                    <div class="section-header">
-                        <div class="section-title">
-                            <span class="required">*</span>
-                            <span data-i18n-key="pushStrategy.reminderFrequency">提醒频率</span>
-                        </div>
-                        <div class="section-description" data-i18n-key="pushStrategy.reminderDescription">满足条件，无人响应，多久发送一次提醒</div>
-                    </div>
-                    <div class="form-group">
-                        <div class="counter-input">
-                            <button type="button" class="counter-btn" onclick="adjustFrequency(-1)">−</button>
-                            <input type="number" class="counter-value" value="1" min="1" max="60" id="frequency">
-                            <span class="counter-unit">min</span>
-                            <button type="button" class="counter-btn" onclick="adjustFrequency(1)">+</button>
-                        </div>
-                    </div>
+            <!-- 选择用户 -->
+            <div class="form-section">
+                <div class="section-title">
+                    <span class="required">*</span>
+                    <span data-i18n-key="pushStrategy.selectUsers">选择用户</span>
                 </div>
+                <div class="user-table-wrapper">
+                    <table class="user-table">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th data-i18n-key="pushStrategy.table.userName">用户名称</th>
+                                <th data-i18n-key="pushStrategy.table.userEmail">用户邮箱</th>
+                                <th data-i18n-key="pushStrategy.table.status">状态</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <input type="checkbox" class="checkbox-input" id="user1" checked>
+                                </td>
+                                <td data-i18n-key="userName1">用户名称1</td>
+                                <td>bigbang@163.com</td>
+                                <td>
+                                    <span class="status-badge status-active">
+                                        <span class="status-icon"></span>
+                                        <span data-i18n-key="pushStrategy.status.enabled">启用</span>
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <input type="checkbox" class="checkbox-input" id="user2">
+                                </td>
+                                <td data-i18n-key="userName2">用户名称2</td>
+                                <td>g.hjkl@163.com</td>
+                                <td>
+                                    <span class="status-badge status-inactive">
+                                        <span class="status-icon"></span>
+                                        <span data-i18n-key="pushStrategy.status.disabled">禁用</span>
+                                    </span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
 
-                <!-- 发送方式 -->
-                <div class="form-section">
-                    <div class="section-header">
-                        <div class="section-title">
-                            <span class="required">*</span>
-                            <span data-i18n-key="pushStrategy.sendingMethod">发送方式</span>
-                        </div>
-                    </div>
-                    <div class="checkbox-group">
-                        <div class="checkbox-item">
-                            <input type="checkbox" class="checkbox-input" id="sendInApp" checked>
-                            <label class="checkbox-label" for="sendInApp" data-i18n-key="pushStrategy.methods.inSiteMessage">站内信</label>
-                        </div>
-                        <div class="checkbox-item">
-                            <input type="checkbox" class="checkbox-input" id="sendEmail">
-                            <label class="checkbox-label" for="sendEmail" data-i18n-key="pushStrategy.methods.email">邮件</label>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 选择用户 -->
-                <div class="form-section">
-                    <div class="section-header">
-                        <div class="section-title">
-                            <span class="required">*</span>
-                            <span data-i18n-key="pushStrategy.selectUsers">选择用户</span>
-                        </div>
-                    </div>
-                    <div class="user-selection">
-                        <div class="table-wrapper">
-                            <table class="data-table">
-                                <thead>
-                                    <tr>
-                                        <th></th>
-                                        <th data-i18n-key="pushStrategy.table.userName">用户名称</th>
-                                        <th data-i18n-key="pushStrategy.table.userEmail">用户邮箱</th>
-                                        <th data-i18n-key="pushStrategy.table.status">状态</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>
-                                            <div class="checkbox-item">
-                                                <input type="checkbox" class="checkbox-input" id="user1" checked>
-                                            </div>
-                                        </td>
-                                        <td data-i18n-key="userName1">用户名称1</td>
-                                        <td>bigbang@163.com</td>
-                                        <td>
-                                            <span class="status-badge status-active" data-status="enabled">
-                                                <span class="status-icon"></span>
-                                                <span class="status-text" data-i18n-key="pushStrategy.status.enabled">启用</span>
-                                            </span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="checkbox-item">
-                                                <input type="checkbox" class="checkbox-input" id="user2">
-                                            </div>
-                                        </td>
-                                        <td data-i18n-key="userName2">用户名称2</td>
-                                        <td>g.hjkl@163.com</td>
-                                        <td>
-                                            <span class="status-badge status-inactive" data-status="disabled">
-                                                <span class="status-icon"></span>
-                                                <span class="status-text" data-i18n-key="pushStrategy.status.disabled">禁用</span>
-                                            </span>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Form Actions -->
-                <div class="drawer-actions">
-                    <button type="button" class="btn btn-secondary" onclick="closeStrategyDrawer()" data-i18n-key="pushStrategy.buttons.cancel">取消</button>
-                    <button type="button" class="btn btn-primary" onclick="confirmStrategy()" data-i18n-key="pushStrategy.buttons.confirm">确定</button>
-                </div>
+            <!-- Form Actions -->
+            <div class="form-actions">
+                <button type="button" class="btn btn-secondary" onclick="cancelEdit()" data-i18n-key="pushStrategy.buttons.cancel">取消</button>
+                <button type="button" class="btn btn-primary" onclick="saveStrategy()" data-i18n-key="pushStrategy.buttons.save">保存</button>
             </div>
         </div>
     </div>
@@ -1370,26 +737,13 @@
     <div class="toast-container" id="toastContainer"></div>
 
     <script>
-        // Global variables
-        let toastCounter = 0;
-        let isEditMode = false;
-        let currentEditingRegion = null;
-        
-        // Store price settings for each region
-        let regionPriceSettings = {
-            NSW: { dischargePrice: '0.65', chargePrice: '0.35', frequency: 5, sendInApp: true, sendEmail: false, enabled: true },
-            QLD: { dischargePrice: '0.70', chargePrice: '0.30', frequency: 5, sendInApp: true, sendEmail: false, enabled: true },
-            VIC: { dischargePrice: '', chargePrice: '', frequency: 5, sendInApp: true, sendEmail: false, enabled: false },
-            SA: { dischargePrice: '', chargePrice: '', frequency: 5, sendInApp: true, sendEmail: false, enabled: false },
-            TAS: { dischargePrice: '', chargePrice: '', frequency: 5, sendInApp: true, sendEmail: false, enabled: false }
-        };
-
         // Toast functionality
+        let toastCounter = 0;
+
         function showToast(type, title, message, duration = 3000) {
             const toastContainer = document.getElementById('toastContainer');
             const toastId = `toast-${++toastCounter}`;
             
-            // Icon mapping
             const icons = {
                 success: '✓',
                 error: '✕',
@@ -1397,7 +751,6 @@
                 info: 'i'
             };
 
-            // Create toast element
             const toast = document.createElement('div');
             toast.className = `toast ${type}`;
             toast.id = toastId;
@@ -1408,18 +761,14 @@
                     <div class="toast-message">${message}</div>
                 </div>
                 <button class="toast-close" onclick="hideToast('${toastId}')">&times;</button>
-                <div class="toast-progress"></div>
             `;
 
-            // Add to container
             toastContainer.appendChild(toast);
 
-            // Show toast with animation
             setTimeout(() => {
                 toast.classList.add('show');
             }, 10);
 
-            // Auto hide after duration
             setTimeout(() => {
                 hideToast(toastId);
             }, duration);
@@ -1437,223 +786,13 @@
             }
         }
 
-        // Helper toast functions
-        function showSuccessToast(title, message, duration = 3000) {
-            showToast('success', title, message, duration);
+        function showSuccessToast(title, message) {
+            showToast('success', title, message);
         }
 
-        function showErrorToast(title, message, duration = 4000) {
-            showToast('error', title, message, duration);
+        function showErrorToast(title, message) {
+            showToast('error', title, message);
         }
-
-        function showWarningToast(title, message, duration = 4000) {
-            showToast('warning', title, message, duration);
-        }
-
-        function showInfoToast(title, message, duration = 3000) {
-            showToast('info', title, message, duration);
-        }
-        
-        // Export data function
-        function exportData() {
-            const data = [];
-            for (let region in regionPriceSettings) {
-                const settings = regionPriceSettings[region];
-                if (settings.dischargePrice || settings.chargePrice) {
-                    data.push({
-                        region: region,
-                        chargePrice: settings.chargePrice,
-                        dischargePrice: settings.dischargePrice,
-                        frequency: settings.frequency,
-                        sendInApp: settings.sendInApp,
-                        sendEmail: settings.sendEmail
-                    });
-                }
-            }
-            
-            // Convert to CSV
-            const csv = 'Region,Charge Price,Discharge Price,Frequency,In-App,Email\n' +
-                data.map(row => `${row.region},$${row.chargePrice},$${row.dischargePrice},${row.frequency},${row.sendInApp},${row.sendEmail}`).join('\n');
-            
-            // Download CSV
-            const blob = new Blob([csv], { type: 'text/csv' });
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'push_strategy_' + new Date().toISOString().split('T')[0] + '.csv';
-            a.click();
-            window.URL.revokeObjectURL(url);
-            
-            showSuccessToast(
-                window.i18n ? window.i18n.getText('pushStrategy.messages.exportSuccess') : '导出成功',
-                window.i18n ? window.i18n.getText('pushStrategy.messages.dataExported') : '数据已导出到CSV文件'
-            );
-        }
-        
-        // Refresh data function
-        function refreshData() {
-            renderStrategyTable();
-            showSuccessToast(
-                window.i18n ? window.i18n.getText('pushStrategy.messages.refreshSuccess') : '刷新成功',
-                window.i18n ? window.i18n.getText('pushStrategy.messages.dataRefreshed') : '数据已刷新'
-            );
-        }
-
-        // Toggle strategy status
-        function toggleStrategyStatus() {
-            const statusCheckbox = document.getElementById('strategyStatus');
-            const statusText = document.getElementById('statusText');
-            const isEnabled = statusCheckbox.checked;
-            
-            if (isEnabled) {
-                statusText.className = 'status-badge status-active';
-                statusText.setAttribute('data-status', 'enabled');
-                statusText.querySelector('.status-text').setAttribute('data-i18n-key', 'pushStrategy.status.enabled');
-                statusText.querySelector('.status-text').textContent = window.i18n ? window.i18n.getText('pushStrategy.status.enabled') : '启用';
-            } else {
-                statusText.className = 'status-badge status-inactive';
-                statusText.setAttribute('data-status', 'disabled');
-                statusText.querySelector('.status-text').setAttribute('data-i18n-key', 'pushStrategy.status.disabled');
-                statusText.querySelector('.status-text').textContent = window.i18n ? window.i18n.getText('pushStrategy.status.disabled') : '禁用';
-            }
-        }
-
-        // Render strategy table
-        function renderStrategyTable() {
-            const tbody = document.getElementById('strategyTableBody');
-            tbody.innerHTML = '';
-            
-            for (let region in regionPriceSettings) {
-                const settings = regionPriceSettings[region];
-                const row = document.createElement('tr');
-                
-                const hasConfig = settings.dischargePrice && settings.chargePrice;
-                const statusHtml = hasConfig ? 
-                    `<span class="status-badge ${settings.enabled ? 'status-active' : 'status-inactive'}">
-                        <span class="status-icon"></span>
-                        <span class="status-text" data-i18n-key="pushStrategy.status.${settings.enabled ? 'enabled' : 'disabled'}">
-                            ${settings.enabled ? (window.i18n ? window.i18n.getText('pushStrategy.status.enabled') : '启用') : 
-                              (window.i18n ? window.i18n.getText('pushStrategy.status.disabled') : '禁用')}
-                        </span>
-                    </span>` : '-';
-                
-                row.innerHTML = `
-                    <td>${region}</td>
-                    <td>${settings.chargePrice ? '$' + settings.chargePrice : '-'}</td>
-                    <td>${settings.dischargePrice ? '$' + settings.dischargePrice : '-'}</td>
-                    <td>${statusHtml}</td>
-                    <td>
-                        <div class="action-buttons">
-                            <button class="action-btn edit" onclick="editRegionStrategy('${region}')">
-                                <span data-i18n-key="pushStrategy.buttons.edit">编辑</span>
-                            </button>
-                            <button class="action-btn delete" onclick="deleteRegionStrategy('${region}')">
-                                <span data-i18n-key="pushStrategy.buttons.delete">删除</span>
-                            </button>
-                        </div>
-                    </td>
-                `;
-                
-                tbody.appendChild(row);
-            }
-        }
-        
-        // Add new strategy
-        function addStrategy() {
-            // Find first unconfigured region
-            let regionToEdit = null;
-            for (let region in regionPriceSettings) {
-                if (!regionPriceSettings[region].dischargePrice || !regionPriceSettings[region].chargePrice) {
-                    regionToEdit = region;
-                    break;
-                }
-            }
-            
-            if (!regionToEdit) {
-                showWarningToast(
-                    window.i18n ? window.i18n.getText('pushStrategy.messages.allConfigured') : '所有地区已配置',
-                    window.i18n ? window.i18n.getText('pushStrategy.messages.editExisting') : '请编辑现有配置'
-                );
-                return;
-            }
-            
-            editRegionStrategy(regionToEdit);
-        }
-        
-        // Open strategy drawer
-        function openStrategyDrawer() {
-            document.getElementById('strategyDrawer').classList.add('show');
-            document.body.style.overflow = 'hidden';
-        }
-        
-        // Close strategy drawer
-        function closeStrategyDrawer() {
-            document.getElementById('strategyDrawer').classList.remove('show');
-            document.body.style.overflow = '';
-            currentEditingRegion = null;
-        }
-        
-        // Handle drawer click
-        function handleDrawerClick(event) {
-            if (event.target === event.currentTarget) {
-                closeStrategyDrawer();
-            }
-        }
-
-        // Edit region strategy
-        function editRegionStrategy(region) {
-            currentEditingRegion = region;
-            const settings = regionPriceSettings[region];
-            
-            // Update form title
-            document.getElementById('formRegionName').textContent = region;
-            
-            // Load values into form
-            document.getElementById('dischargePrice').value = settings.dischargePrice || '';
-            document.getElementById('chargePrice').value = settings.chargePrice || '';
-            document.getElementById('frequency').value = settings.frequency || 5;
-            document.getElementById('sendInApp').checked = settings.sendInApp !== false;
-            document.getElementById('sendEmail').checked = settings.sendEmail || false;
-            
-            // Load status
-            const statusCheckbox = document.getElementById('strategyStatus');
-            statusCheckbox.checked = settings.enabled || false;
-            toggleStrategyStatus(); // Update UI
-            
-            // Reset user selections
-            document.getElementById('user1').checked = true;
-            document.getElementById('user2').checked = false;
-            
-            // Open drawer
-            openStrategyDrawer();
-        }
-        
-        // Delete region strategy
-        function deleteRegionStrategy(region) {
-            const confirmDelete = confirm(
-                window.i18n ? 
-                window.i18n.getText('pushStrategy.messages.confirmDelete') : 
-                `确定要删除 ${region} 的推送策略吗？`
-            );
-            
-            if (confirmDelete) {
-                regionPriceSettings[region] = {
-                    dischargePrice: '',
-                    chargePrice: '',
-                    frequency: 5,
-                    sendInApp: true,
-                    sendEmail: false,
-                    enabled: false
-                };
-                
-                renderStrategyTable();
-                showSuccessToast(
-                    window.i18n ? window.i18n.getText('pushStrategy.messages.deleteSuccess') : '删除成功',
-                    window.i18n ? window.i18n.getText('pushStrategy.messages.strategyDeleted') : `${region} 的推送策略已删除`
-                );
-            }
-        }
-        
 
         // Frequency adjustment
         function adjustFrequency(delta) {
@@ -1662,7 +801,6 @@
             const newValue = Math.max(1, Math.min(60, currentValue + delta));
             input.value = newValue;
             
-            // Update button states
             const decreaseBtn = input.parentElement.querySelector('.counter-btn:first-child');
             const increaseBtn = input.parentElement.querySelector('.counter-btn:last-child');
             
@@ -1670,59 +808,30 @@
             increaseBtn.disabled = newValue >= 60;
         }
 
-
-        // Form validation
-        function validateForm() {
-            const dischargePrice = document.getElementById('dischargePrice').value.trim();
-            const chargePrice = document.getElementById('chargePrice').value.trim();
-            const frequency = document.getElementById('frequency').value;
+        // Save strategy
+        function saveStrategy() {
+            // Validate form
+            const regions = ['NSW', 'QLD', 'VIC', 'SA', 'TAS'];
+            const missingRegions = [];
             
-            if (!dischargePrice) {
+            for (const region of regions) {
+                const chargePrice = document.getElementById(`chargePrice_${region}`).value;
+                const dischargePrice = document.getElementById(`dischargePrice_${region}`).value;
+                
+                if (chargePrice && dischargePrice) {
+                    // At least one region has both prices set
+                } else if (chargePrice || dischargePrice) {
+                    // Region has incomplete price settings
+                    missingRegions.push(region);
+                }
+            }
+            
+            if (missingRegions.length > 0) {
                 showErrorToast(
                     window.i18n ? window.i18n.getText('pushStrategy.messages.validationFailed') : '验证失败',
-                    window.i18n ? window.i18n.getText('pushStrategy.messages.enterDischargePrice') : '请输入放电通知策略价格'
+                    window.i18n ? window.i18n.getText('pushStrategy.messages.missingRegionPrices') : '请为以下地区完整设置价格: ' + missingRegions.join(', ')
                 );
-                return false;
-            }
-            
-            if (!chargePrice) {
-                showErrorToast(
-                    window.i18n ? window.i18n.getText('pushStrategy.messages.validationFailed') : '验证失败',
-                    window.i18n ? window.i18n.getText('pushStrategy.messages.enterChargePrice') : '请输入充电通知策略价格'
-                );
-                return false;
-            }
-            
-            if (!frequency) {
-                showErrorToast(
-                    window.i18n ? window.i18n.getText('pushStrategy.messages.validationFailed') : 'Validation Failed',
-                    window.i18n ? window.i18n.getText('pushStrategy.messages.enterChargePrice') : 'Please enter charge notification strategy price'
-                );
-                return false;
-            }
-            
-            if (isNaN(parseFloat(dischargePrice)) || parseFloat(dischargePrice) <= 0) {
-                showErrorToast(
-                    window.i18n ? window.i18n.getText('pushStrategy.messages.validationFailed') : 'Validation Failed',
-                    window.i18n ? window.i18n.getText('pushStrategy.messages.invalidDischargePrice') : 'Discharge price must be a valid positive number'
-                );
-                return false;
-            }
-            
-            if (isNaN(parseFloat(chargePrice)) || parseFloat(chargePrice) <= 0) {
-                showErrorToast(
-                    window.i18n ? window.i18n.getText('pushStrategy.messages.validationFailed') : 'Validation Failed',
-                    window.i18n ? window.i18n.getText('pushStrategy.messages.invalidChargePrice') : 'Charge price must be a valid positive number'
-                );
-                return false;
-            }
-            
-            if (parseInt(frequency) < 1 || parseInt(frequency) > 60) {
-                showErrorToast(
-                    window.i18n ? window.i18n.getText('pushStrategy.messages.validationFailed') : 'Validation Failed',
-                    window.i18n ? window.i18n.getText('pushStrategy.messages.invalidFrequency') : 'Reminder frequency must be between 1-60 minutes'
-                );
-                return false;
+                return;
             }
             
             // Check if at least one sending method is selected
@@ -1731,107 +840,88 @@
             
             if (!sendInApp && !sendEmail) {
                 showErrorToast('验证失败', '请至少选择一种发送方式');
-                return false;
+                return;
             }
             
             // Check if at least one user is selected
-            const selectedUsers = document.querySelectorAll('tbody input[type="checkbox"]:checked');
+            const selectedUsers = document.querySelectorAll('.user-table input[type="checkbox"]:checked');
             if (selectedUsers.length === 0) {
                 showErrorToast('验证失败', '请至少选择一个用户');
-                return false;
-            }
-            
-            return true;
-        }
-
-        // Save strategy
-        function saveStrategy() {
-            if (!isEditMode) {
-                toggleEditMode(true);
-            }
-        }
-
-        function confirmStrategy() {
-            if (!validateForm()) {
                 return;
             }
-
-            // Save current region's data
-            regionPriceSettings[currentEditingRegion] = {
-                dischargePrice: document.getElementById('dischargePrice').value,
-                chargePrice: document.getElementById('chargePrice').value,
-                frequency: parseInt(document.getElementById('frequency').value),
-                sendInApp: document.getElementById('sendInApp').checked,
-                sendEmail: document.getElementById('sendEmail').checked,
-                enabled: document.getElementById('strategyStatus').checked
-            };
-
-            console.log('Strategy saved for region:', currentEditingRegion, regionPriceSettings[currentEditingRegion]);
-
-            // Simulate API call
-            const confirmBtn = document.querySelector('.drawer-actions .btn-primary');
-            const originalText = confirmBtn.textContent;
-            confirmBtn.textContent = window.i18n ? window.i18n.getText('saving') : 'Saving...';
-            confirmBtn.disabled = true;
-
+            
+            // Simulate saving
+            const btn = event.target;
+            const originalText = btn.textContent;
+            btn.textContent = window.i18n ? window.i18n.getText('saving') : '保存中...';
+            btn.disabled = true;
+            
             setTimeout(() => {
                 showSuccessToast(
                     window.i18n ? window.i18n.getText('pushStrategy.messages.saveSuccess') : '保存成功',
-                    window.i18n ? window.i18n.getText('pushStrategy.messages.strategyUpdated') : `${currentEditingRegion} 的推送策略已更新`
+                    window.i18n ? window.i18n.getText('pushStrategy.messages.strategyUpdated') : '推送策略已成功更新'
                 );
+                btn.textContent = originalText;
+                btn.disabled = false;
                 
-                confirmBtn.textContent = originalText;
-                confirmBtn.disabled = false;
+                // Exit edit mode
+                const inputs = document.querySelectorAll('.region-input, .counter-value, .checkbox-input');
+                const editButton = document.querySelector('.edit-button');
+                const formActions = document.querySelector('.form-actions');
+                const counterBtns = document.querySelectorAll('.counter-btn');
                 
-                // Close drawer and refresh table
-                closeStrategyDrawer();
-                renderStrategyTable();
+                // Disable all inputs
+                inputs.forEach(input => {
+                    input.disabled = true;
+                });
+                
+                // Disable counter buttons
+                counterBtns.forEach(btn => {
+                    btn.disabled = true;
+                });
+                
+                // Show edit button and hide form actions
+                editButton.style.display = 'block';
+                formActions.style.display = 'none';
             }, 1500);
         }
 
-        // Remove the old toggleEditMode function as it's no longer needed
+        // Cancel edit
+        function cancelEdit() {
+            if (confirm(window.i18n ? window.i18n.getText('pushStrategy.messages.confirmCancel') : '确定要取消编辑吗？未保存的更改将丢失。')) {
+                window.location.reload();
+            }
+        }
 
-        // Table row click to toggle checkbox
-        function setupTableInteractions() {
-            const tableRows = document.querySelectorAll('.data-table tbody tr');
+        // Edit strategy
+        function editStrategy() {
+            // Toggle edit mode
+            const inputs = document.querySelectorAll('.region-input, .counter-value, .checkbox-input');
+            const editButton = document.querySelector('.edit-button');
+            const formActions = document.querySelector('.form-actions');
+            const counterBtns = document.querySelectorAll('.counter-btn');
             
-            tableRows.forEach(row => {
-                row.addEventListener('click', function(e) {
-                    // Don't trigger if clicking directly on checkbox
-                    if (e.target.type === 'checkbox') return;
-                    
-                    const checkbox = row.querySelector('input[type="checkbox"]');
-                    if (checkbox && !checkbox.disabled) {
-                        checkbox.checked = !checkbox.checked;
-                        
-                        // Add visual feedback
-                        if (checkbox.checked) {
-                            row.style.background = 'rgba(0, 255, 136, 0.05)';
-                            setTimeout(() => {
-                                row.style.background = '';
-                            }, 200);
-                        }
-                    }
-                });
+            // Enable all inputs
+            inputs.forEach(input => {
+                input.disabled = false;
             });
+            
+            // Enable counter buttons
+            counterBtns.forEach(btn => {
+                btn.disabled = false;
+            });
+            
+            // Hide edit button and show save/cancel buttons
+            editButton.style.display = 'none';
+            formActions.style.display = 'flex';
+            
+            showSuccessToast(
+                window.i18n ? window.i18n.getText('pushStrategy.messages.editMode') : '编辑模式',
+                window.i18n ? window.i18n.getText('pushStrategy.messages.editModeEnabled') : '已进入编辑模式，请修改配置'
+            );
         }
 
         // Initialize
-        // Update status display with current language
-        function updateStatusDisplay() {
-            document.querySelectorAll('[data-status]').forEach(statusElement => {
-                const status = statusElement.getAttribute('data-status');
-                const statusTextElement = statusElement.querySelector('.status-text');
-                if (statusTextElement) {
-                    if (status === 'enabled') {
-                        statusTextElement.textContent = window.i18n ? window.i18n.getText('pushStrategy.status.enabled') : '已启用';
-                    } else if (status === 'disabled') {
-                        statusTextElement.textContent = window.i18n ? window.i18n.getText('pushStrategy.status.disabled') : '已禁用';
-                    }
-                }
-            });
-        }
-
         document.addEventListener('DOMContentLoaded', function() {
             // Initialize HeaderNav component
             const headerNav = new HeaderNav({
@@ -1839,31 +929,27 @@
                 containerId: 'headerContainer'
             });
             
-            // Initialize i18n
-            window.i18n = new I18n({
-                containerId: 'languageSelector',
-                defaultLanguage: localStorage.getItem('app_language') || 'zh'
+            // Initialize frequency counter
+            adjustFrequency(0);
+            
+            // Initialize form in view mode
+            const inputs = document.querySelectorAll('.region-input, .counter-value, .checkbox-input');
+            const formActions = document.querySelector('.form-actions');
+            const counterBtns = document.querySelectorAll('.counter-btn');
+            
+            // Disable all inputs initially
+            inputs.forEach(input => {
+                input.disabled = true;
             });
             
-            // Add language change observer to refresh content
-            if (window.i18n) {
-                window.i18n.addObserver(() => {
-                    // Refresh table content
-                    renderStrategyTable();
-                    // Update status display with current language
-                    updateStatusDisplay();
-                });
-            }
+            // Disable counter buttons initially
+            counterBtns.forEach(btn => {
+                btn.disabled = true;
+            });
             
-            // Initialize table
-            renderStrategyTable();
+            // Hide form actions initially
+            formActions.style.display = 'none';
             
-            // Initialize frequency counter buttons
-            adjustFrequency(0); // This will set the initial button states
-            
-            // Setup table interactions
-            setupTableInteractions();
-
             console.log('推送策略页面初始化完成');
         });
     </script>

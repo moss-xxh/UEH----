@@ -59,6 +59,31 @@
         .time-input[type="number"] {
             min-width: 100px;
         }
+        
+        /* Region selector specific styles */
+        select.time-input {
+            background: var(--color-bg-card);
+            cursor: pointer;
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+            background-size: 16px;
+            padding-right: 35px;
+        }
+        
+        select.time-input:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+            border-color: var(--color-primary);
+        }
+        
+        select.time-input:focus {
+            outline: none;
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 2px rgba(0, 255, 136, 0.2);
+        }
 
         .refresh-btn {
             background: transparent;
@@ -676,12 +701,23 @@
                 <button class="page-tab" onclick="switchViewMode('table', this)" id="tableTab">
                     📋 <span data-i18n-key="profit.views.table">表格视图</span>
                 </button>
+                <button class="page-tab" onclick="addRegionSelector()" style="background: #ff6b6b;">
+                    🌏 添加地区
+                </button>
             </div>
         </div>
         
         <!-- Time Pills -->
         <!-- Unified Time Selector Module -->
-        <div class="time-selector-module">
+        <div class="time-selector-module" id="profitTimeSelectorModule">
+            <select id="regionSelector" class="time-input" onchange="handleRegionChange()" style="min-width: 120px; margin-right: 12px; margin-left: 0; display: inline-block;">
+                <option value="all">全部地区</option>
+                <option value="NSW">NSW</option>
+                <option value="QLD">QLD</option>
+                <option value="VIC">VIC</option>
+                <option value="SA">SA</option>
+                <option value="TAS">TAS</option>
+            </select>
             <button class="time-pill active" onclick="switchTimePeriod('day', this)" data-i18n-key="dayReport">日</button>
             <button class="time-pill" onclick="switchTimePeriod('month', this)" data-i18n-key="monthReport">月</button>
             <button class="time-pill" onclick="switchTimePeriod('year', this)" data-i18n-key="yearReport">年</button>
@@ -832,7 +868,6 @@
     </div>
 
     <!-- Add profit chart fix script -->
-    <script src="profit-chart-fix.js"></script>
 
     <script>
         // Global chart variables
@@ -970,6 +1005,17 @@
                     });
                 }
 
+                // Check region selector
+                const regionSelector = document.getElementById('regionSelector');
+                console.log('Region selector element:', regionSelector);
+                if (!regionSelector) {
+                    console.error('Region selector NOT found in DOM!');
+                } else {
+                    console.log('Region selector found, value:', regionSelector.value);
+                    console.log('Region selector style display:', window.getComputedStyle(regionSelector).display);
+                    console.log('Region selector parent class:', regionSelector.parentElement.className);
+                }
+                
                 // Initialize time selector with default day + today
                 const today = new Date();
                 const timeInput = document.getElementById('timeSelector');
@@ -1088,6 +1134,31 @@
                         break;
                 }
             }
+        }
+
+        // Region change handling
+        function handleRegionChange() {
+            const regionSelector = document.getElementById('regionSelector');
+            const selectedRegion = regionSelector.value;
+            console.log('[handleRegionChange] Selected region:', selectedRegion);
+            
+            // Simply refresh all data with new region
+            refreshData();
+        }
+        
+        // Update charts data based on region
+        function updateChartsData(region = 'all') {
+            refreshCharts(region);
+        }
+        
+        // Update stats cards based on region
+        function updateStatsCards(region = 'all') {
+            updateStats(region);
+        }
+        
+        // Update table data based on region
+        function updateTableData(region = 'all') {
+            refreshTableData(region);
         }
 
         // Time period switching
@@ -1219,8 +1290,13 @@
             console.log('[refreshData] Current view mode:', currentViewMode);
             console.log('[refreshData] Current time period:', currentTimePeriod);
             
+            // Get selected region
+            const regionSelector = document.getElementById('regionSelector');
+            const selectedRegion = regionSelector ? regionSelector.value : 'all';
+            console.log('[refreshData] Selected region:', selectedRegion);
+            
             // Update stats
-            updateStats();
+            updateStats(selectedRegion);
             
             // Check if table view is visible
             const tableViewContent = document.getElementById('tableViewContent');
@@ -1232,10 +1308,10 @@
             if (currentViewMode === 'table' || isTableVisible) {
                 // Refresh table data
                 console.log('[refreshData] Refreshing table view');
-                refreshTableData();
+                refreshTableData(selectedRegion);
             } else {
                 // Refresh charts
-                refreshCharts();
+                refreshCharts(selectedRegion);
             }
         }
         
@@ -1276,10 +1352,21 @@
             loadTableData();
         }
 
-        // Update stats based on current time period
-        function updateStats() {
+        // Update stats based on current time period and region
+        function updateStats(region = 'all') {
             // This would normally fetch data from an API
-            // For now, using demo data
+            // For now, using demo data with region multipliers
+            const regionMultipliers = {
+                'all': 1,
+                'NSW': 0.35,
+                'QLD': 0.25,
+                'VIC': 0.20,
+                'SA': 0.15,
+                'TAS': 0.05
+            };
+            
+            const multiplier = regionMultipliers[region] || 1;
+            
             const stats = {
                 day: {
                     userCount: '1,234',
@@ -1319,17 +1406,74 @@
             };
             
             const currentStats = stats[currentTimePeriod] || stats.day;
-            document.getElementById('userCount').textContent = currentStats.userCount;
-            document.getElementById('totalRevenue').textContent = currentStats.totalRevenue;
-            document.getElementById('avgProfit').textContent = currentStats.avgProfit;
-            document.getElementById('maxStationProfit').textContent = currentStats.maxProfit;
-            document.getElementById('minStationProfit').textContent = currentStats.minProfit;
+            
+            // Apply region multiplier to numeric values
+            const userCount = Math.round(parseInt(currentStats.userCount.replace(/,/g, '')) * multiplier).toLocaleString();
+            const totalRevenue = '$' + Math.round(parseInt(currentStats.totalRevenue.replace(/[$,]/g, '')) * multiplier).toLocaleString();
+            const avgProfit = currentStats.avgProfit; // Keep average the same
+            const maxProfit = '$' + Math.round(parseInt(currentStats.maxProfit.replace(/[$,]/g, '')) * multiplier).toLocaleString();
+            const minProfit = '$' + Math.round(parseInt(currentStats.minProfit.replace(/[$,]/g, '')) * multiplier).toLocaleString();
+            
+            document.getElementById('userCount').textContent = userCount;
+            document.getElementById('totalRevenue').textContent = totalRevenue;
+            document.getElementById('avgProfit').textContent = avgProfit;
+            document.getElementById('maxStationProfit').textContent = maxProfit;
+            document.getElementById('minStationProfit').textContent = minProfit;
         }
 
         // Toggle test mode
         function toggleTestMode() {
             console.log('Toggling test mode');
             // TODO: Implement test mode functionality
+        }
+        
+        // Manually add region selector
+        function addRegionSelector() {
+            const timeSelectorModule = document.querySelector('.time-selector-module');
+            if (timeSelectorModule) {
+                // Check if region selector already exists
+                let regionSelector = document.getElementById('regionSelector');
+                if (!regionSelector) {
+                    console.log('Creating region selector...');
+                    
+                    // Create the select element
+                    regionSelector = document.createElement('select');
+                    regionSelector.id = 'regionSelector';
+                    regionSelector.className = 'time-input';
+                    regionSelector.style.minWidth = '120px';
+                    regionSelector.style.marginRight = '12px';
+                    regionSelector.style.marginLeft = '0';
+                    regionSelector.style.display = 'inline-block';
+                    regionSelector.onchange = function() { handleRegionChange(); };
+                    
+                    // Add options
+                    const regions = [
+                        { value: 'all', text: '全部地区' },
+                        { value: 'NSW', text: 'NSW' },
+                        { value: 'QLD', text: 'QLD' },
+                        { value: 'VIC', text: 'VIC' },
+                        { value: 'SA', text: 'SA' },
+                        { value: 'TAS', text: 'TAS' }
+                    ];
+                    
+                    regions.forEach(region => {
+                        const option = document.createElement('option');
+                        option.value = region.value;
+                        option.textContent = region.text;
+                        regionSelector.appendChild(option);
+                    });
+                    
+                    // Insert at the beginning of time-selector-module
+                    const firstChild = timeSelectorModule.firstElementChild;
+                    timeSelectorModule.insertBefore(regionSelector, firstChild);
+                    
+                    console.log('Region selector created successfully');
+                    alert('地区选择器已添加！');
+                } else {
+                    console.log('Region selector already exists');
+                    alert('地区选择器已存在！');
+                }
+            }
         }
 
         // View mode switching
@@ -1426,14 +1570,24 @@
         }
 
         // Initialize all charts
-        function initAllCharts() {
-            initUserManagementChart();
-            initRevenueDistributionChart();
-            initPowerRevenueChart();
-            initProfitRankingChart();
+        function initAllCharts(region = 'all') {
+            initUserManagementChart(region);
+            initRevenueDistributionChart(region);
+            initPowerRevenueChart(region);
+            initProfitRankingChart(region);
         }
 
-        function initUserManagementChart() {
+        function initUserManagementChart(region = 'all') {
+            // Apply region multiplier for data
+            const regionMultipliers = {
+                'all': 1,
+                'NSW': 0.35,
+                'QLD': 0.25,
+                'VIC': 0.20,
+                'SA': 0.15,
+                'TAS': 0.05
+            };
+            const multiplier = regionMultipliers[region] || 1;
             const options = {
                 tooltip: {
                     trigger: 'item',
@@ -1479,17 +1633,17 @@
                     },
                     data: [
                         { 
-                            value: 1048, 
+                            value: Math.round(1048 * multiplier), 
                             name: window.i18n ? window.i18n.getText('profit.filters.active') : '活跃用户',
                             itemStyle: { color: '#00ff88' }
                         },
                         { 
-                            value: 735, 
+                            value: Math.round(735 * multiplier), 
                             name: window.i18n ? window.i18n.getText('profit.filters.inactive') : '非活跃用户',
                             itemStyle: { color: '#ffd93d' }
                         },
                         { 
-                            value: 580, 
+                            value: Math.round(580 * multiplier), 
                             name: window.i18n ? window.i18n.getText('profit.filters.notParticipating') : '未参与用户',
                             itemStyle: { color: '#ff6b6b' }
                         }
@@ -2137,10 +2291,10 @@
         }
 
         // Refresh functions
-        function refreshCharts() {
+        function refreshCharts(region = 'all') {
             if (currentViewMode === 'chart') {
                 setTimeout(() => {
-                    initAllCharts();
+                    initAllCharts(region);
                 }, 100);
             }
         }
@@ -2201,6 +2355,58 @@
             window.i18n.translations.en.actualDischarge = 'Actual Discharge';
             window.i18n.translations.en.profit = 'Profit';
         }
+    </script>
+    
+    <!-- Force create region selector -->
+    <script>
+        // Ensure region selector is created
+        window.addEventListener('load', function() {
+            setTimeout(() => {
+                const timeSelectorModule = document.querySelector('.time-selector-module');
+                if (timeSelectorModule) {
+                    // Check if region selector already exists
+                    let regionSelector = document.getElementById('regionSelector');
+                    if (!regionSelector) {
+                        console.log('Creating region selector...');
+                        
+                        // Create the select element
+                        regionSelector = document.createElement('select');
+                        regionSelector.id = 'regionSelector';
+                        regionSelector.className = 'time-input';
+                        regionSelector.style.minWidth = '120px';
+                        regionSelector.style.marginRight = '12px';
+                        regionSelector.style.marginLeft = '0';
+                        regionSelector.style.display = 'inline-block';
+                        regionSelector.onchange = function() { handleRegionChange(); };
+                        
+                        // Add options
+                        const regions = [
+                            { value: 'all', text: '全部地区' },
+                            { value: 'NSW', text: 'NSW' },
+                            { value: 'QLD', text: 'QLD' },
+                            { value: 'VIC', text: 'VIC' },
+                            { value: 'SA', text: 'SA' },
+                            { value: 'TAS', text: 'TAS' }
+                        ];
+                        
+                        regions.forEach(region => {
+                            const option = document.createElement('option');
+                            option.value = region.value;
+                            option.textContent = region.text;
+                            regionSelector.appendChild(option);
+                        });
+                        
+                        // Insert at the beginning of time-selector-module
+                        const firstChild = timeSelectorModule.firstElementChild;
+                        timeSelectorModule.insertBefore(regionSelector, firstChild);
+                        
+                        console.log('Region selector created successfully');
+                    } else {
+                        console.log('Region selector already exists');
+                    }
+                }
+            }, 500);
+        });
     </script>
 </body>
 </html>

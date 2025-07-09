@@ -33,10 +33,29 @@
         .container {
             background: var(--color-bg);
             max-width: 1200px;
-            min-height: 100vh;
+            height: 100vh;
             margin: 0 auto;
             box-sizing: border-box;
             padding: 80px 24px 40px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* Fixed Header Area */
+        .fixed-header {
+            position: sticky;
+            top: 60px;  /* 从80px改为60px，上移20px */
+            background: #000;
+            z-index: 100;
+            padding-bottom: 0;  /* 从20px改为0 */
+        }
+        
+        /* Scrollable Content Area */
+        .scrollable-content {
+            flex: 1;
+            overflow-y: auto;
+            padding-bottom: 20px;
+            padding-top: 10px;  /* 添加顶部内边距，内容向下移动10px */
         }
         .card, .glass, .stat-card, .chart-container, .table-container {
             background: var(--color-bg-card);
@@ -83,11 +102,12 @@
             border-bottom: 1px solid var(--color-border);
         }
         .page-header {
-            margin-bottom: -24px;
+            margin-bottom: -44px; /* 从-24px改为-44px，上移20px */
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-top: -20px; /* 向上移动20px */
+            border-bottom: none !important; /* 去掉分割线 */
         }
         .page-title {
             font-size: 48px;
@@ -688,12 +708,59 @@
             border-color: rgba(255, 255, 255, 0.2);
             color: #fff;
         }
+        .filter-btn.export {
+            background: rgba(30, 127, 255, 0.1);
+            border: 1px solid rgba(30, 127, 255, 0.3);
+            color: var(--color-accent);
+        }
+        .filter-btn.export:hover {
+            background: rgba(30, 127, 255, 0.2);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(30, 127, 255, 0.3);
+        }
+        .filter-btn.refresh {
+            background: rgba(0, 255, 136, 0.1);
+            border: 1px solid rgba(0, 255, 136, 0.3);
+            color: #00ff88;
+        }
+        .filter-btn.refresh:hover {
+            background: rgba(0, 255, 136, 0.15);
+            border-color: rgba(0, 255, 136, 0.4);
+            transform: translateY(-1px);
+        }
         @media (max-width: 768px) {
             .search-filter-section {
                 flex-direction: column;
             }
         }
         /* === 消息中心查询区域样式同步 end === */
+        
+        /* Table Card - 与家庭页面保持一致 */
+        .table-card {
+            background: var(--color-bg-card);
+            border-radius: var(--radius);
+            box-shadow: var(--color-shadow);
+            border: 1.5px solid var(--color-border);
+            width: 100%;
+            margin-bottom: 20px;
+            padding: 20px;
+        }
+        
+        /* Table Actions Header */
+        .table-actions-header {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--color-border);
+        }
+        
+        /* Table Wrapper */
+        .table-wrapper {
+            overflow-x: auto;
+            border-radius: var(--radius);
+            border: 1px solid var(--color-border);
+        }
 
         /* Data Table */
         .table-section {
@@ -753,7 +820,6 @@
 
         .data-table tbody tr:hover {
             background: rgba(255, 255, 255, 0.03);
-            transform: translateY(-1px);
         }
 
         /* Operation Commands */
@@ -815,7 +881,6 @@
         .action-link:hover {
             background: rgba(0, 255, 136, 0.1);
             border-color: rgba(0, 255, 136, 0.3);
-            transform: translateY(-1px);
         }
 
         /* Pagination */
@@ -851,11 +916,17 @@
             background: rgba(255, 255, 255, 0.08);
             border: 1px solid rgba(255, 255, 255, 0.15);
             border-radius: 8px;
+            color: rgba(255, 255, 255, 0.8);
             padding: 6px 12px;
-            color: #fff;
             font-size: 13px;
-            outline: none;
             cursor: pointer;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        .page-size-select:focus {
+            border-color: rgba(0, 255, 136, 0.5);
+            background: rgba(255, 255, 255, 0.12);
         }
 
         .page-size-select option {
@@ -870,24 +941,25 @@
         }
 
         .page-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: rgba(255, 255, 255, 0.7);
             width: 36px;
             height: 36px;
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            background: rgba(255, 255, 255, 0.05);
-            color: rgba(255, 255, 255, 0.7);
-            border-radius: 8px;
-            font-size: 14px;
-            cursor: pointer;
-            transition: all 0.2s ease;
             display: flex;
             align-items: center;
             justify-content: center;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            outline: none;
         }
 
         .page-btn:hover:not(:disabled) {
             background: rgba(255, 255, 255, 0.1);
             color: #fff;
-            transform: translateY(-1px);
+            border-color: rgba(255, 255, 255, 0.2);
         }
 
         .page-btn.active {
@@ -911,19 +983,25 @@
         }
 
         .page-input {
-            width: 45px;
             background: rgba(255, 255, 255, 0.08);
             border: 1px solid rgba(255, 255, 255, 0.15);
-            border-radius: 6px;
-            padding: 6px 4px;
-            color: #fff;
-            font-size: 13px;
+            border-radius: 8px;
+            color: rgba(255, 255, 255, 0.8);
+            width: 50px;
+            height: 32px;
             text-align: center;
+            font-size: 13px;
             outline: none;
+            transition: all 0.3s ease;
         }
 
         .page-input:focus {
             border-color: rgba(0, 255, 136, 0.5);
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+        .page-input::placeholder {
+            color: rgba(255, 255, 255, 0.4);
         }
 
         /* Date Picker Styles */
@@ -1296,71 +1374,96 @@
 
     <!-- Main Container -->
     <div class="container">
-        <!-- Page Header -->
-        <div class="page-header">
-            <h1 class="page-title" data-i18n="operationLog.title">操作记录</h1>
-        </div>
+        <!-- Fixed Header Area -->
+        <div class="fixed-header">
+            <!-- Page Header -->
+            <div class="page-header">
+                <h1 class="page-title" data-i18n="operationLog.title">操作记录</h1>
+            </div>
 
-        <!-- Search and Filter Section -->
-        <div class="search-filter-section" style="display: flex; align-items: center; gap: 12px; margin-top: -24px; margin-bottom: 16px; padding: 20px; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 16px; backdrop-filter: blur(10px);">
-            <input type="text" class="search-input" id="opSearchInput" 
-                   style="width: 240px; padding: 12px 16px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 10px; color: rgba(255, 255, 255, 0.9); font-size: 14px;"
-                   data-i18n-placeholder="operationLog.placeholder.operator" 
-                   placeholder="请输入操作人员...">
-            
-            <select class="filter-select" id="opCommandFilter"
-                    style="width: 180px; padding: 12px 16px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 10px; color: rgba(255, 255, 255, 0.9); font-size: 14px;">
-                <option value="" data-i18n-key="operationLog.placeholder.command">全部命令</option>
-                <option value="charge" data-i18n-key="operationLog.commands.charge">充电</option>
-                <option value="discharge" data-i18n-key="operationLog.commands.discharge">放电</option>
-                <option value="stop-charge" data-i18n-key="operationLog.commands.stopCharge">停止充电</option>
-                <option value="stop-discharge" data-i18n-key="operationLog.commands.stopDischarge">停止放电</option>
-            </select>
-            
-            <input type="text" class="search-input" id="opDateInput" 
-                   style="width: 240px; padding: 12px 16px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 10px; color: rgba(255, 255, 255, 0.9); font-size: 14px; cursor: pointer;"
-                   data-i18n-placeholder="operationLog.placeholder.time" 
-                   placeholder="请选择时间..." 
-                   readonly>
-            
-            <div class="filter-actions" style="display: flex; gap: 8px; margin-left: auto;">
-                <button class="filter-btn primary" onclick="applyOpFilters()"
-                        style="background: #00ff88; border-color: #00ff88; color: #000; font-weight: 500;">
-                    <span></span>
-                    <span data-i18n-key="operationLog.buttons.search">查询</span>
-                </button>
-                <button class="filter-btn secondary" onclick="resetOpFilters()"
-                        style="background: rgba(255, 255, 255, 0.05);">
-                    <span></span>
-                    <span data-i18n-key="operationLog.buttons.reset">重置</span>
-                </button>
-                <button class="filter-btn export" onclick="exportOpLogs()"
-                        style="background: rgba(30, 127, 255, 0.1); border: 1px solid rgba(30, 127, 255, 0.3); color: var(--color-accent);">
-                    <span></span>
-                    <span data-i18n-key="operationLog.buttons.clear">导出</span>
-                </button>
+            <!-- Search and Filter Section -->
+            <div class="search-filter-section" style="display: flex; align-items: center; gap: 12px; margin-top: -14px; margin-bottom: 16px; padding: 20px; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 16px; backdrop-filter: blur(10px);">
+                <select id="regionFilter" class="filter-select" 
+                        style="width: 180px; padding: 12px 16px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 10px; color: rgba(255, 255, 255, 0.9); font-size: 14px;">
+                    <option value="" data-i18n-key="allRegions">全部地区</option>
+                    <option value="NSW">NSW</option>
+                    <option value="QLD">QLD</option>
+                    <option value="VIC">VIC</option>
+                    <option value="SA">SA</option>
+                    <option value="TAS">TAS</option>
+                </select>
+                
+                <input type="text" class="search-input" id="opSearchInput" 
+                       style="width: 180px; padding: 12px 16px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 10px; color: rgba(255, 255, 255, 0.9); font-size: 14px;"
+                       data-i18n-placeholder="operationLog.placeholder.operator" 
+                       placeholder="请输入操作人员...">
+                
+                <select class="filter-select" id="opCommandFilter"
+                        style="width: 180px; padding: 12px 16px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 10px; color: rgba(255, 255, 255, 0.9); font-size: 14px;">
+                    <option value="" data-i18n-key="operationLog.placeholder.command">全部命令</option>
+                    <option value="charge" data-i18n-key="operationLog.commands.charge">充电</option>
+                    <option value="discharge" data-i18n-key="operationLog.commands.discharge">放电</option>
+                    <option value="stop-charge" data-i18n-key="operationLog.commands.stopCharge">停止充电</option>
+                    <option value="stop-discharge" data-i18n-key="operationLog.commands.stopDischarge">停止放电</option>
+                </select>
+                
+                <input type="text" class="search-input" id="opDateInput" 
+                       style="width: 180px; padding: 12px 16px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 10px; color: rgba(255, 255, 255, 0.9); font-size: 14px; cursor: pointer;"
+                       data-i18n-placeholder="operationLog.placeholder.time" 
+                       placeholder="请选择时间..." 
+                       readonly>
+                
+                <div class="filter-actions" style="display: flex; gap: 8px; margin-left: auto;">
+                    <button class="filter-btn primary" onclick="applyOpFilters()"
+                            style="background: #00ff88; border-color: #00ff88; color: #000; font-weight: 500;">
+                        <span></span>
+                        <span data-i18n-key="operationLog.buttons.search">查询</span>
+                    </button>
+                    <button class="filter-btn secondary" onclick="resetOpFilters()"
+                            style="background: rgba(255, 255, 255, 0.05);">
+                        <span></span>
+                        <span data-i18n-key="operationLog.buttons.reset">重置</span>
+                    </button>
+                </div>
             </div>
         </div>
 
-        <!-- Table Section -->
-        <div class="table-section">
-            <div class="table-container">
-                <table class="data-table">
-                    <thead>
-                        <tr>
-                            <th data-i18n="operationLog.table.time">时间</th>
-                            <th data-i18n="operationLog.table.command">命令</th>
-                            <th data-i18n="operationLog.table.operator">操作人</th>
-                            <th data-i18n="operationLog.table.stations">下发电站</th>
-                            <th data-i18n="operationLog.table.success">成功</th>
-                            <th data-i18n="operationLog.table.failed">失败</th>
-                            <th data-i18n="operationLog.table.action">操作</th>
-                        </tr>
-                    </thead>
-                    <tbody id="operationTableBody">
-                        <!-- Data will be populated here -->
-                    </tbody>
-                </table>
+        <!-- Scrollable Content Area -->
+        <div class="scrollable-content">
+            <!-- Table Card -->
+            <div class="table-card">
+                <!-- Table Actions Header -->
+                <div class="table-actions-header">
+                    <button class="filter-btn export" onclick="exportOperationLogs()">
+                        <span>📥</span>
+                        <span data-i18n-key="operationLog.buttons.export">导出</span>
+                    </button>
+                    <button class="filter-btn refresh" onclick="refreshOperationLogs()">
+                        <span>🔄</span>
+                        <span data-i18n-key="operationLog.buttons.refresh">刷新</span>
+                    </button>
+                </div>
+                
+                <!-- Table -->
+                <div class="table-wrapper">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th data-i18n="operationLog.table.time">时间</th>
+                                <th data-i18n="operationLog.table.region">地区</th>
+                                <th data-i18n="operationLog.table.command">命令</th>
+                                <th data-i18n="operationLog.table.stations">下发电站</th>
+                                <th data-i18n="operationLog.table.success">成功</th>
+                                <th data-i18n="operationLog.table.failed">失败</th>
+                                <th data-i18n="operationLog.table.operator">操作人</th>
+                                <th data-i18n="operationLog.table.action">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="operationTableBody">
+                            <!-- Data will be populated here -->
+                        </tbody>
+                    </table>
+                </div>
             </div>
 
             <!-- Pagination -->
@@ -1399,17 +1502,18 @@
             return cnName;
         }
         
+        const regions = ['NSW', 'QLD', 'VIC', 'SA', 'TAS'];
         const allOperations = [
-            { id: 1, time: '2024-02-17 06:25', command: 'charge', operator: '李怡悦', stations: 59, success: 45, failed: 14 },
-            { id: 2, time: '2024-02-17 07:01', command: 'stop-charge', operator: '王乐康', stations: 59, success: 45, failed: 14 },
-            { id: 3, time: '2024-02-17 18:00', command: 'discharge', operator: '李怡悦', stations: 59, success: 45, failed: 14 },
-            { id: 4, time: '2024-02-17 23:07', command: 'stop-discharge', operator: '王乐康', stations: 59, success: 45, failed: 14 },
-            { id: 5, time: '2024-02-16 14:30', command: 'charge', operator: '张三', stations: 45, success: 38, failed: 7 },
-            { id: 6, time: '2024-02-16 16:45', command: 'discharge', operator: '李四', stations: 32, success: 28, failed: 4 },
-            { id: 7, time: '2024-02-16 20:15', command: 'stop-charge', operator: '王五', stations: 67, success: 55, failed: 12 },
-            { id: 8, time: '2024-02-15 09:20', command: 'stop-discharge', operator: '赵六', stations: 89, success: 78, failed: 11 },
-            { id: 9, time: '2024-02-15 11:35', command: 'charge', operator: '孙七', stations: 23, success: 20, failed: 3 },
-            { id: 10, time: '2024-02-15 15:50', command: 'discharge', operator: '周八', stations: 56, success: 48, failed: 8 }
+            { id: 1, time: '2024-02-17 06:25', command: 'charge', operator: '李怡悦', region: 'NSW', stations: 59, success: 45, failed: 14 },
+            { id: 2, time: '2024-02-17 07:01', command: 'stop-charge', operator: '王乐康', region: 'NSW', stations: 59, success: 45, failed: 14 },
+            { id: 3, time: '2024-02-17 18:00', command: 'discharge', operator: '李怡悦', region: 'QLD', stations: 59, success: 45, failed: 14 },
+            { id: 4, time: '2024-02-17 23:07', command: 'stop-discharge', operator: '王乐康', region: 'QLD', stations: 59, success: 45, failed: 14 },
+            { id: 5, time: '2024-02-16 14:30', command: 'charge', operator: '张三', region: 'VIC', stations: 45, success: 38, failed: 7 },
+            { id: 6, time: '2024-02-16 16:45', command: 'discharge', operator: '李四', region: 'VIC', stations: 32, success: 28, failed: 4 },
+            { id: 7, time: '2024-02-16 20:15', command: 'stop-charge', operator: '王五', region: 'SA', stations: 67, success: 55, failed: 12 },
+            { id: 8, time: '2024-02-15 09:20', command: 'stop-discharge', operator: '赵六', region: 'SA', stations: 89, success: 78, failed: 11 },
+            { id: 9, time: '2024-02-15 11:35', command: 'charge', operator: '孙七', region: 'TAS', stations: 23, success: 20, failed: 3 },
+            { id: 10, time: '2024-02-15 15:50', command: 'discharge', operator: '周八', region: 'TAS', stations: 56, success: 48, failed: 8 }
         ];
 
         // Generate more mock data to simulate pagination
@@ -1428,6 +1532,7 @@
                 }).replace(/\//g, '-'),
                 command: commands[Math.floor(Math.random() * commands.length)],
                 operator: operatorsCN[Math.floor(Math.random() * operatorsCN.length)],
+                region: regions[Math.floor(Math.random() * regions.length)],
                 stations: Math.floor(Math.random() * 80) + 20,
                 success: Math.floor(Math.random() * 60) + 20,
                 failed: Math.floor(Math.random() * 20) + 1
@@ -1525,7 +1630,7 @@
             if (pageData.length === 0) {
                 tbody.innerHTML = `
                     <tr>
-                        <td colspan="7" style="text-align: center; padding: 40px; color: rgba(255, 255, 255, 0.5);">
+                        <td colspan="8" style="text-align: center; padding: 40px; color: rgba(255, 255, 255, 0.5);">
                             ${window.i18n ? window.i18n.getText('operationLog.noData') : '暂无数据'}
                         </td>
                     </tr>
@@ -1538,16 +1643,17 @@
                 const row = document.createElement('tr');
                 row.innerHTML = `
                     <td>${operation.time}</td>
+                    <td>${operation.region || '-'}</td>
                     <td>
                         <span class="operation-command ${commandInfo.class}">
                             <span class="command-icon"></span>
                             ${commandInfo.text}
                         </span>
                     </td>
-                    <td>${getOperatorName(operation.operator)}</td>
                     <td>${operation.stations}</td>
                     <td>${operation.success}</td>
                     <td>${operation.failed}</td>
+                    <td>${getOperatorName(operation.operator)}</td>
                     <td>
                         <a href="#" class="action-link" onclick="viewOperationDetails(${operation.id}); return false;">${window.i18n ? window.i18n.getText('operationLog.viewDetails') : '详情'}</a>
                     </td>
@@ -1568,18 +1674,20 @@
 
         // Remove old searchOperations and resetSearch, add new filter logic
         function applyOpFilters() {
+            const region = document.getElementById('regionFilter').value;
             const operator = document.getElementById('opSearchInput').value.trim();
             const command = document.getElementById('opCommandFilter').value;
             const date = document.getElementById('opDateInput').value.trim();
             
             filteredData = allOperations.filter(op => {
+                const regionMatch = !region || op.region === region;
                 const nameMatch = !operator || op.operator.includes(operator);
                 const commandMatch = !command || op.command === command;
                 let dateMatch = true;
                 if (date) {
                     dateMatch = op.time.startsWith(date);
                 }
-                return nameMatch && commandMatch && dateMatch;
+                return regionMatch && nameMatch && commandMatch && dateMatch;
             });
             currentPage = 1;
             updateTableDisplay();
@@ -1587,6 +1695,7 @@
             showInfoToast('查询完成', `找到 ${filteredData.length} 条匹配记录`);
         }
         function resetOpFilters() {
+            document.getElementById('regionFilter').selectedIndex = 0;
             document.getElementById('opSearchInput').value = '';
             document.getElementById('opCommandFilter').selectedIndex = 0;
             document.getElementById('opDateInput').value = '';
@@ -1596,31 +1705,50 @@
             updatePaginationDisplay();
             showInfoToast('重置完成', '已清空搜索条件');
         }
-        function exportOpLogs() {
+        function exportOperationLogs() {
             if (!filteredData.length) {
                 showErrorToast('导出失败', '没有可导出的数据');
                 return;
             }
-            const headers = ['时间','命令','操作人','下发电站','成功','失败'];
-            const rows = filteredData.map(op => [op.time, getCommandInfo(op.command).text, op.operator, op.stations, op.success, op.failed]);
+            const headers = ['时间','地区','命令','下发电站','成功','失败','操作人','操作'];
+            const rows = filteredData.map(op => [
+                op.time, 
+                op.region || '-',
+                getCommandInfo(op.command).text, 
+                op.stations, 
+                op.success, 
+                op.failed,
+                op.operator, 
+                '详情'
+            ]);
             let csv = headers.join(',') + '\n';
             rows.forEach(row => {
                 csv += row.map(item => `"${item}"`).join(',') + '\n';
             });
-            const blob = new Blob([csv], { type: 'text/csv' });
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = '操作记录导出.csv';
+            a.download = `操作记录_${new Date().toISOString().split('T')[0]}.csv`;
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
             showSuccessToast('导出成功', `已导出 ${filteredData.length} 条记录`);
         }
+        
+        function refreshOperationLogs() {
+            // 重新加载数据
+            filteredData = [...allOperations];
+            currentPage = 1;
+            updateTableDisplay();
+            updatePaginationDisplay();
+            showSuccessToast('刷新成功', '数据已更新');
+        }
+        
         function setupOpRealTimeSearch() {
             const searchInputs = [document.getElementById('opSearchInput'), document.getElementById('opDateInput')];
-            const searchSelect = document.getElementById('opCommandFilter');
+            const searchSelects = [document.getElementById('regionFilter'), document.getElementById('opCommandFilter')];
             searchInputs.forEach(input => {
                 let searchTimeout;
                 input.addEventListener('input', function() {
@@ -1630,8 +1758,10 @@
                     }, 500);
                 });
             });
-            searchSelect.addEventListener('change', function() {
-                applyOpFilters();
+            searchSelects.forEach(select => {
+                select.addEventListener('change', function() {
+                    applyOpFilters();
+                });
             });
         }
         function setupOpDatePicker() {

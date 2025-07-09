@@ -1005,14 +1005,25 @@ class I18n {
                 pushStrategy: {
                     title: "推送策略",
                     buttons: {
+                        add: "新建",
                         edit: "编辑",
+                        delete: "删除",
                         save: "保存",
                         cancel: "取消",
-                        confirm: "确定"
+                        confirm: "确定",
+                        refresh: "刷新",
+                        export: "导出",
+                        back: "返回"
                     },
+                    formTitle: {
+                        add: "新建推送策略",
+                        edit: "编辑推送策略"
+                    },
+                    regionPriceSettings: "地区价格设置",
                     dischargePriceStrategy: "放电通知策略价格",
                     chargePriceStrategy: "充电通知策略价格",
                     descriptions: {
+                        regionPriceDescription: "为每个地区设置充电和放电通知策略价格",
                         dischargeDescription: "价格超过设定值，则进行提醒",
                         chargeDescription: "价格低于设定值，则进行提醒"
                     },
@@ -1025,14 +1036,21 @@ class I18n {
                         email: "邮件"
                     },
                     placeholder: {
-                        price: "价格"
+                        price: "价格",
+                        enterPrice: "输入价格"
                     },
                     table: {
+                        region: "地区",
+                        dischargePrice: "放电价格",
+                        chargePrice: "充电价格",
+                        actions: "操作",
+                        status: "状态",
                         userName: "用户名称",
-                        userEmail: "用户邮箱",
-                        status: "状态"
+                        userEmail: "用户邮箱"
                     },
                     status: {
+                        configured: "已配置",
+                        notConfigured: "未配置",
                         enabled: "启用",
                         disabled: "禁用"
                     },
@@ -1040,13 +1058,27 @@ class I18n {
                         saveSuccess: "保存成功",
                         strategyUpdated: "推送策略已成功更新",
                         cancelled: "已取消",
+                        editCancelled: "编辑已取消",
                         formReset: "表单已重置为原始状态",
                         validationFailed: "验证失败",
+                        missingRegionPrices: "请为以下地区设置价格: ",
                         enterDischargePrice: "请输入放电通知策略价格",
                         enterChargePrice: "请输入充电通知策略价格",
                         invalidDischargePrice: "放电价格必须是有效的正数",
                         invalidChargePrice: "充电价格必须是有效的正数",
-                        invalidFrequency: "提醒频率必须在1-60分钟之间"
+                        invalidFrequency: "提醒频率必须在1-60分钟之间",
+                        selectUser: "请选择至少一个用户",
+                        exporting: "导出中",
+                        exportingData: "正在导出推送策略数据...",
+                        exportSuccess: "导出成功",
+                        dataExported: "推送策略数据已导出",
+                        refreshSuccess: "刷新成功",
+                        dataRefreshed: "推送策略数据已更新",
+                        allConfigured: "所有地区已配置",
+                        editExisting: "请编辑现有配置",
+                        confirmDelete: "确定要删除该地区的推送策略吗？",
+                        deleteSuccess: "删除成功",
+                        strategyDeleted: "推送策略已删除"
                     }
                 },
                 
@@ -2079,14 +2111,25 @@ class I18n {
                 pushStrategy: {
                     title: "Push Strategy",
                     buttons: {
+                        add: "Add",
                         edit: "Edit",
+                        delete: "Delete",
                         save: "Save",
                         cancel: "Cancel",
-                        confirm: "Confirm"
+                        confirm: "Confirm",
+                        refresh: "Refresh",
+                        export: "Export",
+                        back: "Back"
                     },
+                    formTitle: {
+                        add: "Add Push Strategy",
+                        edit: "Edit Push Strategy"
+                    },
+                    regionPriceSettings: "Region Price Settings",
                     dischargePriceStrategy: "Discharge Notification Price Strategy",
                     chargePriceStrategy: "Charge Notification Price Strategy",
                     descriptions: {
+                        regionPriceDescription: "Set charge and discharge notification strategy prices for each region",
                         dischargeDescription: "Send reminder when price exceeds set value",
                         chargeDescription: "Send reminder when price falls below set value"
                     },
@@ -2099,14 +2142,21 @@ class I18n {
                         email: "Email"
                     },
                     placeholder: {
-                        price: "Price"
+                        price: "Price",
+                        enterPrice: "Enter price"
                     },
                     table: {
+                        region: "Region",
+                        dischargePrice: "Discharge Price",
+                        chargePrice: "Charge Price",
+                        actions: "Actions",
+                        status: "Status",
                         userName: "User Name",
-                        userEmail: "User Email",
-                        status: "Status"
+                        userEmail: "User Email"
                     },
                     status: {
+                        configured: "Configured",
+                        notConfigured: "Not Configured",
                         enabled: "Enabled",
                         disabled: "Disabled"
                     },
@@ -2114,13 +2164,27 @@ class I18n {
                         saveSuccess: "Save Successful",
                         strategyUpdated: "Push strategy updated successfully",
                         cancelled: "Cancelled",
+                        editCancelled: "Edit cancelled",
                         formReset: "Form has been reset to original state",
                         validationFailed: "Validation Failed",
+                        missingRegionPrices: "Please set prices for the following regions: ",
                         enterDischargePrice: "Please enter discharge notification strategy price",
                         enterChargePrice: "Please enter charge notification strategy price",
                         invalidDischargePrice: "Discharge price must be a valid positive number",
                         invalidChargePrice: "Charge price must be a valid positive number",
-                        invalidFrequency: "Reminder frequency must be between 1-60 minutes"
+                        invalidFrequency: "Reminder frequency must be between 1-60 minutes",
+                        selectUser: "Please select at least one user",
+                        exporting: "Exporting",
+                        exportingData: "Exporting push strategy data...",
+                        exportSuccess: "Export Successful",
+                        dataExported: "Push strategy data exported",
+                        refreshSuccess: "Refresh Successful",
+                        dataRefreshed: "Push strategy data updated",
+                        allConfigured: "All regions configured",
+                        editExisting: "Please edit existing configurations",
+                        confirmDelete: "Are you sure you want to delete this region's push strategy?",
+                        deleteSuccess: "Delete Successful",
+                        strategyDeleted: "Push strategy deleted"
                     }
                 },
                 

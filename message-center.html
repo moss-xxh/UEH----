@@ -25,6 +25,25 @@
         .container {
             max-width: 95%;
             padding: 100px 10px 40px;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* Fixed Header Area */
+        .fixed-header {
+            position: sticky;
+            top: 80px;
+            background: #000;
+            z-index: 100;
+            padding-bottom: 20px;
+        }
+        
+        /* Scrollable Content Area */
+        .scrollable-content {
+            flex: 1;
+            overflow-y: auto;
+            padding-bottom: 20px;
         }
 
         /* Page Header */
@@ -773,40 +792,51 @@
         }
         /* === 家庭页面查询区域样式同步 end === */
 
-        /* === 表格样式，与组织管理页保持一致 === */
+        /* === 表格样式，与操作记录页保持一致 === */
         .table-section {
-            background: rgba(255, 255, 255, 0.01);
+            background: rgba(255, 255, 255, 0.02);
             backdrop-filter: blur(30px);
-            border: 1px solid rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
             border-radius: 24px;
             overflow: hidden;
-            transition: all 0.3s ease;
-            margin-bottom: 40px;
+            position: relative;
         }
-        .table-section:hover {
-            background: rgba(255, 255, 255, 0.02);
-            border-color: rgba(255, 255, 255, 0.08);
+        .table-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 50% 0%, rgba(0, 255, 136, 0.01), transparent 70%);
+            pointer-events: none;
         }
         .table-container { overflow-x: auto; }
         .data-table { width: 100%; border-collapse: collapse; }
         .data-table th {
-            background: rgba(255, 255, 255, 0.02);
+            background: rgba(255, 255, 255, 0.05);
             padding: 20px 24px;
             text-align: left;
             font-size: 14px;
-            font-weight: 400;
-            color: rgba(255, 255, 255, 0.7);
-            letter-spacing: 0.5px;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.8);
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            white-space: nowrap;
         }
         .data-table td {
             padding: 20px 24px;
             font-size: 14px;
             color: rgba(255, 255, 255, 0.9);
             border-bottom: 1px solid rgba(255, 255, 255, 0.03);
-            transition: all 0.3s ease;
+            vertical-align: middle;
         }
-        .data-table tr:hover td { background: rgba(255, 255, 255, 0.02); }
+        .data-table tbody tr {
+            transition: all 0.2s ease;
+        }
+        .data-table tbody tr:hover {
+            background: rgba(255, 255, 255, 0.03);
+            transform: translateY(-1px);
+        }
 
         /* === Pagination styles (matching operation log) === */
         .pagination-section {
@@ -957,68 +987,95 @@
 
     <!-- Main Container -->
     <div class="container">
-        <!-- Page Header -->
-        <div class="page-header">
-            <h1 class="page-title" data-i18n-key="messageCenter.title">消息中心</h1>
-        </div>
+        <!-- Fixed Header Area -->
+        <div class="fixed-header">
+            <!-- Page Header -->
+            <div class="page-header">
+                <h1 class="page-title" data-i18n-key="messageCenter.title">消息中心</h1>
+            </div>
 
-        <!-- Search and Filter Section -->
-        <div class="search-filter-section" style="display: flex; align-items: center; gap: 12px; margin-top: 56px; margin-bottom: 16px; padding: 20px; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 16px; backdrop-filter: blur(10px);">
-            <input type="text" class="search-input" id="msgSearchInput" 
-                   style="width: 240px; padding: 12px 16px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 10px; color: rgba(255, 255, 255, 0.9); font-size: 14px;"
-                   data-i18n-placeholder="messageCenter.placeholder.searchKeyword" 
-                   placeholder="请输入消息关键词...">
-            
-            <div class="filter-actions" style="display: flex; gap: 8px; margin-left: auto;">
-                <button class="filter-btn primary" onclick="applyFilters()"
-                        style="background: #00ff88; border-color: #00ff88; color: #000; font-weight: 500;">
-                    <span></span>
-                    <span data-i18n-key="messageCenter.buttons.search">查询</span>
-                </button>
-                <button class="filter-btn secondary" onclick="resetFilters()"
-                        style="background: rgba(255, 255, 255, 0.05);">
-                    <span></span>
-                    <span data-i18n-key="messageCenter.buttons.reset">重置</span>
-                </button>
-                <button class="filter-btn export" onclick="exportMessages()"
-                        style="background: rgba(30, 127, 255, 0.1); border: 1px solid rgba(30, 127, 255, 0.3); color: var(--color-accent);">
-                    <span></span>
-                    <span data-i18n-key="messageCenter.buttons.export">导出</span>
-                </button>
+            <!-- Search and Filter Section -->
+            <div class="search-filter-section" style="display: flex; align-items: center; gap: 12px; margin-top: 56px; margin-bottom: 16px; padding: 20px; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 16px; backdrop-filter: blur(10px);">
+                <select id="regionFilter" class="filter-select" 
+                        style="width: 180px; padding: 12px 16px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 10px; color: rgba(255, 255, 255, 0.9); font-size: 14px;">
+                    <option value="" data-i18n-key="allRegions">全部地区</option>
+                    <option value="NSW">NSW</option>
+                    <option value="QLD">QLD</option>
+                    <option value="VIC">VIC</option>
+                    <option value="SA">SA</option>
+                    <option value="TAS">TAS</option>
+                </select>
+                
+                <input type="text" class="search-input" id="msgSearchInput" 
+                       style="width: 180px; padding: 12px 16px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 10px; color: rgba(255, 255, 255, 0.9); font-size: 14px;"
+                       data-i18n-placeholder="messageCenter.placeholder.searchKeyword" 
+                       placeholder="请输入消息关键词...">
+                
+                <div class="filter-actions" style="display: flex; gap: 8px; margin-left: auto;">
+                    <button class="filter-btn primary" onclick="applyFilters()"
+                            style="background: #00ff88; border-color: #00ff88; color: #000; font-weight: 500;">
+                        <span></span>
+                        <span data-i18n-key="messageCenter.buttons.search">查询</span>
+                    </button>
+                    <button class="filter-btn secondary" onclick="resetFilters()"
+                            style="background: rgba(255, 255, 255, 0.05);">
+                        <span></span>
+                        <span data-i18n-key="messageCenter.buttons.reset">重置</span>
+                    </button>
+                </div>
             </div>
         </div>
 
-        <!-- Message Table Section -->
-        <div class="table-section" id="messageTableSection" style="margin-top:24px;">
-            <div class="table-container">
-                <table class="data-table">
-                    <thead>
-                        <tr>
-                            <th data-i18n-key="messageContent">消息内容</th>
-                            <th data-i18n-key="description">描述</th>
-                            <th data-i18n-key="type">类型</th>
-                            <th data-i18n-key="time">时间</th>
-                        </tr>
-                    </thead>
-                    <tbody id="messageTableBody">
-                        <!-- 行数据动态插入 -->
-                    </tbody>
-                </table>
+        <!-- Scrollable Content Area -->
+        <div class="scrollable-content">
+            <!-- Table Card -->
+            <div class="table-card" id="messageTableSection" style="background: var(--color-bg-card); border-radius: var(--radius); box-shadow: var(--color-shadow); border: 1.5px solid var(--color-border); width: 100%; max-width: 1405px; margin-top: 14px; margin-bottom: 20px; padding: 20px;">
+                <!-- Table Actions Header -->
+                <div class="table-actions-header" style="display: flex; gap: 12px; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid var(--color-border);">
+                    <button class="filter-btn export" onclick="exportMessages()"
+                            style="background: rgba(30, 127, 255, 0.1); border: 1px solid rgba(30, 127, 255, 0.3); color: var(--color-accent); padding: 10px 16px; border-radius: 10px; cursor: pointer; font-size: 14px; transition: all 0.3s; display: flex; align-items: center; gap: 6px;">
+                        <span></span>
+                        <span data-i18n-key="messageCenter.buttons.export">导出</span>
+                    </button>
+                    <button class="filter-btn refresh" onclick="refreshMessages()"
+                            style="background: rgba(0, 255, 136, 0.1); border: 1px solid rgba(0, 255, 136, 0.3); color: #00ff88; padding: 10px 16px; border-radius: 10px; cursor: pointer; font-size: 14px; transition: all 0.3s; display: flex; align-items: center; gap: 6px;">
+                        <span>🔄</span>
+                        <span data-i18n-key="messageCenter.buttons.refresh">刷新</span>
+                    </button>
+                </div>
+                
+                <!-- Table -->
+                <div class="table-wrapper" style="overflow-x: auto; border-radius: var(--radius); border: 1px solid var(--color-border);">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th data-i18n-key="messageContent">消息内容</th>
+                                <th data-i18n-key="region">地区</th>
+                                <th data-i18n-key="description">描述</th>
+                                <th data-i18n-key="type">类型</th>
+                                <th data-i18n-key="time">时间</th>
+                            </tr>
+                        </thead>
+                        <tbody id="messageTableBody">
+                            <!-- 行数据动态插入 -->
+                        </tbody>
+                    </table>
+                </div>
             </div>
-        </div>
 
-   
+       
 
-        <!-- Empty State -->
-        <div class="empty-state" id="emptyState" style="display: none;">
-            <div class="empty-icon">📭</div>
-            <div class="empty-title" data-i18n-key="messageCenter.noMessages">暂无消息</div>
-            <div class="empty-text" data-i18n-key="noMessagesFound">当前筛选条件下没有找到相关消息</div>
-        </div>
+            <!-- Empty State -->
+            <div class="empty-state" id="emptyState" style="display: none;">
+                <div class="empty-icon">📭</div>
+                <div class="empty-title" data-i18n-key="messageCenter.noMessages">暂无消息</div>
+                <div class="empty-text" data-i18n-key="noMessagesFound">当前筛选条件下没有找到相关消息</div>
+            </div>
 
-        <!-- Pagination -->
-        <div class="table-section">
-            <div id="paginationContainer"></div>
+            <!-- Pagination -->
+            <div class="table-section">
+                <div id="paginationContainer"></div>
+            </div>
         </div>
     </div>
 
@@ -1094,6 +1151,7 @@
             const now = new Date();
             
             // 示例数据 - 使用原始价格和阈值数据
+            const regions = ['NSW', 'QLD', 'VIC', 'SA', 'TAS'];
             const messageData = [
                 {
                     id: 1,
@@ -1102,7 +1160,8 @@
                     threshold: 0.35,
                     time: new Date(now.getTime() - 15 * 60000), // 15分钟前
                     read: false,
-                    level: 'high'
+                    level: 'high',
+                    region: 'NSW'
                 },
                 {
                     id: 2,
@@ -1111,7 +1170,8 @@
                     threshold: 0.65,
                     time: new Date(now.getTime() - 45 * 60000), // 45分钟前
                     read: false,
-                    level: 'medium'
+                    level: 'medium',
+                    region: 'VIC'
                 },
                 {
                     id: 3,
@@ -1120,7 +1180,8 @@
                     threshold: 0.30,
                     time: new Date(now.getTime() - 3 * 3600000), // 3小时前
                     read: true,
-                    level: 'high'
+                    level: 'high',
+                    region: 'QLD'
                 },
                 {
                     id: 4,
@@ -1129,7 +1190,8 @@
                     threshold: 0.70,
                     time: new Date(now.getTime() - 8 * 3600000), // 8小时前
                     read: true,
-                    level: 'medium'
+                    level: 'medium',
+                    region: 'NSW'
                 },
                 {
                     id: 5,
@@ -1138,7 +1200,8 @@
                     threshold: 0.28,
                     time: new Date(now.getTime() - 16 * 3600000), // 16小时前
                     read: false,
-                    level: 'medium'
+                    level: 'medium',
+                    region: 'SA'
                 },
                 {
                     id: 6,
@@ -1147,7 +1210,8 @@
                     threshold: 0.72,
                     time: new Date(now.getTime() - 26 * 3600000), // 26小时前
                     read: true,
-                    level: 'high'
+                    level: 'high',
+                    region: 'TAS'
                 }
             ];
             
@@ -1175,11 +1239,15 @@
         // Apply filters
         function applyFilters() {
             const searchTerm = document.getElementById('msgSearchInput').value.toLowerCase();
+            const regionFilter = document.getElementById('regionFilter').value;
 
             filteredMessages = allMessages.filter(message => {
                 // Search filter
                 if (searchTerm && !message.title.toLowerCase().includes(searchTerm) && 
                     !message.message.toLowerCase().includes(searchTerm)) return false;
+                
+                // Region filter
+                if (regionFilter && message.region !== regionFilter) return false;
                 
                 return true;
             });
@@ -1196,6 +1264,7 @@
         // Reset filters
         function resetFilters() {
             document.getElementById('msgSearchInput').value = '';
+            document.getElementById('regionFilter').value = '';
             
             // Reset to show all messages
             filteredMessages = [...allMessages];
@@ -1234,6 +1303,7 @@
                     const tr = document.createElement('tr');
                     tr.innerHTML = `
                         <td>${getMessageTitle(msg.type)}</td>
+                        <td>${msg.region || '-'}</td>
                         <td>${msg.message}</td>
                         <td>${getTypeName(msg.type)}</td>
                         <td>${formatTime(msg.time)}</td>
@@ -1243,6 +1313,19 @@
             }
         }
 
+        // Refresh messages
+        function refreshMessages() {
+            loadMessages();
+            renderMessages();
+            showToast('success', '刷新成功', '消息列表已更新');
+        }
+        
+        // Export messages
+        function exportMessages() {
+            // TODO: Implement export functionality
+            showToast('info', '导出中', '正在导出消息数据...');
+        }
+        
         // Helper functions
         function getTypeName(type) {
             // All types are now "警告" (Warning)
