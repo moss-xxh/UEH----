@@ -2748,8 +2748,8 @@
                 
                 <!-- Action Buttons -->
                 <div class="action-buttons">
-                    <button class="action-btn charge-btn" id="chargeBtn" onclick="handleCharge()"><span data-i18n-key="charge">充电</span></button>
-                    <button class="action-btn discharge-btn" id="dischargeBtn" onclick="handleDischarge()"><span data-i18n-key="discharge">放电</span></button>
+                    <button class="action-btn charge-btn" id="chargeBtn" onclick="window.handleCharge ? window.handleCharge() : handleCharge()"><span data-i18n-key="charge">充电</span></button>
+                    <button class="action-btn discharge-btn" id="dischargeBtn" onclick="window.handleDischarge ? window.handleDischarge() : handleDischarge()"><span data-i18n-key="discharge">放电</span></button>
                 </div>
                 
                 <!-- 优化后：一排3个小毛玻璃卡片 -->
@@ -5518,20 +5518,32 @@
 
         // Interactive functions with proper state management and confirmation
         function handleCharge() {
-            console.log('handleCharge called, currentOperation:', currentOperation);
-            console.log('Selected region:', selectedMainRegion);
+            console.log('=== handleCharge Debug ===');
+            console.log('handleCharge called');
+            console.log('currentOperation:', currentOperation);
+            console.log('typeof currentOperation:', typeof currentOperation);
+            console.log('selectedMainRegion:', selectedMainRegion);
             console.log('Region operation status:', getRegionOperationStatus(selectedMainRegion));
+            console.log('Button element:', document.getElementById('chargeBtn'));
+            console.log('=========================');
             
-            if (currentOperation === 'charge') {
+            // 确保 currentOperation 是 null 而不是 undefined 或其他值
+            if (currentOperation === null || currentOperation === undefined) {
+                // 没有当前操作，可以开始充电
+                console.log('No current operation, showing charge confirmation');
+                showOperationConfirmation('charge');
+            } else if (currentOperation === 'charge') {
                 // 当前正在充电，显示停止确认
+                console.log('Currently charging, showing stop confirmation');
                 showStopConfirmation();
             } else if (currentOperation === 'discharge') {
                 // 正在放电时不能充电
                 console.log('Cannot charge while discharging');
                 return;
             } else {
-                // 显示充电确认弹窗
-                console.log('Showing charge confirmation');
+                // 未知状态，重置并显示充电确认
+                console.log('Unknown operation state:', currentOperation, ', resetting and showing charge confirmation');
+                currentOperation = null;
                 showOperationConfirmation('charge');
             }
         }
@@ -5540,26 +5552,53 @@
         window.handleCharge = handleCharge;
 
         function handleDischarge() {
-            console.log('handleDischarge called, currentOperation:', currentOperation);
-            console.log('Selected region:', selectedMainRegion);
+            console.log('=== handleDischarge Debug ===');
+            console.log('handleDischarge called');
+            console.log('currentOperation:', currentOperation);
+            console.log('typeof currentOperation:', typeof currentOperation);
+            console.log('selectedMainRegion:', selectedMainRegion);
             console.log('Region operation status:', getRegionOperationStatus(selectedMainRegion));
+            console.log('Button element:', document.getElementById('dischargeBtn'));
+            console.log('=============================');
             
-            if (currentOperation === 'discharge') {
+            // 确保 currentOperation 是 null 而不是 undefined 或其他值
+            if (currentOperation === null || currentOperation === undefined) {
+                // 没有当前操作，可以开始放电
+                console.log('No current operation, showing discharge confirmation');
+                showOperationConfirmation('discharge');
+            } else if (currentOperation === 'discharge') {
                 // 当前正在放电，显示停止确认
+                console.log('Currently discharging, showing stop confirmation');
                 showStopConfirmation();
             } else if (currentOperation === 'charge') {
                 // 正在充电时不能放电
                 console.log('Cannot discharge while charging');
                 return;
             } else {
-                // 显示放电确认弹窗
-                console.log('Showing discharge confirmation');
+                // 未知状态，重置并显示放电确认
+                console.log('Unknown operation state:', currentOperation, ', resetting and showing discharge confirmation');
+                currentOperation = null;
                 showOperationConfirmation('discharge');
             }
         }
         
         // 将函数暴露到全局作用域
         window.handleDischarge = handleDischarge;
+        
+        // 添加全局调试函数
+        window.debugOperationState = function() {
+            console.log('=== Operation State Debug ===');
+            console.log('currentOperation:', currentOperation);
+            console.log('selectedMainRegion:', selectedMainRegion);
+            console.log('Region operation status:', getRegionOperationStatus(selectedMainRegion));
+            console.log('Charge button:', document.getElementById('chargeBtn'));
+            console.log('Discharge button:', document.getElementById('dischargeBtn'));
+            console.log('Charge button onclick:', document.getElementById('chargeBtn')?.onclick);
+            console.log('Discharge button onclick:', document.getElementById('dischargeBtn')?.onclick);
+            console.log('window.handleCharge:', window.handleCharge);
+            console.log('window.handleDischarge:', window.handleDischarge);
+            console.log('===========================');
+        };
 
         // 新的操作启动函数
         function startOperation(operationType) {
@@ -5737,6 +5776,7 @@
 
         // Show operation confirmation modal
         function showOperationConfirmation(operationType) {
+            console.log('showOperationConfirmation called with:', operationType);
             pendingOperation = operationType;
             
             // 重置弹窗内容避免布局混乱
@@ -7542,15 +7582,15 @@
             }
         }
 
-        // 初始化抽屉组件
-        let homeOperationDrawer;
+        // 初始化抽屉组件（全局变量）
+        window.homeOperationDrawer = null;
 
         // 打开操作详情抽屉
         function openOperationDrawer() {
             console.log('Opening operation drawer');
             
-            if (!homeOperationDrawer) {
-                homeOperationDrawer = new HomeOperationDrawer();
+            if (!window.homeOperationDrawer) {
+                window.homeOperationDrawer = new HomeOperationDrawer();
             }
 
             // 构造操作记录格式的数据
@@ -7572,7 +7612,7 @@
             console.log('Drawer operation data:', operation);
             
             // 直接打开抽屉并设置内容
-            homeOperationDrawer.open();
+            window.homeOperationDrawer.open();
             
             // 强制确保抽屉在最顶层
             setTimeout(() => {
@@ -8471,49 +8511,56 @@
     </div>
     
     <!-- Device Response Statistics Modal -->
-    <div id="deviceResponseModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); z-index: 10000; align-items: center; justify-content: center;">
-        <div style="background: #1a1f2e; border-radius: 16px; border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5); max-width: 600px; width: 90%; max-height: 80vh; overflow: auto;">
-            <div style="padding: 24px;">
-                <h3 style="font-size: 20px; font-weight: 600; color: #fff; margin: 0 0 20px 0; text-align: center;" data-i18n-key="deviceResponseStatistics">Device Response Statistics</h3>
-                <p style="color: rgba(255, 255, 255, 0.7); margin-bottom: 24px; text-align: center;" id="operationCompleteMessage">Discharging command completed. Here is the device response statistics report:</p>
-                
-                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-bottom: 24px;">
-                    <div style="background: rgba(255, 255, 255, 0.05); border-radius: 12px; padding: 16px;">
-                        <div style="font-size: 12px; color: rgba(255, 255, 255, 0.6); margin-bottom: 4px;" data-i18n-key="operationType">Operation Type</div>
+    <div id="deviceResponseModal" class="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); z-index: 10000; align-items: center; justify-content: center;">
+        <div class="modal-content" style="background: linear-gradient(145deg, #1e2433, #161922); border-radius: 24px; border: 1.5px solid rgba(255, 255, 255, 0.1); box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), inset 0 0 30px rgba(255, 255, 255, 0.02); max-width: 600px; width: 90%; animation: modalSlideIn 0.3s ease-out;">
+            <div class="modal-header" style="background: linear-gradient(135deg, rgba(0, 255, 136, 0.1), rgba(0, 255, 136, 0.05)); padding: 32px 32px 24px; border-radius: 24px 24px 0 0; border-bottom: 1px solid rgba(255, 255, 255, 0.08); display: flex; align-items: center; gap: 20px;">
+                <div class="modal-icon" style="width: 60px; height: 60px; background: linear-gradient(145deg, rgba(0, 255, 136, 0.15), rgba(0, 255, 136, 0.05)); border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 24px; box-shadow: 0 4px 12px rgba(0, 255, 136, 0.15), inset 0 1px 1px rgba(255, 255, 255, 0.1);">
+                    <span id="modalIcon">📊</span>
+                </div>
+                <div>
+                    <h3 class="modal-title" style="font-size: 22px; font-weight: 700; color: #fff; margin: 0 0 4px 0; letter-spacing: -0.5px;" data-i18n-key="deviceResponseStatistics">Device Response Statistics</h3>
+                    <p class="modal-message" style="color: rgba(255, 255, 255, 0.7); margin: 0; font-size: 15px; line-height: 1.4;" id="operationCompleteMessage">Operation completed. Here is the device response statistics report:</p>
+                </div>
+            </div>
+            
+            <div class="modal-body" style="padding: 32px;">
+                <div class="modal-info-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-bottom: 24px;">
+                    <div class="modal-info-item" style="background: rgba(255, 255, 255, 0.04); border-radius: 12px; padding: 16px; border: 1px solid rgba(255, 255, 255, 0.08);">
+                        <div style="font-size: 12px; color: rgba(255, 255, 255, 0.5); margin-bottom: 6px; letter-spacing: 0.5px; text-transform: uppercase;" data-i18n-key="operationType">Operation Type</div>
                         <div style="font-size: 18px; font-weight: 600; color: #00ff88;" id="operationTypeDisplay">Discharge</div>
                     </div>
-                    <div style="background: rgba(255, 255, 255, 0.05); border-radius: 12px; padding: 16px;">
-                        <div style="font-size: 12px; color: rgba(255, 255, 255, 0.6); margin-bottom: 4px;" data-i18n-key="targetDevices">Target Devices</div>
+                    <div class="modal-info-item" style="background: rgba(255, 255, 255, 0.04); border-radius: 12px; padding: 16px; border: 1px solid rgba(255, 255, 255, 0.08);">
+                        <div style="font-size: 12px; color: rgba(255, 255, 255, 0.5); margin-bottom: 6px; letter-spacing: 0.5px; text-transform: uppercase;" data-i18n-key="targetDevices">Target Devices</div>
                         <div style="font-size: 18px; font-weight: 600; color: #fff;" id="targetDevicesDisplay">500 units</div>
                     </div>
                 </div>
                 
-                <div style="background: rgba(0, 255, 136, 0.1); border-radius: 16px; padding: 24px; margin-bottom: 24px;">
-                    <h4 style="color: #00ff88; margin: 0 0 20px 0; text-align: center; font-size: 16px;" data-i18n-key="deviceResponseStatistics">Device Response Statistics</h4>
-                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px;">
+                <div class="status-summary" style="background: linear-gradient(145deg, rgba(0, 255, 136, 0.08), rgba(0, 255, 136, 0.03)); border-radius: 16px; padding: 24px; border: 1px solid rgba(0, 255, 136, 0.2);">
+                    <h4 style="color: #00ff88; margin: 0 0 20px 0; text-align: center; font-size: 16px; font-weight: 600; letter-spacing: 0.5px;" data-i18n-key="deviceResponseStatistics">Device Response Statistics</h4>
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;">
                         <div style="text-align: center;">
-                            <div style="font-size: 36px; font-weight: 700; color: #00ff88;">500</div>
-                            <div style="color: rgba(255, 255, 255, 0.7); font-size: 14px;" data-i18n-key="commandsSent">Commands Sent</div>
+                            <div style="font-size: 36px; font-weight: 700; color: #00ff88; line-height: 1;">500</div>
+                            <div style="color: rgba(255, 255, 255, 0.6); font-size: 13px; margin-top: 8px;" data-i18n-key="commandsSent">Commands Sent</div>
                         </div>
                         <div style="text-align: center;">
-                            <div id="commandsReceivedStat" style="font-size: 36px; font-weight: 700; color: #00ff88;">492</div>
-                            <div style="color: rgba(255, 255, 255, 0.7); font-size: 14px;" data-i18n-key="commandsReceived">Commands Received</div>
+                            <div id="commandsReceivedStat" style="font-size: 36px; font-weight: 700; color: #00ff88; line-height: 1;">492</div>
+                            <div style="color: rgba(255, 255, 255, 0.6); font-size: 13px; margin-top: 8px;" data-i18n-key="commandsReceived">Commands Received</div>
                         </div>
                         <div style="text-align: center;">
-                            <div id="devicesActivatedStat" style="font-size: 36px; font-weight: 700; color: #00ff88;">465</div>
-                            <div style="color: rgba(255, 255, 255, 0.7); font-size: 14px;" data-i18n-key="activated">Activated</div>
+                            <div id="devicesActivatedStat" style="font-size: 36px; font-weight: 700; color: #00ff88; line-height: 1;">465</div>
+                            <div style="color: rgba(255, 255, 255, 0.6); font-size: 13px; margin-top: 8px;" data-i18n-key="activated">Activated</div>
                         </div>
                         <div style="text-align: center;">
-                            <div id="successRateStat" style="font-size: 36px; font-weight: 700; color: #00ff88;">93%</div>
-                            <div style="color: rgba(255, 255, 255, 0.7); font-size: 14px;" data-i18n-key="successRate">Success Rate</div>
+                            <div id="successRateStat" style="font-size: 36px; font-weight: 700; color: #00ff88; line-height: 1;">93%</div>
+                            <div style="color: rgba(255, 255, 255, 0.6); font-size: 13px; margin-top: 8px;" data-i18n-key="successRate">Success Rate</div>
                         </div>
                     </div>
                 </div>
-                
-                <div style="display: flex; justify-content: space-between; gap: 16px;">
-                    <button style="flex: 1; background: rgba(255, 255, 255, 0.1); color: #fff; border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 8px; padding: 12px 24px; font-size: 14px; cursor: pointer; transition: all 0.3s;" onclick="closeDeviceResponseModal()" onmouseover="this.style.background='rgba(255, 255, 255, 0.15)'" onmouseout="this.style.background='rgba(255, 255, 255, 0.1)'" data-i18n-key="close">Close</button>
-                    <button style="flex: 1; background: #00ff88; color: #000; border: none; border-radius: 8px; padding: 12px 24px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s;" onclick="viewDeviceResponseDetails()" onmouseover="this.style.background='#00dd77'" onmouseout="this.style.background='#00ff88'" data-i18n-key="viewDetails">View Details</button>
-                </div>
+            </div>
+            
+            <div class="modal-footer" style="padding: 24px 32px 32px; display: flex; gap: 12px;">
+                <button class="modal-btn modal-cancel-btn" onclick="closeDeviceResponseModal()" style="flex: 1; background: rgba(255, 255, 255, 0.08); color: rgba(255, 255, 255, 0.9); border: 1px solid rgba(255, 255, 255, 0.12); padding: 14px 24px; border-radius: 999px; font-size: 15px; font-weight: 600; cursor: pointer; transition: all 0.3s; backdrop-filter: blur(10px);" onmouseover="this.style.background='rgba(255, 255, 255, 0.12)'; this.style.borderColor='rgba(255, 255, 255, 0.2)'" onmouseout="this.style.background='rgba(255, 255, 255, 0.08)'; this.style.borderColor='rgba(255, 255, 255, 0.12)'" data-i18n-key="close">Close</button>
+                <button class="modal-btn modal-confirm-btn" onclick="viewDeviceResponseDetails()" style="flex: 1; background: linear-gradient(135deg, #00ff88, #00dd77); color: #000; padding: 14px 24px; border-radius: 999px; font-size: 15px; font-weight: 700; cursor: pointer; transition: all 0.3s; border: none; box-shadow: 0 4px 16px rgba(0, 255, 136, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.3); letter-spacing: 0.5px;" onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 6px 20px rgba(0, 255, 136, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 16px rgba(0, 255, 136, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.3)'" data-i18n-key="viewDetails">View Details</button>
             </div>
         </div>
     </div>
