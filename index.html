@@ -31,6 +31,28 @@
             position: fixed !important;
         }
         
+        /* 确保抽屉组件使用正确的字体和大小 */
+        #deviceResponseDrawerComponent .drawer-container {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+            font-size: 14px !important;
+        }
+        
+        #deviceResponseDrawerComponent .detail-label {
+            font-size: 14px !important;
+        }
+        
+        #deviceResponseDrawerComponent .detail-value {
+            font-size: 14px !important;
+        }
+        
+        #deviceResponseDrawerComponent .stat-value {
+            font-size: 24px !important;
+        }
+        
+        #deviceResponseDrawerComponent .stat-label {
+            font-size: 12px !important;
+        }
+        
         /* 确保抽屉容器在所有元素之上 */
         #homeOperationDrawer {
             z-index: 2147483647 !important;
@@ -2681,22 +2703,23 @@
                 <div class="region-selection-tabs" style="display: flex; gap: 8px;">
                 <button class="region-select-tab active" data-region="NSW" onclick="selectMainRegion('NSW', this)" style="padding: 12px 24px; background: var(--color-primary); color: #000; border: none; border-radius: 50px; font-weight: 600; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; justify-content: space-between; min-width: 100px;">
                     <span>NSW</span>
-                    <span class="region-status charging" style="font-size: 14px; margin-left: 8px;">+</span>
+                    <span class="region-status charging" style="font-size: 16px; margin-left: 8px; font-weight: 600;">+</span>
                 </button>
                 <button class="region-select-tab" data-region="QLD" onclick="selectMainRegion('QLD', this)" style="padding: 12px 24px; background: transparent; color: var(--color-text-secondary); border: 1px solid var(--color-border); border-radius: 50px; font-weight: 500; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; justify-content: space-between; min-width: 100px;">
                     <span>QLD</span>
-                    <span class="region-status discharging" style="font-size: 14px; margin-left: 8px;">-</span>
+                    <span class="region-status discharging" style="font-size: 18px; margin-left: 8px; font-weight: 600;">−</span>
                 </button>
                 <button class="region-select-tab" data-region="VIC" onclick="selectMainRegion('VIC', this)" style="padding: 12px 24px; background: transparent; color: var(--color-text-secondary); border: 1px solid var(--color-border); border-radius: 50px; font-weight: 500; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; justify-content: space-between; min-width: 100px;">
                     <span>VIC</span>
-                    <span class="region-status charging" style="font-size: 14px; margin-left: 8px;">+</span>
+                    <span class="region-status charging" style="font-size: 16px; margin-left: 8px; font-weight: 600;">+</span>
                 </button>
                 <button class="region-select-tab" data-region="SA" onclick="selectMainRegion('SA', this)" style="padding: 12px 24px; background: transparent; color: var(--color-text-secondary); border: 1px solid var(--color-border); border-radius: 50px; font-weight: 500; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; justify-content: space-between; min-width: 100px;">
                     <span>SA</span>
-                    <span class="region-status discharging" style="font-size: 14px; margin-left: 8px;">-</span>
+                    <span class="region-status discharging" style="font-size: 18px; margin-left: 8px; font-weight: 600;">−</span>
                 </button>
-                <button class="region-select-tab" data-region="TAS" onclick="selectMainRegion('TAS', this)" style="padding: 12px 24px; background: transparent; color: var(--color-text-secondary); border: 1px solid var(--color-border); border-radius: 50px; font-weight: 500; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; justify-content: center; min-width: 100px;">
+                <button class="region-select-tab" data-region="TAS" onclick="selectMainRegion('TAS', this)" style="padding: 12px 24px; background: transparent; color: var(--color-text-secondary); border: 1px solid var(--color-border); border-radius: 50px; font-weight: 500; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; justify-content: space-between; min-width: 100px;">
                     <span>TAS</span>
+                    <span class="region-status discharging" style="font-size: 18px; margin-left: 8px; font-weight: 600;">−</span>
                 </button>
                 </div>
                 <!-- 最高价格区域显示 -->
@@ -2950,13 +2973,13 @@
                     <div style="display:flex; width:100%; height:100%; align-items:center; justify-content:space-between;">
                         <div style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center;">
                             <div style="font-size:18px; margin-bottom:4px;">🏠</div>
-                            <div style="font-size:13px; color:#bfc6d1; font-weight:500; margin-bottom:3px;" data-i18n-key="family">家庭</div>
+                            <div style="font-size:13px; color:#bfc6d1; font-weight:500; margin-bottom:3px;" data-i18n-key="family">Family</div>
                             <div style="font-size:18px; font-weight:700; color:#fff;" id="familySummaryCard">460</div>
                         </div>
                         <div style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center;">
                             <div style="font-size:18px; margin-bottom:4px;">🔋</div>
                             <div style="font-size:13px; color:#bfc6d1; font-weight:500; margin-bottom:3px;" data-i18n-key="installedCapacity">装机量</div>
-                            <div style="font-size:18px; font-weight:700; color:#fff;">235MWh</div>
+                            <div style="font-size:18px; font-weight:700; color:#fff;">235MW</div>
                         </div>
                         <div style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center;">
                             <div style="font-size:18px; margin-bottom:4px;">⚡</div>
@@ -3067,7 +3090,7 @@
                 <div class="stat-overview-card">
                     <div class="stat-overview-icon">🔋</div>
                     <div class="stat-overview-label" data-i18n-key="installedCapacity">装机量</div>
-                    <div class="stat-overview-value" id="installedCapacity">235MWh</div>
+                    <div class="stat-overview-value" id="installedCapacity">235MW</div>
                 </div>
 
                 <div class="stat-overview-card">
@@ -4012,11 +4035,11 @@
 
         // 地区操作状态存储
         const regionOperationStatus = {
-            'NSW': 'charging',
+            'NSW': 'none',  // 待机状态
             'QLD': 'discharging',
             'VIC': 'charging',
             'SA': 'discharging',
-            'TAS': 'none'
+            'TAS': 'discharging'
         };
         
         // 获取地区操作状态
@@ -4068,9 +4091,11 @@
                         // 创建新的状态元素
                         const newStatus = document.createElement('span');
                         newStatus.className = 'region-status ' + status;
-                        newStatus.style.fontSize = '12px';
+                        // 放电符号更大以平衡视觉效果
+                        newStatus.style.fontSize = status === 'charging' ? '16px' : '24px';
                         newStatus.style.marginLeft = '8px';
-                        newStatus.textContent = status === 'charging' ? '充' : '放';
+                        newStatus.style.fontWeight = status === 'charging' ? '600' : '700';
+                        newStatus.textContent = status === 'charging' ? '+' : '−';
                         tab.appendChild(newStatus);
                     } else {
                         // 确保有占位元素
@@ -4231,7 +4256,7 @@
                 'QLD': { price: '$145', low: '$110.00', high: '$170.00', families: 90, power: '48MWh', profit: '$2800' },
                 'VIC': { price: '$155', low: '$115.50', high: '$175.50', families: 100, power: '52MWh', profit: '$3100' },
                 'SA': { price: '$170', low: '$125.00', high: '$190.00', families: 70, power: '38MWh', profit: '$2200' },
-                'TAS': { price: '$135', low: '$100.00', high: '$160.00', families: 80, power: '32MWh', profit: '$1835' }
+                'TAS': { price: '$135', low: '$100.00', high: '$160.00', families: 355, power: '32MWh', profit: '$1835' }
             };
             
             const data = regionData[region] || regionData['NSW'];
@@ -4275,7 +4300,7 @@
                 'QLD': { families: 90, capacity: '48MWh', discharge: '45kwh', profit: '$2800' },
                 'VIC': { families: 100, capacity: '52MWh', discharge: '51kwh', profit: '$3100' },
                 'SA': { families: 70, capacity: '38MWh', discharge: '32kwh', profit: '$2200' },
-                'TAS': { families: 80, capacity: '32MWh', discharge: '17kwh', profit: '$1835' }
+                'TAS': { families: 355, capacity: '32MWh', discharge: '17kwh', profit: '$1835' }
             };
             
             const data = summaryData[region] || summaryData['NSW'];
@@ -5607,6 +5632,16 @@
             // 设置当前操作
             currentOperation = operationType;
             
+            // 确保有选中的地区，如果没有则默认选择NSW
+            if (!selectedMainRegion) {
+                selectedMainRegion = 'NSW';
+                // 更新UI显示
+                const nswTab = document.querySelector('.region-select-tab[data-region="NSW"]');
+                if (nswTab) {
+                    selectMainRegion('NSW', nswTab);
+                }
+            }
+            
             // 更新当前地区的操作状态
             updateRegionOperationStatus(selectedMainRegion, operationType === 'charge' ? 'charging' : 'discharging');
             
@@ -5637,6 +5672,19 @@
             setTimeout(() => {
                 startDeviceAnimation();
             }, 300);
+            
+            // 添加备用定时器，确保统计弹窗显示（如果动画未正常完成）
+            // 设置为10秒后显示，正常情况下动画会在约13秒内完成
+            if (operationType === 'discharge' || operationType === 'charge') {
+                setTimeout(() => {
+                    // 检查是否已经显示了统计弹窗
+                    const modal = document.getElementById('deviceResponseModal');
+                    if (modal && modal.style.display === 'none' && currentOperation) {
+                        console.log('Fallback: Showing operation statistics after timeout');
+                        showOperationStatistics();
+                    }
+                }, 10000); // 10秒后触发
+            }
         }
         
         // 更新按钮状态
@@ -5817,6 +5865,7 @@
                 confirmIcon.textContent = '⚡';
                 modalIcon.style.background = 'linear-gradient(145deg, rgba(0, 255, 136, 0.15), rgba(0, 255, 136, 0.05))';
                 modalIcon.style.boxShadow = '0 4px 12px rgba(0, 255, 136, 0.15)';
+                document.getElementById('confirmOperationType').style.color = '#00ff88';
             } else if (operationType === 'discharge') {
                 confirmIcon.textContent = '🔋';
                 modalIcon.style.background = 'linear-gradient(145deg, rgba(255, 215, 0, 0.15), rgba(255, 215, 0, 0.05))';
@@ -7272,11 +7321,31 @@
             const operationTypeDisplay = document.getElementById('operationTypeDisplay');
             const operationCompleteMessage = document.getElementById('operationCompleteMessage');
             const targetDevicesDisplay = document.getElementById('targetDevicesDisplay');
+            const responseModalIcon = document.getElementById('responseModalIcon');
+            const modalIcon = document.getElementById('modalIcon');
             
-            if (operationTypeDisplay) operationTypeDisplay.textContent = operationName;
+            if (operationTypeDisplay) {
+                operationTypeDisplay.textContent = operationName;
+                // 根据操作类型设置颜色
+                if (lastOperation === 'discharge') {
+                    operationTypeDisplay.style.color = '#ffd700';
+                    if (responseModalIcon) {
+                        responseModalIcon.style.background = 'linear-gradient(145deg, rgba(255, 215, 0, 0.15), rgba(255, 215, 0, 0.05))';
+                        responseModalIcon.style.boxShadow = '0 4px 12px rgba(255, 215, 0, 0.15)';
+                    }
+                    if (modalIcon) modalIcon.textContent = '🔋';
+                } else {
+                    operationTypeDisplay.style.color = '#00ff88';
+                    if (responseModalIcon) {
+                        responseModalIcon.style.background = 'linear-gradient(145deg, rgba(0, 255, 136, 0.15), rgba(0, 255, 136, 0.05))';
+                        responseModalIcon.style.boxShadow = '0 4px 12px rgba(0, 255, 136, 0.15)';
+                    }
+                    if (modalIcon) modalIcon.textContent = '⚡';
+                }
+            }
             if (operationCompleteMessage) operationCompleteMessage.textContent = messageText;
             if (targetDevicesDisplay) {
-                const unit = window.i18n && window.i18n.getCurrentLanguage() === 'en' ? ' units' : '个';
+                const unit = window.i18n && window.i18n.getCurrentLanguage() === 'en' ? '' : '个';
                 targetDevicesDisplay.textContent = '500' + unit;
             }
             
@@ -7578,6 +7647,253 @@
                                     </div>
                                     <div style="font-size: 12px; color: rgba(255, 255, 255, 0.5);">
                                         ${item.time.toLocaleString('zh-CN')}
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        // Device Response Drawer Class - 完全复制自 OperationDrawer
+        class DeviceResponseDrawer extends DrawerComponent {
+            constructor() {
+                super({
+                    containerId: 'deviceResponseDrawerComponent',
+                    title: window.i18n ? window.i18n.getText('operationLog.detailTitle') : '操作记录详情',
+                    width: '500px',
+                    tabs: [
+                        { key: 'basic', label: window.i18n ? window.i18n.getText('operationLog.tabs.basic') : '基本信息' },
+                        { key: 'stations', label: window.i18n ? window.i18n.getText('operationLog.tabs.stations') : '电站详情' },
+                        { key: 'timeline', label: window.i18n ? window.i18n.getText('operationLog.tabs.timeline') : '执行时间线' }
+                    ],
+                    onClose: () => {
+                        console.log('操作记录抽屉关闭');
+                    },
+                    onTabSwitch: (tabKey, data) => {
+                        this.setContent(data, tabKey);
+                    }
+                });
+                
+                // 确保抽屉在最顶层
+                this.forceTopZIndex();
+            }
+            
+            forceTopZIndex() {
+                setTimeout(() => {
+                    const drawer = document.querySelector(`#${this.containerId}`);
+                    if (drawer) {
+                        drawer.style.zIndex = '2147483647';
+                        drawer.style.position = 'fixed';
+                    }
+                    const overlay = document.querySelector('.drawer-overlay');
+                    if (overlay) {
+                        overlay.style.zIndex = '2147483646';
+                    }
+                }, 10);
+            }
+            
+            open(operation) {
+                super.open(operation);
+                this.forceTopZIndex();
+            }
+            
+            generateContent(operation, tabKey) {
+                if (!operation) return `<div>${window.i18n ? window.i18n.getText('dataLoading') : 'Loading data...'}</div>`;
+                
+                const commandInfo = this.getCommandInfo(operation.command || 'charge');
+                
+                switch(tabKey) {
+                    case 'basic':
+                        return this.generateBasicInfo(operation, commandInfo);
+                    case 'stations':
+                        return this.generateStationDetails(operation);
+                    case 'timeline':
+                        return this.generateTimeline(operation);
+                    default:
+                        return this.generateBasicInfo(operation, commandInfo);
+                }
+            }
+            
+            getCommandInfo(command) {
+                const commandMap = {
+                    'charge': {
+                        text: window.i18n ? window.i18n.getText('operationLog.commands.charge') : '充电',
+                        class: 'charge'
+                    },
+                    'discharge': {
+                        text: window.i18n ? window.i18n.getText('operationLog.commands.discharge') : '放电',
+                        class: 'discharge'
+                    },
+                    'stop_charge': {
+                        text: window.i18n ? window.i18n.getText('operationLog.commands.stopCharge') : '停止充电',
+                        class: 'stop-charge'
+                    },
+                    'stop_discharge': {
+                        text: window.i18n ? window.i18n.getText('operationLog.commands.stopDischarge') : '停止放电',
+                        class: 'stop-discharge'
+                    }
+                };
+                return commandMap[command] || { text: command, class: '' };
+            }
+            
+            generateBasicInfo(operation, commandInfo) {
+                return `
+                    <div class="detail-section">
+                        <div class="detail-section-title">
+                            <span>📊</span>
+                            ${window.i18n ? window.i18n.getText('operationLog.overview.title') : '操作概览'}
+                        </div>
+                        <div class="stats-grid">
+                            <div class="stat-card">
+                                <div class="stat-value">${operation.stations || operation.totalStations || 235}</div>
+                                <div class="stat-label">${window.i18n ? window.i18n.getText('operationLog.overview.totalStations') : '总电站数'}</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-value">${operation.success || operation.onlineStations || 230}</div>
+                                <div class="stat-label">${window.i18n ? window.i18n.getText('operationLog.overview.successCount') : '成功数'}</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-value">${operation.failed || 5}</div>
+                                <div class="stat-label">${window.i18n ? window.i18n.getText('operationLog.overview.failedCount') : '失败数'}</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-value">${operation.successRate || Math.round((230 / 235) * 100)}%</div>
+                                <div class="stat-label">${window.i18n ? window.i18n.getText('operationLog.overview.successRate') : '成功率'}</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="detail-section">
+                        <div class="detail-section-title">
+                            <span>📝</span>
+                            ${window.i18n ? window.i18n.getText('operationLog.basicInfo.title') : '基本信息'}
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">${window.i18n ? window.i18n.getText('operationLog.basicInfo.operationTime') : '操作时间'}</span>
+                            <span class="detail-value">${operation.time || new Date().toLocaleString()}</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">${window.i18n ? window.i18n.getText('operationLog.basicInfo.operationCommand') : '操作命令'}</span>
+                            <span class="detail-value">
+                                <span class="command-tag ${commandInfo.class}">${commandInfo.text}</span>
+                            </span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">${window.i18n ? window.i18n.getText('operationLog.basicInfo.operator') : '操作人员'}</span>
+                            <span class="detail-value">${this.getOperatorName(operation.operator || 'System')}</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">${window.i18n ? window.i18n.getText('operationLog.basicInfo.operationId') : '操作编号'}</span>
+                            <span class="detail-value">#${(operation.id || Date.now()).toString().padStart(8, '0')}</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">${window.i18n ? window.i18n.getText('operationLog.basicInfo.executionStatus') : '执行状态'}</span>
+                            <span class="detail-value">
+                                <span class="status-tag ${(operation.failed || 5) === 0 ? 'success' : (operation.success || 230) > (operation.failed || 5) ? 'warning' : 'danger'}">
+                                    ${(operation.failed || 5) === 0 ? (window.i18n ? window.i18n.getText('operationLog.basicInfo.allSuccess') : '全部成功') : (operation.success || 230) > (operation.failed || 5) ? (window.i18n ? window.i18n.getText('operationLog.basicInfo.partialSuccess') : '部分成功') : (window.i18n ? window.i18n.getText('operationLog.basicInfo.mostlyFailed') : '多数失败')}
+                                </span>
+                            </span>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            getOperatorName(operator) {
+                if (operator === 'System') {
+                    return window.i18n ? window.i18n.getText('system') : '系统';
+                }
+                return operator;
+            }
+            
+            generateStationDetails(operation) {
+                // 生成模拟的电站数据
+                const stations = [];
+                const totalStations = operation.stations || operation.totalStations || 235;
+                const successCount = operation.success || operation.onlineStations || 230;
+                
+                for (let i = 0; i < totalStations; i++) {
+                    const isSuccess = i < successCount;
+                    stations.push({
+                        id: `ST${(1000 + i).toString()}`,
+                        name: `${window.i18n ? window.i18n.getText('operationLog.stationDetails.station') : '电站'}${String.fromCharCode(65 + (i % 26))}${Math.floor(i / 26) + 1}`,
+                        status: isSuccess ? 'success' : 'failed',
+                        location: `${window.i18n ? window.i18n.getText('operationLog.stationDetails.area') : '区域'}${Math.floor(i / 10) + 1}`,
+                        executeTime: new Date(new Date().getTime() + i * 1000).toLocaleTimeString(window.i18n ? (window.i18n.getCurrentLanguage() === 'zh' ? 'zh-CN' : 'en-US') : 'zh-CN')
+                    });
+                }
+                
+                return `
+                    <div class="detail-section flex-fill" style="margin-bottom: 0;">
+                        <div class="detail-section-title">
+                            <span>⚡</span>
+                            ${window.i18n ? window.i18n.getText('operationLog.stationDetails.title') : '电站执行详情'}
+                        </div>
+                        <div class="scrollable-list" style="flex: 1; min-height: 600px; padding-bottom: 16px;">
+                            ${stations.map(station => `
+                                <div class="detail-row">
+                                    <div>
+                                        <div class="detail-label">${station.name} (${station.id})</div>
+                                        <div style="font-size: 12px; color: rgba(255, 255, 255, 0.5); margin-top: 2px;">
+                                            ${station.location} • ${station.executeTime}
+                                        </div>
+                                    </div>
+                                    <span class="status-tag ${station.status === 'success' ? 'success' : 'danger'}">
+                                        ${station.status === 'success' ? (window.i18n ? window.i18n.getText('operationLog.stationDetails.success') : '成功') : (window.i18n ? window.i18n.getText('operationLog.stationDetails.failed') : '失败')}
+                                    </span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            }
+            
+            generateTimeline(operation) {
+                const startTime = new Date(operation.time || new Date());
+                const successCount = operation.success || operation.onlineStations || 230;
+                const failedCount = operation.failed || 5;
+                
+                const timeline = [
+                    { time: new Date(startTime.getTime() - 60000), event: window.i18n ? window.i18n.getText('operationLog.timeline.commandCreated') : '操作命令创建', status: 'success' },
+                    { time: new Date(startTime.getTime() - 30000), event: window.i18n ? window.i18n.getText('operationLog.timeline.validationPassed') : '命令验证通过', status: 'success' },
+                    { time: startTime, event: window.i18n ? window.i18n.getText('operationLog.timeline.executionStarted') : '开始执行命令', status: 'success' },
+                    { time: new Date(startTime.getTime() + 30000), event: `${successCount}${window.i18n ? window.i18n.getText('operationLog.timeline.stationsSuccess') : '个电站执行成功'}`, status: 'success' },
+                ];
+                
+                if (failedCount > 0) {
+                    timeline.push({
+                        time: new Date(startTime.getTime() + 45000),
+                        event: `${failedCount}${window.i18n ? window.i18n.getText('operationLog.timeline.stationsFailed') : '个电站执行失败'}`,
+                        status: 'danger'
+                    });
+                }
+                
+                timeline.push({
+                    time: new Date(startTime.getTime() + 60000),
+                    event: window.i18n ? window.i18n.getText('operationLog.timeline.executionCompleted') : '操作执行完成',
+                    status: failedCount === 0 ? 'success' : 'warning'
+                });
+                
+                return `
+                    <div class="detail-section">
+                        <div class="detail-section-title">
+                            <span>🕰️</span>
+                            ${window.i18n ? window.i18n.getText('operationLog.timeline.title') : '执行时间线'}
+                        </div>
+                        <div style="position: relative; padding-left: 24px;">
+                            <div style="position: absolute; left: 8px; top: 0; bottom: 0; width: 2px; background: rgba(255, 255, 255, 0.1);"></div>
+                            ${timeline.map((item, index) => `
+                                <div style="position: relative; margin-bottom: 16px;">
+                                    <div style="position: absolute; left: -20px; top: 2px; width: 12px; height: 12px; border-radius: 50%; background: ${item.status === 'success' ? '#34c759' : item.status === 'warning' ? '#ff9500' : '#ff3b30'};"></div>
+                                    <div class="detail-row" style="border: none; padding: 0; margin-bottom: 4px;">
+                                        <span class="detail-label">${item.event}</span>
+                                        <span class="status-tag ${item.status}">
+                                            ${item.status === 'success' ? (window.i18n ? window.i18n.getText('operationLog.timeline.normal') : '正常') : item.status === 'warning' ? (window.i18n ? window.i18n.getText('operationLog.timeline.warning') : '警告') : (window.i18n ? window.i18n.getText('operationLog.timeline.error') : '错误')}
+                                        </span>
+                                    </div>
+                                    <div style="font-size: 12px; color: rgba(255, 255, 255, 0.5);">
+                                        ${item.time.toLocaleString(window.i18n ? (window.i18n.getCurrentLanguage() === 'zh' ? 'zh-CN' : 'en-US') : 'zh-CN')}
                                     </div>
                                 </div>
                             `).join('')}
@@ -8516,179 +8832,60 @@
     </div>
     
     <!-- Device Response Statistics Modal -->
-    <div id="deviceResponseModal" class="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); z-index: 10000; align-items: center; justify-content: center;">
-        <div class="modal-content" style="background: linear-gradient(145deg, #1e2433, #161922); border-radius: 24px; border: 1.5px solid rgba(255, 255, 255, 0.1); box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), inset 0 0 30px rgba(255, 255, 255, 0.02); max-width: 600px; width: 90%; animation: modalSlideIn 0.3s ease-out;">
-            <div class="modal-header" style="background: linear-gradient(135deg, rgba(0, 255, 136, 0.1), rgba(0, 255, 136, 0.05)); padding: 32px 32px 24px; border-radius: 24px 24px 0 0; border-bottom: 1px solid rgba(255, 255, 255, 0.08); display: flex; align-items: center; gap: 20px;">
-                <div class="modal-icon" style="width: 60px; height: 60px; background: linear-gradient(145deg, rgba(0, 255, 136, 0.15), rgba(0, 255, 136, 0.05)); border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 24px; box-shadow: 0 4px 12px rgba(0, 255, 136, 0.15), inset 0 1px 1px rgba(255, 255, 255, 0.1);">
-                    <span id="modalIcon">📊</span>
+    <div id="deviceResponseModal" class="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.9); z-index: 10000; align-items: center; justify-content: center; backdrop-filter: blur(5px);">
+        <div class="modal-content" style="background: linear-gradient(145deg, #1e1e2e 0%, #252535 100%); border: none; padding: 0; overflow: hidden; width: 480px; max-width: 90%; border-radius: 24px; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8), 0 0 1px rgba(255, 255, 255, 0.1);">
+            <div class="modal-header" style="padding: 28px 32px; border-bottom: 1px solid rgba(255, 255, 255, 0.08); display: flex; align-items: center; justify-content: flex-start; background: rgba(255, 255, 255, 0.02);">
+                <div class="modal-icon" id="responseModalIcon" style="width: 48px; height: 48px; background: linear-gradient(145deg, rgba(0, 255, 136, 0.15), rgba(0, 255, 136, 0.05)); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 16px; box-shadow: 0 4px 12px rgba(0, 255, 136, 0.15);">
+                    <span id="modalIcon" style="font-size: 24px;">📊</span>
                 </div>
-                <div>
-                    <h3 class="modal-title" style="font-size: 22px; font-weight: 700; color: #fff; margin: 0 0 4px 0; letter-spacing: -0.5px;" data-i18n-key="deviceResponseStatistics">Device Response Statistics</h3>
-                    <p class="modal-message" style="color: rgba(255, 255, 255, 0.7); margin: 0; font-size: 15px; line-height: 1.4;" id="operationCompleteMessage">Operation completed. Here is the device response statistics report:</p>
-                </div>
+                <h3 class="modal-title" style="margin: 0; font-size: 20px; font-weight: 700; color: #fff; letter-spacing: 0.3px;" data-i18n-key="deviceResponseStatistics">设备响应统计</h3>
             </div>
             
             <div class="modal-body" style="padding: 32px;">
-                <div class="modal-info-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-bottom: 24px;">
-                    <div class="modal-info-item" style="background: rgba(255, 255, 255, 0.04); border-radius: 12px; padding: 16px; border: 1px solid rgba(255, 255, 255, 0.08);">
-                        <div style="font-size: 12px; color: rgba(255, 255, 255, 0.5); margin-bottom: 6px; letter-spacing: 0.5px; text-transform: uppercase;" data-i18n-key="operationType">Operation Type</div>
-                        <div style="font-size: 18px; font-weight: 600; color: #00ff88;" id="operationTypeDisplay">Discharge</div>
-                    </div>
-                    <div class="modal-info-item" style="background: rgba(255, 255, 255, 0.04); border-radius: 12px; padding: 16px; border: 1px solid rgba(255, 255, 255, 0.08);">
-                        <div style="font-size: 12px; color: rgba(255, 255, 255, 0.5); margin-bottom: 6px; letter-spacing: 0.5px; text-transform: uppercase;" data-i18n-key="targetDevices">Target Devices</div>
-                        <div style="font-size: 18px; font-weight: 600; color: #fff;" id="targetDevicesDisplay">500 units</div>
+                <p class="modal-message" style="color: rgba(255, 255, 255, 0.7); margin: 0 0 24px 0; font-size: 15px; font-weight: 400; line-height: 1.5; text-align: left;" id="operationCompleteMessage">操作完成，以下是设备响应统计报告：</p>
+                
+                <div class="modal-info-grid" style="display: flex; flex-direction: column; gap: 0; margin-bottom: 28px;">
+                    <div style="display: flex; gap: 16px;">
+                        <div class="modal-info-item" style="flex: 1; background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 16px 20px; transition: all 0.3s;">
+                            <div class="modal-info-label" style="color: rgba(255, 255, 255, 0.6); font-size: 13px; margin-bottom: 6px; font-weight: 400;" data-i18n-key="operationType">操作类型</div>
+                            <div class="modal-info-value" id="operationTypeDisplay" style="color: #00ff88; font-size: 18px; font-weight: 600; letter-spacing: 0.3px;">充电</div>
+                        </div>
+                        <div class="modal-info-item" style="flex: 1; background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 16px 20px; transition: all 0.3s;">
+                            <div class="modal-info-label" style="color: rgba(255, 255, 255, 0.6); font-size: 13px; margin-bottom: 6px; font-weight: 400;" data-i18n-key="targetDevices">影响设备</div>
+                            <div class="modal-info-value" id="targetDevicesDisplay" style="color: #fff; font-size: 18px; font-weight: 600;">500个</div>
+                        </div>
                     </div>
                 </div>
                 
-                <div class="status-summary" style="background: linear-gradient(145deg, rgba(0, 255, 136, 0.08), rgba(0, 255, 136, 0.03)); border-radius: 16px; padding: 24px; border: 1px solid rgba(0, 255, 136, 0.2);">
-                    <h4 style="color: #00ff88; margin: 0 0 20px 0; text-align: center; font-size: 16px; font-weight: 600; letter-spacing: 0.5px;" data-i18n-key="deviceResponseStatistics">Device Response Statistics</h4>
+                <div class="status-summary" style="background: linear-gradient(145deg, rgba(0, 255, 136, 0.08), rgba(0, 255, 136, 0.04)); border: 1px solid rgba(0, 255, 136, 0.15); border-radius: 12px; padding: 20px; backdrop-filter: blur(10px);">
                     <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;">
                         <div style="text-align: center;">
-                            <div style="font-size: 36px; font-weight: 700; color: #00ff88; line-height: 1;">500</div>
-                            <div style="color: rgba(255, 255, 255, 0.6); font-size: 13px; margin-top: 8px;" data-i18n-key="commandsSent">Commands Sent</div>
+                            <div style="font-size: 28px; font-weight: 700; color: #00ff88; line-height: 1;">500</div>
+                            <div style="color: rgba(255, 255, 255, 0.6); font-size: 13px; margin-top: 6px;" data-i18n-key="commandsIssued">指令下发</div>
                         </div>
                         <div style="text-align: center;">
-                            <div id="commandsReceivedStat" style="font-size: 36px; font-weight: 700; color: #00ff88; line-height: 1;">492</div>
-                            <div style="color: rgba(255, 255, 255, 0.6); font-size: 13px; margin-top: 8px;" data-i18n-key="commandsReceived">Commands Received</div>
+                            <div id="commandsReceivedStat" style="font-size: 28px; font-weight: 700; color: #00ff88; line-height: 1;">492</div>
+                            <div style="color: rgba(255, 255, 255, 0.6); font-size: 13px; margin-top: 6px;" data-i18n-key="commandsReceived">指令接收</div>
                         </div>
                         <div style="text-align: center;">
-                            <div id="devicesActivatedStat" style="font-size: 36px; font-weight: 700; color: #00ff88; line-height: 1;">465</div>
-                            <div style="color: rgba(255, 255, 255, 0.6); font-size: 13px; margin-top: 8px;" data-i18n-key="activated">Activated</div>
+                            <div id="devicesActivatedStat" style="font-size: 28px; font-weight: 700; color: #00ff88; line-height: 1;">486</div>
+                            <div style="color: rgba(255, 255, 255, 0.6); font-size: 13px; margin-top: 6px;" data-i18n-key="devicesExecuted">已下发</div>
                         </div>
                         <div style="text-align: center;">
-                            <div id="successRateStat" style="font-size: 36px; font-weight: 700; color: #00ff88; line-height: 1;">93%</div>
-                            <div style="color: rgba(255, 255, 255, 0.6); font-size: 13px; margin-top: 8px;" data-i18n-key="successRate">Success Rate</div>
+                            <div id="successRateStat" style="font-size: 28px; font-weight: 700; color: #00ff88; line-height: 1;">97%</div>
+                            <div style="color: rgba(255, 255, 255, 0.6); font-size: 13px; margin-top: 6px;" data-i18n-key="successRate">成功率</div>
                         </div>
                     </div>
                 </div>
             </div>
             
-            <div class="modal-footer" style="padding: 24px 32px 32px; display: flex; gap: 12px;">
-                <button class="modal-btn modal-cancel-btn" onclick="closeDeviceResponseModal()" style="flex: 1; background: rgba(255, 255, 255, 0.08); color: rgba(255, 255, 255, 0.9); border: 1px solid rgba(255, 255, 255, 0.12); padding: 14px 24px; border-radius: 999px; font-size: 15px; font-weight: 600; cursor: pointer; transition: all 0.3s; backdrop-filter: blur(10px);" onmouseover="this.style.background='rgba(255, 255, 255, 0.12)'; this.style.borderColor='rgba(255, 255, 255, 0.2)'" onmouseout="this.style.background='rgba(255, 255, 255, 0.08)'; this.style.borderColor='rgba(255, 255, 255, 0.12)'" data-i18n-key="close">Close</button>
-                <button class="modal-btn modal-confirm-btn" onclick="viewDeviceResponseDetails()" style="flex: 1; background: linear-gradient(135deg, #00ff88, #00dd77); color: #000; padding: 14px 24px; border-radius: 999px; font-size: 15px; font-weight: 700; cursor: pointer; transition: all 0.3s; border: none; box-shadow: 0 4px 16px rgba(0, 255, 136, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.3); letter-spacing: 0.5px;" onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 6px 20px rgba(0, 255, 136, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 16px rgba(0, 255, 136, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.3)'" data-i18n-key="viewDetails">View Details</button>
+            <div class="modal-footer" style="padding: 20px 28px 28px; display: flex; gap: 12px;">
+                <button class="modal-btn modal-cancel-btn" onclick="closeDeviceResponseModal()" style="background: rgba(255, 255, 255, 0.08); color: rgba(255, 255, 255, 0.9); border: 1px solid rgba(255, 255, 255, 0.12); padding: 10px 20px; border-radius: 999px; font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.3s; min-width: 80px;" onmouseover="this.style.background='rgba(255, 255, 255, 0.12)'; this.style.borderColor='rgba(255, 255, 255, 0.2)'" onmouseout="this.style.background='rgba(255, 255, 255, 0.08)'; this.style.borderColor='rgba(255, 255, 255, 0.12)'" data-i18n-key="close">关闭</button>
+                <button class="modal-btn modal-confirm-btn" onclick="viewDeviceResponseDetails()" style="background: linear-gradient(135deg, #00ff88, #00dd77); color: #000; padding: 10px 20px; border-radius: 999px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s; border: none; box-shadow: 0 2px 8px rgba(0, 255, 136, 0.3); min-width: 100px;" onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 4px 12px rgba(0, 255, 136, 0.4)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 8px rgba(0, 255, 136, 0.3)'" data-i18n-key="viewDetails">查看详情</button>
             </div>
         </div>
     </div>
     
-    <!-- Device Response Details Drawer -->
-    <div id="deviceResponseDrawer" style="position: fixed; top: 0; right: -600px; width: 600px; height: 100%; background: #1a1f2e; box-shadow: -4px 0 24px rgba(0, 0, 0, 0.3); transition: right 0.3s ease; z-index: 10001; display: flex; flex-direction: column;">
-        <!-- Drawer Header -->
-        <div style="background: linear-gradient(135deg, rgba(0, 255, 136, 0.1), rgba(0, 255, 136, 0.05)); padding: 24px; border-bottom: 1px solid rgba(255, 255, 255, 0.1);">
-            <div style="display: flex; align-items: center; justify-content: space-between;">
-                <h3 style="font-size: 20px; font-weight: 600; color: #fff; margin: 0;" data-i18n-key="operationDetails">操作详情</h3>
-                <button onclick="closeDeviceResponseDrawer()" style="background: none; border: none; color: rgba(255, 255, 255, 0.6); font-size: 24px; cursor: pointer; padding: 0; line-height: 1;">&times;</button>
-            </div>
-        </div>
-        
-        <!-- Drawer Tabs -->
-        <div style="display: flex; background: rgba(255, 255, 255, 0.02); border-bottom: 1px solid rgba(255, 255, 255, 0.1);">
-            <button class="drawer-tab active" onclick="switchDrawerTab('station', this)" style="flex: 1; padding: 16px; background: none; border: none; color: #00ff88; font-size: 14px; font-weight: 600; cursor: pointer; border-bottom: 2px solid #00ff88;" data-i18n-key="stationInformation">电站信息</button>
-            <button class="drawer-tab" onclick="switchDrawerTab('details', this)" style="flex: 1; padding: 16px; background: none; border: none; color: rgba(255, 255, 255, 0.7); font-size: 14px; font-weight: 600; cursor: pointer; border-bottom: 2px solid transparent;" data-i18n-key="stationDetails">电站详情</button>
-            <button class="drawer-tab" onclick="switchDrawerTab('timeline', this)" style="flex: 1; padding: 16px; background: none; border: none; color: rgba(255, 255, 255, 0.7); font-size: 14px; font-weight: 600; cursor: pointer; border-bottom: 2px solid transparent;" data-i18n-key="executionTimeline">执行时间线</button>
-        </div>
-        
-        <!-- Drawer Content -->
-        <div style="flex: 1; overflow-y: auto; padding: 24px;">
-            <!-- Station Information Tab -->
-            <div id="stationTab" class="drawer-tab-content" style="display: block;">
-                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px;">
-                    <!-- Station cards will be dynamically generated -->
-                    <div class="station-card" style="background: rgba(255, 255, 255, 0.04); border-radius: 12px; padding: 16px; border: 1px solid rgba(255, 255, 255, 0.08);">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-                            <span style="font-size: 16px; font-weight: 600; color: #fff;">NSW-001</span>
-                            <span style="padding: 4px 12px; background: rgba(0, 255, 136, 0.2); color: #00ff88; border-radius: 12px; font-size: 12px;" data-i18n-key="online">在线</span>
-                        </div>
-                        <div style="display: flex; flex-direction: column; gap: 8px;">
-                            <div style="display: flex; justify-content: space-between;">
-                                <span style="color: rgba(255, 255, 255, 0.6); font-size: 13px;" data-i18n-key="location">位置</span>
-                                <span style="color: #fff; font-size: 13px;">Sydney, NSW</span>
-                            </div>
-                            <div style="display: flex; justify-content: space-between;">
-                                <span style="color: rgba(255, 255, 255, 0.6); font-size: 13px;" data-i18n-key="capacity">容量</span>
-                                <span style="color: #fff; font-size: 13px;">250 kWh</span>
-                            </div>
-                            <div style="display: flex; justify-content: space-between;">
-                                <span style="color: rgba(255, 255, 255, 0.6); font-size: 13px;" data-i18n-key="status">状态</span>
-                                <span style="color: #00ff88; font-size: 13px;" data-i18n-key="charging">充电中</span>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- More cards... -->
-                </div>
-            </div>
-            
-            <!-- Station Details Tab -->
-            <div id="detailsTab" class="drawer-tab-content" style="display: none;">
-                <div style="background: rgba(255, 255, 255, 0.04); border-radius: 12px; padding: 20px; margin-bottom: 20px;">
-                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;">
-                        <div style="text-align: center;">
-                            <div style="font-size: 24px; font-weight: 700; color: #00ff88;">235</div>
-                            <div style="color: rgba(255, 255, 255, 0.6); font-size: 13px; margin-top: 4px;" data-i18n-key="totalStations">总电站数</div>
-                        </div>
-                        <div style="text-align: center;">
-                            <div style="font-size: 24px; font-weight: 700; color: #00ff88;">230</div>
-                            <div style="color: rgba(255, 255, 255, 0.6); font-size: 13px; margin-top: 4px;" data-i18n-key="onlineStations">在线电站</div>
-                        </div>
-                        <div style="text-align: center;">
-                            <div style="font-size: 24px; font-weight: 700; color: #00ff88;">225</div>
-                            <div style="color: rgba(255, 255, 255, 0.6); font-size: 13px; margin-top: 4px;" data-i18n-key="executingStations">执行中</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div style="background: rgba(255, 255, 255, 0.04); border-radius: 12px; overflow: hidden;">
-                    <table style="width: 100%; border-collapse: collapse;">
-                        <thead>
-                            <tr style="background: rgba(255, 255, 255, 0.05);">
-                                <th style="padding: 12px; text-align: left; color: rgba(255, 255, 255, 0.6); font-size: 13px; font-weight: 600;" data-i18n-key="stationName">电站名称</th>
-                                <th style="padding: 12px; text-align: left; color: rgba(255, 255, 255, 0.6); font-size: 13px; font-weight: 600;" data-i18n-key="region">区域</th>
-                                <th style="padding: 12px; text-align: left; color: rgba(255, 255, 255, 0.6); font-size: 13px; font-weight: 600;" data-i18n-key="status">状态</th>
-                                <th style="padding: 12px; text-align: left; color: rgba(255, 255, 255, 0.6); font-size: 13px; font-weight: 600;" data-i18n-key="power">功率</th>
-                                <th style="padding: 12px; text-align: left; color: rgba(255, 255, 255, 0.6); font-size: 13px; font-weight: 600;">SOC</th>
-                            </tr>
-                        </thead>
-                        <tbody id="stationDetailsTable">
-                            <!-- Table rows will be dynamically generated -->
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            
-            <!-- Timeline Tab -->
-            <div id="timelineTab" class="drawer-tab-content" style="display: none;">
-                <div class="timeline" style="position: relative; padding-left: 30px;">
-                    <div style="position: absolute; left: 10px; top: 0; bottom: 0; width: 2px; background: rgba(255, 255, 255, 0.1);"></div>
-                    
-                    <div class="timeline-item" style="position: relative; margin-bottom: 24px;">
-                        <div style="position: absolute; left: -25px; width: 12px; height: 12px; background: #00ff88; border-radius: 50%; border: 2px solid #1a1f2e;"></div>
-                        <div style="color: rgba(255, 255, 255, 0.6); font-size: 12px; margin-bottom: 4px;">10:30:00</div>
-                        <div style="background: rgba(255, 255, 255, 0.04); border-radius: 8px; padding: 12px; border: 1px solid rgba(255, 255, 255, 0.08);">
-                            <div style="color: #fff; font-size: 14px; font-weight: 600; margin-bottom: 4px;" data-i18n-key="commandIssued">指令下发</div>
-                            <div style="color: rgba(255, 255, 255, 0.6); font-size: 13px;" data-i18n-key="commandIssuedDesc">系统向所有设备发送充电指令</div>
-                        </div>
-                    </div>
-                    
-                    <div class="timeline-item" style="position: relative; margin-bottom: 24px;">
-                        <div style="position: absolute; left: -25px; width: 12px; height: 12px; background: #00ff88; border-radius: 50%; border: 2px solid #1a1f2e;"></div>
-                        <div style="color: rgba(255, 255, 255, 0.6); font-size: 12px; margin-bottom: 4px;">10:30:05</div>
-                        <div style="background: rgba(255, 255, 255, 0.04); border-radius: 8px; padding: 12px; border: 1px solid rgba(255, 255, 255, 0.08);">
-                            <div style="color: #fff; font-size: 14px; font-weight: 600; margin-bottom: 4px;" data-i18n-key="devicesResponded">设备响应</div>
-                            <div style="color: rgba(255, 255, 255, 0.6); font-size: 13px;" data-i18n-key="devicesRespondedDesc">230个设备确认收到指令</div>
-                        </div>
-                    </div>
-                    
-                    <div class="timeline-item" style="position: relative;">
-                        <div style="position: absolute; left: -25px; width: 12px; height: 12px; background: #ffd700; border-radius: 50%; border: 2px solid #1a1f2e; box-shadow: 0 0 0 4px rgba(255, 215, 0, 0.2);"></div>
-                        <div style="color: rgba(255, 255, 255, 0.6); font-size: 12px; margin-bottom: 4px;">10:30:15</div>
-                        <div style="background: rgba(255, 215, 0, 0.05); border-radius: 8px; padding: 12px; border: 1px solid rgba(255, 215, 0, 0.2);">
-                            <div style="color: #fff; font-size: 14px; font-weight: 600; margin-bottom: 4px;" data-i18n-key="executionStarted">开始执行</div>
-                            <div style="color: rgba(255, 255, 255, 0.6); font-size: 13px;" data-i18n-key="executionStartedDesc">设备开始执行充电操作</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
     
     <style>
         /* Modal Styles */
@@ -9062,6 +9259,7 @@
                 modalTitle.textContent = window.i18n ? window.i18n.getText('confirmCharge') : '确认充电';
                 operationType.textContent = window.i18n ? window.i18n.getText('charge') : '充电';
                 operationType.className = 'operation-type charge';
+                operationType.style.color = '#00ff88';
                 warningMessage.textContent = window.i18n ? window.i18n.getText('operationWarning') : '此操作将影响所有选中的设备，请确认后继续。';
                 
                 // Hide estimated revenue for charge
@@ -9237,59 +9435,27 @@
         }
         
         function viewDeviceResponseDetails() {
-            // 打开设备响应详情抽屉
-            openDeviceResponseDrawer();
+            // 使用新的抽屉组件
+            if (!window.deviceResponseDrawer) {
+                window.deviceResponseDrawer = new DeviceResponseDrawer();
+            }
             
-            // 关闭当前模态框
-            closeDeviceResponseModal();
+            // 创建与操作记录页面相同格式的数据
+            const operation = {
+                id: Date.now(),
+                time: new Date().toLocaleString(),
+                command: currentOperation || 'charge',
+                operator: 'System',
+                region: selectedMainRegion || 'NSW',
+                stations: 235,
+                success: 230,
+                failed: 5
+            };
+            
+            // 打开抽屉 - 不关闭设备响应统计弹窗
+            window.deviceResponseDrawer.open(operation);
         }
         
-        function openDeviceResponseDrawer() {
-            const drawer = document.getElementById('deviceResponseDrawer');
-            if (drawer) {
-                drawer.style.right = '0';
-                // 添加遮罩层
-                const overlay = document.createElement('div');
-                overlay.id = 'drawerOverlay';
-                overlay.style.cssText = 'position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.5); z-index: 10000;';
-                overlay.onclick = closeDeviceResponseDrawer;
-                document.body.appendChild(overlay);
-            }
-        }
-        
-        function closeDeviceResponseDrawer() {
-            const drawer = document.getElementById('deviceResponseDrawer');
-            if (drawer) {
-                drawer.style.right = '-600px';
-            }
-            const overlay = document.getElementById('drawerOverlay');
-            if (overlay) {
-                overlay.remove();
-            }
-        }
-        
-        function switchDrawerTab(tabName, tabElement) {
-            // 更新标签样式
-            document.querySelectorAll('.drawer-tab').forEach(tab => {
-                tab.style.color = 'rgba(255, 255, 255, 0.7)';
-                tab.style.borderBottomColor = 'transparent';
-            });
-            tabElement.style.color = '#00ff88';
-            tabElement.style.borderBottomColor = '#00ff88';
-            
-            // 切换内容
-            document.getElementById('stationTab').style.display = 'none';
-            document.getElementById('detailsTab').style.display = 'none';
-            document.getElementById('timelineTab').style.display = 'none';
-            
-            if (tabName === 'station') {
-                document.getElementById('stationTab').style.display = 'block';
-            } else if (tabName === 'details') {
-                document.getElementById('detailsTab').style.display = 'block';
-            } else if (tabName === 'timeline') {
-                document.getElementById('timelineTab').style.display = 'block';
-            }
-        }
         
         function switchDeviceResponseTab(tabName, tabElement) {
             // Update active tab
@@ -9301,12 +9467,120 @@
             document.getElementById(tabName + 'Tab').style.display = 'block';
         }
         
-        function loadDeviceResponseData() {
-            // This would load real data in production
-            // For now, using static demo data
+        function loadDeviceResponseData(operation) {
+            // 模拟加载设备响应数据
+            const deviceData = {
+                operation: operation || currentOperation || 'charge',
+                totalDevices: 500,
+                commandsReceived: Math.floor(Math.random() * 10) + 490,
+                devicesActivated: Math.floor(Math.random() * 50) + 430,
+                onlineDevices: Math.floor(Math.random() * 10) + 490,
+                executingDevices: Math.floor(Math.random() * 50) + 430,
+                stations: generateStationData(50), // 生成50个电站数据
+                timeline: generateTimelineData()
+            };
+            
+            // 存储数据以供后续使用
+            window.currentDeviceResponseData = deviceData;
+            
+            return deviceData;
         }
         
-        // Update the device response statistics click handler
+        // 生成随机电站数据
+        function generateStationData(count) {
+            const stations = [];
+            const regions = ['NSW', 'VIC', 'QLD', 'WA', 'SA', 'TAS', 'NT', 'ACT'];
+            const statuses = ['online', 'charging', 'discharging', 'idle', 'offline'];
+            const statusLabels = {
+                online: { zh: '在线', en: 'Online' },
+                charging: { zh: '充电中', en: 'Charging' },
+                discharging: { zh: '放电中', en: 'Discharging' },
+                idle: { zh: '空闲', en: 'Idle' },
+                offline: { zh: '离线', en: 'Offline' }
+            };
+            
+            for (let i = 0; i < count; i++) {
+                const region = regions[Math.floor(Math.random() * regions.length)];
+                const status = statuses[Math.floor(Math.random() * statuses.length)];
+                stations.push({
+                    id: `${region}-${String(i + 1).padStart(3, '0')}`,
+                    name: `Station ${region}-${String(i + 1).padStart(3, '0')}`,
+                    region: region,
+                    location: `${region} Region`,
+                    capacity: Math.floor(Math.random() * 400) + 100, // 100-500 kWh
+                    power: Math.floor(Math.random() * 200) + 50, // 50-250 kW
+                    soc: Math.floor(Math.random() * 100), // 0-100%
+                    status: status,
+                    statusLabel: statusLabels[status]
+                });
+            }
+            
+            return stations;
+        }
+        
+        // 生成时间线数据
+        function generateTimelineData() {
+            const now = new Date();
+            const timeline = [];
+            
+            // 指令下发
+            timeline.push({
+                time: formatTime(now),
+                title: { zh: '指令下发', en: 'Command Issued' },
+                description: { zh: '系统向所有设备发送操作指令', en: 'System sent operation command to all devices' },
+                type: 'success'
+            });
+            
+            // 设备响应
+            const responseTime = new Date(now.getTime() + 5000);
+            const respondedCount = Math.floor(Math.random() * 10) + 490;
+            timeline.push({
+                time: formatTime(responseTime),
+                title: { zh: '设备响应', en: 'Devices Responded' },
+                description: { 
+                    zh: `${respondedCount}个设备确认收到指令`, 
+                    en: `${respondedCount} devices confirmed receipt of command` 
+                },
+                type: 'success'
+            });
+            
+            // 开始执行
+            const executionTime = new Date(now.getTime() + 15000);
+            const executingCount = Math.floor(Math.random() * 50) + 430;
+            timeline.push({
+                time: formatTime(executionTime),
+                title: { zh: '开始执行', en: 'Execution Started' },
+                description: { 
+                    zh: `${executingCount}个设备开始执行操作`, 
+                    en: `${executingCount} devices started executing operation` 
+                },
+                type: 'active'
+            });
+            
+            // 部分完成
+            const partialTime = new Date(now.getTime() + 60000);
+            const completedCount = Math.floor(Math.random() * 100) + 300;
+            timeline.push({
+                time: formatTime(partialTime),
+                title: { zh: '部分完成', en: 'Partial Completion' },
+                description: { 
+                    zh: `${completedCount}个设备已完成操作`, 
+                    en: `${completedCount} devices completed operation` 
+                },
+                type: 'info'
+            });
+            
+            return timeline;
+        }
+        
+        // 格式化时间
+        function formatTime(date) {
+            const hours = String(date.getHours()).padStart(2, '0');
+            const minutes = String(date.getMinutes()).padStart(2, '0');
+            const seconds = String(date.getSeconds()).padStart(2, '0');
+            return `${hours}:${minutes}:${seconds}`;
+        }
+        
         
         // 添加全局强制切换到市场页面的命令
         window.forceMarket = function() {
