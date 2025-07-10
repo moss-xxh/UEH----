@@ -5896,26 +5896,31 @@
             dynamicRows.forEach(row => row.remove());
             
             // Hide/show fields based on user requirements
-            const estimatedPowerItem = document.getElementById('confirmEstimatedPower').parentElement;
-            const currentPriceItem = document.getElementById('confirmCurrentPrice').parentElement;
-            const durationItem = document.getElementById('confirmDuration').parentElement;
-            const costBenefitItem = document.getElementById('confirmCostBenefit').parentElement;
+            const estimatedPowerEl = document.getElementById('confirmEstimatedPower');
+            const currentPriceEl = document.getElementById('confirmCurrentPrice');
+            const durationEl = document.getElementById('confirmDuration');
+            const costBenefitEl = document.getElementById('confirmCostBenefit');
+            
+            const estimatedPowerItem = estimatedPowerEl ? estimatedPowerEl.parentElement : null;
+            const currentPriceItem = currentPriceEl ? currentPriceEl.parentElement : null;
+            const durationItem = durationEl ? durationEl.parentElement : null;
+            const costBenefitItem = costBenefitEl ? costBenefitEl.parentElement : null;
             
             // 判断是否为停止操作
             const isStopOperation = operationType.includes('stop') || pendingOperation.includes('stop');
             
             if (operationType === 'charge' || isStopOperation) {
                 // For charge and stop operations: hide all profit-related fields
-                estimatedPowerItem.style.display = 'none';
-                currentPriceItem.style.display = 'none';
-                durationItem.style.display = 'none';
-                costBenefitItem.style.display = 'none';
+                if (estimatedPowerItem) estimatedPowerItem.style.display = 'none';
+                if (currentPriceItem) currentPriceItem.style.display = 'none';
+                if (durationItem) durationItem.style.display = 'none';
+                if (costBenefitItem) costBenefitItem.style.display = 'none';
             } else if (operationType === 'discharge' && !isStopOperation) {
                 // For discharge only (not stop discharge): show predicted profit
-                estimatedPowerItem.style.display = 'none';
-                currentPriceItem.style.display = 'none';
-                durationItem.style.display = 'none';
-                costBenefitItem.style.display = 'none';
+                if (estimatedPowerItem) estimatedPowerItem.style.display = 'none';
+                if (currentPriceItem) currentPriceItem.style.display = 'none';
+                if (durationItem) durationItem.style.display = 'none';
+                if (costBenefitItem) costBenefitItem.style.display = 'none';
                 
                 const profitRow = document.createElement('div');
                 profitRow.style.cssText = 'display: flex; gap: 20px; margin-top: 20px;';
@@ -8565,6 +8570,126 @@
         </div>
     </div>
     
+    <!-- Device Response Details Drawer -->
+    <div id="deviceResponseDrawer" style="position: fixed; top: 0; right: -600px; width: 600px; height: 100%; background: #1a1f2e; box-shadow: -4px 0 24px rgba(0, 0, 0, 0.3); transition: right 0.3s ease; z-index: 10001; display: flex; flex-direction: column;">
+        <!-- Drawer Header -->
+        <div style="background: linear-gradient(135deg, rgba(0, 255, 136, 0.1), rgba(0, 255, 136, 0.05)); padding: 24px; border-bottom: 1px solid rgba(255, 255, 255, 0.1);">
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+                <h3 style="font-size: 20px; font-weight: 600; color: #fff; margin: 0;" data-i18n-key="operationDetails">操作详情</h3>
+                <button onclick="closeDeviceResponseDrawer()" style="background: none; border: none; color: rgba(255, 255, 255, 0.6); font-size: 24px; cursor: pointer; padding: 0; line-height: 1;">&times;</button>
+            </div>
+        </div>
+        
+        <!-- Drawer Tabs -->
+        <div style="display: flex; background: rgba(255, 255, 255, 0.02); border-bottom: 1px solid rgba(255, 255, 255, 0.1);">
+            <button class="drawer-tab active" onclick="switchDrawerTab('station', this)" style="flex: 1; padding: 16px; background: none; border: none; color: #00ff88; font-size: 14px; font-weight: 600; cursor: pointer; border-bottom: 2px solid #00ff88;" data-i18n-key="stationInformation">电站信息</button>
+            <button class="drawer-tab" onclick="switchDrawerTab('details', this)" style="flex: 1; padding: 16px; background: none; border: none; color: rgba(255, 255, 255, 0.7); font-size: 14px; font-weight: 600; cursor: pointer; border-bottom: 2px solid transparent;" data-i18n-key="stationDetails">电站详情</button>
+            <button class="drawer-tab" onclick="switchDrawerTab('timeline', this)" style="flex: 1; padding: 16px; background: none; border: none; color: rgba(255, 255, 255, 0.7); font-size: 14px; font-weight: 600; cursor: pointer; border-bottom: 2px solid transparent;" data-i18n-key="executionTimeline">执行时间线</button>
+        </div>
+        
+        <!-- Drawer Content -->
+        <div style="flex: 1; overflow-y: auto; padding: 24px;">
+            <!-- Station Information Tab -->
+            <div id="stationTab" class="drawer-tab-content" style="display: block;">
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px;">
+                    <!-- Station cards will be dynamically generated -->
+                    <div class="station-card" style="background: rgba(255, 255, 255, 0.04); border-radius: 12px; padding: 16px; border: 1px solid rgba(255, 255, 255, 0.08);">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                            <span style="font-size: 16px; font-weight: 600; color: #fff;">NSW-001</span>
+                            <span style="padding: 4px 12px; background: rgba(0, 255, 136, 0.2); color: #00ff88; border-radius: 12px; font-size: 12px;" data-i18n-key="online">在线</span>
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 8px;">
+                            <div style="display: flex; justify-content: space-between;">
+                                <span style="color: rgba(255, 255, 255, 0.6); font-size: 13px;" data-i18n-key="location">位置</span>
+                                <span style="color: #fff; font-size: 13px;">Sydney, NSW</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between;">
+                                <span style="color: rgba(255, 255, 255, 0.6); font-size: 13px;" data-i18n-key="capacity">容量</span>
+                                <span style="color: #fff; font-size: 13px;">250 kWh</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between;">
+                                <span style="color: rgba(255, 255, 255, 0.6); font-size: 13px;" data-i18n-key="status">状态</span>
+                                <span style="color: #00ff88; font-size: 13px;" data-i18n-key="charging">充电中</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- More cards... -->
+                </div>
+            </div>
+            
+            <!-- Station Details Tab -->
+            <div id="detailsTab" class="drawer-tab-content" style="display: none;">
+                <div style="background: rgba(255, 255, 255, 0.04); border-radius: 12px; padding: 20px; margin-bottom: 20px;">
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;">
+                        <div style="text-align: center;">
+                            <div style="font-size: 24px; font-weight: 700; color: #00ff88;">235</div>
+                            <div style="color: rgba(255, 255, 255, 0.6); font-size: 13px; margin-top: 4px;" data-i18n-key="totalStations">总电站数</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="font-size: 24px; font-weight: 700; color: #00ff88;">230</div>
+                            <div style="color: rgba(255, 255, 255, 0.6); font-size: 13px; margin-top: 4px;" data-i18n-key="onlineStations">在线电站</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="font-size: 24px; font-weight: 700; color: #00ff88;">225</div>
+                            <div style="color: rgba(255, 255, 255, 0.6); font-size: 13px; margin-top: 4px;" data-i18n-key="executingStations">执行中</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="background: rgba(255, 255, 255, 0.04); border-radius: 12px; overflow: hidden;">
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <thead>
+                            <tr style="background: rgba(255, 255, 255, 0.05);">
+                                <th style="padding: 12px; text-align: left; color: rgba(255, 255, 255, 0.6); font-size: 13px; font-weight: 600;" data-i18n-key="stationName">电站名称</th>
+                                <th style="padding: 12px; text-align: left; color: rgba(255, 255, 255, 0.6); font-size: 13px; font-weight: 600;" data-i18n-key="region">区域</th>
+                                <th style="padding: 12px; text-align: left; color: rgba(255, 255, 255, 0.6); font-size: 13px; font-weight: 600;" data-i18n-key="status">状态</th>
+                                <th style="padding: 12px; text-align: left; color: rgba(255, 255, 255, 0.6); font-size: 13px; font-weight: 600;" data-i18n-key="power">功率</th>
+                                <th style="padding: 12px; text-align: left; color: rgba(255, 255, 255, 0.6); font-size: 13px; font-weight: 600;">SOC</th>
+                            </tr>
+                        </thead>
+                        <tbody id="stationDetailsTable">
+                            <!-- Table rows will be dynamically generated -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Timeline Tab -->
+            <div id="timelineTab" class="drawer-tab-content" style="display: none;">
+                <div class="timeline" style="position: relative; padding-left: 30px;">
+                    <div style="position: absolute; left: 10px; top: 0; bottom: 0; width: 2px; background: rgba(255, 255, 255, 0.1);"></div>
+                    
+                    <div class="timeline-item" style="position: relative; margin-bottom: 24px;">
+                        <div style="position: absolute; left: -25px; width: 12px; height: 12px; background: #00ff88; border-radius: 50%; border: 2px solid #1a1f2e;"></div>
+                        <div style="color: rgba(255, 255, 255, 0.6); font-size: 12px; margin-bottom: 4px;">10:30:00</div>
+                        <div style="background: rgba(255, 255, 255, 0.04); border-radius: 8px; padding: 12px; border: 1px solid rgba(255, 255, 255, 0.08);">
+                            <div style="color: #fff; font-size: 14px; font-weight: 600; margin-bottom: 4px;" data-i18n-key="commandIssued">指令下发</div>
+                            <div style="color: rgba(255, 255, 255, 0.6); font-size: 13px;" data-i18n-key="commandIssuedDesc">系统向所有设备发送充电指令</div>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item" style="position: relative; margin-bottom: 24px;">
+                        <div style="position: absolute; left: -25px; width: 12px; height: 12px; background: #00ff88; border-radius: 50%; border: 2px solid #1a1f2e;"></div>
+                        <div style="color: rgba(255, 255, 255, 0.6); font-size: 12px; margin-bottom: 4px;">10:30:05</div>
+                        <div style="background: rgba(255, 255, 255, 0.04); border-radius: 8px; padding: 12px; border: 1px solid rgba(255, 255, 255, 0.08);">
+                            <div style="color: #fff; font-size: 14px; font-weight: 600; margin-bottom: 4px;" data-i18n-key="devicesResponded">设备响应</div>
+                            <div style="color: rgba(255, 255, 255, 0.6); font-size: 13px;" data-i18n-key="devicesRespondedDesc">230个设备确认收到指令</div>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item" style="position: relative;">
+                        <div style="position: absolute; left: -25px; width: 12px; height: 12px; background: #ffd700; border-radius: 50%; border: 2px solid #1a1f2e; box-shadow: 0 0 0 4px rgba(255, 215, 0, 0.2);"></div>
+                        <div style="color: rgba(255, 255, 255, 0.6); font-size: 12px; margin-bottom: 4px;">10:30:15</div>
+                        <div style="background: rgba(255, 215, 0, 0.05); border-radius: 8px; padding: 12px; border: 1px solid rgba(255, 215, 0, 0.2);">
+                            <div style="color: #fff; font-size: 14px; font-weight: 600; margin-bottom: 4px;" data-i18n-key="executionStarted">开始执行</div>
+                            <div style="color: rgba(255, 255, 255, 0.6); font-size: 13px;" data-i18n-key="executionStartedDesc">设备开始执行充电操作</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
     <style>
         /* Modal Styles */
         .modal {
@@ -9112,20 +9237,58 @@
         }
         
         function viewDeviceResponseDetails() {
-            // 使用 HomeOperationDrawer 显示详情
-            if (window.homeOperationDrawer) {
-                window.homeOperationDrawer.open({
-                    operationType: currentOperation || 'stop',
-                    targetDevices: 500,
-                    startTime: new Date().toISOString(),
-                    region: selectedMainRegion
-                });
-            } else {
-                console.error('HomeOperationDrawer not initialized');
-            }
+            // 打开设备响应详情抽屉
+            openDeviceResponseDrawer();
             
             // 关闭当前模态框
             closeDeviceResponseModal();
+        }
+        
+        function openDeviceResponseDrawer() {
+            const drawer = document.getElementById('deviceResponseDrawer');
+            if (drawer) {
+                drawer.style.right = '0';
+                // 添加遮罩层
+                const overlay = document.createElement('div');
+                overlay.id = 'drawerOverlay';
+                overlay.style.cssText = 'position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.5); z-index: 10000;';
+                overlay.onclick = closeDeviceResponseDrawer;
+                document.body.appendChild(overlay);
+            }
+        }
+        
+        function closeDeviceResponseDrawer() {
+            const drawer = document.getElementById('deviceResponseDrawer');
+            if (drawer) {
+                drawer.style.right = '-600px';
+            }
+            const overlay = document.getElementById('drawerOverlay');
+            if (overlay) {
+                overlay.remove();
+            }
+        }
+        
+        function switchDrawerTab(tabName, tabElement) {
+            // 更新标签样式
+            document.querySelectorAll('.drawer-tab').forEach(tab => {
+                tab.style.color = 'rgba(255, 255, 255, 0.7)';
+                tab.style.borderBottomColor = 'transparent';
+            });
+            tabElement.style.color = '#00ff88';
+            tabElement.style.borderBottomColor = '#00ff88';
+            
+            // 切换内容
+            document.getElementById('stationTab').style.display = 'none';
+            document.getElementById('detailsTab').style.display = 'none';
+            document.getElementById('timelineTab').style.display = 'none';
+            
+            if (tabName === 'station') {
+                document.getElementById('stationTab').style.display = 'block';
+            } else if (tabName === 'details') {
+                document.getElementById('detailsTab').style.display = 'block';
+            } else if (tabName === 'timeline') {
+                document.getElementById('timelineTab').style.display = 'block';
+            }
         }
         
         function switchDeviceResponseTab(tabName, tabElement) {
