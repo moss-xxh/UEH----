@@ -2722,13 +2722,12 @@
                     <span class="region-status discharging" style="font-size: 18px; margin-left: 8px; font-weight: 600;">−</span>
                 </button>
                 </div>
-                <!-- 最高价格区域显示 -->
-                <div style="display: flex; align-items: center; gap: 12px; padding: 0 20px;">
+                <!-- 固定文本显示 -->
+                <div style="display: flex; align-items: center; gap: 8px; padding: 0 20px;">
                     <span style="font-size: 14px; color: var(--color-text-secondary); font-weight: 500;">
-                        <span data-i18n-key="highestPrice">最高价</span>
+                        <span data-i18n-key="highestPrice">价格最高</span>：
                     </span>
-                    <span id="highestPriceRegionDisplay" style="font-size: 16px; font-weight: 700; color: #00ff88;">NSW</span>
-                    <span style="font-size: 18px; font-weight: 700; color: #00ff88;">$<span id="highestPriceValue">170</span></span>
+                    <span style="font-size: 16px; font-weight: 700; color: #00ff88;">NSW $450</span>
                 </div>
             </div>
         </div>
@@ -3730,7 +3729,7 @@
                 }, 1000);
                 
                 // Initialize highest price region display
-                updateHighestPriceRegion();
+                // updateHighestPriceRegion(); // Removed - using fixed text now
                 
                 // Initialize other station data
                 document.getElementById('availableHomes').textContent = '235';
@@ -4185,7 +4184,7 @@
             if (!stopBtn) {
                 stopBtn = document.createElement('button');
                 stopBtn.className = 'action-btn stop-btn';
-                stopBtn.innerHTML = '<span data-i18n-key="stop">停止</span>';
+                stopBtn.innerHTML = `<span data-i18n-key="stop">${window.i18n ? window.i18n.getText('stop') : '停止'}</span>`;
                 stopBtn.onclick = handleStop;
                 actionButtonsContainer.appendChild(stopBtn);
             } else {
@@ -4804,7 +4803,7 @@
             });
             
             // Update highest price region
-            updateHighestPriceRegion();
+            // updateHighestPriceRegion(); // Removed - using fixed text now
         }
 
         // Update highest price region display
