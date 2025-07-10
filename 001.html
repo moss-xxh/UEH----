@@ -266,6 +266,43 @@
         #historicalContent {
             display: none;
         }
+        
+        /* Historical Region Selector Styles */
+        .historical-region-selector {
+            display: flex;
+            margin: 0;
+        }
+        
+        .historical-region-tabs {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .historical-region-tab {
+            padding: 8px 20px;
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: rgba(255, 255, 255, 0.7);
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+        
+        .historical-region-tab:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+        
+        .historical-region-tab.active {
+            background: #00ff88;
+            color: #000;
+            border-color: #00ff88;
+            font-weight: 600;
+        }
 
         /* Chart Detail Button */
         .chart-detail-btn {
@@ -364,13 +401,24 @@
 
         /* Combined Tabs and Time Container */
         .tabs-time-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
             margin-top: 24px;
             margin-bottom: 20px;
             border-bottom: 1px solid rgba(255,255,255,0.1);
             padding-bottom: 16px;
+        }
+        
+        .dimension-tabs-row {
+            display: flex;
+            justify-content: flex-start;
+            margin-bottom: 20px;
+        }
+        
+        .region-time-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 32px;
+            margin-bottom: 10px;
         }
         
         /* Analysis Dimension Tabs */
@@ -979,27 +1027,53 @@
         <div id="historicalContent">
             <!-- Combined Tabs and Time Selector Container -->
             <div class="tabs-time-container">
-                <!-- Dimension Tabs -->
-                <div class="dimension-tabs">
-                    <div class="dimension-tab active" onclick="switchDimension('price', this)">
-                        <span class="dimension-icon">💰</span>
-                        <span class="dimension-name" data-key="priceAnalysis">价格分析</span>
-                    </div>
-                    <div class="dimension-tab" onclick="switchDimension('operation', this)">
-                        <span class="dimension-icon">⚙️</span>
-                        <span class="dimension-name" data-key="operationAnalysis">操作分析</span>
-                    </div>
-                    <div class="dimension-tab" onclick="switchDimension('user', this)">
-                        <span class="dimension-icon">👤</span>
-                        <span class="dimension-name" data-key="userAnalysis">用户分析</span>
+                <!-- Dimension Tabs Row -->
+                <div class="dimension-tabs-row">
+                    <div class="dimension-tabs">
+                        <div class="dimension-tab active" onclick="switchDimension('price', this)">
+                            <span class="dimension-icon">💰</span>
+                            <span class="dimension-name" data-key="priceAnalysis">价格分析</span>
+                        </div>
+                        <div class="dimension-tab" onclick="switchDimension('operation', this)">
+                            <span class="dimension-icon">⚙️</span>
+                            <span class="dimension-name" data-key="operationAnalysis">操作分析</span>
+                        </div>
+                        <div class="dimension-tab" onclick="switchDimension('user', this)">
+                            <span class="dimension-icon">👤</span>
+                            <span class="dimension-name" data-key="userAnalysis">用户分析</span>
+                        </div>
                     </div>
                 </div>
                 
-                <!-- Time Dimension Selector -->
-                <div class="time-dimension-selector">
-                    <button class="time-tab active" data-range="yesterday" onclick="switchTimeDimension('yesterday', this)" data-key="yesterday">昨天</button>
-                    <button class="time-tab" data-range="7d" onclick="switchTimeDimension('7d', this)" data-key="recent7days">近7天</button>
-                    <button class="time-tab" data-range="30d" onclick="switchTimeDimension('30d', this)" data-key="recent30days">近30天</button>
+                <!-- Region and Time Selector Row -->
+                <div class="region-time-row">
+                    <!-- Region Selector -->
+                    <div class="historical-region-selector">
+                        <div class="historical-region-tabs">
+                            <div class="historical-region-tab active" data-region="nsw" onclick="switchHistoricalRegion('nsw', this)">
+                                <span data-key="nswRegion">NSW</span>
+                            </div>
+                            <div class="historical-region-tab" data-region="qld" onclick="switchHistoricalRegion('qld', this)">
+                                <span data-key="qldRegion">QLD</span>
+                            </div>
+                            <div class="historical-region-tab" data-region="vic" onclick="switchHistoricalRegion('vic', this)">
+                                <span data-key="vicRegion">VIC</span>
+                            </div>
+                            <div class="historical-region-tab" data-region="sa" onclick="switchHistoricalRegion('sa', this)">
+                                <span data-key="saRegion">SA</span>
+                            </div>
+                            <div class="historical-region-tab" data-region="tas" onclick="switchHistoricalRegion('tas', this)">
+                                <span data-key="tasRegion">TAS</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Time Dimension Selector -->
+                    <div class="time-dimension-selector">
+                        <button class="time-tab active" data-range="yesterday" onclick="switchTimeDimension('yesterday', this)" data-key="yesterday">昨天</button>
+                        <button class="time-tab" data-range="7d" onclick="switchTimeDimension('7d', this)" data-key="recent7days">近7天</button>
+                        <button class="time-tab" data-range="30d" onclick="switchTimeDimension('30d', this)" data-key="recent30days">近30天</button>
+                    </div>
                 </div>
             </div>
             
@@ -1062,14 +1136,14 @@
                         <div class="insight-content" style="flex: 1; overflow-y: auto; overflow-x: hidden; padding-right: 10px; color: #fff; line-height: 1.6;">
                             <strong style="font-size: 16px; color: #fff;">✨ <span data-key="predictionReliabilityHigh">预测可靠性很高</span></strong>
                             <ul style="margin: 15px 0; padding-left: 20px; line-height: 1.8;">
-                                <li style="margin-bottom: 10px;" data-key="accuracyAnalysis1">具有<span style="color: #00ff88; font-weight: 600;">94.7%</span>准确性，平均偏差率仅<span style="color: #00ff88; font-weight: 600;">1.9%</span>，说明预测准确性高且误差很小</li>
-                                <li style="margin-bottom: 10px;" data-key="accuracyAnalysis2">价格趋势预测准确率<span style="color: #00ff88; font-weight: 600;">96.8%</span>，说明趋势预判准确，尤其谷值预测准确率高达<span style="color: #00ff88; font-weight: 600;">95.2%</span></li>
-                                <li data-key="accuracyAnalysis3">高准确率时段：凌晨2-6点和下午2-6点，准确率超过<span style="color: #00ff88; font-weight: 600;">95%</span></li>
+                                <li style="margin-bottom: 10px;" class="price-analysis-item" data-key="accuracyAnalysis1">具有<span style="color: #00ff88; font-weight: 600;">94.7%</span>准确性，平均偏差率仅<span style="color: #00ff88; font-weight: 600;">1.9%</span>，平均价格误差<span style="color: #ff9500; font-weight: 600;">$8/MWh</span>，说明预测准确性高且误差很小</li>
+                                <li style="margin-bottom: 10px;" class="price-analysis-item" data-key="accuracyAnalysis2">价格趋势预测准确率<span style="color: #00ff88; font-weight: 600;">96.8%</span>，说明趋势预判准确，尤其谷值预测准确率高达<span style="color: #00ff88; font-weight: 600;">95.2%</span></li>
+                                <li class="price-analysis-item" data-key="accuracyAnalysis3">高准确率时段：凌晨2-6点和下午2-6点，准确率超过<span style="color: #00ff88; font-weight: 600;">95%</span></li>
                             </ul>
                             
                             <strong style="font-size: 16px; color: #fff; display: block; margin-top: 20px;">⚠️ <span data-key="attention">注意</span></strong>
-                            <div style="margin: 15px 0; line-height: 1.6;" data-key="warningMessage">
-                                晚上7-9点用电高峰期，价格波动大，准确性较低，建议谨慎操作
+                            <div style="margin: 15px 0; line-height: 1.6;" class="price-analysis-item" data-key="warningMessage">
+                                晚上<span style="color: #ff9500; font-weight: 600;">7-9点</span>用电高峰期，价格波动大，准确性较低，建议谨慎操作
                             </div>
                         </div>
                     </div>
@@ -1138,10 +1212,10 @@
                 <!-- Top Section: Half-Half Layout -->
                 <div style="display: flex; gap: 16px; margin-bottom: 16px;">
                     <!-- Left Half: Summary Card -->
-                    <div class="summary-card" style="flex: 1; margin: 0; padding: 16px; height: 350px;">
+                    <div class="summary-card" style="flex: 1; margin: 0; padding: 20px; height: 380px;">
                         <div class="summary-card-header" style="margin-bottom: 12px;">
                             <h2 class="summary-card-title" style="font-size: 18px;" data-key="dischargeAnalysis">放电分析</h2>
-                            <div class="summary-card-value" style="font-size: 32px;">85%</div>
+                            <div class="summary-card-value" style="font-size: 32px;">85<span data-key="score">分</span></div>
                         </div>
                         <div class="summary-metrics" style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
                             <div class="summary-metric positive">
@@ -1184,25 +1258,25 @@
                     </div>
                     
                     <!-- Right Half: Analysis Conclusion -->
-                    <div class="insight-box" style="flex: 1; margin: 0; height: 350px; display: flex; flex-direction: column;">
+                    <div class="insight-box" style="flex: 1; margin: 0; height: 380px; display: flex; flex-direction: column;">
                         <div class="insight-title" style="flex-shrink: 0;">
                             <span>🎯</span>
                             <span data-key="analysisConclusion">分析结论</span>
                         </div>
                         <div class="insight-content" style="flex: 1; overflow-y: auto; overflow-x: hidden; padding-right: 10px; color: #fff; line-height: 1.6;">
                             <strong style="font-size: 16px; color: #fff;">✨ <span data-key="yourPerformanceExcellent">您的表现：优秀（85分）</span></strong>
-                            <div style="margin: 15px 0; line-height: 1.8;" data-key="performanceAnalysis">
+                            <div style="margin: 15px 0; line-height: 1.8;" class="operation-analysis-item" data-key="performanceAnalysis">
                                 您很会挑时间卖电！<span style="color: #00ff88; font-weight: 600;">37.1%</span>的电卖在了最高价，<span style="color: #00ff88; font-weight: 600;">40.8%</span>卖在高点，是一个优秀的卖电达人！
                             </div>
                             
                             <strong style="font-size: 16px; color: #fff; display: block; margin-top: 20px;">📊 <span data-key="yourSellingStatus">您的卖电情况</span></strong>
-                            <div style="margin: 15px 0; line-height: 1.8;" data-key="sellingAnalysis">
+                            <div style="margin: 15px 0; line-height: 1.8;" class="operation-analysis-item" data-key="sellingAnalysis">
                                 过去30天共卖电<span style="color: #00ff88;">383次</span>，其中<span style="color: #00ff88;">298次</span>时机把握较好（77.9%），<span style="color: #ff9500;">85次</span>时机一般。<br style="margin-bottom: 10px;">
                                 整体平均放电价格：<span style="color: #00ff88; font-weight: 600;">$382/MWh</span>
                             </div>
                             
                             <strong style="font-size: 16px; color: #fff; display: block; margin-top: 20px;">💡 <span data-key="optimizationSuggestions">优化建议</span></strong>
-                            <div style="margin: 15px 0; line-height: 1.8;" data-key="suggestionDetails">
+                            <div style="margin: 15px 0; line-height: 1.8;" class="operation-analysis-item" data-key="suggestionDetails">
                                 重点关注每天17-19点的价格高峰。对于那<span style="color: #ff9500; font-weight: 600;">4.5%</span>的低价卖电，建议多等待1-2小时，往往能获得更好的价格。
                             </div>
                         </div>
@@ -1350,18 +1424,18 @@
                         </div>
                         <div class="insight-content" style="flex: 1; overflow-y: auto; overflow-x: hidden; padding-right: 10px; color: #fff; line-height: 1.6;">
                             <strong style="font-size: 16px; color: #fff;">✨ <span data-key="userPerformanceGreat">用户表现很棒</span></strong>
-                            <div style="margin: 15px 0; line-height: 1.8;" data-key="userPerformanceAnalysis">
+                            <div style="margin: 15px 0; line-height: 1.8;" class="user-analysis-item" data-key="userPerformanceAnalysis">
                                 有<span style="color: #00ff88; font-weight: 600;">92%</span>的用户积极参与放电，每人平均贡献了<span style="color: #00ff88; font-weight: 600;">45.8度电</span>，赚了<span style="color: #00ff88; font-weight: 600;">$7.08</span>。<br>
                                 有<span style="color: #00ff88; font-weight: 600;">67%</span>的活跃用户贡献了<span style="color: #00ff88; font-weight: 600;">90%</span>的获利。
                             </div>
                             
                             <strong style="font-size: 16px; color: #fff; display: block; margin-top: 20px;">📈 <span data-key="betterThanLastPeriod">比上期更好了</span></strong>
-                            <div style="margin: 15px 0; line-height: 1.8;" data-key="improvementAnalysis">
+                            <div style="margin: 15px 0; line-height: 1.8;" class="user-analysis-item" data-key="improvementAnalysis">
                                 放电量增加了<span style="color: #00ff88; font-weight: 600;">5.2%</span>，收益增加了<span style="color: #00ff88; font-weight: 600;">3.8%</span>，大家赚得更多了！
                             </div>
                             
                             <strong style="font-size: 16px; color: #fff; display: block; margin-top: 20px;">💡 <span data-key="canBeBetter">还能更好</span></strong>
-                            <div style="margin: 15px 0; line-height: 1.8;" data-key="improvementSuggestion">
+                            <div style="margin: 15px 0; line-height: 1.8;" class="user-analysis-item" data-key="improvementSuggestion">
                                 还有<span style="color: #ff9500; font-weight: 600;">8%</span>的用户没参与，如果能让他们也加入进来，整体收益还能提升更多。
                             </div>
                         </div>
@@ -1394,6 +1468,7 @@
         // 翻译数据
         const translations = {
             zh: {
+                allRegions: "全部地区",
                 nswRegion: "NSW",
                 qldRegion: "QLD", 
                 vicRegion: "VIC",
@@ -1552,6 +1627,7 @@
                 closeModal: "关闭"
             },
             en: {
+                allRegions: "All Regions",
                 nswRegion: "NSW",
                 qldRegion: "QLD",
                 vicRegion: "VIC", 
@@ -1718,6 +1794,9 @@
         document.documentElement.lang = currentLanguage === 'zh' ? 'zh-CN' : currentLanguage;
         let currentTimeDimension = 'yesterday';
         let currentDimension = 'price';
+        
+        // 历史分析地区选择
+        window.currentHistoricalRegion = 'nsw';
 
         // Language switching is now handled by the HeaderNav component's i18n system
 
@@ -1726,9 +1805,117 @@
             document.querySelectorAll('[data-key]').forEach(element => {
                 const key = element.getAttribute('data-key');
                 if (translations[currentLanguage] && translations[currentLanguage][key]) {
-                    element.textContent = translations[currentLanguage][key];
+                    // Special handling for analysis items with colored spans
+                    if (element.classList.contains('price-analysis-item')) {
+                        updatePriceAnalysisItem(element, key);
+                    } else if (element.classList.contains('operation-analysis-item')) {
+                        updateOperationAnalysisItem(element, key);
+                    } else if (element.classList.contains('user-analysis-item')) {
+                        updateUserAnalysisItem(element, key);
+                    } else {
+                        element.textContent = translations[currentLanguage][key];
+                    }
                 }
             });
+        }
+        
+        // Special function to update price analysis items while preserving colored spans
+        function updatePriceAnalysisItem(element, key) {
+            if (currentLanguage === 'zh') {
+                // Chinese content with colored spans
+                switch(key) {
+                    case 'accuracyAnalysis1':
+                        element.innerHTML = '具有<span style="color: #00ff88; font-weight: 600;">94.7%</span>准确性，平均偏差率仅<span style="color: #00ff88; font-weight: 600;">1.9%</span>，平均价格误差<span style="color: #ff9500; font-weight: 600;">$8/MWh</span>，说明预测准确性高且误差很小';
+                        break;
+                    case 'accuracyAnalysis2':
+                        element.innerHTML = '价格趋势预测准确率<span style="color: #00ff88; font-weight: 600;">96.8%</span>，说明趋势预判准确，尤其谷值预测准确率高达<span style="color: #00ff88; font-weight: 600;">95.2%</span>';
+                        break;
+                    case 'accuracyAnalysis3':
+                        element.innerHTML = '高准确率时段：凌晨2-6点和下午2-6点，准确率超过<span style="color: #00ff88; font-weight: 600;">95%</span>';
+                        break;
+                    case 'warningMessage':
+                        element.innerHTML = '晚上<span style="color: #ff9500; font-weight: 600;">7-9点</span>用电高峰期，价格波动大，准确性较低，建议谨慎操作';
+                        break;
+                }
+            } else {
+                // English content with colored spans
+                switch(key) {
+                    case 'accuracyAnalysis1':
+                        element.innerHTML = 'With <span style="color: #00ff88; font-weight: 600;">94.7%</span> accuracy and only <span style="color: #00ff88; font-weight: 600;">1.9%</span> average deviation rate, average price error <span style="color: #ff9500; font-weight: 600;">$8/MWh</span>, indicating high prediction accuracy with minimal error';
+                        break;
+                    case 'accuracyAnalysis2':
+                        element.innerHTML = 'Price trend prediction accuracy is <span style="color: #00ff88; font-weight: 600;">96.8%</span>, indicating accurate trend judgment, especially valley prediction accuracy up to <span style="color: #00ff88; font-weight: 600;">95.2%</span>';
+                        break;
+                    case 'accuracyAnalysis3':
+                        element.innerHTML = 'High accuracy periods: 2-6 AM and 2-6 PM, with accuracy exceeding <span style="color: #00ff88; font-weight: 600;">95%</span>';
+                        break;
+                    case 'warningMessage':
+                        element.innerHTML = '<span style="color: #ff9500; font-weight: 600;">7-9 PM</span> peak electricity period has high price volatility and lower accuracy, suggest operating cautiously';
+                        break;
+                }
+            }
+        }
+        
+        // Special function to update operation analysis items while preserving colored spans
+        function updateOperationAnalysisItem(element, key) {
+            if (currentLanguage === 'zh') {
+                // Chinese content with colored spans
+                switch(key) {
+                    case 'performanceAnalysis':
+                        element.innerHTML = '您很会挑时间卖电！<span style="color: #00ff88; font-weight: 600;">37.1%</span>的电卖在了最高价，<span style="color: #00ff88; font-weight: 600;">40.8%</span>卖在高点，是一个优秀的卖电达人！';
+                        break;
+                    case 'sellingAnalysis':
+                        element.innerHTML = '过去30天共卖电<span style="color: #00ff88;">383次</span>，其中<span style="color: #00ff88;">298次</span>时机把握较好（77.9%），<span style="color: #ff9500;">85次</span>时机一般。<br style="margin-bottom: 10px;">整体平均放电价格：<span style="color: #00ff88; font-weight: 600;">$382/MWh</span>';
+                        break;
+                    case 'suggestionDetails':
+                        element.innerHTML = '重点关注每天17-19点的价格高峰。对于那<span style="color: #ff9500; font-weight: 600;">4.5%</span>的低价卖电，建议多等待1-2小时，往往能获得更好的价格。';
+                        break;
+                }
+            } else {
+                // English content with colored spans
+                switch(key) {
+                    case 'performanceAnalysis':
+                        element.innerHTML = 'You\'re great at timing electricity sales! <span style="color: #00ff88; font-weight: 600;">37.1%</span> sold at peak prices, <span style="color: #00ff88; font-weight: 600;">40.8%</span> at high points - an excellent electricity seller!';
+                        break;
+                    case 'sellingAnalysis':
+                        element.innerHTML = '<span style="color: #00ff88;">383</span> sales in the past 30 days, <span style="color: #00ff88;">298</span> with good timing (77.9%), <span style="color: #ff9500;">85</span> average.<br style="margin-bottom: 10px;">Overall average discharge price: <span style="color: #00ff88; font-weight: 600;">$382/MWh</span>';
+                        break;
+                    case 'suggestionDetails':
+                        element.innerHTML = 'Focus on the 5-7 PM price peaks daily. For the <span style="color: #ff9500; font-weight: 600;">4.5%</span> low-price sales, suggest waiting 1-2 more hours for better prices.';
+                        break;
+                }
+            }
+        }
+        
+        // Special function to update user analysis items while preserving colored spans
+        function updateUserAnalysisItem(element, key) {
+            if (currentLanguage === 'zh') {
+                // Chinese content with colored spans
+                switch(key) {
+                    case 'userPerformanceAnalysis':
+                        element.innerHTML = '有<span style="color: #00ff88; font-weight: 600;">92%</span>的用户积极参与放电，每人平均贡献了<span style="color: #00ff88; font-weight: 600;">45.8度电</span>，赚了<span style="color: #00ff88; font-weight: 600;">$7.08</span>。<br>有<span style="color: #00ff88; font-weight: 600;">67%</span>的活跃用户贡献了<span style="color: #00ff88; font-weight: 600;">90%</span>的获利。';
+                        break;
+                    case 'improvementAnalysis':
+                        element.innerHTML = '放电量增加了<span style="color: #00ff88; font-weight: 600;">5.2%</span>，收益增加了<span style="color: #00ff88; font-weight: 600;">3.8%</span>，大家赚得更多了！';
+                        break;
+                    case 'improvementSuggestion':
+                        element.innerHTML = '还有<span style="color: #ff9500; font-weight: 600;">8%</span>的用户没参与，如果能让他们也加入进来，整体收益还能提升更多。';
+                        break;
+                }
+            } else {
+                // English content with colored spans
+                switch(key) {
+                    case 'userPerformanceAnalysis':
+                        element.innerHTML = '<span style="color: #00ff88; font-weight: 600;">92%</span> of users actively participated in discharge, averaging <span style="color: #00ff88; font-weight: 600;">45.8 kWh</span> per person, earning <span style="color: #00ff88; font-weight: 600;">$7.08</span>.<br><span style="color: #00ff88; font-weight: 600;">67%</span> of active users contributed <span style="color: #00ff88; font-weight: 600;">90%</span> of profits.';
+                        break;
+                    case 'improvementAnalysis':
+                        element.innerHTML = 'Discharge volume increased by <span style="color: #00ff88; font-weight: 600;">5.2%</span>, revenue increased by <span style="color: #00ff88; font-weight: 600;">3.8%</span> - everyone earned more!';
+                        break;
+                    case 'improvementSuggestion':
+                        element.innerHTML = '<span style="color: #ff9500; font-weight: 600;">8%</span> of users haven\'t participated yet. If they join in, overall revenue could increase even more.';
+                        break;
+                }
+            }
         }
 
         // 切换区域
@@ -1736,6 +1923,36 @@
             document.querySelectorAll('.region-tab').forEach(btn => btn.classList.remove('active'));
             button.classList.add('active');
             console.log('Switched to region:', region);
+        }
+        
+        // 历史分析地区切换
+        function switchHistoricalRegion(region, button) {
+            document.querySelectorAll('.historical-region-tab').forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
+            console.log('Historical analysis switched to region:', region);
+            
+            // 更新当前选中的地区
+            window.currentHistoricalRegion = region;
+            
+            // 根据当前维度更新数据
+            updateHistoricalData();
+        }
+        
+        // 更新历史分析数据
+        function updateHistoricalData() {
+            const currentDimension = document.querySelector('.dimension-tab.active')?.getAttribute('onclick')?.match(/switchDimension\('([^']+)'/)?.[1] || 'price';
+            const currentTimeDimension = document.querySelector('.time-tab.active')?.getAttribute('data-range') || 'yesterday';
+            
+            console.log('Updating historical data for:', {
+                region: window.currentHistoricalRegion || 'nsw',
+                dimension: currentDimension,
+                timeDimension: currentTimeDimension
+            });
+            
+            // 根据维度重新初始化图表
+            if (currentDimension === 'price' || currentDimension === 'operation' || currentDimension === 'user') {
+                initializeCharts();
+            }
         }
 
         // 切换分析模式
