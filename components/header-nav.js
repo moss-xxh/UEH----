@@ -80,7 +80,7 @@ class HeaderNav {
     createHeaderHTML() {
         const navItems = [
             { href: 'index.html', i18nKey: 'nav.home', key: 'home' },
-            { href: 'profit-new.html', i18nKey: 'nav.profit', key: 'profit' },
+            { href: '002.html', i18nKey: 'nav.profit', key: 'profit' },
             { href: 'family-new.html', i18nKey: 'nav.family', key: 'family' },
             { href: '001.html', i18nKey: 'nav.analysis', key: 'analysis' },
             { href: 'organization-new.html', i18nKey: 'nav.organization', key: 'organization' },
@@ -109,7 +109,7 @@ class HeaderNav {
         const headerHTML = `
             <div class="header" data-lang="${currentLang}">
                 <div class="logo">
-                    <img src="logo.jpg" alt="U Energy" style="height: 50px; width: auto;">
+                    <img src="logo1.png" alt="U Energy" style="height: 45px; width: auto;">
                 </div>
                 <div class="nav">
                     ${navHTML}

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title data-i18n-key="profit.title">获利 - AlwaysControl</title>
+    <title data-i18n="profit.title">获利 - AlwaysControl</title>
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
     <link rel="stylesheet" href="components/common-styles.css">
     <link rel="stylesheet" href="components/time-selector.css">
@@ -692,14 +692,14 @@
     <div class="container">
         <!-- Page Header -->
         <div class="page-header">
-            <h1 class="page-title" id="pageTitle" data-i18n-key="profit.pageTitle">获利</h1>
+            <h1 class="page-title" id="pageTitle" data-i18n="profit.pageTitle">获利</h1>
             <!-- View Mode Tabs -->
             <div class="page-view-tabs">
                 <button class="page-tab active" onclick="switchViewMode('chart', this)" id="chartTab">
-                    📊 <span data-i18n-key="profit.views.chart">图表视图</span>
+                    📊 <span data-i18n="profit.views.chart">图表视图</span>
                 </button>
                 <button class="page-tab" onclick="switchViewMode('table', this)" id="tableTab">
-                    📋 <span data-i18n-key="profit.views.table">表格视图</span>
+                    📋 <span data-i18n="profit.views.table">表格视图</span>
                 </button>
             </div>
         </div>
@@ -708,47 +708,47 @@
         <!-- Unified Time Selector Module -->
         <div class="time-selector-module" id="profitTimeSelectorModule">
             <select id="regionSelector" class="time-input" onchange="handleRegionChange()" style="min-width: 120px; margin-right: 12px; margin-left: 0; display: inline-block;">
-                <option value="all">全部地区</option>
+                <option value="all" data-i18n="allRegions">全部地区</option>
                 <option value="NSW">NSW</option>
                 <option value="QLD">QLD</option>
                 <option value="VIC">VIC</option>
                 <option value="SA">SA</option>
                 <option value="TAS">TAS</option>
             </select>
-            <button class="time-pill active" onclick="switchTimePeriod('day', this)" data-i18n-key="dayReport">日</button>
-            <button class="time-pill" onclick="switchTimePeriod('month', this)" data-i18n-key="monthReport">月</button>
-            <button class="time-pill" onclick="switchTimePeriod('year', this)" data-i18n-key="yearReport">年</button>
-            <button class="time-pill" onclick="switchTimePeriod('total', this)" data-i18n-key="totalReport">累计</button>
+            <button class="time-pill active" onclick="switchTimePeriod('day', this)" data-i18n="dayReport">日</button>
+            <button class="time-pill" onclick="switchTimePeriod('month', this)" data-i18n="monthReport">月</button>
+            <button class="time-pill" onclick="switchTimePeriod('year', this)" data-i18n="yearReport">年</button>
+            <button class="time-pill" onclick="switchTimePeriod('total', this)" data-i18n="totalReport">累计</button>
             <input type="date" id="timeSelector" class="time-input" onchange="handleTimeInputChange()">
-            <button class="refresh-btn" onclick="refreshData()" data-i18n-key="refresh" title="刷新数据">🔄 刷新</button>
+            <button class="refresh-btn" onclick="refreshData()" data-i18n="refresh" title="刷新数据">🔄 <span data-i18n="refresh">刷新</span></button>
         </div>
 
         <!-- Stats Cards -->
         <div class="stats-grid">
             <div class="stat-card card">
-                <div class="stat-label" data-i18n-key="profit.stats.userCount">用户数量</div>
+                <div class="stat-label" data-i18n="profit.stats.userCount">用户数量</div>
                 <div class="stat-value" id="userCount">1,234</div>
-                <div class="stat-change"><span data-i18n-key="profit.stats.comparedYesterday">比昨日</span> ↑ 12</div>
+                <div class="stat-change"><span data-i18n="profit.stats.comparedYesterday">比昨日</span> ↑ 12</div>
             </div>
             <div class="stat-card card">
-                <div class="stat-label" data-i18n-key="profit.stats.totalRevenue">累计收益</div>
+                <div class="stat-label" data-i18n="profit.stats.totalRevenue">累计收益</div>
                 <div class="stat-value" id="totalRevenue">$457,000</div>
-                <div class="stat-change"><span data-i18n-key="profit.stats.comparedYesterday">比昨日</span> ↑ $2,000</div>
+                <div class="stat-change"><span data-i18n="profit.stats.comparedYesterday">比昨日</span> ↑ $2,000</div>
             </div>
             <div class="stat-card card">
-                <div class="stat-label" data-i18n-key="profit.stats.avgProfit">人均获利</div>
+                <div class="stat-label" data-i18n="profit.stats.avgProfit">人均获利</div>
                 <div class="stat-value" id="avgProfit">$370</div>
-                <div class="stat-change"><span data-i18n-key="profit.stats.comparedYesterday">比昨日</span> ↑ $5</div>
+                <div class="stat-change"><span data-i18n="profit.stats.comparedYesterday">比昨日</span> ↑ $5</div>
             </div>
             <div class="stat-card card">
-                <div class="stat-label" data-i18n-key="profit.stats.maxStationProfit">最大获利 (电站)</div>
+                <div class="stat-label" data-i18n="profit.stats.maxStationProfit">最大获利 (电站)</div>
                 <div class="stat-value" id="maxStationProfit">$5,000</div>
-                <div class="stat-change"><span data-i18n-key="profit.stats.comparedYesterday">比昨日</span> ↑ $200</div>
+                <div class="stat-change"><span data-i18n="profit.stats.comparedYesterday">比昨日</span> ↑ $200</div>
             </div>
             <div class="stat-card card">
-                <div class="stat-label" data-i18n-key="profit.stats.minStationProfit">最小获利 (电站)</div>
+                <div class="stat-label" data-i18n="profit.stats.minStationProfit">最小获利 (电站)</div>
                 <div class="stat-value" id="minStationProfit">$10</div>
-                <div class="stat-change"><span data-i18n-key="profit.stats.comparedYesterday">比昨日</span> ↑ $1</div>
+                <div class="stat-change"><span data-i18n="profit.stats.comparedYesterday">比昨日</span> ↑ $1</div>
             </div>
         </div>
 
@@ -759,7 +759,7 @@
                 <!-- User Management Chart -->
                 <div class="chart-container card">
                     <div class="chart-header">
-                        <div class="chart-title" data-i18n-key="profit.charts.userManagement">用户管理</div>
+                        <div class="chart-title" data-i18n="profit.charts.userManagement">用户管理</div>
                     </div>
                     <div id="userManagementChart" style="width: 100%; height: 300px;"></div>
                 </div>
@@ -767,7 +767,7 @@
                 <!-- Revenue Distribution Chart -->
                 <div class="chart-container card">
                     <div class="chart-header">
-                        <div class="chart-title" data-i18n-key="profit.charts.revenueDistribution">收益分布</div>
+                        <div class="chart-title" data-i18n="profit.charts.revenueDistribution">收益分布</div>
                     </div>
                     <div id="revenueDistributionChart" style="width: 100%; height: 300px;"></div>
                 </div>
@@ -778,7 +778,7 @@
                 <!-- Power and Revenue Chart -->
                 <div class="chart-container card">
                     <div class="chart-header">
-                        <div class="chart-title" data-i18n-key="profit.charts.dischargeAndProfit">放电与获利</div>
+                        <div class="chart-title" data-i18n="profit.charts.dischargeAndProfit">放电与获利</div>
                     </div>
                     <div id="powerRevenueChart" style="width: 100%; height: 350px;"></div>
                 </div>
@@ -786,10 +786,10 @@
                 <!-- Top 5 Profit Chart -->
                 <div class="chart-container card">
                     <div class="chart-header">
-                        <div class="chart-title" data-i18n-key="profit.charts.profitRanking">获利排名</div>
+                        <div class="chart-title" data-i18n="profit.charts.profitRanking">获利排名</div>
                         <div class="chart-controls">
-                            <button class="filter-tab active" onclick="switchProfitView('top5', this)" id="top5Tab" data-i18n-key="profit.ranking.top5">前五</button>
-                            <button class="filter-tab" onclick="switchProfitView('bottom5', this)" id="bottom5Tab" data-i18n-key="profit.ranking.bottom5">后五</button>
+                            <button class="filter-tab active" onclick="switchProfitView('top5', this)" id="top5Tab" data-i18n="profit.ranking.top5">前五</button>
+                            <button class="filter-tab" onclick="switchProfitView('bottom5', this)" id="bottom5Tab" data-i18n="profit.ranking.bottom5">后五</button>
                         </div>
                     </div>
                     <div id="profitRankingChart" style="width: 100%; height: 350px;"></div>
@@ -804,48 +804,48 @@
             <div class="table-section">
                 <div class="table-container card">
                     <div class="table-header">
-                        <div class="table-title" data-i18n-key="profit.table.userParticipation">用户参与情况</div>
+                        <div class="table-title" data-i18n="profit.table.userParticipation">用户参与情况</div>
                         <div class="table-controls">
                             <!-- 状态筛选 -->
                             <div class="status-filters">
-                                <button class="filter-tab active" onclick="filterByStatus('all', this)" id="statusAll" data-i18n-key="profit.filters.all">全部</button>
-                                <button class="filter-tab" onclick="filterByStatus('active', this)" id="statusActive" data-i18n-key="profit.filters.active">活跃</button>
-                                <button class="filter-tab" onclick="filterByStatus('inactive', this)" id="statusInactive" data-i18n-key="profit.filters.inactive">非活跃</button>
-                                <button class="filter-tab" onclick="filterByStatus('notParticipating', this)" id="statusNotParticipating" data-i18n-key="profit.filters.notParticipating">未参与</button>
+                                <button class="filter-tab active" onclick="filterByStatus('all', this)" id="statusAll" data-i18n="profit.filters.all">全部</button>
+                                <button class="filter-tab" onclick="filterByStatus('active', this)" id="statusActive" data-i18n="profit.filters.active">活跃</button>
+                                <button class="filter-tab" onclick="filterByStatus('inactive', this)" id="statusInactive" data-i18n="profit.filters.inactive">非活跃</button>
+                                <button class="filter-tab" onclick="filterByStatus('notParticipating', this)" id="statusNotParticipating" data-i18n="profit.filters.notParticipating">未参与</button>
                             </div>
                             <!-- 导出功能 -->
                             <button class="export-btn" onclick="exportTableData()">
-                                📥 <span data-i18n-key="profit.buttons.exportData">导出数据</span>
+                                📥 <span data-i18n="profit.buttons.exportData">导出数据</span>
                             </button>
                         </div>
                     </div>
                     <table class="data-table">
                         <thead>
                             <tr>
-                                <th data-i18n-key="profit.table.date">日期</th>
-                                <th data-i18n-key="profit.table.user">用户</th>
-                                <th data-i18n-key="profit.table.status">性质</th>
+                                <th data-i18n="profit.table.date">日期</th>
+                                <th data-i18n="profit.table.user">用户</th>
+                                <th data-i18n="profit.table.status">性质</th>
                                 <th>
-                                    <span data-i18n-key="profit.table.dischargeAmount">实际放电量 (kWh)</span>
+                                    <span data-i18n="profit.table.dischargeAmount">实际放电量 (kWh)</span>
                                     <span class="sort-buttons">
                                         <button class="sort-btn sort-asc" onclick="sortTable('discharge', 'asc', this)" title="升序">▲</button>
                                         <button class="sort-btn sort-desc" onclick="sortTable('discharge', 'desc', this)" title="降序">▼</button>
                                     </span>
                                 </th>
                                 <th>
-                                    <span data-i18n-key="profit.table.profit">获利 ($)</span>
+                                    <span data-i18n="profit.table.profit">获利 ($)</span>
                                     <span class="sort-buttons">
                                         <button class="sort-btn sort-asc" onclick="sortTable('profit', 'asc', this)" title="升序">▲</button>
                                         <button class="sort-btn sort-desc" onclick="sortTable('profit', 'desc', this)" title="降序">▼</button>
                                     </span>
                                 </th>
-                                <th data-i18n-key="profit.table.dailyAvg" id="avgHeader">日均
+                                <th data-i18n="profit.table.dailyAvg" id="avgHeader">日均
                                     <span class="sort-buttons">
                                         <button class="sort-btn sort-asc" onclick="sortTable('dailyAvg', 'asc', this)" title="升序">▲</button>
                                         <button class="sort-btn sort-desc" onclick="sortTable('dailyAvg', 'desc', this)" title="降序">▼</button>
                                     </span>
                                 </th>
-                                <th data-i18n-key="profit.table.compareDaily" id="compareHeader">对比日均 ($)
+                                <th data-i18n="profit.table.compareDaily" id="compareHeader">对比日均 ($)
                                     <span class="sort-buttons">
                                         <button class="sort-btn sort-asc" onclick="sortTable('comparison', 'asc', this)" title="升序">▲</button>
                                         <button class="sort-btn sort-desc" onclick="sortTable('comparison', 'desc', this)" title="降序">▼</button>
@@ -1056,6 +1056,15 @@
                         updateTexts();
                         refreshCharts();
                     });
+                    
+                    // Initial update of texts
+                    setTimeout(() => {
+                        updateTexts();
+                        // Force i18n to update all texts
+                        if (window.i18n && window.i18n.updatePageTexts) {
+                            window.i18n.updatePageTexts();
+                        }
+                    }, 100);
                 }
 
                 // Window resize listener
@@ -1080,54 +1089,40 @@
             const compareHeader = document.getElementById('compareHeader');
             
             if (avgHeader && compareHeader) {
+                // Helper function to create sort buttons HTML
+                const createSortButtonsHTML = (column) => {
+                    const ascTitle = window.i18n ? window.i18n.getText('sortAsc') || '升序' : '升序';
+                    const descTitle = window.i18n ? window.i18n.getText('sortDesc') || '降序' : '降序';
+                    return '<span class="sort-buttons">' +
+                        `<button class="sort-btn sort-asc" onclick="sortTable('${column}', 'asc', this)" title="${ascTitle}">▲</button>` +
+                        `<button class="sort-btn sort-desc" onclick="sortTable('${column}', 'desc', this)" title="${descTitle}">▼</button>` +
+                        '</span>';
+                };
+                
+                // Get localized text function
+                const getLocalizedText = (zhText, enKey) => {
+                    if (window.i18n && window.i18n.getCurrentLanguage() === 'en') {
+                        return window.i18n.getText(enKey) || zhText;
+                    }
+                    return zhText;
+                };
+                
                 switch(period) {
                     case 'day':
-                        avgHeader.innerHTML = '日均' +
-                            '<span class="sort-buttons">' +
-                            '<button class="sort-btn sort-asc" onclick="sortTable(\'dailyAvg\', \'asc\', this)" title="升序">▲</button>' +
-                            '<button class="sort-btn sort-desc" onclick="sortTable(\'dailyAvg\', \'desc\', this)" title="降序">▼</button>' +
-                            '</span>';
-                        compareHeader.innerHTML = '对比日均 ($)' + 
-                            '<span class="sort-buttons">' +
-                            '<button class="sort-btn sort-asc" onclick="sortTable(\'comparison\', \'asc\', this)" title="升序">▲</button>' +
-                            '<button class="sort-btn sort-desc" onclick="sortTable(\'comparison\', \'desc\', this)" title="降序">▼</button>' +
-                            '</span>';
+                        avgHeader.innerHTML = getLocalizedText('日均', 'profit.table.dailyAvg') + createSortButtonsHTML('dailyAvg');
+                        compareHeader.innerHTML = getLocalizedText('对比日均 ($)', 'profit.table.compareDaily') + createSortButtonsHTML('comparison');
                         break;
                     case 'month':
-                        avgHeader.innerHTML = '月均' +
-                            '<span class="sort-buttons">' +
-                            '<button class="sort-btn sort-asc" onclick="sortTable(\'dailyAvg\', \'asc\', this)" title="升序">▲</button>' +
-                            '<button class="sort-btn sort-desc" onclick="sortTable(\'dailyAvg\', \'desc\', this)" title="降序">▼</button>' +
-                            '</span>';
-                        compareHeader.innerHTML = '对比月均 ($)' + 
-                            '<span class="sort-buttons">' +
-                            '<button class="sort-btn sort-asc" onclick="sortTable(\'comparison\', \'asc\', this)" title="升序">▲</button>' +
-                            '<button class="sort-btn sort-desc" onclick="sortTable(\'comparison\', \'desc\', this)" title="降序">▼</button>' +
-                            '</span>';
+                        avgHeader.innerHTML = getLocalizedText('月均', 'profit.table.monthlyAvg') + createSortButtonsHTML('dailyAvg');
+                        compareHeader.innerHTML = getLocalizedText('对比月均 ($)', 'profit.table.compareMonthly') + createSortButtonsHTML('comparison');
                         break;
                     case 'year':
-                        avgHeader.innerHTML = '年均' +
-                            '<span class="sort-buttons">' +
-                            '<button class="sort-btn sort-asc" onclick="sortTable(\'dailyAvg\', \'asc\', this)" title="升序">▲</button>' +
-                            '<button class="sort-btn sort-desc" onclick="sortTable(\'dailyAvg\', \'desc\', this)" title="降序">▼</button>' +
-                            '</span>';
-                        compareHeader.innerHTML = '对比年均 ($)' + 
-                            '<span class="sort-buttons">' +
-                            '<button class="sort-btn sort-asc" onclick="sortTable(\'comparison\', \'asc\', this)" title="升序">▲</button>' +
-                            '<button class="sort-btn sort-desc" onclick="sortTable(\'comparison\', \'desc\', this)" title="降序">▼</button>' +
-                            '</span>';
+                        avgHeader.innerHTML = getLocalizedText('年均', 'profit.table.yearlyAvg') + createSortButtonsHTML('dailyAvg');
+                        compareHeader.innerHTML = getLocalizedText('对比年均 ($)', 'profit.table.compareYearly') + createSortButtonsHTML('comparison');
                         break;
                     case 'total':
-                        avgHeader.innerHTML = '历史均值' +
-                            '<span class="sort-buttons">' +
-                            '<button class="sort-btn sort-asc" onclick="sortTable(\'dailyAvg\', \'asc\', this)" title="升序">▲</button>' +
-                            '<button class="sort-btn sort-desc" onclick="sortTable(\'dailyAvg\', \'desc\', this)" title="降序">▼</button>' +
-                            '</span>';
-                        compareHeader.innerHTML = '对比历史均值 ($)' + 
-                            '<span class="sort-buttons">' +
-                            '<button class="sort-btn sort-asc" onclick="sortTable(\'comparison\', \'asc\', this)" title="升序">▲</button>' +
-                            '<button class="sort-btn sort-desc" onclick="sortTable(\'comparison\', \'desc\', this)" title="降序">▼</button>' +
-                            '</span>';
+                        avgHeader.innerHTML = getLocalizedText('历史均值', 'profit.table.historicalAvg') + createSortButtonsHTML('dailyAvg');
+                        compareHeader.innerHTML = getLocalizedText('对比历史均值 ($)', 'profit.table.compareHistorical') + createSortButtonsHTML('comparison');
                         break;
                 }
             }
@@ -1445,7 +1440,7 @@
                     
                     // Add options
                     const regions = [
-                        { value: 'all', text: '全部地区' },
+                        { value: 'all', text: window.i18n ? window.i18n.getText('allRegions') : '全部地区' },
                         { value: 'NSW', text: 'NSW' },
                         { value: 'QLD', text: 'QLD' },
                         { value: 'VIC', text: 'VIC' },
@@ -2104,7 +2099,14 @@
                     }
                     
                     // 为每个用户生成该月的汇总数据
-                    const dateStr = `${year}年${parseInt(month)}月`;
+                    let dateStr;
+                    if (window.i18n && window.i18n.getCurrentLanguage() === 'en') {
+                        const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
+                            'July', 'August', 'September', 'October', 'November', 'December'];
+                        dateStr = `${monthNames[parseInt(month) - 1]} ${year}`;
+                    } else {
+                        dateStr = `${year}年${parseInt(month)}月`;
+                    }
                     const userCount = 8 + Math.floor(Math.random() * 3);
                     
                     for (let i = 0; i < userCount; i++) {
@@ -2118,7 +2120,12 @@
                     const year = timeSelector && timeSelector.type === 'number' ? timeSelector.value : new Date().getFullYear();
                     
                     // 为每个用户生成该年的汇总数据
-                    const dateStr = `${year}年`;
+                    let dateStr;
+                    if (window.i18n && window.i18n.getCurrentLanguage() === 'en') {
+                        dateStr = `${year}`;
+                    } else {
+                        dateStr = `${year}年`;
+                    }
                     const userCount = 10;  // 显示所有10个用户
                     
                     for (let i = 0; i < userCount; i++) {
@@ -2129,8 +2136,14 @@
                 
                 case 'total': {
                     // 累计 - 显示所有用户累计数据
+                    let dateStr;
+                    if (window.i18n && window.i18n.getCurrentLanguage() === 'en') {
+                        dateStr = window.i18n.getText('totalReport') || 'Total';
+                    } else {
+                        dateStr = '累计';
+                    }
                     users.forEach(user => {
-                        data.push(createUserData(user, '累计', statuses, 'total'));
+                        data.push(createUserData(user, dateStr, statuses, 'total'));
                     });
                     break;
                 }
@@ -2181,7 +2194,11 @@
         
         // 格式化日期
         function formatDate(date) {
-            return `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日`;
+            if (window.i18n && window.i18n.getCurrentLanguage() === 'en') {
+                return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+            } else {
+                return `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日`;
+            }
         }
         
         // Load table data into the table
@@ -2300,6 +2317,24 @@
             // Update chart titles and legends when language changes
             if (window.i18n) {
                 refreshCharts();
+                
+                // Update region selector options
+                const regionSelector = document.getElementById('regionSelector');
+                if (regionSelector) {
+                    const allRegionOption = regionSelector.querySelector('option[value="all"]');
+                    if (allRegionOption) {
+                        allRegionOption.textContent = window.i18n.getText('allRegions');
+                    }
+                }
+                
+                // Force update time pills text
+                const timePills = document.querySelectorAll('.time-pill');
+                timePills.forEach(pill => {
+                    const dataI18n = pill.getAttribute('data-i18n');
+                    if (dataI18n && window.i18n) {
+                        pill.textContent = window.i18n.getText(dataI18n);
+                    }
+                });
             }
         }
 
@@ -2356,8 +2391,15 @@
     
     <!-- Force create region selector -->
     <script>
-        // Ensure region selector is created
+        // Ensure region selector is created and texts are updated
         window.addEventListener('load', function() {
+            // Update all i18n texts after page fully loaded
+            setTimeout(() => {
+                if (window.i18n && window.i18n.updatePageTexts) {
+                    console.log('Force updating all i18n texts after page load...');
+                    window.i18n.updatePageTexts();
+                }
+            }, 500);
             setTimeout(() => {
                 const timeSelectorModule = document.querySelector('.time-selector-module');
                 if (timeSelectorModule) {
@@ -2378,7 +2420,7 @@
                         
                         // Add options
                         const regions = [
-                            { value: 'all', text: '全部地区' },
+                            { value: 'all', text: window.i18n ? window.i18n.getText('allRegions') : '全部地区' },
                             { value: 'NSW', text: 'NSW' },
                             { value: 'QLD', text: 'QLD' },
                             { value: 'VIC', text: 'VIC' },

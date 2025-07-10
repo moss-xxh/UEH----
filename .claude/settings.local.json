@@ -47,7 +47,11 @@
       "Bash(./restore-to-1322.sh:*)",
       "mcp__ide__executeCode",
       "Bash(git switch:*)",
-      "Bash(mkdir:*)"
+      "Bash(mkdir:*)",
+      "Bash(git push:*)",
+      "Bash(git remote set-url:*)",
+      "Bash(ssh:*)",
+      "Bash(git config:*)"
     ],
     "deny": []
   }

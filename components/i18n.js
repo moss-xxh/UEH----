@@ -207,6 +207,8 @@ class I18n {
                 cumulative: "累计",
                 refresh: "刷新",
                 charging: "充电中",
+                chargeIndicator: "充",
+                dischargeIndicator: "放",
                 selectRegion: "选择地区",
                 regionSelectionHint: "选择地区后，页面将只显示该地区的数据",
                 allRegions: "全部地区",
@@ -336,7 +338,8 @@ class I18n {
                 confirmDischarge: "确认放电",
                 confirmStop: "确认停止",
                 stopWarning: "停止操作将立即终止所有设备的充电/放电状态，设备将恢复到待机模式。",
-                stopChargeWarning: "停止操作将立即终止所有设备的Charge状态，设备将恢复到待机模式。",
+                stopChargeWarning: "停止操作将立即终止所有设备的充电状态，设备将恢复到待机模式。",
+                stopDischargeWarning: "停止操作将立即终止所有设备的放电状态，设备将恢复到待机模式。",
                 chargingCompleteMessage: "充电指令下发完成，以下是设备响应统计报告：",
                 dischargingCompleteMessage: "放电指令下发完成，以下是设备响应统计报告：",
                 stopWarning: "停止操作将立即终止所有设备的充电/放电状态，设备将恢复到待机模式。",
@@ -432,6 +435,7 @@ class I18n {
                 currentOperation: "当前操作",
                 none: "无",
                 estimatedProfit: "预计获利",
+                estimatedProfitValue: "+$340",
                 devices: "设备",
                 operationDetails: "操作详情",
                 basicInfo: "基本信息",
@@ -502,6 +506,8 @@ class I18n {
                 confirmStopDischarge: "确认停止放电",
                 confirmStopChargeMessage: "您确定要停止充电操作吗？",
                 confirmStopDischargeMessage: "您确定要停止放电操作吗？",
+                confirmStopChargeTitle: "确认停止充电",
+                confirmStopDischargeTitle: "确认停止放电",
                 stopCharge: "停止充电",
                 stopDischarge: "停止放电",
                 allDevices: "所有设备",
@@ -518,7 +524,8 @@ class I18n {
                         stations: "下发电站",
                         success: "成功",
                         failed: "失败",
-                        action: "操作"
+                        action: "操作",
+                        region: "地区"
                     },
                     commands: {
                         charge: "充电",
@@ -631,6 +638,10 @@ class I18n {
                         daysAgo: "{days}天前"
                     }
                 },
+                
+                // Sorting translations
+                sortAsc: "升序",
+                sortDesc: "降序",
                 
                 // Common translations
                 page: "页",
@@ -1019,7 +1030,13 @@ class I18n {
                         dischargeAmount: "实际放电量 (kwh)",
                         profit: "获利 ($)",
                         dailyAvg: "日均",
-                        compareDaily: "对比日均 ($)"
+                        monthlyAvg: "月均",
+                        yearlyAvg: "年均",
+                        historicalAvg: "历史均值",
+                        compareDaily: "对比日均 ($)",
+                        compareMonthly: "对比月均 ($)",
+                        compareYearly: "对比年均 ($)",
+                        compareHistorical: "对比历史均值 ($)"
                     },
                     filters: {
                         all: "全部",
@@ -1214,7 +1231,29 @@ class I18n {
                     email: {
                         title: "邮箱设置",
                         currentEmail: "当前邮箱",
-                        newEmail: "新邮箱地址"
+                        newEmail: "新邮箱地址",
+                        bindEmail: "绑定邮箱",
+                        emailAddress: "邮箱地址",
+                        emailPlaceholder: "请输入邮箱地址",
+                        emailCode: "邮箱验证码",
+                        emailCodePlaceholder: "请输入验证码",
+                        sendCode: "发送验证码",
+                        codeWillBeSent: "验证码将发送到您的邮箱地址",
+                        selectVerificationMethod: "选择验证方式",
+                        useCurrentPassword: "使用原密码",
+                        emailVerification: "邮箱验证",
+                        verifyCurrentEmail: "验证当前邮箱",
+                        verifyNewEmail: "验证新邮箱",
+                        verifyCurrentEmailHint: "请先验证当前邮箱，验证通过后才能设置新邮箱",
+                        newEmailCodeHint: "验证码将发送到您的新邮箱地址",
+                        verificationCode: "验证码",
+                        profileSaved: "个人信息已保存",
+                        codeSent: "验证码已发送到您的邮箱",
+                        currentEmailCodeSent: "验证码已发送到您的当前邮箱",
+                        newEmailCodeSent: "验证码已发送到您的新邮箱",
+                        codeError: "验证码错误",
+                        currentEmailVerified: "当前邮箱验证成功",
+                        enterCode: "请输入验证码"
                     },
                     password: {
                         title: "密码设置",
@@ -1487,7 +1526,7 @@ class I18n {
                 normal: "Normal",
                 totalDischarge: "Total Discharge",
                 totalRevenue: "Total Revenue",
-                totalHomes: "Family",
+                totalHomes: "Families",
                 totalInstall: "Installed Capacity",
                 totalActualDischarge: "Total Actual Discharge",
                 totalProfit: "Total Profit",
@@ -1507,6 +1546,8 @@ class I18n {
                 refresh: "Refresh",
                 timeFilter: "Time Filter",
                 charging: "Charging",
+                chargeIndicator: "Charging",
+                dischargeIndicator: "Discharging",
                 discharging: "Discharging",
                 standby: "Standby",
                 selectRegion: "Select Region",
@@ -1541,6 +1582,7 @@ class I18n {
                 confirmStop: "Confirm Stop",
                 stopWarning: "Stop operation will immediately terminate the charging/discharging status of all devices, devices will return to standby mode.",
                 stopChargeWarning: "Stop operation will immediately terminate the charging status of all devices, devices will return to standby mode.",
+                stopDischargeWarning: "Stop operation will immediately terminate the discharging status of all devices, devices will return to standby mode.",
                 chargeCompleteMessage: "Charging command completed. Here is the device response statistics report:",
                 dischargeCompleteMessage: "Discharging command completed. Here is the device response statistics report:",
                 chargingCompleteMessage: "Charging command completed. Here is the device response statistics report:",
@@ -1549,7 +1591,7 @@ class I18n {
                 estimatedRevenue: "Estimated Revenue",
                 cancel: "Cancel",
                 stop: "Stop",
-                units: "",
+                units: " items",
                 comparedToYesterday: "vs Yesterday",
                 currentCumulativePrice: "Current Cumulative Price",
                 forecastCumulativePrice5min: "Forecast Cumulative Price (5min)",
@@ -1581,7 +1623,8 @@ class I18n {
                 currentOperation: "Current Operation",
                 none: "None",
                 estimatedProfit: "Estimated Profit",
-                devices: "devices",
+                estimatedProfitValue: "+$340",
+                devices: "",
                 refresh: "Refresh",
                 timeFilter: "Time Filter",
                 refreshData: "Manually refresh data",
@@ -1747,6 +1790,17 @@ class I18n {
                 logout: "Logout",
                 confirmLogout: "Confirm Logout",
                 confirmLogoutMessage: "Are you sure you want to logout?",
+                
+                // Common translations
+                common: {
+                    设置: "Settings",
+                    退出: "Logout",
+                    确认退出: "Confirm Logout",
+                    确认退出消息: "Are you sure you want to logout?",
+                    cancel: "Cancel"
+                },
+                sortAsc: "Ascending",
+                sortDesc: "Descending",
                 export: "Export",
                 refresh: "Refresh",
                 estimatedDuration: "15-30 minutes",
@@ -1771,6 +1825,8 @@ class I18n {
                 confirmStopDischarge: "Confirm Stop Discharge",
                 confirmStopChargeMessage: "Are you sure you want to stop charging?",
                 confirmStopDischargeMessage: "Are you sure you want to stop discharging?",
+                confirmStopChargeTitle: "Confirm Stop Charging",
+                confirmStopDischargeTitle: "Confirm Stop Discharging",
                 stopCharge: "Stop Charge",
                 stopDischarge: "Stop Discharge",
                 allDevices: "All Devices",
@@ -1787,7 +1843,8 @@ class I18n {
                         stations: "Stations",
                         success: "Success",
                         failed: "Failed",
-                        action: "Action"
+                        action: "Action",
+                        region: "Region"
                     },
                     commands: {
                         charge: "Charge",
@@ -1883,7 +1940,8 @@ class I18n {
                         search: "🔍 Search",
                         reset: "🔄 Reset",
                         export: "📥 Export",
-                        delete: "Delete"
+                        delete: "Delete",
+                        refresh: "🔄 Refresh"
                     },
                     markAsRead: "Mark as read",
                     delete: "Delete",
@@ -2473,7 +2531,13 @@ class I18n {
                         dischargeAmount: "Actual Discharge (kwh)",
                         profit: "Profit ($)",
                         dailyAvg: "Daily Avg",
-                        compareDaily: "Compare Daily Avg ($)"
+                        monthlyAvg: "Monthly Avg",
+                        yearlyAvg: "Yearly Avg",
+                        historicalAvg: "Historical Avg",
+                        compareDaily: "Compare Daily Avg ($)",
+                        compareMonthly: "Compare Monthly Avg ($)",
+                        compareYearly: "Compare Yearly Avg ($)",
+                        compareHistorical: "Compare Historical Avg ($)"
                     },
                     filters: {
                         all: "All",
@@ -2598,6 +2662,60 @@ class I18n {
                     userName8: "Jennifer Martin",
                     userName9: "David Lee",
                     userName10: "Mary White"
+                },
+                
+                // User Settings translations
+                settings: {
+                    title: "Settings",
+                    save: "Save Changes",
+                    cancel: "Cancel",
+                    profile: {
+                        title: "Profile Information",
+                        basic: "Basic Information",
+                        avatar: "Avatar",
+                        changeAvatar: "Change Avatar",
+                        removeAvatar: "Remove",
+                        avatarHint: "Supports JPG, PNG formats, max 2MB",
+                        username: "Username"
+                    },
+                    email: {
+                        title: "Email Settings",
+                        currentEmail: "Current Email",
+                        newEmail: "New Email Address",
+                        bindEmail: "Bind Email",
+                        emailAddress: "Email Address",
+                        emailPlaceholder: "Enter email address",
+                        emailCode: "Email Verification Code",
+                        emailCodePlaceholder: "Enter verification code",
+                        sendCode: "Send Verification Code",
+                        codeWillBeSent: "Verification code will be sent to your email address",
+                        selectVerificationMethod: "Select Verification Method",
+                        useCurrentPassword: "Use Current Password",
+                        emailVerification: "Email Verification",
+                        verifyCurrentEmail: "Verify Current Email",
+                        verifyNewEmail: "Verify New Email",
+                        verifyCurrentEmailHint: "Please verify your current email first before setting a new email",
+                        newEmailCodeHint: "Verification code will be sent to your new email address",
+                        verificationCode: "Verification Code",
+                        profileSaved: "Profile information saved",
+                        codeSent: "Verification code sent to your email",
+                        currentEmailCodeSent: "Verification code sent to your current email",
+                        newEmailCodeSent: "Verification code sent to your new email",
+                        codeError: "Verification code incorrect",
+                        currentEmailVerified: "Current email verified successfully",
+                        enterCode: "Please enter verification code"
+                    },
+                    password: {
+                        title: "Password Settings",
+                        changePassword: "Change Password",
+                        oldPassword: "Current Password",
+                        newPassword: "New Password",
+                        confirmPassword: "Confirm New Password",
+                        updatePassword: "Update Password",
+                        currentPasswordPlaceholder: "Enter current password",
+                        newPasswordPlaceholder: "Enter new password",
+                        confirmPasswordPlaceholder: "Enter new password again"
+                    }
                 }
             },
             

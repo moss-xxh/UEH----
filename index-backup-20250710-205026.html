@@ -2681,19 +2681,19 @@
                 <div class="region-selection-tabs" style="display: flex; gap: 8px;">
                 <button class="region-select-tab active" data-region="NSW" onclick="selectMainRegion('NSW', this)" style="padding: 12px 24px; background: var(--color-primary); color: #000; border: none; border-radius: 50px; font-weight: 600; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; justify-content: space-between; min-width: 100px;">
                     <span>NSW</span>
-                    <span class="region-status charging" style="font-size: 16px; margin-left: 8px;">🔋+</span>
+                    <span class="region-status charging" style="font-size: 12px; margin-left: 8px;">充</span>
                 </button>
                 <button class="region-select-tab" data-region="QLD" onclick="selectMainRegion('QLD', this)" style="padding: 12px 24px; background: transparent; color: var(--color-text-secondary); border: 1px solid var(--color-border); border-radius: 50px; font-weight: 500; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; justify-content: space-between; min-width: 100px;">
                     <span>QLD</span>
-                    <span class="region-status discharging" style="font-size: 16px; margin-left: 8px;">🔋-</span>
+                    <span class="region-status discharging" style="font-size: 12px; margin-left: 8px;">放</span>
                 </button>
                 <button class="region-select-tab" data-region="VIC" onclick="selectMainRegion('VIC', this)" style="padding: 12px 24px; background: transparent; color: var(--color-text-secondary); border: 1px solid var(--color-border); border-radius: 50px; font-weight: 500; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; justify-content: space-between; min-width: 100px;">
                     <span>VIC</span>
-                    <span class="region-status charging" style="font-size: 16px; margin-left: 8px;">🔋+</span>
+                    <span class="region-status charging" style="font-size: 12px; margin-left: 8px;">充</span>
                 </button>
                 <button class="region-select-tab" data-region="SA" onclick="selectMainRegion('SA', this)" style="padding: 12px 24px; background: transparent; color: var(--color-text-secondary); border: 1px solid var(--color-border); border-radius: 50px; font-weight: 500; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; justify-content: space-between; min-width: 100px;">
                     <span>SA</span>
-                    <span class="region-status discharging" style="font-size: 16px; margin-left: 8px;">🔋-</span>
+                    <span class="region-status discharging" style="font-size: 12px; margin-left: 8px;">放</span>
                 </button>
                 <button class="region-select-tab" data-region="TAS" onclick="selectMainRegion('TAS', this)" style="padding: 12px 24px; background: transparent; color: var(--color-text-secondary); border: 1px solid var(--color-border); border-radius: 50px; font-weight: 500; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; justify-content: center; min-width: 100px;">
                     <span>TAS</span>
@@ -4050,11 +4050,11 @@
                     if (status === 'charging') {
                         statusElement.style.display = 'inline-flex';
                         statusElement.classList.add('charging');
-                        statusElement.textContent = '🔋+';
+                        statusElement.textContent = '充';
                     } else if (status === 'discharging') {
                         statusElement.style.display = 'inline-flex';
                         statusElement.classList.add('discharging');
-                        statusElement.textContent = '🔋-';
+                        statusElement.textContent = '放';
                     } else {
                         // 无状态，移除状态元素并添加占位
                         statusElement.remove();
@@ -4174,26 +4174,17 @@
             // 移除operating类
             actionButtonsContainer.classList.remove('operating');
             
-            // 重置当前操作状态
-            currentOperation = null;
+            // 显示充放电按钮
+            const chargeBtn = document.getElementById('chargeBtn');
+            const dischargeBtn = document.getElementById('dischargeBtn');
             
-            // 调用resetButtons确保正确重置
-            resetButtons();
+            if (chargeBtn) chargeBtn.style.display = 'flex';
+            if (dischargeBtn) dischargeBtn.style.display = 'flex';
             
             // 移除停止按钮（而不仅是隐藏）
             const stopBtn = document.querySelector('.stop-btn');
             if (stopBtn) {
                 stopBtn.remove();
-            }
-            
-            // 确保按钮事件处理器正确绑定
-            const chargeBtn = document.getElementById('chargeBtn');
-            const dischargeBtn = document.getElementById('dischargeBtn');
-            if (chargeBtn) {
-                chargeBtn.onclick = handleCharge;
-            }
-            if (dischargeBtn) {
-                dischargeBtn.onclick = handleDischarge;
             }
         }
         
@@ -5615,8 +5606,8 @@
 
         // 停止确认弹窗
         function showStopConfirmation() {
-            // 使用标准的停止确认弹窗，不显示预计收益
-            showStopConfirmationModal();
+            const operationName = currentOperation === 'charge' ? '充电' : '放电';
+            showOperationConfirmation(`stop_${currentOperation}`);
         }
         
         // 停止操作
@@ -5628,9 +5619,6 @@
                 clearInterval(mapAnimationInterval);
                 console.log('Map animation interval cleared');
             }
-            
-            // 重置当前操作状态
-            currentOperation = null;
             
             // 强制立即切换到行情页面
             console.log('Force switching to market panel immediately');
@@ -5661,20 +5649,6 @@
             // 重置按钮状态
             resetButtons();
             
-            // 确保按钮事件处理器正确绑定
-            setTimeout(() => {
-                const chargeBtn = document.getElementById('chargeBtn');
-                const dischargeBtn = document.getElementById('dischargeBtn');
-                if (chargeBtn) {
-                    chargeBtn.onclick = handleCharge;
-                    console.log('Charge button handler reattached after stop');
-                }
-                if (dischargeBtn) {
-                    dischargeBtn.onclick = handleDischarge;
-                    console.log('Discharge button handler reattached after stop');
-                }
-            }, 100);
-            
             // 显示操作统计
             setTimeout(() => {
                 console.log('Showing operation statistics after stop');
@@ -5682,47 +5656,9 @@
             }, 200);
         }
 
-        // 重置确认弹窗内容避免布局混乱
-        function resetConfirmationModal() {
-            const confirmModal = document.getElementById('confirmationModal');
-            if (!confirmModal) return;
-            
-            // 关闭并重置弹窗
-            confirmModal.classList.remove('show');
-            confirmModal.style.display = 'none';
-            confirmModal.style.opacity = '0';
-            
-            // 移除之前动态添加的收益行
-            const confirmInfoGrid = document.getElementById('confirmInfoGrid');
-            if (confirmInfoGrid) {
-                // 移除所有动态添加的行（包括任何包含预计收益的行）
-                const dynamicRows = confirmInfoGrid.querySelectorAll('div[style*="margin-top"]');
-                dynamicRows.forEach(row => row.remove());
-                
-                // 额外检查：移除任何包含预计收益的元素
-                const profitElements = confirmInfoGrid.querySelectorAll('[data-i18n-key="estimatedProfit"]');
-                profitElements.forEach(element => {
-                    const parentRow = element.closest('div[style*="flex"]');
-                    if (parentRow && parentRow.parentElement === confirmInfoGrid) {
-                        parentRow.remove();
-                    }
-                });
-            }
-            
-            // 重置所有信息项为可见
-            const allInfoItems = confirmModal.querySelectorAll('.modal-info-item');
-            allInfoItems.forEach(item => {
-                item.style.display = 'flex';
-                item.style.flexDirection = 'column';
-            });
-        }
-
         // Show operation confirmation modal
         function showOperationConfirmation(operationType) {
             pendingOperation = operationType;
-            
-            // 重置弹窗内容避免布局混乱
-            resetConfirmationModal();
             
             // Store current panel state before showing confirmation
             const activePanel = document.querySelector('.panel-content.active');
@@ -5819,7 +5755,7 @@
             
             const deviceTexts = {
                 'zh': deviceCount + '个',
-                'en': deviceCount.toString(), // 英文模式只显示数字
+                'en': deviceCount + ' devices',
                 'ja': deviceCount + '台',
                 'ko': deviceCount + '대'
             };
@@ -5843,28 +5779,25 @@
             const durationItem = document.getElementById('confirmDuration').parentElement;
             const costBenefitItem = document.getElementById('confirmCostBenefit').parentElement;
             
-            // 判断是否为停止操作
-            const isStopOperation = operationType.includes('stop') || pendingOperation.includes('stop');
-            
-            if (operationType === 'charge' || isStopOperation) {
-                // For charge and stop operations: hide all profit-related fields
+            if (operationType === 'charge') {
+                // For charge: remove 预计功率, 预计时间, 当前电价, 预计获利
                 estimatedPowerItem.style.display = 'none';
                 currentPriceItem.style.display = 'none';
                 durationItem.style.display = 'none';
                 costBenefitItem.style.display = 'none';
-            } else if (operationType === 'discharge' && !isStopOperation) {
-                // For discharge only (not stop discharge): show predicted profit
+            } else if (operationType === 'discharge') {
+                // For discharge: show predicted profit in a new row
                 estimatedPowerItem.style.display = 'none';
                 currentPriceItem.style.display = 'none';
                 durationItem.style.display = 'none';
                 costBenefitItem.style.display = 'none';
                 
+                // Add predicted profit as a new row
                 const profitRow = document.createElement('div');
                 profitRow.style.cssText = 'display: flex; gap: 20px; margin-top: 20px;';
-                const profitLabel = window.i18n ? window.i18n.getText('estimatedProfit') : '预计收益';
                 profitRow.innerHTML = `
                     <div class="modal-info-item" style="flex: 1; max-width: calc(50% - 10px); background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 16px; padding: 20px 24px; transition: all 0.3s; display: flex; flex-direction: column;">
-                        <div class="modal-info-label" style="color: rgba(255, 255, 255, 0.6); font-size: 14px; margin-bottom: 8px; font-weight: 400;" data-i18n-key="estimatedProfit">${profitLabel}</div>
+                        <div class="modal-info-label" style="color: rgba(255, 255, 255, 0.6); font-size: 14px; margin-bottom: 8px; font-weight: 400;">预计收益</div>
                         <div class="modal-info-value" style="color: #ffd700; font-size: 20px; font-weight: 600;">+$${Math.floor(estimatedPower * parseInt(currentPrice.replace('$', '')) * 0.7)}</div>
                     </div>
                     <div style="flex: 1;"></div>
@@ -5896,22 +5829,9 @@
                     this.style.transform='translateY(0)'; 
                     this.style.boxShadow='0 4px 16px rgba(255, 215, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.3)';
                 };
-            } else if (operationType === 'charge') {
-                // Charge按钮使用绿色
+            } else {
                 executeBtn.style.background = 'linear-gradient(135deg, #00ff88, #00dd77)';
                 executeBtn.style.color = '#000';
-                executeBtn.onmouseover = function() { 
-                    this.style.transform='translateY(-1px)'; 
-                    this.style.boxShadow='0 6px 20px rgba(0, 255, 136, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3)';
-                };
-                executeBtn.onmouseout = function() { 
-                    this.style.transform='translateY(0)'; 
-                    this.style.boxShadow='0 4px 16px rgba(0, 255, 136, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.3)';
-                };
-            } else {
-                // 其他操作（停止等）使用红色
-                executeBtn.style.background = 'linear-gradient(135deg, #ff4444, #ff3333)';
-                executeBtn.style.color = '#fff';
             }
             
             // Show modal with animation
@@ -5926,9 +5846,7 @@
 
         // Show stop operation confirmation
         function showStopConfirmation(operationType) {
-            // 使用标准的停止确认弹窗，确保不显示预计收益
-            showStopConfirmationModal();
-            return;
+            pendingOperation = 'stop_' + operationType;
             
             // Store current panel state before showing confirmation
             const activePanel = document.querySelector('.panel-content.active');
@@ -6400,9 +6318,6 @@
         }
         
         function showStopConfirmationModal() {
-            // 首先重置弹窗，确保没有预计收益
-            resetConfirmationModal();
-            
             // 根据当前操作确定停止类型
             const currentOp = currentOperation || 'charge'; // 默认为充电
             const isCharging = currentOp === 'charge';
@@ -6548,17 +6463,17 @@
             // 清除当前操作状态
             currentOperation = null;
             
-            // 更新地区状态 - 移除当前地区的充放电标记
-            updateRegionOperationStatus(selectedMainRegion, 'none');
-            
-            // 更新地区状态指示器
-            updateRegionStatusIndicators();
-            
             // 恢复充放电按钮
             updateActionButtonsToChargeDis();
             
             // 切换到行情页面
             switchPanel('market');
+            
+            // 更新地区状态 - 移除当前地区的充放电标记
+            updateRegionOperationStatus(selectedMainRegion, 'none');
+            
+            // 更新地区状态指示器
+            updateRegionStatusIndicators();
             
             // 清除电站管理标题的状态文字
             const statusText = document.getElementById('regionStatusText');
@@ -6569,20 +6484,6 @@
             
             // 显示停止确认消息
             showNotification('操作已停止', 'success');
-            
-            // 确保按钮事件处理器正确绑定
-            setTimeout(() => {
-                const chargeBtn = document.getElementById('chargeBtn');
-                const dischargeBtn = document.getElementById('dischargeBtn');
-                if (chargeBtn) {
-                    chargeBtn.onclick = handleCharge;
-                    console.log('Charge button handler reattached after stop');
-                }
-                if (dischargeBtn) {
-                    dischargeBtn.onclick = handleDischarge;
-                    console.log('Discharge button handler reattached after stop');
-                }
-            }, 100);
         }
         
         // Enhanced device animation with wave effect
@@ -6920,18 +6821,6 @@
                 clearInterval(mapAnimationInterval);
             }
             
-            // 重置当前操作状态
-            currentOperation = null;
-            
-            // 更新地区状态 - 移除当前地区的充放电标记
-            updateRegionOperationStatus(selectedMainRegion, 'none');
-            
-            // 更新地区状态指示器
-            updateRegionStatusIndicators();
-            
-            // 恢复充放电按钮
-            updateActionButtonsToChargeDis();
-            
             // 立即切换到市场页面
             switchPanel('market');
             
@@ -7117,7 +7006,6 @@
                 chargeBtn.classList.add('charge-btn');
                 chargeBtn.style.display = 'flex';
                 chargeBtn.style.removeProperty('background');
-                chargeBtn.style.color = '#000'; // 确保文字颜色为黑色
                 chargeBtn.onclick = handleCharge;
             }
             
@@ -7128,7 +7016,6 @@
                 dischargeBtn.classList.add('discharge-btn');
                 dischargeBtn.style.display = 'flex';
                 dischargeBtn.style.removeProperty('background');
-                dischargeBtn.style.color = '#000'; // 确保文字颜色为黑色
                 dischargeBtn.onclick = handleDischarge;
             }
         }
@@ -8487,61 +8374,61 @@
     </div>
     
     <!-- Operation Result Modal (shown after charge/discharge command) -->
-    <div id="operationResultModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 10000;">
-        <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(5px);" onclick="closeOperationResultModal()"></div>
-        <div style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #1a1f2e; border-radius: 16px; border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5); max-width: 600px; width: 90vw; overflow: hidden;">
-            <div class="modal-header" style="padding: 24px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); display: flex; align-items: center; justify-content: space-between;">
+    <div id="operationResultModal" class="modal" style="display: none;">
+        <div class="modal-overlay" onclick="closeOperationResultModal()"></div>
+        <div class="modal-content" style="max-width: 600px;">
+            <div class="modal-header">
                 <div style="display: flex; align-items: center; gap: 16px;">
                     <div style="width: 48px; height: 48px; border-radius: 50%; background: rgba(0, 255, 136, 0.2); display: flex; align-items: center; justify-content: center;">
                         <span style="font-size: 24px;">📊</span>
                     </div>
-                    <h3 style="margin: 0; font-size: 20px; font-weight: 600; color: #fff;" data-i18n-key="deviceResponseStatisticsTitle">设备响应统计</h3>
+                    <h3 class="modal-title" data-i18n-key="deviceResponseStatisticsTitle">设备响应统计</h3>
                 </div>
-                <button style="background: none; border: none; font-size: 24px; color: rgba(255, 255, 255, 0.6); cursor: pointer; padding: 0; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; border-radius: 50%;" onclick="closeOperationResultModal()" onmouseover="this.style.background='rgba(255, 255, 255, 0.1)'; this.style.color='#fff';" onmouseout="this.style.background='none'; this.style.color='rgba(255, 255, 255, 0.6)';">×</button>
+                <button class="modal-close" onclick="closeOperationResultModal()">×</button>
             </div>
-            <div style="padding: 24px;">
-                <p id="operationResultMessage" style="color: rgba(255, 255, 255, 0.8); margin-bottom: 24px; font-size: 14px;"></p>
+            <div class="modal-body">
+                <p id="operationResultMessage" style="color: rgba(255, 255, 255, 0.8); margin-bottom: 24px;"></p>
                 
-                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px;">
-                    <div style="background: rgba(255, 255, 255, 0.05); border-radius: 12px; padding: 16px; text-align: center;">
-                        <div style="font-size: 12px; color: rgba(255, 255, 255, 0.6); margin-bottom: 8px;" data-i18n-key="operationType">操作类型</div>
-                        <div id="resultOperationType" style="font-size: 16px; font-weight: 600;"></div>
+                <div class="result-info-grid">
+                    <div class="result-info-item">
+                        <label data-i18n-key="operationType">操作类型</label>
+                        <span id="resultOperationType" class="operation-type"></span>
                     </div>
-                    <div style="background: rgba(255, 255, 255, 0.05); border-radius: 12px; padding: 16px; text-align: center;">
-                        <div style="font-size: 12px; color: rgba(255, 255, 255, 0.6); margin-bottom: 8px;" data-i18n-key="targetDevices">目标设备</div>
-                        <div id="resultTargetDevices" style="font-size: 16px; font-weight: 600; color: #fff;">500</div>
+                    <div class="result-info-item">
+                        <label data-i18n-key="targetDevices">目标设备</label>
+                        <span id="resultTargetDevices">500 units</span>
                     </div>
-                    <div style="background: rgba(255, 255, 255, 0.05); border-radius: 12px; padding: 16px; text-align: center;">
-                        <div style="font-size: 12px; color: rgba(255, 255, 255, 0.6); margin-bottom: 8px;" data-i18n-key="estimatedDuration">预计时长</div>
-                        <div style="font-size: 16px; font-weight: 600; color: #fff;">15-30 <span data-i18n-key="minutes">分钟</span></div>
+                    <div class="result-info-item">
+                        <label data-i18n-key="estimatedDuration">预计时长</label>
+                        <span>15-30 <span data-i18n-key="minutes">分钟</span></span>
                     </div>
                 </div>
                 
-                <div style="background: rgba(0, 255, 136, 0.1); border-radius: 16px; padding: 24px;">
-                    <h4 style="color: #00ff88; margin: 0 0 20px 0; text-align: center; font-size: 16px;" data-i18n-key="deviceResponseStatistics">Device Response Statistics</h4>
-                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px;">
-                        <div style="text-align: center;">
+                <div class="device-stats-container" style="background: rgba(0, 255, 136, 0.1); border-radius: 16px; padding: 24px; margin-top: 24px;">
+                    <h4 style="color: #00ff88; margin: 0 0 20px 0; text-align: center;" data-i18n-key="deviceResponseStatistics">Device Response Statistics</h4>
+                    <div class="stats-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px;">
+                        <div class="stat-item" style="text-align: center;">
                             <div style="font-size: 36px; font-weight: 700; color: #00ff88;">500</div>
                             <div style="color: rgba(255, 255, 255, 0.7); font-size: 14px;" data-i18n-key="commandsSent">Commands Sent</div>
                         </div>
-                        <div style="text-align: center;">
-                            <div id="commandsReceived" style="font-size: 36px; font-weight: 700; color: #00ff88;">498</div>
+                        <div class="stat-item" style="text-align: center;">
+                            <div style="font-size: 36px; font-weight: 700; color: #00ff88;">477</div>
                             <div style="color: rgba(255, 255, 255, 0.7); font-size: 14px;" data-i18n-key="commandsReceived">Commands Received</div>
                         </div>
-                        <div style="text-align: center;">
-                            <div id="devicesActivated" style="font-size: 36px; font-weight: 700; color: #00ff88;">448</div>
+                        <div class="stat-item" style="text-align: center;">
+                            <div style="font-size: 36px; font-weight: 700; color: #00ff88;">445</div>
                             <div style="color: rgba(255, 255, 255, 0.7); font-size: 14px;" data-i18n-key="devicesActivated">Devices Activated</div>
                         </div>
-                        <div style="text-align: center;">
-                            <div id="successRate" style="font-size: 36px; font-weight: 700; color: #00ff88;">89%</div>
+                        <div class="stat-item" style="text-align: center;">
+                            <div style="font-size: 36px; font-weight: 700; color: #00ff88;">89%</div>
                             <div style="color: rgba(255, 255, 255, 0.7); font-size: 14px;" data-i18n-key="successRate">Success Rate</div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div style="padding: 32px 24px; min-height: 100px; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(255, 255, 255, 0.1);">
-                <button style="background: rgba(255, 255, 255, 0.1); color: #fff; border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 8px; padding: 8px 16px; font-size: 14px; cursor: pointer; transition: all 0.3s;" onclick="closeOperationResultModal()" onmouseover="this.style.background='rgba(255, 255, 255, 0.15)'" onmouseout="this.style.background='rgba(255, 255, 255, 0.1)'" data-i18n-key="close">关闭</button>
-                <button style="background: #00ff88; color: #000; border: none; border-radius: 8px; padding: 8px 24px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s;" onclick="viewDetailsFromResult()" onmouseover="this.style.background='#00dd77'" onmouseout="this.style.background='#00ff88'">
+            <div class="modal-footer" style="padding: 24px; height: 80px; display: flex; justify-content: space-between; align-items: center;">
+                <button class="btn btn-secondary" onclick="closeOperationResultModal()" style="width: 80px; height: 36px; font-size: 14px; padding: 0 12px;" data-i18n-key="close">关闭</button>
+                <button class="btn btn-primary" onclick="viewDetailsFromResult()" style="background: #00ff88; color: #000; width: 120px; height: 36px; font-size: 14px; padding: 0 16px;">
                     <span data-i18n-key="viewDetails">查看详情</span>
                 </button>
             </div>
@@ -8549,9 +8436,9 @@
     </div>
     
     <!-- Device Response Statistics Modal (for clicking device response) -->
-    <div id="deviceResponseModal" class="modal" style="display: none;">
-        <div class="modal-overlay" onclick="closeDeviceResponseModal()"></div>
-        <div class="modal-content" style="max-width: 900px; width: 90vw; max-height: 80vh;">
+    <div id="deviceResponseModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 10000; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(5px);">
+        <div class="modal-overlay" onclick="closeDeviceResponseModal()" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></div>
+        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #1a1f2e; border-radius: 16px; border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5); overflow: hidden; max-width: 900px; max-height: 80vh; width: 90vw;">
             <div class="modal-header">
                 <h3 class="modal-title" data-i18n-key="operationDetails">操作详情</h3>
                 <button class="modal-close" onclick="closeDeviceResponseModal()">×</button>
@@ -9155,33 +9042,23 @@
             // Set operation type
             if (operation === 'charge') {
                 operationType.textContent = window.i18n ? window.i18n.getText('charge') : '充电';
-                operationType.style.color = '#00ff88';
+                operationType.className = 'operation-type charge';
                 message.textContent = window.i18n ? window.i18n.getText('chargingCompleteMessage') : '充电指令下发完成，以下是设备响应统计报告：';
             } else if (operation === 'discharge') {
                 operationType.textContent = window.i18n ? window.i18n.getText('discharge') : '放电';
-                operationType.style.color = '#ffd700';
+                operationType.className = 'operation-type discharge';
                 message.textContent = window.i18n ? window.i18n.getText('dischargingCompleteMessage') : '放电指令下发完成，以下是设备响应统计报告：';
             }
             
-            // Set target devices - 英文模式只显示数字
+            // Set target devices with proper unit
             const currentLang = window.i18n ? window.i18n.getCurrentLanguage() : 'zh';
-            if (currentLang === 'en') {
-                targetDevices.textContent = '500';
-            } else {
-                targetDevices.textContent = '500个';
-            }
+            const unit = currentLang === 'en' ? ' units' : 
+                        currentLang === 'ja' ? '個' :
+                        currentLang === 'ko' ? '개' : '个';
+            targetDevices.textContent = '500' + unit;
             
-            // 生成随机统计数据
-            const commandsReceived = Math.floor(Math.random() * 10) + 490; // 490-499
-            const devicesActivated = Math.floor(Math.random() * 50) + 430; // 430-479
-            const successRate = Math.floor((devicesActivated / 500) * 100);
-            
-            document.getElementById('commandsReceived').textContent = commandsReceived;
-            document.getElementById('devicesActivated').textContent = devicesActivated;
-            document.getElementById('successRate').textContent = successRate + '%';
-            
-            // 显示弹窗
-            modal.style.display = 'block';
+            // Show modal
+            modal.style.display = 'flex';
         }
         
         function closeOperationResultModal() {
@@ -9195,8 +9072,7 @@
         
         // Device Response Modal Functions
         function showDeviceResponseModal() {
-            const modal = document.getElementById('deviceResponseModal');
-            modal.style.display = 'flex';
+            document.getElementById('deviceResponseModal').style.display = 'flex';
             // Load data for the modal
             loadDeviceResponseData();
         }

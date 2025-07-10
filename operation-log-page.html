@@ -1435,11 +1435,11 @@
                 <!-- Table Actions Header -->
                 <div class="table-actions-header">
                     <button class="filter-btn export" onclick="exportOperationLogs()">
-                        <span>📥</span>
+                        <span></span>
                         <span data-i18n-key="operationLog.buttons.export">导出</span>
                     </button>
                     <button class="filter-btn refresh" onclick="refreshOperationLogs()">
-                        <span>🔄</span>
+                        <span></span>
                         <span data-i18n-key="operationLog.buttons.refresh">刷新</span>
                     </button>
                 </div>
@@ -1710,7 +1710,16 @@
                 showErrorToast('导出失败', '没有可导出的数据');
                 return;
             }
-            const headers = ['时间','地区','命令','下发电站','成功','失败','操作人','操作'];
+            const headers = [
+                window.i18n ? window.i18n.getText('operationLog.table.time') : '时间',
+                window.i18n ? window.i18n.getText('operationLog.table.region') : '地区',
+                window.i18n ? window.i18n.getText('operationLog.table.command') : '命令',
+                window.i18n ? window.i18n.getText('operationLog.table.stations') : '下发电站',
+                window.i18n ? window.i18n.getText('operationLog.table.success') : '成功',
+                window.i18n ? window.i18n.getText('operationLog.table.failed') : '失败',
+                window.i18n ? window.i18n.getText('operationLog.table.operator') : '操作人',
+                window.i18n ? window.i18n.getText('operationLog.table.action') : '操作'
+            ];
             const rows = filteredData.map(op => [
                 op.time, 
                 op.region || '-',

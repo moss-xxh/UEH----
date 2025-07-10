@@ -1,0 +1,1637 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="profit.title">获利 - AlwaysControl</title>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <link rel="stylesheet" href="components/common-styles.css">
+    <link rel="stylesheet" href="components/time-selector.css">
+    <link rel="stylesheet" href="components/i18n.css">
+    <link rel="stylesheet" href="components/notification-center.css">
+    <link rel="stylesheet" href="components/header-nav.css">
+    <link rel="stylesheet" href="components/standard-layout.css">
+    <link rel="stylesheet" href="components/pagination.css">
+    <link rel="stylesheet" href="components/user-dropdown.css">
+    <script src="components/time-selector.js"></script>
+    <script src="components/user-menu-link.js"></script>
+    <script src="components/i18n.js"></script>
+    <script src="components/simple-message-icon.js"></script>
+    <script src="components/user-dropdown-simple-new.js"></script>
+    <script src="components/user-menu.js"></script>
+    <script src="components/header-nav.js"></script>
+    <script src="components/pagination.js"></script>
+    <style>
+        /* 时间选择器模块样式 */
+        .time-selector-module {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+            padding: 4px;
+            background: var(--color-bg-card);
+            border-radius: 24px;
+            border: 1px solid var(--color-border);
+        }
+
+        .time-input {
+            background: transparent;
+            border: 1px solid var(--color-border);
+            color: var(--color-text);
+            padding: 8px 12px;
+            border-radius: 16px;
+            font-size: 14px;
+            min-width: 150px;
+            margin-left: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .time-input:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            background: transparent;
+            color: var(--color-text-secondary);
+        }
+
+        .time-input[type="number"] {
+            min-width: 100px;
+        }
+        
+        select.time-input {
+            background: var(--color-bg-card);
+            cursor: pointer;
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+            background-size: 16px;
+            padding-right: 35px;
+        }
+        
+        select.time-input:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+            border-color: var(--color-primary);
+        }
+        
+        select.time-input:focus {
+            outline: none;
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 2px rgba(0, 255, 136, 0.2);
+        }
+
+        .refresh-btn {
+            background: transparent;
+            border: 1px solid var(--color-border);
+            color: var(--color-text);
+            padding: 8px 12px;
+            border-radius: 16px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+            white-space: nowrap;
+            margin-left: 8px;
+        }
+
+        .refresh-btn:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        /* 视图切换标签样式 */
+        .page-view-tabs {
+            display: inline-flex;
+            background: var(--color-bg);
+            border: 1px solid var(--color-border);
+            border-radius: 12px;
+            padding: 4px;
+            gap: 4px;
+        }
+
+        .page-tab {
+            position: relative;
+            background: rgba(255, 255, 255, 0.05);
+            color: rgba(255, 255, 255, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 10px 24px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .page-tab:hover:not(.active) {
+            background: rgba(255, 255, 255, 0.08);
+            color: rgba(255, 255, 255, 0.8);
+            border-color: rgba(255, 255, 255, 0.15);
+        }
+
+        .page-tab.active {
+            background: #00ff88;
+            color: #000;
+            border-color: #00ff88;
+            box-shadow: 0 4px 12px rgba(0, 255, 136, 0.3);
+            font-weight: 600;
+        }
+
+        .container {
+            max-width: 95%;
+            padding: 100px 10px 24px;
+            margin: 0 auto;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 36px;
+        }
+        
+        .page-title {
+            font-size: 48px;
+            font-weight: 500;
+            color: var(--color-text);
+            margin: 0;
+            letter-spacing: -2px;
+        }
+
+        /* 统计卡片网格 */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 24px;
+            margin-bottom: 48px;
+        }
+
+        .stat-card {
+            padding: 24px;
+            text-align: center;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+        }
+
+        .stat-label {
+            color: var(--color-text-secondary);
+            font-size: 14px;
+            font-weight: 400;
+            margin-bottom: 12px;
+        }
+
+        .stat-value {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--color-text);
+            letter-spacing: -0.5px;
+        }
+
+        .stat-change {
+            font-size: 13px;
+            color: var(--color-success);
+            font-weight: 400;
+        }
+
+        .stat-change.negative {
+            color: var(--color-danger);
+        }
+
+        /* 图表区域网格 */
+        .charts-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+            margin-bottom: 48px;
+        }
+
+        .chart-container {
+            padding: 24px;
+            min-height: 400px;
+            position: relative;
+        }
+
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .chart-title {
+            font-size: 18px;
+            font-weight: 500;
+            color: var(--color-text);
+        }
+
+        .chart-controls {
+            display: flex;
+            gap: 8px;
+            margin-left: auto;
+        }
+
+        .chart-controls .filter-tab {
+            padding: 6px 12px;
+            background: var(--color-bg);
+            border: 1px solid var(--color-border);
+            border-radius: 15px;
+            color: var(--color-text-secondary);
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .chart-controls .filter-tab:hover {
+            background: var(--color-border);
+            border-color: var(--color-primary);
+            color: var(--color-text);
+        }
+
+        .chart-controls .filter-tab.active {
+            background: var(--color-primary);
+            border-color: var(--color-primary);
+            color: #000;
+            font-weight: 600;
+        }
+
+        /* 表格样式 */
+        .table-section {
+            margin-bottom: 40px;
+        }
+
+        .table-container {
+            padding: 24px;
+        }
+
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .table-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--color-text);
+        }
+
+        .table-controls {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .status-filters {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .status-filters .filter-tab {
+            padding: 6px 14px;
+            background: var(--color-bg);
+            border: 1px solid var(--color-border);
+            border-radius: 18px;
+            color: var(--color-text-secondary);
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 500;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            white-space: nowrap;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .status-filters .filter-tab:hover {
+            background: var(--color-border);
+            border-color: var(--color-primary);
+            color: var(--color-text);
+            transform: translateY(-1px);
+            box-shadow: var(--color-shadow);
+        }
+
+        .status-filters .filter-tab.active {
+            background: var(--color-primary);
+            border-color: var(--color-primary);
+            color: #000;
+            font-weight: 600;
+            transform: translateY(-1px);
+        }
+
+        .export-btn {
+            padding: 8px 16px;
+            background: transparent;
+            border: 1px solid var(--color-primary);
+            border-radius: 6px;
+            color: var(--color-primary);
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            white-space: nowrap;
+        }
+
+        .export-btn:hover {
+            background: var(--color-primary);
+            color: #000;
+            transform: translateY(-1px);
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            color: var(--color-text);
+        }
+
+        .data-table th {
+            background: var(--color-bg);
+            padding: 12px 16px;
+            text-align: left;
+            font-weight: 600;
+            color: var(--color-text-secondary);
+            border-bottom: 1px solid var(--color-border);
+            white-space: nowrap;
+            position: relative;
+        }
+
+        .data-table td {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--color-border);
+            transition: background-color 0.2s ease;
+        }
+
+        .data-table tr:hover {
+            background: var(--color-bg);
+        }
+
+        .sort-buttons {
+            margin-left: 6px;
+            display: inline-flex;
+            flex-direction: column;
+            gap: 2px;
+            vertical-align: middle;
+            position: relative;
+            top: -2px;
+        }
+
+        .sort-btn {
+            background: transparent;
+            border: none;
+            color: rgba(255, 255, 255, 0.4);
+            width: 16px;
+            height: 14px;
+            cursor: pointer;
+            font-size: 11px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            padding: 0;
+            margin: 0;
+            line-height: 1;
+            opacity: 0.8;
+        }
+
+        .sort-btn:hover {
+            color: rgba(255, 255, 255, 0.8);
+            opacity: 1;
+            transform: scale(1.2);
+        }
+
+        .sort-btn.active {
+            color: var(--color-primary);
+            opacity: 1;
+            text-shadow: 0 0 8px rgba(0, 255, 136, 0.6);
+        }
+
+        .status-active {
+            color: var(--color-primary) !important;
+            font-weight: 500;
+        }
+
+        .status-inactive {
+            color: #ffd93d !important;
+            font-weight: 500;
+        }
+
+        .status-not-participating {
+            color: #ff6b6b !important;
+            font-weight: 500;
+        }
+
+        .profit-positive {
+            color: var(--color-primary);
+        }
+
+        .profit-negative {
+            color: #ff6b6b;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 1200px) {
+            .container {
+                max-width: 98%;
+                padding: 120px 8px 40px;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 20px;
+            }
+            
+            .charts-section {
+                gap: 24px;
+            }
+            
+            .chart-container {
+                padding: 24px;
+                min-height: 380px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                max-width: 100%;
+                padding: 120px 5px 40px;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 16px;
+            }
+            
+            .charts-section {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .page-title {
+                font-size: 28px;
+            }
+            
+            .stat-value {
+                font-size: 28px;
+            }
+            
+            .chart-title {
+                font-size: 18px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                max-width: 100%;
+                padding: 120px 3px 40px;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+        }
+    </style>
+</head>
+<body class="theme-dark">
+    <!-- Header Container -->
+    <div id="headerContainer"></div>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1 class="page-title" id="pageTitle" data-i18n="profit.pageTitle">获利</h1>
+            <!-- View Mode Tabs -->
+            <div class="page-view-tabs">
+                <button class="page-tab active" onclick="switchViewMode('chart', this)" id="chartTab">
+                    📊 <span data-i18n="profit.views.chart">图表视图</span>
+                </button>
+                <button class="page-tab" onclick="switchViewMode('table', this)" id="tableTab">
+                    📋 <span data-i18n="profit.views.table">表格视图</span>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Time Selector Module -->
+        <div class="time-selector-module" id="profitTimeSelectorModule">
+            <select id="regionSelector" class="time-input" onchange="handleRegionChange()" style="min-width: 120px; margin-right: 12px; margin-left: 0; display: inline-block;">
+                <option value="all" data-i18n="allRegions">全部地区</option>
+                <option value="NSW">NSW</option>
+                <option value="QLD">QLD</option>
+                <option value="VIC">VIC</option>
+                <option value="SA">SA</option>
+                <option value="TAS">TAS</option>
+            </select>
+            <button class="time-pill active" onclick="switchTimePeriod('day', this)" data-i18n="dayReport">日</button>
+            <button class="time-pill" onclick="switchTimePeriod('month', this)" data-i18n="monthReport">月</button>
+            <button class="time-pill" onclick="switchTimePeriod('year', this)" data-i18n="yearReport">年</button>
+            <button class="time-pill" onclick="switchTimePeriod('total', this)" data-i18n="totalReport">累计</button>
+            <input type="date" id="timeSelector" class="time-input" onchange="handleTimeInputChange()">
+            <button class="refresh-btn" onclick="refreshData()" data-i18n="refresh" title="刷新数据">🔄 <span data-i18n="refresh">刷新</span></button>
+        </div>
+
+        <!-- Stats Cards Grid -->
+        <div class="stats-grid">
+            <div class="stat-card card">
+                <div class="stat-label" data-i18n="profit.stats.userCount">用户数量</div>
+                <div class="stat-value" id="userCount">1,234</div>
+                <div class="stat-change"><span data-i18n="profit.stats.comparedYesterday">比昨日</span> ↑ 12</div>
+            </div>
+            <div class="stat-card card">
+                <div class="stat-label" data-i18n="profit.stats.totalRevenue">累计收益</div>
+                <div class="stat-value" id="totalRevenue">$457,000</div>
+                <div class="stat-change"><span data-i18n="profit.stats.comparedYesterday">比昨日</span> ↑ $2,000</div>
+            </div>
+            <div class="stat-card card">
+                <div class="stat-label" data-i18n="profit.stats.avgProfit">人均获利</div>
+                <div class="stat-value" id="avgProfit">$370</div>
+                <div class="stat-change"><span data-i18n="profit.stats.comparedYesterday">比昨日</span> ↑ $5</div>
+            </div>
+            <div class="stat-card card">
+                <div class="stat-label" data-i18n="profit.stats.maxStationProfit">最大获利 (电站)</div>
+                <div class="stat-value" id="maxStationProfit">$5,000</div>
+                <div class="stat-change"><span data-i18n="profit.stats.comparedYesterday">比昨日</span> ↑ $200</div>
+            </div>
+            <div class="stat-card card">
+                <div class="stat-label" data-i18n="profit.stats.minStationProfit">最小获利 (电站)</div>
+                <div class="stat-value" id="minStationProfit">$10</div>
+                <div class="stat-change"><span data-i18n="profit.stats.comparedYesterday">比昨日</span> ↑ $1</div>
+            </div>
+        </div>
+
+        <!-- Chart View Content -->
+        <div id="chartViewContent">
+            <!-- Charts Section -->
+            <div class="charts-section">
+                <!-- User Management Chart -->
+                <div class="chart-container card">
+                    <div class="chart-header">
+                        <div class="chart-title" data-i18n="profit.charts.userManagement">用户管理</div>
+                    </div>
+                    <div id="userManagementChart" style="width: 100%; height: 300px;"></div>
+                </div>
+
+                <!-- Revenue Distribution Chart -->
+                <div class="chart-container card">
+                    <div class="chart-header">
+                        <div class="chart-title" data-i18n="profit.charts.revenueDistribution">收益分布</div>
+                    </div>
+                    <div id="revenueDistributionChart" style="width: 100%; height: 300px;"></div>
+                </div>
+            </div>
+
+            <!-- Secondary Charts Section -->
+            <div class="charts-section">
+                <!-- Power and Revenue Chart -->
+                <div class="chart-container card">
+                    <div class="chart-header">
+                        <div class="chart-title" data-i18n="profit.charts.dischargeAndProfit">放电与获利</div>
+                    </div>
+                    <div id="powerRevenueChart" style="width: 100%; height: 350px;"></div>
+                </div>
+
+                <!-- Top 5 Profit Chart -->
+                <div class="chart-container card">
+                    <div class="chart-header">
+                        <div class="chart-title" data-i18n="profit.charts.profitRanking">获利排名</div>
+                        <div class="chart-controls">
+                            <button class="filter-tab active" onclick="switchProfitView('top5', this)" id="top5Tab" data-i18n="profit.ranking.top5">前五</button>
+                            <button class="filter-tab" onclick="switchProfitView('bottom5', this)" id="bottom5Tab" data-i18n="profit.ranking.bottom5">后五</button>
+                        </div>
+                    </div>
+                    <div id="profitRankingChart" style="width: 100%; height: 350px;"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Table View Content -->
+        <div id="tableViewContent" style="display: none;">
+            <!-- User Participation Table -->
+            <div class="table-section">
+                <div class="table-container card">
+                    <div class="table-header">
+                        <div class="table-title" data-i18n="profit.table.userParticipation">用户参与情况</div>
+                        <div class="table-controls">
+                            <!-- 状态筛选 -->
+                            <div class="status-filters">
+                                <button class="filter-tab active" onclick="filterByStatus('all', this)" id="statusAll" data-i18n="profit.filters.all">全部</button>
+                                <button class="filter-tab" onclick="filterByStatus('active', this)" id="statusActive" data-i18n="profit.filters.active">活跃</button>
+                                <button class="filter-tab" onclick="filterByStatus('inactive', this)" id="statusInactive" data-i18n="profit.filters.inactive">非活跃</button>
+                                <button class="filter-tab" onclick="filterByStatus('notParticipating', this)" id="statusNotParticipating" data-i18n="profit.filters.notParticipating">未参与</button>
+                            </div>
+                            <!-- 导出功能 -->
+                            <button class="export-btn" onclick="exportTableData()">
+                                📥 <span data-i18n="profit.buttons.exportData">导出数据</span>
+                            </button>
+                        </div>
+                    </div>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th data-i18n="profit.table.date">日期</th>
+                                <th data-i18n="profit.table.user">用户</th>
+                                <th data-i18n="profit.table.status">性质</th>
+                                <th>
+                                    <span data-i18n="profit.table.dischargeAmount">实际放电量 (kWh)</span>
+                                    <span class="sort-buttons">
+                                        <button class="sort-btn sort-asc" onclick="sortTable('discharge', 'asc', this)" title="升序">▲</button>
+                                        <button class="sort-btn sort-desc" onclick="sortTable('discharge', 'desc', this)" title="降序">▼</button>
+                                    </span>
+                                </th>
+                                <th>
+                                    <span data-i18n="profit.table.profit">获利 ($)</span>
+                                    <span class="sort-buttons">
+                                        <button class="sort-btn sort-asc" onclick="sortTable('profit', 'asc', this)" title="升序">▲</button>
+                                        <button class="sort-btn sort-desc" onclick="sortTable('profit', 'desc', this)" title="降序">▼</button>
+                                    </span>
+                                </th>
+                                <th data-i18n="profit.table.dailyAvg" id="avgHeader">日均
+                                    <span class="sort-buttons">
+                                        <button class="sort-btn sort-asc" onclick="sortTable('dailyAvg', 'asc', this)" title="升序">▲</button>
+                                        <button class="sort-btn sort-desc" onclick="sortTable('dailyAvg', 'desc', this)" title="降序">▼</button>
+                                    </span>
+                                </th>
+                                <th data-i18n="profit.table.compareDaily" id="compareHeader">对比日均 ($)
+                                    <span class="sort-buttons">
+                                        <button class="sort-btn sort-asc" onclick="sortTable('comparison', 'asc', this)" title="升序">▲</button>
+                                        <button class="sort-btn sort-desc" onclick="sortTable('comparison', 'desc', this)" title="降序">▼</button>
+                                    </span>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="userParticipationTableBody">
+                            <!-- Table data will be loaded dynamically -->
+                        </tbody>
+                    </table>
+                    
+                    <div id="paginationContainer"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 全局变量
+        let userManagementChart, revenueDistributionChart, powerRevenueChart, profitRankingChart;
+        let currentViewMode = 'chart';
+        let currentProfitView = 'top5';
+        let currentTimePeriod = 'day';
+        let currentRegion = 'all';
+        
+        // 表格变量
+        let tableData = [];
+        let currentPage = 1;
+        let pageSize = 10;
+        let pagination = null;
+        let currentFilter = 'all';
+        let currentSortColumn = null;
+        let currentSortDirection = null;
+
+        // 初始化页面
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(() => {
+                // 初始化Header导航
+                if (typeof HeaderNav !== 'undefined') {
+                    window.headerNav = new HeaderNav({
+                        containerId: 'headerContainer',
+                        currentPage: 'profit'
+                    });
+                }
+
+                // 初始化时间选择器
+                const today = new Date();
+                const timeInput = document.getElementById('timeSelector');
+                if (timeInput) {
+                    timeInput.type = 'date';
+                    timeInput.value = today.toISOString().split('T')[0];
+                }
+
+                // 初始化图表
+                initAllCharts();
+                
+                // 初始化表格数据
+                generateTableData();
+
+                // 监听语言变化
+                if (window.i18n) {
+                    window.i18n.addObserver(() => {
+                        updateTexts();
+                        refreshCharts();
+                        loadTableData();
+                    });
+                    
+                    // 初始文本更新
+                    setTimeout(() => {
+                        updateTexts();
+                        if (window.i18n && window.i18n.updatePageTexts) {
+                            window.i18n.updatePageTexts();
+                        }
+                    }, 100);
+                }
+
+                // 窗口大小变化监听
+                window.addEventListener('resize', () => {
+                    Object.values({userManagementChart, revenueDistributionChart, powerRevenueChart, profitRankingChart}).forEach(chart => {
+                        if (chart && !chart.isDisposed()) {
+                            chart.resize();
+                        }
+                    });
+                });
+            }, 200);
+        });
+
+        // 地区变化处理
+        function handleRegionChange() {
+            const regionSelector = document.getElementById('regionSelector');
+            currentRegion = regionSelector.value;
+            refreshData();
+        }
+
+        // 时间周期切换
+        function switchTimePeriod(period, element) {
+            currentTimePeriod = period;
+            
+            // 更新按钮状态
+            document.querySelectorAll('.time-pill').forEach(pill => {
+                pill.classList.remove('active');
+            });
+            element.classList.add('active');
+            
+            // 处理时间输入框
+            const timeInput = document.getElementById('timeSelector');
+            const today = new Date();
+            
+            if (period === 'total') {
+                timeInput.style.display = 'none';
+                timeInput.disabled = true;
+                timeInput.value = '';
+            } else {
+                timeInput.style.display = 'block';
+                timeInput.disabled = false;
+                
+                switch(period) {
+                    case 'day':
+                        timeInput.type = 'date';
+                        timeInput.value = today.toISOString().split('T')[0];
+                        break;
+                    case 'month':
+                        timeInput.type = 'month';
+                        timeInput.value = today.getFullYear() + '-' + String(today.getMonth() + 1).padStart(2, '0');
+                        break;
+                    case 'year':
+                        timeInput.type = 'number';
+                        timeInput.min = 2020;
+                        timeInput.max = 2030;
+                        timeInput.value = today.getFullYear();
+                        break;
+                }
+            }
+            
+            updateTableHeaders(period);
+            generateTableData();
+            refreshData();
+        }
+
+        function handleTimeInputChange() {
+            refreshData();
+        }
+
+        // 视图模式切换
+        function switchViewMode(mode, element) {
+            currentViewMode = mode;
+            
+            // 更新标签状态
+            document.querySelectorAll('.page-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            element.classList.add('active');
+            
+            // 切换内容
+            if (mode === 'chart') {
+                document.getElementById('chartViewContent').style.display = 'block';
+                document.getElementById('tableViewContent').style.display = 'none';
+                setTimeout(() => refreshCharts(), 100);
+            } else {
+                document.getElementById('chartViewContent').style.display = 'none';
+                document.getElementById('tableViewContent').style.display = 'block';
+                
+                if (!pagination) {
+                    updateTableHeaders(currentTimePeriod);
+                    generateTableData();
+                    initializePagination();
+                } else {
+                    updateTableHeaders(currentTimePeriod);
+                    refreshTableData();
+                }
+            }
+        }
+
+        // 获利视图切换
+        function switchProfitView(view, element) {
+            currentProfitView = view;
+            
+            // 更新标签状态
+            document.querySelectorAll('.chart-controls .filter-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            element.classList.add('active');
+            
+            // 更新图表
+            updateProfitRankingChart();
+        }
+
+        // 状态筛选
+        function filterByStatus(status, element) {
+            currentFilter = status;
+            
+            // 更新标签状态
+            document.querySelectorAll('.status-filters .filter-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            element.classList.add('active');
+            
+            // 重置排序状态
+            currentSortColumn = null;
+            currentSortDirection = null;
+            document.querySelectorAll('.sort-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // 重新生成数据并加载
+            generateTableData();
+            loadTableData();
+        }
+
+        // 刷新数据
+        function refreshData() {
+            updateStats();
+            
+            if (currentViewMode === 'chart') {
+                refreshCharts();
+            } else {
+                refreshTableData();
+            }
+        }
+
+        // 更新统计数据
+        function updateStats() {
+            const regionMultipliers = {
+                'all': 1,
+                'NSW': 0.35,
+                'QLD': 0.25,
+                'VIC': 0.20,
+                'SA': 0.15,
+                'TAS': 0.05
+            };
+            
+            const multiplier = regionMultipliers[currentRegion] || 1;
+            
+            const stats = {
+                day: { userCount: '1,234', totalRevenue: '$457,000', avgProfit: '$370', maxProfit: '$5,000', minProfit: '$10' },
+                month: { userCount: '12,345', totalRevenue: '$4,570,000', avgProfit: '$370', maxProfit: '$50,000', minProfit: '$100' },
+                year: { userCount: '123,456', totalRevenue: '$45,700,000', avgProfit: '$370', maxProfit: '$500,000', minProfit: '$1,000' },
+                total: { userCount: '234,567', totalRevenue: '$457,000,000', avgProfit: '$1,950', maxProfit: '$5,000,000', minProfit: '$10,000' }
+            };
+            
+            const currentStats = stats[currentTimePeriod] || stats.day;
+            
+            const userCount = Math.round(parseInt(currentStats.userCount.replace(/,/g, '')) * multiplier).toLocaleString();
+            const totalRevenue = '$' + Math.round(parseInt(currentStats.totalRevenue.replace(/[$,]/g, '')) * multiplier).toLocaleString();
+            const avgProfit = currentStats.avgProfit;
+            const maxProfit = '$' + Math.round(parseInt(currentStats.maxProfit.replace(/[$,]/g, '')) * multiplier).toLocaleString();
+            const minProfit = '$' + Math.round(parseInt(currentStats.minProfit.replace(/[$,]/g, '')) * multiplier).toLocaleString();
+            
+            document.getElementById('userCount').textContent = userCount;
+            document.getElementById('totalRevenue').textContent = totalRevenue;
+            document.getElementById('avgProfit').textContent = avgProfit;
+            document.getElementById('maxStationProfit').textContent = maxProfit;
+            document.getElementById('minStationProfit').textContent = minProfit;
+        }
+
+        // 初始化所有图表
+        function initAllCharts() {
+            initUserManagementChart();
+            initRevenueDistributionChart();
+            initPowerRevenueChart();
+            initProfitRankingChart();
+        }
+
+        function initUserManagementChart() {
+            const chartDom = document.getElementById('userManagementChart');
+            const chart = echarts.init(chartDom);
+            
+            const regionMultipliers = {
+                'all': 1, 'NSW': 0.35, 'QLD': 0.25, 'VIC': 0.20, 'SA': 0.15, 'TAS': 0.05
+            };
+            const multiplier = regionMultipliers[currentRegion] || 1;
+            
+            // 获取当前语言
+            const currentLang = window.i18n ? window.i18n.currentLanguage : 'zh';
+            const userTypes = {
+                zh: {
+                    active: '活跃用户',
+                    inactive: '非活跃用户',
+                    notParticipating: '未参与用户'
+                },
+                en: {
+                    active: 'Active Users',
+                    inactive: 'Inactive Users', 
+                    notParticipating: 'Not Participating'
+                }
+            };
+            
+            const option = {
+                tooltip: {
+                    trigger: 'item',
+                    backgroundColor: 'rgba(0,0,0,0.9)',
+                    borderColor: 'rgba(255,255,255,0.1)',
+                    textStyle: { color: '#fff' },
+                    formatter: '{b}: {c} ({d}%)'
+                },
+                legend: {
+                    orient: 'vertical',
+                    left: 'left',
+                    top: 'center',
+                    itemGap: 20,
+                    textStyle: { 
+                        color: 'rgba(255, 255, 255, 0.6)',
+                        fontSize: 14
+                    },
+                    icon: 'circle'
+                },
+                series: [{
+                    name: currentLang === 'en' ? 'User Management' : '用户管理',
+                    type: 'pie',
+                    radius: ['40%', '70%'],
+                    center: ['60%', '50%'],
+                    avoidLabelOverlap: false,
+                    label: { show: false, position: 'center' },
+                    emphasis: {
+                        label: {
+                            show: true,
+                            fontSize: '20',
+                            fontWeight: 'bold',
+                            color: '#fff'
+                        }
+                    },
+                    labelLine: { show: false },
+                    data: [
+                        { 
+                            value: Math.round(1048 * multiplier), 
+                            name: userTypes[currentLang].active,
+                            itemStyle: { color: '#00ff88' }
+                        },
+                        { 
+                            value: Math.round(735 * multiplier), 
+                            name: userTypes[currentLang].inactive,
+                            itemStyle: { color: '#ffd93d' }
+                        },
+                        { 
+                            value: Math.round(580 * multiplier), 
+                            name: userTypes[currentLang].notParticipating,
+                            itemStyle: { color: '#ff6b6b' }
+                        }
+                    ]
+                }]
+            };
+            
+            chart.setOption(option);
+            userManagementChart = chart;
+        }
+
+        function initRevenueDistributionChart() {
+            const chartDom = document.getElementById('revenueDistributionChart');
+            const chart = echarts.init(chartDom);
+            
+            // 生成散点数据
+            const scatterData = [];
+            for (let i = 0; i < 50; i++) {
+                scatterData.push([
+                    Math.random() * 100,
+                    20 + Math.random() * 100
+                ]);
+            }
+            
+            const option = {
+                tooltip: {
+                    trigger: 'item',
+                    backgroundColor: 'rgba(0,0,0,0.9)',
+                    borderColor: 'rgba(255,255,255,0.1)',
+                    textStyle: { color: '#fff' },
+                    formatter: function(params) {
+                        return `用户: ${params.data[0].toFixed(0)}<br/>收益: $${params.data[1].toFixed(0)}`;
+                    }
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    top: '3%',
+                    containLabel: true
+                },
+                xAxis: {
+                    type: 'value',
+                    name: '用户',
+                    nameLocation: 'end',
+                    nameTextStyle: { color: 'rgba(255, 255, 255, 0.6)', fontSize: 12 },
+                    axisLine: { lineStyle: { color: 'rgba(255, 255, 255, 0.08)' } },
+                    axisLabel: { color: 'rgba(255, 255, 255, 0.6)' },
+                    splitLine: { 
+                        lineStyle: { color: 'rgba(255, 255, 255, 0.08)', type: 'dashed' } 
+                    }
+                },
+                yAxis: {
+                    type: 'value',
+                    name: '$',
+                    nameLocation: 'end',
+                    nameTextStyle: { color: 'rgba(255, 255, 255, 0.6)', fontSize: 12 },
+                    axisLine: { lineStyle: { color: 'rgba(255, 255, 255, 0.08)' } },
+                    axisLabel: { color: 'rgba(255, 255, 255, 0.6)', formatter: '{value}' },
+                    splitLine: { 
+                        lineStyle: { color: 'rgba(255, 255, 255, 0.08)', type: 'dashed' } 
+                    }
+                },
+                series: [{
+                    name: '收益分布',
+                    type: 'scatter',
+                    data: scatterData,
+                    symbolSize: 8,
+                    itemStyle: { color: '#00ff88', opacity: 0.8 },
+                    emphasis: {
+                        scale: 1.5,
+                        itemStyle: {
+                            color: '#00ff88',
+                            shadowBlur: 10,
+                            shadowColor: 'rgba(0, 255, 136, 0.5)'
+                        }
+                    }
+                }]
+            };
+            
+            chart.setOption(option);
+            revenueDistributionChart = chart;
+        }
+
+        function initPowerRevenueChart() {
+            const chartDom = document.getElementById('powerRevenueChart');
+            const chart = echarts.init(chartDom);
+            
+            // 获取当前语言
+            const currentLang = window.i18n ? window.i18n.currentLanguage : 'zh';
+            const seriesNames = {
+                zh: {
+                    discharge: '实时放电量',
+                    profit: '获利'
+                },
+                en: {
+                    discharge: 'Actual Discharge',
+                    profit: 'Profit'
+                }
+            };
+            
+            const option = {
+                tooltip: {
+                    trigger: 'axis',
+                    backgroundColor: 'rgba(0,0,0,0.9)',
+                    borderColor: 'rgba(255,255,255,0.1)',
+                    textStyle: { color: '#fff' },
+                    axisPointer: {
+                        type: 'cross',
+                        crossStyle: { color: 'var(--color-text-secondary)' }
+                    }
+                },
+                legend: {
+                    data: [seriesNames[currentLang].discharge, seriesNames[currentLang].profit],
+                    textStyle: { color: 'var(--color-text-secondary)' },
+                    top: 0
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    top: '15%',
+                    containLabel: true
+                },
+                xAxis: {
+                    type: 'category',
+                    data: ['0', '6', '12', '18', '24'],
+                    axisLine: { lineStyle: { color: 'rgba(255, 255, 255, 0.08)' } },
+                    axisLabel: { color: 'var(--color-text-secondary)' }
+                },
+                yAxis: [{
+                    type: 'value',
+                    name: 'kWh',
+                    min: 0,
+                    max: 250,
+                    interval: 50,
+                    nameTextStyle: { color: 'var(--color-text-secondary)' },
+                    axisLine: { lineStyle: { color: 'rgba(255, 255, 255, 0.08)' } },
+                    axisLabel: { color: 'rgba(255, 255, 255, 0.6)' },
+                    splitLine: { 
+                        lineStyle: { color: 'rgba(255, 255, 255, 0.08)', type: 'dashed' } 
+                    }
+                }, {
+                    type: 'value',
+                    name: '$',
+                    min: 0,
+                    max: 250,
+                    interval: 50,
+                    nameTextStyle: { color: 'var(--color-text-secondary)' },
+                    axisLine: { lineStyle: { color: 'rgba(255, 255, 255, 0.08)' } },
+                    axisLabel: { 
+                        color: 'rgba(255, 255, 255, 0.6)',
+                        formatter: '{value}'
+                    }
+                }],
+                series: [{
+                    name: seriesNames[currentLang].discharge,
+                    type: 'bar',
+                    data: [100, 120, 240, 80, 110],
+                    itemStyle: { color: '#00ff88', opacity: 0.8 },
+                    barWidth: '40%'
+                }, {
+                    name: seriesNames[currentLang].profit,
+                    type: 'line',
+                    yAxisIndex: 1,
+                    data: [150, 180, 240, 120, 165],
+                    lineStyle: { width: 3, color: '#ffd700' },
+                    itemStyle: { color: '#ffd700' },
+                    symbol: 'circle',
+                    symbolSize: 8,
+                    smooth: true
+                }]
+            };
+            
+            chart.setOption(option);
+            powerRevenueChart = chart;
+        }
+
+        function initProfitRankingChart() {
+            updateProfitRankingChart();
+        }
+
+        function updateProfitRankingChart() {
+            const chartDom = document.getElementById('profitRankingChart');
+            if (!profitRankingChart) {
+                profitRankingChart = echarts.init(chartDom);
+            }
+            
+            const isTop5 = currentProfitView === 'top5';
+            const userNames = ['John Zhang', 'Henry Li', 'William Wang', 'Sam Zhang', 'Tom Li', 'Tony Zhou', 'Amy Wu', 'Eric Zheng', 'Linda Lin', '刘强'];
+            
+            const data = isTop5 
+                ? [
+                    { value: 4850, name: userNames[0] },
+                    { value: 4320, name: userNames[1] },
+                    { value: 3980, name: userNames[2] },
+                    { value: 3650, name: userNames[3] },
+                    { value: 3420, name: userNames[4] }
+                ]
+                : [
+                    { value: 280, name: userNames[5] },
+                    { value: 250, name: userNames[6] },
+                    { value: 220, name: userNames[7] },
+                    { value: 180, name: userNames[8] },
+                    { value: 150, name: userNames[9] }
+                ];
+
+            const option = {
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: { type: 'shadow' },
+                    backgroundColor: 'rgba(0,0,0,0.9)',
+                    borderColor: 'rgba(255,255,255,0.1)',
+                    textStyle: { color: '#fff' },
+                    formatter: function(params) {
+                        return `${params[0].name}: $${params[0].value}`;
+                    }
+                },
+                grid: {
+                    left: '3%',
+                    right: '15%',
+                    bottom: '3%',
+                    top: '3%',
+                    containLabel: true
+                },
+                xAxis: {
+                    type: 'category',
+                    data: data.map(item => item.name),
+                    axisLine: { lineStyle: { color: 'rgba(255, 255, 255, 0.08)' } },
+                    axisLabel: { 
+                        color: 'rgba(255, 255, 255, 0.6)',
+                        interval: 0,
+                        rotate: -45,
+                        fontSize: 12,
+                        margin: 8
+                    }
+                },
+                yAxis: {
+                    type: 'value',
+                    axisLine: { lineStyle: { color: 'rgba(255, 255, 255, 0.08)' } },
+                    axisLabel: { 
+                        color: 'rgba(255, 255, 255, 0.6)',
+                        formatter: function(value) { return '$' + value; }
+                    },
+                    splitLine: { 
+                        lineStyle: { color: 'rgba(255, 255, 255, 0.08)', type: 'dashed' } 
+                    }
+                },
+                series: [{
+                    name: '获利 ($)',
+                    type: 'bar',
+                    data: data.map(item => item.value),
+                    label: {
+                        show: true,
+                        position: 'top',
+                        color: 'rgba(255, 255, 255, 0.6)',
+                        formatter: function(params) { return '$' + params.value; }
+                    },
+                    itemStyle: {
+                        color: isTop5 ? '#00ff88' : '#ff6b6b',
+                        borderRadius: [4, 4, 0, 0]
+                    },
+                    barWidth: '50%'
+                }]
+            };
+
+            profitRankingChart.setOption(option);
+        }
+
+        // 刷新图表
+        function refreshCharts() {
+            if (currentViewMode === 'chart') {
+                setTimeout(() => {
+                    initAllCharts();
+                }, 100);
+            }
+        }
+
+        // 表格排序
+        function sortTable(column, direction, element) {
+            const isCurrentSort = currentSortColumn === column && currentSortDirection === direction;
+            
+            document.querySelectorAll('.sort-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            if (isCurrentSort) {
+                currentSortColumn = null;
+                currentSortDirection = null;
+                generateTableData();
+            } else {
+                currentSortColumn = column;
+                currentSortDirection = direction;
+                element.classList.add('active');
+                
+                tableData.sort((a, b) => {
+                    let aVal, bVal;
+                    switch(column) {
+                        case 'discharge': aVal = a.discharge; bVal = b.discharge; break;
+                        case 'profit': aVal = a.profit; bVal = b.profit; break;
+                        case 'dailyAvg': aVal = a.dailyAvg; bVal = b.dailyAvg; break;
+                        case 'comparison': aVal = a.comparison; bVal = b.comparison; break;
+                        default: return 0;
+                    }
+                    return direction === 'asc' ? aVal - bVal : bVal - aVal;
+                });
+            }
+            
+            loadTableData();
+        }
+
+        // 导出表格数据
+        function exportTableData() {
+            console.log('导出表格数据...');
+        }
+
+        // 初始化分页
+        function initializePagination() {
+            pagination = new Pagination({
+                containerId: 'paginationContainer',
+                currentPage: currentPage,
+                pageSize: pageSize,
+                totalItems: tableData.length,
+                onPageChange: (page, size) => {
+                    currentPage = page;
+                    loadTableData();
+                },
+                onPageSizeChange: (size) => {
+                    pageSize = size;
+                    currentPage = 1;
+                    loadTableData();
+                }
+            });
+            
+            loadTableData();
+        }
+
+        // 生成表格数据
+        function generateTableData() {
+            const users = ['Harvey Lee', 'Lucas Wang', 'David Zhang', 'Fiona Liu', 
+                          'Michael Chen', 'Lisa Zhao', 'John Sun', '周敏', '吴强', '郑华'];
+            const statuses = ['active', 'inactive', 'notParticipating'];
+            const data = [];
+            
+            const timeSelector = document.getElementById('timeSelector');
+            const selectedTime = timeSelector ? timeSelector.value : '';
+            
+            switch (currentTimePeriod) {
+                case 'day': {
+                    const date = selectedTime ? new Date(selectedTime) : new Date();
+                    const dateStr = formatDate(date);
+                    const userCount = 5 + Math.floor(Math.random() * 4);
+                    for (let i = 0; i < userCount; i++) {
+                        data.push(createUserData(users[i % users.length], dateStr, statuses, 'day'));
+                    }
+                    break;
+                }
+                case 'month': {
+                    let year, month;
+                    if (selectedTime && selectedTime.includes('-')) {
+                        [year, month] = selectedTime.split('-');
+                    } else {
+                        year = new Date().getFullYear();
+                        month = String(new Date().getMonth() + 1).padStart(2, '0');
+                    }
+                    const dateStr = `${year}年${parseInt(month)}月`;
+                    const userCount = 8 + Math.floor(Math.random() * 3);
+                    for (let i = 0; i < userCount; i++) {
+                        data.push(createUserData(users[i % users.length], dateStr, statuses, 'month'));
+                    }
+                    break;
+                }
+                case 'year': {
+                    const year = timeSelector && timeSelector.type === 'number' ? timeSelector.value : new Date().getFullYear();
+                    const dateStr = `${year}年`;
+                    const userCount = 10;
+                    for (let i = 0; i < userCount; i++) {
+                        data.push(createUserData(users[i], dateStr, statuses, 'year'));
+                    }
+                    break;
+                }
+                case 'total': {
+                    users.forEach(user => {
+                        data.push(createUserData(user, '累计', statuses, 'total'));
+                    });
+                    break;
+                }
+            }
+            
+            tableData = data;
+            
+            // 应用筛选
+            if (currentFilter !== 'all') {
+                tableData = tableData.filter(item => item.status === currentFilter);
+            }
+        }
+
+        // 创建用户数据
+        function createUserData(user, date, statuses, period) {
+            const status = statuses[Math.floor(Math.random() * statuses.length)];
+            let discharge = 0;
+            let dailyAvg = 50;
+            
+            if (status !== 'notParticipating') {
+                switch (period) {
+                    case 'day':
+                        discharge = 20 + Math.floor(Math.random() * 40);
+                        dailyAvg = 50;
+                        break;
+                    case 'month':
+                        discharge = 600 + Math.floor(Math.random() * 600);
+                        dailyAvg = 1500;
+                        break;
+                    case 'year':
+                        discharge = 7000 + Math.floor(Math.random() * 5000);
+                        dailyAvg = 18000;
+                        break;
+                    case 'total':
+                        discharge = 10000 + Math.floor(Math.random() * 5000);
+                        dailyAvg = 500;
+                        break;
+                }
+            }
+            
+            const profit = status === 'notParticipating' ? 0 : Math.floor(discharge * 1.8);
+            
+            return {
+                date: date,
+                user: user,
+                status: status,
+                discharge: discharge,
+                profit: profit,
+                dailyAvg: dailyAvg,
+                comparison: profit - dailyAvg
+            };
+        }
+
+        // 格式化日期
+        function formatDate(date) {
+            return `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日`;
+        }
+
+        // 加载表格数据
+        function loadTableData() {
+            const tbody = document.getElementById('userParticipationTableBody');
+            if (!tbody) return;
+            
+            tbody.innerHTML = '';
+            
+            if (!tableData || tableData.length === 0) {
+                generateTableData();
+                if (!tableData || tableData.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 40px; color: var(--color-text-secondary);">暂无数据</td></tr>';
+                    return;
+                }
+            }
+            
+            // 获取当前页数据
+            const startIndex = (currentPage - 1) * pageSize;
+            const endIndex = Math.min(startIndex + pageSize, tableData.length);
+            const pageData = tableData.slice(startIndex, endIndex);
+            
+            // 按日期分组
+            const groupedData = {};
+            pageData.forEach(item => {
+                if (!groupedData[item.date]) {
+                    groupedData[item.date] = [];
+                }
+                groupedData[item.date].push(item);
+            });
+            
+            // 渲染行
+            Object.entries(groupedData).forEach(([date, rows]) => {
+                rows.forEach((row, index) => {
+                    const tr = document.createElement('tr');
+                    
+                    // 为每个日期的第一行添加日期单元格
+                    if (index === 0) {
+                        const dateCell = document.createElement('td');
+                        dateCell.rowSpan = rows.length;
+                        dateCell.style.verticalAlign = 'middle';
+                        dateCell.style.fontWeight = '500';
+                        dateCell.textContent = date;
+                        tr.appendChild(dateCell);
+                    }
+                    
+                    // 添加数据单元格
+                    tr.innerHTML += `
+                        <td>${row.user}</td>
+                        <td class="status-${row.status === 'notParticipating' ? 'not-participating' : row.status}">${getStatusText(row.status)}</td>
+                        <td>${row.discharge.toFixed(1)}</td>
+                        <td class="${row.profit > 0 ? 'profit-positive' : 'profit-negative'}">${row.profit}</td>
+                        <td>${row.dailyAvg}</td>
+                        <td class="${row.comparison >= 0 ? 'profit-positive' : 'profit-negative'}">${row.comparison >= 0 ? '+' : ''}${row.comparison}</td>
+                    `;
+                    
+                    tbody.appendChild(tr);
+                });
+            });
+            
+            // 最后一页添加总计行
+            if (endIndex === tableData.length && tableData.length > 0) {
+                const totalDischarge = tableData.reduce((sum, item) => sum + item.discharge, 0);
+                const totalProfit = tableData.reduce((sum, item) => sum + item.profit, 0);
+                
+                // 获取当前语言
+                const currentLang = window.i18n ? window.i18n.currentLanguage : 'zh';
+                const totalText = currentLang === 'en' ? 'Total' : '合计';
+                
+                const totalRow = document.createElement('tr');
+                totalRow.style.borderTop = '2px solid var(--color-border)';
+                totalRow.style.background = 'var(--color-bg)';
+                totalRow.innerHTML = `
+                    <td colspan="3" style="text-align: center; font-weight: 600; color: var(--color-primary);">${totalText}</td>
+                    <td style="font-weight: 600;">${totalDischarge.toFixed(1)}</td>
+                    <td class="profit-positive" style="font-weight: 600;">${totalProfit}</td>
+                    <td>-</td>
+                    <td>-</td>
+                `;
+                tbody.appendChild(totalRow);
+            }
+        }
+
+        // 获取状态文本
+        function getStatusText(status) {
+            const currentLang = window.i18n ? window.i18n.currentLanguage : 'zh';
+            const statusTexts = {
+                zh: {
+                    active: '活跃',
+                    inactive: '非活跃',
+                    notParticipating: '未参与'
+                },
+                en: {
+                    active: 'Active',
+                    inactive: 'Inactive',
+                    notParticipating: 'Not Participating'
+                }
+            };
+            return statusTexts[currentLang][status] || status;
+        }
+
+        // 刷新表格数据
+        function refreshTableData() {
+            generateTableData();
+            currentPage = 1;
+            
+            if (pagination) {
+                pagination = new Pagination({
+                    containerId: 'paginationContainer',
+                    currentPage: 1,
+                    pageSize: pageSize,
+                    totalItems: tableData.length,
+                    onPageChange: (page, size) => {
+                        currentPage = page;
+                        loadTableData();
+                    },
+                    onPageSizeChange: (size) => {
+                        pageSize = size;
+                        currentPage = 1;
+                        loadTableData();
+                    }
+                });
+            }
+            
+            loadTableData();
+        }
+
+        // 更新表格标题根据时间周期
+        function updateTableHeaders(period) {
+            const avgHeader = document.getElementById('avgHeader');
+            const compareHeader = document.getElementById('compareHeader');
+            
+            if (avgHeader && compareHeader) {
+                // 获取当前语言
+                const currentLang = window.i18n ? window.i18n.currentLanguage : 'zh';
+                
+                const periodTexts = {
+                    zh: {
+                        day: { avg: '日均', compare: '对比日均 ($)' },
+                        month: { avg: '月均', compare: '对比月均 ($)' },
+                        year: { avg: '年均', compare: '对比年均 ($)' },
+                        total: { avg: '历史均值', compare: '对比历史均值 ($)' }
+                    },
+                    en: {
+                        day: { avg: 'Daily Avg', compare: 'Compare Daily ($)' },
+                        month: { avg: 'Monthly Avg', compare: 'Compare Monthly ($)' },
+                        year: { avg: 'Yearly Avg', compare: 'Compare Yearly ($)' },
+                        total: { avg: 'Historical Avg', compare: 'Compare Historical ($)' }
+                    }
+                };
+                
+                const texts = periodTexts[currentLang][period] || periodTexts.zh.day;
+                
+                avgHeader.innerHTML = texts.avg +
+                    '<span class="sort-buttons">' +
+                    '<button class="sort-btn sort-asc" onclick="sortTable(\'dailyAvg\', \'asc\', this)" title="升序">▲</button>' +
+                    '<button class="sort-btn sort-desc" onclick="sortTable(\'dailyAvg\', \'desc\', this)" title="降序">▼</button>' +
+                    '</span>';
+                compareHeader.innerHTML = texts.compare + 
+                    '<span class="sort-buttons">' +
+                    '<button class="sort-btn sort-asc" onclick="sortTable(\'comparison\', \'asc\', this)" title="升序">▲</button>' +
+                    '<button class="sort-btn sort-desc" onclick="sortTable(\'comparison\', \'desc\', this)" title="降序">▼</button>' +
+                    '</span>';
+            }
+        }
+
+        // 更新文本（用于国际化）
+        function updateTexts() {
+            if (window.i18n) {
+                refreshCharts();
+                
+                // 更新地区选择器选项
+                const regionSelector = document.getElementById('regionSelector');
+                if (regionSelector) {
+                    const allRegionOption = regionSelector.querySelector('option[value="all"]');
+                    if (allRegionOption) {
+                        allRegionOption.textContent = window.i18n.getText('allRegions') || '全部地区';
+                    }
+                }
+                
+                // 强制更新时间按钮文本
+                const timePills = document.querySelectorAll('.time-pill');
+                timePills.forEach(pill => {
+                    const dataI18n = pill.getAttribute('data-i18n');
+                    if (dataI18n && window.i18n) {
+                        pill.textContent = window.i18n.getText(dataI18n) || pill.textContent;
+                    }
+                });
+            }
+        }
+    </script>
+</body>
+</html>
