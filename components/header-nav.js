@@ -57,6 +57,8 @@ class HeaderNav {
                 this.i18n = new I18n({
                     containerId: 'headerLanguageSelector'
                 });
+                // 设置全局i18n实例
+                window.i18n = this.i18n;
             } else {
                 console.warn('I18n class not found. Language selector will not be available.');
                 this.showLanguageSelector = false;
@@ -67,6 +69,10 @@ class HeaderNav {
         if (this.i18n) {
             this.i18n.addObserver((newLanguage, oldLanguage) => {
                 this.updateTexts();
+                // 调用i18n系统的updatePageTexts方法来更新页面上的所有翻译
+                if (this.i18n.updatePageTexts) {
+                    this.i18n.updatePageTexts();
+                }
             });
         }
     }
@@ -76,7 +82,7 @@ class HeaderNav {
             { href: 'index.html', i18nKey: 'nav.home', key: 'home' },
             { href: 'profit-new.html', i18nKey: 'nav.profit', key: 'profit' },
             { href: 'family-new.html', i18nKey: 'nav.family', key: 'family' },
-            { href: 'analysis-historical.html', i18nKey: 'nav.analysis', key: 'analysis' },
+            { href: '001.html', i18nKey: 'nav.analysis', key: 'analysis' },
             { href: 'organization-new.html', i18nKey: 'nav.organization', key: 'organization' },
             { href: 'push-strategy-page.html', i18nKey: 'nav.pushStrategy', key: 'pushStrategy' },
             { href: 'operation-log-page.html', i18nKey: 'nav.operationLog', key: 'operationLog' }

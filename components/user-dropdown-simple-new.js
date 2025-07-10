@@ -4,18 +4,26 @@
 class UserDropdownSimpleNew {
     constructor(options = {}) {
         this.containerId = options.containerId || 'userDropdownContainer';
+        this.container = null;
         this.init();
     }
     
     init() {
         this.render();
         this.bindEvents();
+        this.updateTranslations();
+        
+        // Listen for language changes
+        document.addEventListener('languageChanged', () => {
+            this.updateTranslations();
+        });
     }
     
     render() {
         const container = document.getElementById(this.containerId);
         if (!container) return;
         
+        this.container = container;
         container.innerHTML = `
             <div class="user-dropdown-simple-new">
                 <div class="user-avatar-simple-new">
@@ -27,11 +35,11 @@ class UserDropdownSimpleNew {
                     <div class="dropdown-divider-simple-new"></div>
                     <div class="dropdown-item-simple-new" data-action="settings">
                         <span class="dropdown-icon-simple-new">⚙️</span>
-                        <span>设置</span>
+                        <span data-i18n-key="common.设置">设置</span>
                     </div>
                     <div class="dropdown-item-simple-new" data-action="logout">
                         <span class="dropdown-icon-simple-new">🚪</span>
-                        <span>退出</span>
+                        <span data-i18n-key="common.退出">退出</span>
                     </div>
                 </div>
             </div>
@@ -39,11 +47,11 @@ class UserDropdownSimpleNew {
             <!-- 退出确认弹窗 -->
             <div class="logout-confirm-simple-new" id="logoutConfirmSimpleNew">
                 <div class="logout-confirm-content-simple-new">
-                    <div class="logout-confirm-title-simple-new">确认退出</div>
-                    <div class="logout-confirm-message-simple-new">您确定要退出系统吗？</div>
+                    <div class="logout-confirm-title-simple-new" data-i18n-key="common.确认退出">确认退出</div>
+                    <div class="logout-confirm-message-simple-new" data-i18n-key="common.确认退出消息">您确定要退出系统吗？</div>
                     <div class="logout-confirm-buttons-simple-new">
-                        <button class="logout-btn-cancel-simple-new" data-action="cancel">取消</button>
-                        <button class="logout-btn-confirm-simple-new" data-action="confirm">确认退出</button>
+                        <button class="logout-btn-cancel-simple-new" data-action="cancel" data-i18n-key="common.cancel">取消</button>
+                        <button class="logout-btn-confirm-simple-new" data-action="confirm" data-i18n-key="common.确认退出">确认退出</button>
                     </div>
                 </div>
             </div>
@@ -330,6 +338,42 @@ class UserDropdownSimpleNew {
         sessionStorage.clear();
         // 跳转到登录页
         window.location.href = 'vpp-login.html';
+    }
+    
+    updateTranslations() {
+        if (!window.i18n || !this.container) return;
+        
+        // Update dropdown menu items
+        const settingsText = this.container.querySelector('[data-i18n-key="common.设置"]');
+        if (settingsText) {
+            settingsText.textContent = window.i18n.getText('common.设置');
+        }
+        
+        const logoutText = this.container.querySelector('[data-i18n-key="common.退出"]');
+        if (logoutText) {
+            logoutText.textContent = window.i18n.getText('common.退出');
+        }
+        
+        // Update logout confirmation dialog
+        const confirmTitle = document.querySelector('[data-i18n-key="common.确认退出"]');
+        if (confirmTitle) {
+            confirmTitle.textContent = window.i18n.getText('common.确认退出');
+        }
+        
+        const confirmMessage = document.querySelector('[data-i18n-key="common.确认退出消息"]');
+        if (confirmMessage) {
+            confirmMessage.textContent = window.i18n.getText('common.确认退出消息');
+        }
+        
+        const cancelBtn = document.querySelector('[data-i18n-key="common.cancel"]');
+        if (cancelBtn) {
+            cancelBtn.textContent = window.i18n.getText('common.cancel');
+        }
+        
+        const confirmBtn = document.querySelector('.logout-btn-confirm-simple-new[data-i18n-key="common.确认退出"]');
+        if (confirmBtn) {
+            confirmBtn.textContent = window.i18n.getText('common.确认退出');
+        }
     }
 }
 

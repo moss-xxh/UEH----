@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="components/user-dropdown.css">
     <link rel="stylesheet" href="components/standard-layout.css">
     <script src="components/i18n.js"></script>
+    <script src="i18n-fixed.js"></script>
     <script src="components/simple-message-icon.js"></script>
     <script src="components/header-nav.js"></script>
     <script src="components/user-menu-link.js"></script>
@@ -1437,14 +1438,14 @@
                             <span style="color: rgba(255,255,255,0.6); font-size: 13px;" data-i18n-key="analysis.supplyDemandRatio">供需比</span>
                             <div style="display: flex; align-items: baseline; gap: 8px;">
                                 <span style="color: #fff; font-size: 15px; font-weight: 600;">0.92</span>
-                                <span style="color: #FFD700; font-size: 11px;" data-i18n-key="analysis.supplyTight">供应紧张</span>
+                                <span style="color: #ff9500; font-size: 11px;" data-i18n-key="analysis.supplyTight">供应紧张</span>
                             </div>
                         </div>
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px;">
                             <span style="color: rgba(255,255,255,0.6); font-size: 13px;" data-i18n-key="analysis.supplyDemandGap">供需缺口</span>
                             <div style="display: flex; align-items: baseline; gap: 8px;">
                                 <span style="color: #fff; font-size: 15px; font-weight: 600;">650MW</span>
-                                <span style="color: #FFD700; font-size: 11px;" data-i18n-key="analysis.gapLarge">缺口较大</span>
+                                <span style="color: #ff9500; font-size: 11px;" data-i18n-key="analysis.gapLarge">缺口较大</span>
                             </div>
                         </div>
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px;">
@@ -1458,7 +1459,7 @@
                             <span style="color: rgba(255,255,255,0.6); font-size: 13px;" data-i18n-key="analysis.generationChangeRate">发电变动率</span>
                             <div style="display: flex; align-items: baseline; gap: 8px;">
                                 <span style="color: #fff; font-size: 15px; font-weight: 600;">-2.3%/h</span>
-                                <span style="color: #FFD700; font-size: 11px;" data-i18n-key="analysis.continuousDecline">持续下降</span>
+                                <span style="color: #ff9500; font-size: 11px;" data-i18n-key="analysis.continuousDecline">持续下降</span>
                             </div>
                         </div>
                         <div style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 16px; display: flex; gap: 8px;">
@@ -1472,7 +1473,7 @@
                         <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px;">
                             <span style="font-size: 20px;">👥</span>
                             <span style="color: #fff; font-size: 18px; font-weight: 600;" data-i18n-key="analysis.userDimension">用户维度</span>
-                            <div style="margin-left: auto; color: #FFD700; font-size: 22px; font-weight: 600;" data-i18n-key="analysis.dischargingCapacityDrop">放电量下降</div>
+                            <div style="margin-left: auto; color: #ff9500; font-size: 22px; font-weight: 600;" data-i18n-key="analysis.dischargingCapacityDrop">放电量下降</div>
                         </div>
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px;">
                             <span style="color: rgba(255,255,255,0.6); font-size: 13px;" data-i18n-key="analysis.participationRate">可参与率</span>
@@ -1492,7 +1493,7 @@
                             <span style="color: rgba(255,255,255,0.6); font-size: 13px;" data-i18n-key="analysis.todayExpectedDischarge">今日预计放电</span>
                             <div style="display: flex; align-items: baseline; gap: 8px;">
                                 <span style="color: #fff; font-size: 15px; font-weight: 600;">45.3kWh</span>
-                                <span style="color: #FFD700; font-size: 11px;" data-i18n-key="analysis.belowHistorical">低于历史</span>
+                                <span style="color: #ff9500; font-size: 11px;" data-i18n-key="analysis.belowHistorical">低于历史</span>
                             </div>
                         </div>
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 22px;">
@@ -1781,28 +1782,13 @@
                 containerId: 'userDropdownContainer'
             });
 
-            // Wait for i18n to be ready before initializing charts
-            function initializeWhenReady() {
-                if (window.i18n && window.i18n.isReady) {
-                    console.log('I18n ready, initializing charts with language:', window.i18n.getCurrentLanguage());
-                    initializeCharts();
-                    updateSellingPerformanceMetrics('yesterday');
-                } else {
-                    console.log('I18n not ready, waiting...');
-                    setTimeout(initializeWhenReady, 50);
-                }
-            }
+            // Initialize charts based on current dimension with delay to ensure DOM is ready
+            setTimeout(() => {
+                initializeCharts();
+            }, 100);
             
-            setTimeout(initializeWhenReady, 100);
-            
-            // Listen for language changes
-            document.addEventListener('languageChanged', function() {
-                console.log('Language changed, reinitializing charts...');
-                setTimeout(() => {
-                    initializeCharts();
-                    updateSellingPerformanceMetrics(currentTimeDimension || 'yesterday');
-                }, 100);
-            });
+            // Initialize selling performance metrics with default time dimension
+            updateSellingPerformanceMetrics('yesterday');
             
             // Pre-initialize all selling point charts for smooth switching
             setTimeout(() => {
@@ -6561,6 +6547,42 @@
                 </div>
             </div>
         </div>
+    </div>
+
+    <script>
+        // 添加调试功能
+        window.debugI18n = function() {
+            console.log('=== I18n Debug Info ===');
+            console.log('Current language:', window.i18n ? window.i18n.currentLanguage : 'i18n not found');
+            console.log('data-i18n-key elements:', document.querySelectorAll('[data-i18n-key]').length);
+            console.log('data-i18n elements:', document.querySelectorAll('[data-i18n]').length);
+            if (window.i18n) {
+                console.log('Force updating...');
+                window.i18n.forceUpdateAllTexts();
+            }
+        };
+
+        window.testEnglish = function() {
+            if (window.i18n) {
+                window.i18n.setLanguage('en');
+                console.log('Switched to English');
+            }
+        };
+
+        window.testChinese = function() {
+            if (window.i18n) {
+                window.i18n.setLanguage('zh');
+                console.log('Switched to Chinese');
+            }
+        };
+    </script>
+    
+    <!-- 调试按钮 -->
+    <div style="position: fixed; bottom: 20px; right: 20px; z-index: 9999; background: rgba(0,0,0,0.8); padding: 10px; border-radius: 8px; font-size: 12px;">
+        <button onclick="debugI18n()" style="margin: 2px; padding: 5px 10px; background: #333; color: white; border: none; border-radius: 4px; cursor: pointer;">Debug</button>
+        <button onclick="testEnglish()" style="margin: 2px; padding: 5px 10px; background: #333; color: white; border: none; border-radius: 4px; cursor: pointer;">EN</button>
+        <button onclick="testChinese()" style="margin: 2px; padding: 5px 10px; background: #333; color: white; border: none; border-radius: 4px; cursor: pointer;">中文</button>
+        <button onclick="window.i18n && window.i18n.forceUpdateAllTexts()" style="margin: 2px; padding: 5px 10px; background: #333; color: white; border: none; border-radius: 4px; cursor: pointer;">Force Update</button>
     </div>
 </body>
 </html>

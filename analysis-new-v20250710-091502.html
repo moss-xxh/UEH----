@@ -1027,30 +1027,12 @@
                 console.error('HeaderNav initialization failed:', error);
             }
 
-            // Wait for i18n to be ready before initializing charts
-            function initializeWhenReady() {
-                if (window.i18n && window.i18n.isReady) {
-                    console.log('I18n ready, initializing charts with language:', window.i18n.getCurrentLanguage());
-                    initializeCharts();
-                    setupEventListeners();
-                    updatePriceMarker();
-                } else {
-                    console.log('I18n not ready, waiting...');
-                    setTimeout(initializeWhenReady, 50);
-                }
-            }
-            
-            setTimeout(initializeWhenReady, 100);
-            
-            // Listen for language changes
-            document.addEventListener('languageChanged', function() {
-                // Reinitialize charts with new language
-                setTimeout(() => {
-                    initializeCharts();
-                    updatePriceMarker();
-                    refreshLegendTexts();
-                }, 100);
-            });
+            // Initialize charts after a short delay
+            setTimeout(() => {
+                initializeCharts();
+                setupEventListeners();
+                updatePriceMarker();
+            }, 100);
         });
 
         // Update price marker position based on current price

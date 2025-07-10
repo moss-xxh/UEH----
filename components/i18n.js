@@ -15,20 +15,58 @@ class I18n {
         this.currentLanguage = this.loadLanguageFromStorage() || this.defaultLanguage;
         this.translations = {};
         this.observers = new Set();
+        this.isReady = false;
         
         this.init();
     }
     
     init() {
+        console.log('I18n init called, current language:', this.currentLanguage);
         this.loadTranslations();
+        console.log('Translations loaded, available languages:', Object.keys(this.translations));
+        
+        // Set initial HTML lang attribute
+        document.documentElement.lang = this.currentLanguage === 'zh' ? 'zh-CN' : this.currentLanguage;
+        
         this.createLanguageSelectorHTML();
         this.bindEvents();
         this.updatePageTexts();
         
-        // 检查是否需要恢复页面状态（语言切换后）
-        if (sessionStorage.getItem('pageStateBeforeLanguageSwitch')) {
-            this.restorePageState();
+        // 延迟再次更新页面文本，确保页面内容完全加载
+        setTimeout(() => {
+            console.log('Delayed page text update (500ms)');
+            this.updatePageTexts();
+        }, 500);
+        
+        // 更长的延迟，确保动态内容也加载完成
+        setTimeout(() => {
+            console.log('Delayed page text update (1500ms)');
+            this.updatePageTexts();
+        }, 1500);
+        
+        // 监听页面加载完成事件
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', () => {
+                console.log('DOMContentLoaded: updating page texts');
+                this.updatePageTexts();
+            });
         }
+        
+        // 监听页面完全加载
+        window.addEventListener('load', () => {
+            console.log('Window load: updating page texts');
+            this.updatePageTexts();
+        });
+        
+        // 检查是否需要恢复页面状态（语言切换后）
+        // 临时禁用页面状态恢复，用于调试
+        // if (sessionStorage.getItem('pageStateBeforeLanguageSwitch')) {
+        //     this.restorePageState();
+        // }
+        
+        // Mark as ready after all initialization is complete
+        this.isReady = true;
+        console.log('I18n initialization completed, isReady set to true');
     }
     
     loadTranslations() {
@@ -44,6 +82,75 @@ class I18n {
                     pushStrategy: "推送策略",
                     operationLog: "操作记录",
                     messageCenter: "消息中心"
+                },
+                analysis: {
+                    realtime: "实时分析",
+                    historical: "历史分析",
+                    waitToSell: "等待卖出",
+                    waitingMessage: "预计3小时后电价上涨至峰值，建议继续持有",
+                    decisionConfidence: "决策信心度",
+                    expectedWaitTime: "预计等待时间",
+                    estimatedPrice: "预计价格",
+                    estimatedExtraProfit: "预计多获利",
+                    riskAlert: "风险提示",
+                    opportunityHint: "机会提示",
+                    dischargingCapacityDecline: "可放电量下降，峰值时刻仅剩52MWh",
+                    priceVolatility: "价格波动大，容易错失放电时机",
+                    eveningPeak: "晚高峰将至，需求将会增加",
+                    demandGrowth: "需求快速增长，发电量持续下降，缺口将继续扩大",
+                    pricePrediction: "今日价格预测偏差小，峰值$450",
+                    priceDimension: "价格维度",
+                    priceLow: "价格偏低",
+                    currentPrice: "当前价格",
+                    predictedTodayPeak: "预测今日峰值",
+                    recent7daysAvgPrice: "近7日平均卖电价",
+                    sellPriceHigh: "卖电高点",
+                    todayPricePredictionError: "今日价格预测偏差",
+                    highPrecision: "高精度",
+                    priceConclusion: "结论：近7日均价$385处于高点，当前$285低于均值26%，预测峰值$450，存在较大套利空间",
+                    marketDimension: "市场维度",
+                    veryLikelyToRise: "极可能上涨",
+                    supplyDemandRatio: "供需比",
+                    supplyTight: "供应紧张",
+                    supplyDemandGap: "供需缺口",
+                    gapLarge: "缺口较大",
+                    demandChangeRate: "需求变动率",
+                    rapidGrowth: "快速增长",
+                    generationChangeRate: "发电变动率",
+                    continuousDecline: "持续下降",
+                    marketConclusion: "结论：需求增长8.5%/h而发电下降2.3%/h，供需缺口持续扩大至650MW，电价必然大幅上涨",
+                    userDimension: "用户维度",
+                    dischargingCapacityDrop: "放电量下降",
+                    participationRate: "可参与率",
+                    comprehensiveCoverage: "覆盖全面",
+                    availableDischargeCapacity: "可放电量",
+                    todayExpectedDischarge: "今日预计放电",
+                    belowHistorical: "低于历史",
+                    recent7daysAvgDischarge: "近7日平均放电量",
+                    dailyAvgPerformance: "日均表现",
+                    userConclusion: "结论：可参与率98.5%覆盖全面，可放电量45.8kWh(37%)，今日预计放电45.3kWh低于历史",
+                    hours: "小时",
+                    title: "历史数据深度分析 - U Energy",
+                    priceAnalysis: "价格分析",
+                    operationAnalysis: "操作分析",
+                    userAnalysis: "用户分析",
+                    yesterday: "昨天",
+                    recent7days: "近7天",
+                    recent30days: "近30天",
+                    analysisConclusion: "分析结论",
+                    dischargeAnalysis: "放电分析",
+                    sellingTimingAnalysis: "售电时机分析图表",
+                    detailedAnalysisChart: "详细分析图表",
+                    supplyDemandGapAnalysis: "供需缺口分析",
+                    accuratePrediction: "准确预测",
+                    pricePrediction: "价格预测",
+                    analysisConclusion: "分析结论",
+                    moderatelyAccuratePrediction: "较准预测",
+                    deviation1to5: "偏差1-5%",
+                    largeDeviation: "偏差较大",
+                    deviationGreaterThan5: "偏差>5%",
+                    priceError: "价格误差",
+                    accuracyTrendChart: "预测准确率趋势"
                 },
                 home: "首页",
                 station: "电站管理",
@@ -367,6 +474,12 @@ class I18n {
                 energyManagementCenter: "能源管理中心",
                 unit: "个",
                 comparedToYesterdayPlus: "↑ 比昨日+",
+                设置: "设置",
+                退出: "退出",
+                确认退出: "确认退出",
+                确认退出消息: "您确定要退出系统吗？",
+                导出: "导出",
+                刷新: "刷新",
                 estimatedDuration: "15-30分钟",
                 thisOperationWillAffectAll: "此操作将影响所有已连接设备，请确认后再继续。",
                 viewDetails: "查看详情",
@@ -421,7 +534,8 @@ class I18n {
                     buttons: {
                         search: "🔍 查询",
                         reset: "🔄 重置",
-                        clear: "📥 导出"
+                        export: "📥 导出",
+                        refresh: "🔄 刷新"
                     },
                     viewDetails: "查看详情",
                     noData: "暂无数据",
@@ -935,6 +1049,7 @@ class I18n {
                         search: "🔍 查询",
                         reset: "🔄 重置",
                         export: "📥 导出",
+                        refresh: "🔄 刷新",
                         add: "新建"
                     },
                     table: {
@@ -1082,6 +1197,35 @@ class I18n {
                     }
                 },
                 
+                // Settings translations
+                settings: {
+                    title: "设置",
+                    save: "保存更改",
+                    cancel: "取消",
+                    profile: {
+                        title: "个人信息",
+                        basic: "基本信息",
+                        avatar: "头像",
+                        changeAvatar: "更换头像",
+                        removeAvatar: "移除",
+                        avatarHint: "支持 JPG、PNG 格式，大小不超过 2MB",
+                        username: "昵称"
+                    },
+                    email: {
+                        title: "邮箱设置",
+                        currentEmail: "当前邮箱",
+                        newEmail: "新邮箱地址"
+                    },
+                    password: {
+                        title: "密码设置",
+                        changePassword: "更改密码",
+                        oldPassword: "当前密码",
+                        newPassword: "新密码",
+                        confirmPassword: "确认新密码",
+                        updatePassword: "更新密码"
+                    }
+                },
+                
                 // Pagination translations
                 pagination: {
                     info: "共 {total} 条",
@@ -1198,6 +1342,75 @@ class I18n {
                     pushStrategy: "Push Strategy",
                     operationLog: "Operation Log",
                     messageCenter: "Message Center"
+                },
+                analysis: {
+                    realtime: "Real-time Analysis",
+                    historical: "Historical Analysis",
+                    waitToSell: "Wait to Sell",
+                    waitingMessage: "Expected price peak in 3 hours, recommend continuing to hold",
+                    decisionConfidence: "Decision Confidence",
+                    expectedWaitTime: "Expected Wait Time",
+                    estimatedPrice: "Estimated Price",
+                    estimatedExtraProfit: "Estimated Extra Profit",
+                    riskAlert: "Risk Alert",
+                    opportunityHint: "Opportunity Hint",
+                    dischargingCapacityDecline: "Discharging capacity declining, only 52MWh left at peak",
+                    priceVolatility: "High price volatility, easy to miss discharge opportunities",
+                    eveningPeak: "Evening peak approaching, demand will increase",
+                    demandGrowth: "Rapid demand growth, generation continues to decline, gap will keep expanding",
+                    pricePrediction: "Today's price prediction error is small, peak $450",
+                    priceDimension: "Price Dimension",
+                    priceLow: "Price Low",
+                    currentPrice: "Current Price",
+                    predictedTodayPeak: "Predicted Today's Peak",
+                    recent7daysAvgPrice: "Recent 7-day Avg Sell Price",
+                    sellPriceHigh: "Sell Price High",
+                    todayPricePredictionError: "Today's Price Prediction Error",
+                    highPrecision: "High Precision",
+                    priceConclusion: "Conclusion: 7-day average price $385 is at high point, current $285 is 26% below average, predicted peak $450, significant arbitrage opportunity exists",
+                    marketDimension: "Market Dimension",
+                    veryLikelyToRise: "Very Likely to Rise",
+                    supplyDemandRatio: "Supply/Demand Ratio",
+                    supplyTight: "Supply Tight",
+                    supplyDemandGap: "Supply-Demand Gap",
+                    gapLarge: "Gap Large",
+                    demandChangeRate: "Demand Change Rate",
+                    rapidGrowth: "Rapid Growth",
+                    generationChangeRate: "Generation Change Rate",
+                    continuousDecline: "Continuous Decline",
+                    marketConclusion: "Conclusion: Demand growing at 8.5%/h while generation declining at 2.3%/h, supply-demand gap continues to expand to 650MW, electricity price will inevitably rise significantly",
+                    userDimension: "User Dimension",
+                    dischargingCapacityDrop: "Discharging Capacity Drop",
+                    participationRate: "Participation Rate",
+                    comprehensiveCoverage: "Comprehensive Coverage",
+                    availableDischargeCapacity: "Available Discharge Capacity",
+                    todayExpectedDischarge: "Today's Expected Discharge",
+                    belowHistorical: "Below Historical",
+                    recent7daysAvgDischarge: "Recent 7-day Avg Discharge",
+                    dailyAvgPerformance: "Daily Avg Performance",
+                    userConclusion: "Conclusion: Participation rate 98.5% comprehensive coverage, available discharge capacity 45.8kWh(37%), today's expected discharge 45.3kWh below historical",
+                    hours: "hours",
+                    title: "Historical Data Deep Analysis - U Energy",
+                    priceAnalysis: "Price Analysis",
+                    operationAnalysis: "Operation Analysis",
+                    userAnalysis: "User Analysis",
+                    yesterday: "Yesterday",
+                    recent7days: "Recent 7 days",
+                    recent30days: "Recent 30 days",
+                    analysisConclusion: "Analysis Conclusion",
+                    dischargeAnalysis: "Discharge Analysis",
+                    sellingTimingAnalysis: "Selling Timing Analysis Chart",
+                    detailedAnalysisChart: "Detailed Analysis Chart",
+                    supplyDemandGapAnalysis: "Supply-Demand Gap Analysis",
+                    accuratePrediction: "Accurate Prediction",
+                    pricePrediction: "Price Prediction",
+                    analysisConclusion: "Analysis Conclusion",
+                    moderatelyAccuratePrediction: "Moderate Prediction",
+                    deviation1to5: "Deviation 1-5%",
+                    largeDeviation: "Large Deviation",
+                    deviationGreaterThan5: "Deviation >5%",
+                    priceError: "Price Error",
+                    accuracyTrendChart: "Accuracy Trend"
                 },
                 home: "Home",
                 station: "Station Management",
@@ -1530,6 +1743,12 @@ class I18n {
                 energyManagementCenter: "Energy Management Center",
                 unit: "",
                 comparedToYesterdayPlus: "↑ vs Yesterday +",
+                settings: "Settings",
+                logout: "Logout",
+                confirmLogout: "Confirm Logout",
+                confirmLogoutMessage: "Are you sure you want to logout?",
+                export: "Export",
+                refresh: "Refresh",
                 estimatedDuration: "15-30 minutes",
                 thisOperationWillAffectAll: "This operation will affect all connected devices. Please confirm to continue.",
                 viewDetails: "View Details",
@@ -1584,7 +1803,8 @@ class I18n {
                     buttons: {
                         search: "🔍 Search",
                         reset: "🔄 Reset",
-                        clear: "📥 Export"
+                        export: "📥 Export",
+                        refresh: "🔄 Refresh"
                     },
                     viewDetails: "View Details",
                     noData: "No data",
@@ -2041,6 +2261,7 @@ class I18n {
                         search: "🔍 Search",
                         reset: "🔄 Reset",
                         export: "📥 Export",
+                        refresh: "🔄 Refresh",
                         add: "Add New"
                     },
                     table: {
@@ -2185,6 +2406,35 @@ class I18n {
                         confirmDelete: "Are you sure you want to delete this region's push strategy?",
                         deleteSuccess: "Delete Successful",
                         strategyDeleted: "Push strategy deleted"
+                    }
+                },
+                
+                // Settings translations
+                settings: {
+                    title: "Settings",
+                    save: "Save Changes",
+                    cancel: "Cancel",
+                    profile: {
+                        title: "Profile",
+                        basic: "Basic Information",
+                        avatar: "Avatar",
+                        changeAvatar: "Change Avatar",
+                        removeAvatar: "Remove",
+                        avatarHint: "Supports JPG, PNG formats, max size 2MB",
+                        username: "Username"
+                    },
+                    email: {
+                        title: "Email Settings",
+                        currentEmail: "Current Email",
+                        newEmail: "New Email Address"
+                    },
+                    password: {
+                        title: "Password Settings",
+                        changePassword: "Change Password",
+                        oldPassword: "Current Password",
+                        newPassword: "New Password",
+                        confirmPassword: "Confirm New Password",
+                        updatePassword: "Update Password"
                     }
                 },
                 
@@ -2845,6 +3095,7 @@ class I18n {
     }
     
     setLanguage(language) {
+        console.log('setLanguage called:', language);
         if (!this.supportedLanguages[language]) {
             console.warn(`Language ${language} is not supported`);
             return;
@@ -2852,6 +3103,7 @@ class I18n {
         
         const oldLanguage = this.currentLanguage;
         this.currentLanguage = language;
+        console.log('Language changed from', oldLanguage, 'to', language);
         
         // 保存到本地存储
         this.saveLanguageToStorage(language);
@@ -2861,8 +3113,17 @@ class I18n {
         this.updatePageTexts();
         this.closeDropdown();
         
+        // Update HTML lang attribute
+        document.documentElement.lang = language === 'zh' ? 'zh-CN' : language;
+        
         // 通知观察者
         this.notifyObservers(language, oldLanguage);
+        
+        // Dispatch language change event for components to listen
+        const languageChangeEvent = new CustomEvent('languageChanged', {
+            detail: { newLanguage: language, oldLanguage: oldLanguage }
+        });
+        document.dispatchEvent(languageChangeEvent);
         
         // 重新渲染需要多语言的组件
         this.reloadComponents();
@@ -2872,8 +3133,18 @@ class I18n {
             window.headerNav.updateTexts();
         }
         
-        // 新增：保存当前页面状态并刷新页面以确保所有内容都正确翻译
-        this.refreshPageWithState();
+        // 强制更新页面所有翻译文本，避免页面刷新导致的问题
+        setTimeout(() => {
+            console.log('Language switched to:', language, 'Starting translation update...');
+            this.updatePageTexts();
+            console.log('Translation update completed');
+        }, 50);
+        
+        // 额外的延迟更新，确保所有内容都被翻译
+        setTimeout(() => {
+            console.log('Language switch: additional update (300ms)');
+            this.updatePageTexts();
+        }, 300);
     }
     
     updateLanguageSelector() {
@@ -2900,10 +3171,16 @@ class I18n {
     }
     
     updatePageTexts() {
+        console.log('updatePageTexts called, current language:', this.currentLanguage);
+        
         // 更新所有标记了 data-i18n 的元素
-        document.querySelectorAll('[data-i18n]').forEach(element => {
+        const dataI18nElements = document.querySelectorAll('[data-i18n]');
+        console.log('Found', dataI18nElements.length, 'elements with data-i18n');
+        
+        dataI18nElements.forEach(element => {
             const key = element.getAttribute('data-i18n');
             const text = this.getText(key);
+            console.log('data-i18n:', key, '->', text);
             if (text !== key) { // 只有找到翻译时才更新
                 if (element.tagName === 'INPUT' && (element.type === 'text' || element.type === 'search')) {
                     element.placeholder = text;
@@ -2914,11 +3191,21 @@ class I18n {
         });
 
         // 新增：批量替换所有 data-i18n-key
-        document.querySelectorAll('[data-i18n-key]').forEach(el => {
+        const dataI18nKeyElements = document.querySelectorAll('[data-i18n-key]');
+        console.log('Found', dataI18nKeyElements.length, 'elements with data-i18n-key');
+        
+        dataI18nKeyElements.forEach(el => {
             const key = el.getAttribute('data-i18n-key');
             const text = this.getText(key);
+            console.log('data-i18n-key:', key, '->', text);
             if (text !== key) {
-                el.textContent = text;
+                if (el.tagName === 'INPUT' && (el.type === 'text' || el.type === 'search')) {
+                    el.placeholder = text;
+                } else if (el.tagName === 'TITLE') {
+                    el.textContent = text;
+                } else {
+                    el.textContent = text;
+                }
             }
         });
         
@@ -2948,19 +3235,24 @@ class I18n {
     }
     
     getText(key, params = {}) {
+        console.log('getText called for key:', key, 'currentLanguage:', this.currentLanguage);
         const keys = key.split('.');
         let text = this.translations[this.currentLanguage];
+        
+        console.log('Available translations for', this.currentLanguage, ':', text ? Object.keys(text) : 'undefined');
         
         for (const k of keys) {
             if (text && typeof text === 'object' && k in text) {
                 text = text[k];
             } else {
+                console.log('Key', k, 'not found in', this.currentLanguage, 'falling back to', this.defaultLanguage);
                 // fallback to default language
                 text = this.translations[this.defaultLanguage];
                 for (const fallbackKey of keys) {
                     if (text && typeof text === 'object' && fallbackKey in text) {
                         text = text[fallbackKey];
                     } else {
+                        console.log('Fallback failed for key:', key, 'returning original key');
                         return key; // 返回原始key作为fallback
                     }
                 }
@@ -2969,13 +3261,17 @@ class I18n {
         }
         
         if (typeof text !== 'string') {
+            console.log('Final text is not string:', text, 'returning original key');
             return key;
         }
         
         // 替换参数
-        return text.replace(/{(\w+)}/g, (match, param) => {
+        const result = text.replace(/{(\w+)}/g, (match, param) => {
             return params[param] !== undefined ? params[param] : match;
         });
+        
+        console.log('getText result for', key, ':', result);
+        return result;
     }
     
     // 添加观察者
@@ -3045,11 +3341,33 @@ class I18n {
     // 从本地存储加载语言设置
     loadLanguageFromStorage() {
         try {
-            return localStorage.getItem(this.storageKey);
+            const stored = localStorage.getItem(this.storageKey);
+            console.log('Loaded language from storage:', stored);
+            return stored;
         } catch (error) {
             console.warn('Failed to load language from localStorage:', error);
             return null;
         }
+    }
+    
+    // 重置语言设置
+    resetLanguage() {
+        console.log('Resetting language settings');
+        localStorage.removeItem(this.storageKey);
+        sessionStorage.removeItem('pageStateBeforeLanguageSwitch');
+        this.currentLanguage = this.defaultLanguage;
+        this.updatePageTexts();
+    }
+    
+    // 强制完整翻译更新
+    forceUpdateAllTexts() {
+        console.log('Force updating all texts');
+        this.updatePageTexts();
+        // 多次尝试确保所有动态内容都被翻译
+        setTimeout(() => this.updatePageTexts(), 100);
+        setTimeout(() => this.updatePageTexts(), 300);
+        setTimeout(() => this.updatePageTexts(), 500);
+        return this;
     }
     
     // 获取当前语言
@@ -3218,4 +3536,9 @@ class I18n {
 // 导出供其他文件使用
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = I18n;
+}
+
+// 设置全局变量，确保在页面加载时自动创建i18n实例
+if (typeof window !== 'undefined' && !window.i18n) {
+    window.i18n = new I18n();
 }
