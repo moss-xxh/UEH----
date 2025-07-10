@@ -5942,6 +5942,98 @@
             }, 10);
         }
 
+            
+            // Store current panel state before showing confirmation
+            const activePanel = document.querySelector('.panel-content.active');
+            if (activePanel) {
+                if (activePanel.id === 'marketPanel') {
+                    previousPanel = 'market';
+                } else if (activePanel.id === 'mapPanel') {
+                    previousPanel = 'map';
+                }
+            }
+            
+            const confirmModal = document.getElementById('confirmationModal');
+            // 定义getOperationName函数
+            const getOperationName = (type) => {
+                return window.i18n ? window.i18n.getText(type) : (type === 'charge' ? '充电' : '放电');
+            };
+            const operationName = getOperationName(operationType);
+            const currentLang = window.i18n ? window.i18n.getCurrentLanguage() : 'zh';
+            
+            const stopTitleTexts = {
+                'zh': `停止${operationName}`,
+                'en': `Stop ${operationName}`,
+                'ja': `${operationName}停止`,
+                'ko': `${operationName} 중지`
+            };
+            const stopMessageTexts = {
+                'zh': `确定要停止当前的${operationName}操作吗？`,
+                'en': `Are you sure to stop current ${operationName} operation?`,
+                'ja': `現在の${operationName}操作を停止してもよろしいですか？`,
+                'ko': `현재 ${operationName} 작업을 중지하시겠습니까?`
+            };
+            const stopOperationTexts = {
+                'zh': `停止${operationName}`,
+                'en': `Stop ${operationName}`,
+                'ja': `${operationName}停止`,
+                'ko': `${operationName} 중지`
+            };
+            const allDevicesTexts = {
+                'zh': '所有设备',
+                'en': 'All devices',
+                'ja': 'すべてのデバイス',
+                'ko': '모든 장치'
+            };
+            
+            document.getElementById('confirmTitle').textContent = stopTitleTexts[currentLang] || stopTitleTexts['zh'];
+            document.getElementById('confirmMessage').textContent = stopMessageTexts[currentLang] || stopMessageTexts['zh'];
+            document.getElementById('confirmOperationType').textContent = stopOperationTexts[currentLang] || stopOperationTexts['zh'];
+            document.getElementById('confirmTargetDevices').textContent = allDevicesTexts[currentLang] || allDevicesTexts['zh'];
+            
+            // Show only basic fields for stop operations
+            const estimatedPowerItem = document.getElementById('confirmEstimatedPower').parentElement;
+            const currentPriceItem = document.getElementById('confirmCurrentPrice').parentElement;
+            const durationItem = document.getElementById('confirmDuration').parentElement;
+            const costBenefitItem = document.getElementById('confirmCostBenefit').parentElement;
+            
+            // Hide all optional fields for stop operations
+            estimatedPowerItem.style.display = 'none';
+            currentPriceItem.style.display = 'none';
+            durationItem.style.display = 'none';
+            costBenefitItem.style.display = 'none';
+            
+            // Update warning message
+            const stopWarningTexts = {
+                'zh': operationType === 'charge' ? 
+                    `停止操作将立即终止所有设备的Charge状态，设备将恢复到待机模式。` :
+                    `停止操作将立即终止所有设备的${operationName}状态，设备将恢复到待机模式。`,
+                'en': `Stop operation will immediately terminate ${operationName} state of all devices, devices will return to standby mode.`,
+                'ja': `停止操作により、すべてのデバイスの${operationName}状態が即座に終了し、デバイスはスタンバイモードに戻ります。`,
+                'ko': `중지 작업은 모든 장치의 ${operationName} 상태를 즉시 종료하고 장치는 대기 모드로 돌아겉니다.`
+            };
+            document.getElementById('warningText').textContent = stopWarningTexts[currentLang] || stopWarningTexts['zh'];
+            
+            // Update execute button
+            const executeBtn = document.getElementById('confirmExecuteBtn');
+            const confirmStopTexts = {
+                'zh': '确认停止',
+                'en': 'Confirm Stop',
+                'ja': '停止確認',
+                'ko': '중지 확인'
+            };
+            executeBtn.textContent = confirmStopTexts[currentLang] || confirmStopTexts['zh'];
+            executeBtn.style.background = 'linear-gradient(135deg, #00ff88, #00ff88dd)';
+            
+            // Show modal with animation
+            confirmModal.classList.add('show');
+            confirmModal.style.display = 'flex';
+            
+            // Add fade-in animation
+            setTimeout(() => {
+                confirmModal.style.opacity = '1';
+            }, 10);
+        }
 
         // Close confirmation modal
         function closeConfirmationModal() {
@@ -6316,13 +6408,9 @@
 
         // 处理停止操作
         function handleStop() {
-            console.log('handleStop called');
             // 显示停止确认弹窗
             showStopConfirmationModal();
         }
-        
-        // 将函数暴露到全局作用域
-        window.handleStop = handleStop;
         
         function showStopConfirmationModal() {
             // 首先重置弹窗，确保没有预计收益
@@ -8876,6 +8964,10 @@
         
         // 移除重复的函数定义，使用主要的handleCharge和handleDischarge函数
         
+        function showStopConfirmation(newOperation) {
+            // 使用标准的停止确认弹窗
+            showStopConfirmationModal();
+        }
         
         function showDeviceCommandModal(operation, currentOpText) {
             const modal = document.getElementById('deviceCommandModal');
