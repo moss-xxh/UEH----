@@ -397,6 +397,55 @@
             border-radius: 50%;
             background: linear-gradient(135deg, #00ff88, #00aa66);
             opacity: 0.9;
+            transition: all 0.3s ease;
+        }
+        
+        /* 充电状态脉冲动画 */
+        @keyframes chargePulse {
+            0%, 100% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(0, 255, 136, 0.4);
+            }
+            50% {
+                transform: scale(1.05);
+                box-shadow: 0 0 0 15px rgba(0, 255, 136, 0);
+            }
+        }
+        
+        /* 放电状态脉冲动画 */
+        @keyframes dischargePulse {
+            0%, 100% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.4);
+            }
+            50% {
+                transform: scale(1.05);
+                box-shadow: 0 0 0 15px rgba(255, 215, 0, 0);
+            }
+        }
+        
+        /* 待机状态呼吸动画 */
+        @keyframes breathe {
+            0%, 100% {
+                opacity: 0.9;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.02);
+            }
+        }
+        
+        .circle-background.charging {
+            animation: chargePulse 2s ease-in-out infinite;
+        }
+        
+        .circle-background.discharging {
+            animation: dischargePulse 2s ease-in-out infinite;
+        }
+        
+        .circle-background.idle {
+            animation: breathe 3s ease-in-out infinite;
         }
 
         .circle-content {
@@ -464,7 +513,7 @@
 
         .discharge-btn:hover {
             transform: translateY(-2px);
-            background: #FFC107 !important;
+            background: linear-gradient(135deg, #FF8C00, #FFD700) !important;
             box-shadow: 0 8px 20px rgba(255, 215, 0, 0.4) !important;
             border-color: rgba(255, 215, 0, 0.6) !important;
         }
@@ -3497,6 +3546,9 @@
             // Use setTimeout to ensure all dependencies are loaded
             setTimeout(() => {
                 try {
+                    // Initialize price circle color
+                    updatePriceCircleColor();
+                    
                     // Initialize HeaderNav component FIRST
                     console.log('Initializing HeaderNav...');
                     if (typeof HeaderNav === 'undefined') {
@@ -4124,6 +4176,9 @@
             button.style.border = 'none';
             button.style.borderRadius = '50px';
             
+            // 更新价格圆圈颜色
+            updatePriceCircleColor();
+            
             // 获取该地区的操作状态
             const status = getRegionOperationStatus(region);
             console.log(`Selected region: ${region}, Status: ${status}`); // Debug log
@@ -4134,10 +4189,14 @@
                 if (status === 'charging') {
                     statusText.textContent = window.i18n ? window.i18n.getText('charging') : '充电中';
                     statusText.style.color = '#00ff88';
+                    statusText.style.background = 'rgba(0, 255, 136, 0.1)';
+                    statusText.style.border = '1px solid rgba(0, 255, 136, 0.3)';
                     statusText.style.display = 'inline-block';
                 } else if (status === 'discharging') {
                     statusText.textContent = window.i18n ? window.i18n.getText('discharging') : '放电中';
-                    statusText.style.color = '#ffd700';
+                    statusText.style.color = '#FFD700';
+                    statusText.style.background = 'rgba(255, 215, 0, 0.1)';
+                    statusText.style.border = '1px solid rgba(255, 215, 0, 0.3)';
                     statusText.style.display = 'inline-block';
                 } else {
                     // 无状态时隐藏状态文字
@@ -5631,6 +5690,9 @@
             // 设置当前操作
             currentOperation = operationType;
             
+            // 更新价格圆圈颜色
+            updatePriceCircleColor();
+            
             // 确保有选中的地区，如果没有则默认选择NSW
             if (!selectedMainRegion) {
                 selectedMainRegion = 'NSW';
@@ -5653,10 +5715,14 @@
                 if (operationType === 'charge') {
                     statusText.textContent = window.i18n ? window.i18n.getText('charging') : '充电中';
                     statusText.style.color = '#00ff88';
+                    statusText.style.background = 'rgba(0, 255, 136, 0.1)';
+                    statusText.style.border = '1px solid rgba(0, 255, 136, 0.3)';
                     statusText.style.display = 'inline-block';
                 } else if (operationType === 'discharge') {
                     statusText.textContent = window.i18n ? window.i18n.getText('discharging') : '放电中';
-                    statusText.style.color = '#ffd700';
+                    statusText.style.color = '#FFD700';
+                    statusText.style.background = 'rgba(255, 215, 0, 0.1)';
+                    statusText.style.border = '1px solid rgba(255, 215, 0, 0.3)';
                     statusText.style.display = 'inline-block';
                 }
             }
@@ -6932,6 +6998,65 @@
             updateMapLegend();
         }
 
+        // 更新价格圆圈颜色的函数
+        function updatePriceCircleColor() {
+            const circleBackground = document.querySelector('.circle-background');
+            const circleContent = document.querySelector('.circle-content');
+            const currentPrice = document.querySelector('.current-price');
+            const priceUnit = document.querySelector('.price-unit');
+            if (!circleBackground) return;
+            
+            // 获取当前选中地区的状态
+            const regionStatus = getRegionOperationStatus(selectedMainRegion);
+            
+            // 先移除所有动画类
+            circleBackground.classList.remove('charging', 'discharging', 'idle');
+            
+            if (regionStatus === 'charging') {
+                // 充电状态 - 绿色（与充电按钮相同）
+                circleBackground.style.background = 'linear-gradient(135deg, #00D67A, #00FF88)';
+                circleBackground.classList.add('charging');
+                // 文字保持白色
+                if (circleContent) {
+                    circleContent.style.color = '#fff';
+                }
+                if (currentPrice) {
+                    currentPrice.style.color = '#fff';
+                }
+                if (priceUnit) {
+                    priceUnit.style.color = 'rgba(255, 255, 255, 0.8)';
+                }
+            } else if (regionStatus === 'discharging') {
+                // 放电状态 - 黄色（与放电按钮相同）
+                circleBackground.style.background = 'linear-gradient(135deg, #FFA500, #FFD700)';
+                circleBackground.classList.add('discharging');
+                // 文字保持白色
+                if (circleContent) {
+                    circleContent.style.color = '#fff';
+                }
+                if (currentPrice) {
+                    currentPrice.style.color = '#fff';
+                }
+                if (priceUnit) {
+                    priceUnit.style.color = 'rgba(255, 255, 255, 0.8)';
+                }
+            } else {
+                // 无操作状态 - 默认蓝绿色
+                circleBackground.style.background = 'linear-gradient(135deg, #00BFFF, #00CED1)';
+                circleBackground.classList.add('idle');
+                // 文字保持白色
+                if (circleContent) {
+                    circleContent.style.color = '#fff';
+                }
+                if (currentPrice) {
+                    currentPrice.style.color = '#fff';
+                }
+                if (priceUnit) {
+                    priceUnit.style.color = 'rgba(255, 255, 255, 0.8)';
+                }
+            }
+        }
+
         function stopOperation() {
             // Stop animation
             if (mapAnimationInterval) {
@@ -6940,6 +7065,9 @@
             
             // 重置当前操作状态
             currentOperation = null;
+            
+            // 更新价格圆圈颜色
+            updatePriceCircleColor();
             
             // 更新地区状态 - 移除当前地区的充放电标记
             updateRegionOperationStatus(selectedMainRegion, 'none');
