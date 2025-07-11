@@ -5747,10 +5747,15 @@
                 const fallbackTimer = setTimeout(() => {
                     // 检查是否已经显示了统计弹窗，并且操作没有被手动停止
                     const modal = document.getElementById('deviceResponseModal');
-                    // 只有当操作仍在进行中（currentOperation不为null）且弹窗未显示时才显示
-                    if (modal && modal.style.display === 'none' && currentOperation && currentOperation === operationType) {
-                        console.log('Fallback: Showing operation statistics after timeout');
+                    const progressText = document.getElementById('progressPercent')?.textContent || '0%';
+                    const currentProgress = parseInt(progressText.replace('%', '')) || 0;
+                    
+                    // 只有当操作仍在进行中、弹窗未显示、且进度达到100%时才显示
+                    if (modal && modal.style.display === 'none' && currentOperation && currentOperation === operationType && currentProgress >= 100) {
+                        console.log('Fallback: Showing operation statistics after timeout (progress: ' + currentProgress + '%)');
                         showOperationStatistics();
+                    } else if (currentProgress < 100) {
+                        console.log('Fallback timer: Progress only at ' + currentProgress + '%, not showing statistics yet');
                     }
                 }, 10000); // 10秒后触发
                 
@@ -5808,32 +5813,6 @@
             
             // 重置当前操作状态
             currentOperation = null;
-            
-            // 强制立即切换到行情页面
-            console.log('Force switching to market panel immediately');
-            
-            // 手动激活行情页面
-            document.querySelectorAll('.panel-content').forEach(p => {
-                p.classList.remove('active');
-            });
-            const marketPanel = document.getElementById('marketPanel');
-            if (marketPanel) {
-                marketPanel.classList.add('active');
-                console.log('Market panel activated');
-            }
-            
-            // 手动激活行情tab
-            document.querySelectorAll('.panel-tab').forEach(tab => {
-                tab.classList.remove('active');
-            });
-            const marketTab = Array.from(document.querySelectorAll('.panel-tab')).find(tab => {
-                const onclick = tab.getAttribute('onclick');
-                return onclick && onclick.includes("'market'");
-            });
-            if (marketTab) {
-                marketTab.classList.add('active');
-                console.log('Market tab activated');
-            }
             
             // 重置按钮状态
             resetButtons();
@@ -6687,16 +6666,22 @@
                     // Animation complete
                     clearInterval(mapAnimationInterval);
                     
-                    // Final update to ensure all devices are activated
+                    // 确保所有设备都已激活
                     activatedDevices = totalDevices;
                     document.getElementById('activeDevices').textContent = activatedDevices;
-                    document.getElementById('progressPercent').textContent = '100%';
                     
-                    // 动画完成后显示统计
-                    setTimeout(() => {
-                        console.log('Animation complete, showing statistics for:', currentOperation);
-                        showOperationStatistics();
-                    }, 1000);
+                    // 计算实际进度
+                    const actualProgress = Math.round((activatedDevices / totalDevices) * 100);
+                    document.getElementById('progressPercent').textContent = actualProgress + '%';
+                    
+                    // 只有真正达到100%时才显示统计弹窗
+                    if (actualProgress >= 100) {
+                        // 动画完成后显示统计
+                        setTimeout(() => {
+                            console.log('Animation complete, showing statistics for:', currentOperation);
+                            showOperationStatistics();
+                        }, 1000);
+                    }
                 }
             }, 80); // Slightly faster updates for smoother animation
         }
@@ -7057,27 +7042,8 @@
             // 恢复充放电按钮
             updateActionButtonsToChargeDis();
             
-            // 立即切换到市场页面
+            // 切换到行情面板
             switchPanel('market');
-            
-            // 强制确保切换成功
-            setTimeout(() => {
-                const marketTab = document.querySelector('[onclick*="switchPanel(\'market\')"]');
-                const mapTab = document.querySelector('[onclick*="switchPanel(\'map\')"]');
-                
-                if (marketTab && mapTab) {
-                    marketTab.classList.add('active');
-                    mapTab.classList.remove('active');
-                }
-                
-                const marketPanel = document.getElementById('marketPanel');
-                const mapPanel = document.getElementById('mapPanel');
-                
-                if (marketPanel && mapPanel) {
-                    marketPanel.style.display = 'block';
-                    mapPanel.style.display = 'none';
-                }
-            }, 10);
             
             // Show operation completion modal with device response statistics
             setTimeout(() => {
