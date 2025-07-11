@@ -5690,9 +5690,6 @@
             // 设置当前操作
             currentOperation = operationType;
             
-            // 更新价格圆圈颜色
-            updatePriceCircleColor();
-            
             // 确保有选中的地区，如果没有则默认选择NSW
             if (!selectedMainRegion) {
                 selectedMainRegion = 'NSW';
@@ -5708,6 +5705,9 @@
             
             // 更新地区状态指示器
             updateRegionStatusIndicators();
+            
+            // 立即更新价格圆圈颜色
+            updatePriceCircleColor();
             
             // 更新电站管理标题的状态文字
             const statusText = document.getElementById('regionStatusText');
@@ -5741,14 +5741,18 @@
             // 添加备用定时器，确保统计弹窗显示（如果动画未正常完成）
             // 设置为10秒后显示，正常情况下动画会在约13秒内完成
             if (operationType === 'discharge' || operationType === 'charge') {
-                setTimeout(() => {
-                    // 检查是否已经显示了统计弹窗
+                const fallbackTimer = setTimeout(() => {
+                    // 检查是否已经显示了统计弹窗，并且操作没有被手动停止
                     const modal = document.getElementById('deviceResponseModal');
-                    if (modal && modal.style.display === 'none' && currentOperation) {
+                    // 只有当操作仍在进行中（currentOperation不为null）且弹窗未显示时才显示
+                    if (modal && modal.style.display === 'none' && currentOperation && currentOperation === operationType) {
                         console.log('Fallback: Showing operation statistics after timeout');
                         showOperationStatistics();
                     }
                 }, 10000); // 10秒后触发
+                
+                // 保存定时器引用，以便在停止操作时清除
+                window.operationFallbackTimer = fallbackTimer;
             }
         }
         
@@ -6131,6 +6135,12 @@
             } else {
                 // Execute start operation
                 startOperation(operationType);
+                
+                // 确保价格圆圈颜色立即更新
+                setTimeout(() => {
+                    updatePriceCircleColor();
+                    console.log('Price circle color updated after operation start');
+                }, 100);
             }
             
             pendingOperation = null;
@@ -6611,62 +6621,8 @@
         function executeStopOperation() {
             console.log('执行停止操作');
             
-            // 停止设备动画
-            if (mapAnimationInterval) {
-                clearInterval(mapAnimationInterval);
-                mapAnimationInterval = null;
-            }
-            
-            // 重置所有设备状态
-            if (deviceLocations && deviceLocations.length > 0) {
-                deviceLocations.forEach(device => {
-                    device.status = 'idle';
-                });
-                
-                // 更新地图显示
-                if (mapChart) {
-                    updateMapByRegion(selectedMainRegion);
-                }
-            }
-            
-            // 清除当前操作状态
-            currentOperation = null;
-            
-            // 更新地区状态 - 移除当前地区的充放电标记
-            updateRegionOperationStatus(selectedMainRegion, 'none');
-            
-            // 更新地区状态指示器
-            updateRegionStatusIndicators();
-            
-            // 恢复充放电按钮
-            updateActionButtonsToChargeDis();
-            
-            // 切换到行情页面
-            switchPanel('market');
-            
-            // 清除电站管理标题的状态文字
-            const statusText = document.getElementById('regionStatusText');
-            if (statusText) {
-                statusText.textContent = '';
-                statusText.style.display = 'none';
-            }
-            
-            // 显示停止确认消息
-            showNotification('操作已停止', 'success');
-            
-            // 确保按钮事件处理器正确绑定
-            setTimeout(() => {
-                const chargeBtn = document.getElementById('chargeBtn');
-                const dischargeBtn = document.getElementById('dischargeBtn');
-                if (chargeBtn) {
-                    chargeBtn.onclick = handleCharge;
-                    console.log('Charge button handler reattached after stop');
-                }
-                if (dischargeBtn) {
-                    dischargeBtn.onclick = handleDischarge;
-                    console.log('Discharge button handler reattached after stop');
-                }
-            }, 100);
+            // 调用停止操作函数，它会处理所有的状态重置和UI更新
+            stopOperation();
         }
         
         // Enhanced device animation with wave effect
@@ -7004,10 +6960,14 @@
             const circleContent = document.querySelector('.circle-content');
             const currentPrice = document.querySelector('.current-price');
             const priceUnit = document.querySelector('.price-unit');
-            if (!circleBackground) return;
+            if (!circleBackground) {
+                console.log('Circle background not found!');
+                return;
+            }
             
             // 获取当前选中地区的状态
             const regionStatus = getRegionOperationStatus(selectedMainRegion);
+            console.log('UpdatePriceCircleColor - Region:', selectedMainRegion, 'Status:', regionStatus);
             
             // 先移除所有动画类
             circleBackground.classList.remove('charging', 'discharging', 'idle');
@@ -7063,17 +7023,33 @@
                 clearInterval(mapAnimationInterval);
             }
             
+            // 清除备用定时器
+            if (window.operationFallbackTimer) {
+                clearTimeout(window.operationFallbackTimer);
+                window.operationFallbackTimer = null;
+                console.log('Cleared operation fallback timer');
+            }
+            
+            // 保存停止前的操作类型，用于显示统计
+            window.lastStoppedOperation = currentOperation;
+            
             // 重置当前操作状态
             currentOperation = null;
-            
-            // 更新价格圆圈颜色
-            updatePriceCircleColor();
             
             // 更新地区状态 - 移除当前地区的充放电标记
             updateRegionOperationStatus(selectedMainRegion, 'none');
             
             // 更新地区状态指示器
             updateRegionStatusIndicators();
+            
+            // 立即更新价格圆圈颜色
+            updatePriceCircleColor();
+            
+            // 添加延迟确保圆圈颜色更新
+            setTimeout(() => {
+                updatePriceCircleColor();
+                console.log('Price circle color updated after stop operation');
+            }, 100);
             
             // 恢复充放电按钮
             updateActionButtonsToChargeDis();
@@ -7430,6 +7406,7 @@
             // 设置操作类型和消息
             let operationName = '';
             let messageText = '';
+            let isStopOperation = false;
             
             const lastOperation = currentOperation || 'stop'; // 如果currentOperation为null，说明是停止操作
             
@@ -7440,7 +7417,16 @@
                 operationName = window.i18n ? window.i18n.getText('discharge') : 'Discharge';
                 messageText = window.i18n ? window.i18n.getText('dischargeCompleteMessage') : 'Discharging command completed. Here is the device response statistics report:';
             } else {
-                operationName = window.i18n ? window.i18n.getText('stop') : 'Stop';
+                // 这是停止操作
+                isStopOperation = true;
+                const stoppedType = window.lastStoppedOperation;
+                if (stoppedType === 'charge') {
+                    operationName = window.i18n ? window.i18n.getText('stopCharge') || '停止充电' : 'Stop Charging';
+                } else if (stoppedType === 'discharge') {
+                    operationName = window.i18n ? window.i18n.getText('stopDischarge') || '停止放电' : 'Stop Discharging';
+                } else {
+                    operationName = window.i18n ? window.i18n.getText('stop') : 'Stop';
+                }
                 messageText = window.i18n ? window.i18n.getText('stopCompleteMessage') : 'Stop command completed. Here is the device response statistics report:';
             }
             
@@ -7454,7 +7440,15 @@
             if (operationTypeDisplay) {
                 operationTypeDisplay.textContent = operationName;
                 // 根据操作类型设置颜色
-                if (lastOperation === 'discharge') {
+                if (isStopOperation) {
+                    // 停止操作使用红色
+                    operationTypeDisplay.style.color = '#ff6b6b';
+                    if (responseModalIcon) {
+                        responseModalIcon.style.background = 'linear-gradient(145deg, rgba(255, 107, 107, 0.15), rgba(255, 107, 107, 0.05))';
+                        responseModalIcon.style.boxShadow = '0 4px 12px rgba(255, 107, 107, 0.15)';
+                    }
+                    if (modalIcon) modalIcon.textContent = '🛑';
+                } else if (lastOperation === 'discharge') {
                     operationTypeDisplay.style.color = '#ffd700';
                     if (responseModalIcon) {
                         responseModalIcon.style.background = 'linear-gradient(145deg, rgba(255, 215, 0, 0.15), rgba(255, 215, 0, 0.05))';
