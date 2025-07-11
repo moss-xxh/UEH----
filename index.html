@@ -2833,7 +2833,7 @@
                     <div class="card" style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:10px 0 8px 0; border-radius:10px; background:var(--color-bg-card); border:1px solid var(--color-border); box-shadow:var(--color-shadow);">
                         <div class="stat-icon" style="font-size:14px; margin-bottom:0;">⚡</div>
                         <div class="stat-label" style="font-size:10px; color:#bfc6d1; font-weight:500; margin-bottom:0; text-align:center; width:100%;"><span data-i18n-key="availablePower">可放电量</span></div>
-                        <div class="stat-value" style="font-size:13px; font-weight:700; color:#fff;">65MWh</div>
+                        <div class="stat-value" style="font-size:13px; font-weight:700; color:#fff;" id="totalPowerCard">65kWh</div>
                     </div>
                     <div class="card" style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:10px 0 8px 0; border-radius:10px; background:var(--color-bg-card); border:1px solid var(--color-border); box-shadow:var(--color-shadow);">
                         <div class="stat-icon" style="font-size:14px; margin-bottom:0;">💰</div>
@@ -4310,11 +4310,11 @@
         // 更新电站管理数据
         function updatePowerStationData(region) {
             const regionData = {
-                'NSW': { price: '$163', low: '$120.50', high: '$185.75', families: 120, power: '65MWh', profit: '$3500' },
-                'QLD': { price: '$145', low: '$110.00', high: '$170.00', families: 90, power: '48MWh', profit: '$2800' },
-                'VIC': { price: '$155', low: '$115.50', high: '$175.50', families: 100, power: '52MWh', profit: '$3100' },
-                'SA': { price: '$170', low: '$125.00', high: '$190.00', families: 70, power: '38MWh', profit: '$2200' },
-                'TAS': { price: '$135', low: '$100.00', high: '$160.00', families: 355, power: '32MWh', profit: '$1835' }
+                'NSW': { price: '$163', low: '$120.50', high: '$185.75', families: 120, power: '65kWh', profit: '$3500' },
+                'QLD': { price: '$145', low: '$110.00', high: '$170.00', families: 90, power: '48kWh', profit: '$2800' },
+                'VIC': { price: '$155', low: '$115.50', high: '$175.50', families: 100, power: '52kWh', profit: '$3100' },
+                'SA': { price: '$170', low: '$125.00', high: '$190.00', families: 70, power: '38kWh', profit: '$2200' },
+                'TAS': { price: '$135', low: '$100.00', high: '$160.00', families: 355, power: '32kWh', profit: '$1835' }
             };
             
             const data = regionData[region] || regionData['NSW'];
@@ -4331,7 +4331,7 @@
             const powerStationCards = document.querySelectorAll('.power-station-container .stat-value');
             if (powerStationCards.length >= 3) {
                 powerStationCards[0].textContent = data.families;  // 家庭数
-                powerStationCards[1].textContent = data.power + 'kWh';  // 可放电量
+                powerStationCards[1].textContent = data.power;  // 可放电量
                 powerStationCards[2].textContent = data.profit;  // 预计获利
             }
             
@@ -4354,11 +4354,11 @@
         // 更新统计卡片
         function updateStatisticsCards(region) {
             const summaryData = {
-                'NSW': { families: 120, capacity: '65MWh', discharge: '89kwh', profit: '$3500' },
-                'QLD': { families: 90, capacity: '48MWh', discharge: '45kwh', profit: '$2800' },
-                'VIC': { families: 100, capacity: '52MWh', discharge: '51kwh', profit: '$3100' },
-                'SA': { families: 70, capacity: '38MWh', discharge: '32kwh', profit: '$2200' },
-                'TAS': { families: 355, capacity: '32MWh', discharge: '17kwh', profit: '$1835' }
+                'NSW': { families: 120, capacity: '65kWh', discharge: '89kwh', profit: '$3500' },
+                'QLD': { families: 90, capacity: '48kWh', discharge: '45kwh', profit: '$2800' },
+                'VIC': { families: 100, capacity: '52kWh', discharge: '51kwh', profit: '$3100' },
+                'SA': { families: 70, capacity: '38kWh', discharge: '32kwh', profit: '$2200' },
+                'TAS': { families: 355, capacity: '32kWh', discharge: '17kwh', profit: '$1835' }
             };
             
             const data = summaryData[region] || summaryData['NSW'];
