@@ -5687,6 +5687,9 @@
         function startOperation(operationType) {
             console.log('Starting operation:', operationType);
             
+            // 重置弹窗关闭标志
+            window.deviceResponseModalClosed = false;
+            
             // 设置当前操作
             currentOperation = operationType;
             
@@ -7396,6 +7399,12 @@
         // 新的操作统计显示函数
         function showOperationStatistics() {
             console.log('Showing operation statistics');
+            
+            // 检查用户是否已经关闭了弹窗
+            if (window.deviceResponseModalClosed) {
+                console.log('Device response modal was closed by user, not showing again');
+                return;
+            }
             
             const modal = document.getElementById('deviceResponseModal');
             if (!modal) {
@@ -9553,6 +9562,9 @@
         
         function closeDeviceResponseModal() {
             document.getElementById('deviceResponseModal').style.display = 'none';
+            // 设置标志，防止自动重新显示
+            window.deviceResponseModalClosed = true;
+            console.log('Device response modal closed by user');
         }
         
         function viewDeviceResponseDetails() {
