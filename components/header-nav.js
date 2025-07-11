@@ -109,7 +109,7 @@ class HeaderNav {
         const headerHTML = `
             <div class="header" data-lang="${currentLang}">
                 <div class="logo">
-                    <img src="logo1.png" alt="U Energy" style="height: 45px; width: auto;">
+                    <img src="logo.png" alt="U Energy" style="height: 45px; width: auto;">
                 </div>
                 <div class="nav">
                     ${navHTML}
