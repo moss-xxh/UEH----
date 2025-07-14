@@ -535,7 +535,7 @@
             box-shadow: 0 4px 12px rgba(255, 71, 87, 0.3);
         }
 
-        .main-price-circle:hover .stop-circle-overlay {
+        .main-price-circle.manual-operation:hover .stop-circle-overlay {
             opacity: 1;
         }
 
@@ -3922,6 +3922,9 @@
                 // Start auto check interval
                 startAutoOperationCheck();
             }
+            
+            // Update stop button visibility after mode change
+            updateStopButtonVisibility();
         }
         
         // Auto settings panel functions (no longer needed - using inline editing)
@@ -7835,6 +7838,9 @@
             // Update water wave level based on current price percentage
             updateWaterWaveLevel();
             
+            // Update stop button visibility based on current state
+            updateStopButtonVisibility();
+            
             // 获取当前选中地区的状态
             const regionStatus = getRegionOperationStatus(selectedMainRegion);
             console.log('UpdatePriceCircleColor - Region:', selectedMainRegion, 'Status:', regionStatus);
@@ -7859,6 +7865,27 @@
                 // 无状态 - 蓝色水波
                 waterWave.style.background = 'linear-gradient(180deg, rgba(75, 123, 255, 0.9) 0%, rgba(75, 123, 255, 0.7) 100%)';
                 console.log('Set idle water wave colors');
+            }
+        }
+
+        // 更新停止按钮显示状态
+        function updateStopButtonVisibility() {
+            const mainPriceCircle = document.getElementById('mainPriceCircle');
+            if (!mainPriceCircle) return;
+            
+            // 获取当前选中地区的状态
+            const regionStatus = getRegionOperationStatus(selectedMainRegion);
+            
+            // 只有在手动模式下且正在进行充电或放电操作时才显示停止按钮
+            const shouldShowStop = currentOperationMode === 'manual' && 
+                                  (regionStatus === 'charging' || regionStatus === 'discharging');
+            
+            if (shouldShowStop) {
+                mainPriceCircle.classList.add('manual-operation');
+                console.log('Stop button enabled - manual operation in progress');
+            } else {
+                mainPriceCircle.classList.remove('manual-operation');
+                console.log('Stop button disabled - no manual operation or in auto mode');
             }
         }
 
