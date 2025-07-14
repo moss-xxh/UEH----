@@ -470,13 +470,6 @@
             transform-origin: center bottom;
         }
 
-        .water-wave.wave2 {
-            animation-delay: -1s;
-            opacity: 0.8;
-            height: 25%;
-            left: -45%;
-            animation: horizontalWaveAnimation 2.5s ease-in-out infinite;
-        }
 
         @keyframes horizontalWaveAnimation {
             0%, 100% {
@@ -523,43 +516,40 @@
             margin-top: 2px;
         }
 
-        /* Stop Button Overlay */
-        .stop-button-overlay {
+        /* Stop Circle Overlay */
+        .stop-circle-overlay {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.8);
+            background: linear-gradient(135deg, #ff4757, #c44569);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            z-index: 4;
+            z-index: 5;
             opacity: 0;
             transition: opacity 0.3s ease;
-        }
-
-        .main-price-circle:hover .stop-button-overlay {
-            opacity: 1;
-        }
-
-        .stop-btn {
-            padding: 8px 16px;
-            background: linear-gradient(135deg, #ff4757, #c44569);
-            color: #fff;
-            border: none;
-            border-radius: 20px;
-            font-size: 14px;
-            font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s ease;
             box-shadow: 0 4px 12px rgba(255, 71, 87, 0.3);
         }
 
-        .stop-btn:hover {
-            transform: translateY(-2px);
+        .main-price-circle:hover .stop-circle-overlay {
+            opacity: 1;
+        }
+
+        .stop-circle-overlay:hover {
+            transform: scale(1.05);
             box-shadow: 0 6px 20px rgba(255, 71, 87, 0.4);
+        }
+
+        .stop-text {
+            color: #fff;
+            font-size: 18px;
+            font-weight: 600;
+            text-align: center;
+            pointer-events: none;
         }
 
         /* Circle Action Buttons */
@@ -3018,7 +3008,6 @@
                     <div class="main-price-circle" id="mainPriceCircle">
                         <div class="water-wave-container">
                             <div class="water-wave" id="waterWave"></div>
-                            <div class="water-wave wave2" id="waterWave2"></div>
                         </div>
                         <div class="circle-content">
                             <div class="current-price" id="currentPrice">$163</div>
@@ -3027,11 +3016,9 @@
                             </div>
                             <div class="price-percentage" id="pricePercentage" style="display: none;">68%</div>
                         </div>
-                        <!-- Stop button (hidden by default, shown on hover) -->
-                        <div class="stop-button-overlay" id="stopButtonOverlay" style="display: none;">
-                            <button class="stop-btn" id="stopBtn" onclick="handleStop()">
-                                <span data-i18n-key="stop">停止</span>
-                            </button>
+                        <!-- Stop button overlay - entire circle becomes stop button on hover -->
+                        <div class="stop-circle-overlay" id="stopCircleOverlay" onclick="handleStop()">
+                            <div class="stop-text" data-i18n-key="stop">停止</div>
                         </div>
                     </div>
                     
@@ -7854,27 +7841,23 @@
             
             // Update water wave colors based on operation status
             const waterWave = document.getElementById('waterWave');
-            const waterWave2 = document.getElementById('waterWave2');
             
-            if (!waterWave || !waterWave2) {
-                console.log('Water wave elements not found!');
+            if (!waterWave) {
+                console.log('Water wave element not found!');
                 return;
             }
             
             if (regionStatus === 'charging') {
                 // 充电状态 - 绿色水波
                 waterWave.style.background = 'linear-gradient(180deg, rgba(0, 255, 136, 0.9) 0%, rgba(0, 255, 136, 0.7) 100%)';
-                waterWave2.style.background = 'linear-gradient(180deg, rgba(0, 255, 136, 0.8) 0%, rgba(0, 255, 136, 0.6) 100%)';
                 console.log('Set charging water wave colors');
             } else if (regionStatus === 'discharging') {
                 // 放电状态 - 黄色水波
                 waterWave.style.background = 'linear-gradient(180deg, rgba(255, 193, 7, 0.9) 0%, rgba(255, 149, 0, 0.7) 100%)';
-                waterWave2.style.background = 'linear-gradient(180deg, rgba(255, 193, 7, 0.8) 0%, rgba(255, 149, 0, 0.6) 100%)';
                 console.log('Set discharging water wave colors');
             } else {
                 // 无状态 - 蓝色水波
                 waterWave.style.background = 'linear-gradient(180deg, rgba(75, 123, 255, 0.9) 0%, rgba(75, 123, 255, 0.7) 100%)';
-                waterWave2.style.background = 'linear-gradient(180deg, rgba(75, 123, 255, 0.8) 0%, rgba(75, 123, 255, 0.6) 100%)';
                 console.log('Set idle water wave colors');
             }
         }
@@ -7886,9 +7869,8 @@
             const todayHighElement = document.getElementById('todayHigh');
             const pricePercentageElement = document.getElementById('pricePercentage');
             const waterWave = document.getElementById('waterWave');
-            const waterWave2 = document.getElementById('waterWave2');
             
-            if (!currentPriceElement || !todayLowElement || !todayHighElement || !pricePercentageElement || !waterWave || !waterWave2) {
+            if (!currentPriceElement || !todayLowElement || !todayHighElement || !pricePercentageElement || !waterWave) {
                 console.log('Required elements not found for water wave update');
                 return;
             }
@@ -7910,14 +7892,12 @@
             // 更新百分比显示
             pricePercentageElement.textContent = `${Math.round(percentage)}%`;
             
-            // 更新水波高度 (10% - 80% 的范围，避免水波太满或太空)
+            // 更新单一水波高度 (10% - 80% 的范围，避免水波太满或太空)
             const waveHeight = 10 + (percentage * 0.7); // 10% + (0-100% * 70%) = 10%-80%
-            const waveHeight2 = 8 + (percentage * 0.6); // 8% + (0-100% * 60%) = 8%-68%
             
             waterWave.style.height = `${waveHeight}%`;
-            waterWave2.style.height = `${waveHeight2}%`;
             
-            console.log(`Updated water wave: ${percentage}% -> Wave1: ${waveHeight}%, Wave2: ${waveHeight2}%`);
+            console.log(`Updated water wave: ${percentage}% -> Wave height: ${waveHeight}%`);
         }
 
         function stopOperation() {
