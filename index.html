@@ -3925,6 +3925,9 @@
             
             // Update stop button visibility after mode change
             updateStopButtonVisibility();
+            
+            // Update action buttons visibility after mode change
+            updateActionButtonsVisibility();
         }
         
         // Auto settings panel functions (no longer needed - using inline editing)
@@ -7841,6 +7844,9 @@
             // Update stop button visibility based on current state
             updateStopButtonVisibility();
             
+            // Update action buttons visibility based on current state
+            updateActionButtonsVisibility();
+            
             // 获取当前选中地区的状态
             const regionStatus = getRegionOperationStatus(selectedMainRegion);
             console.log('UpdatePriceCircleColor - Region:', selectedMainRegion, 'Status:', regionStatus);
@@ -7886,6 +7892,31 @@
             } else {
                 mainPriceCircle.classList.remove('manual-operation');
                 console.log('Stop button disabled - no manual operation or in auto mode');
+            }
+        }
+
+        // 更新充电/放电按钮的显示状态
+        function updateActionButtonsVisibility() {
+            const chargeBtn = document.getElementById('chargeBtn');
+            const dischargeBtn = document.getElementById('dischargeBtn');
+            
+            if (!chargeBtn || !dischargeBtn) return;
+            
+            // 获取当前选中地区的状态
+            const regionStatus = getRegionOperationStatus(selectedMainRegion);
+            
+            // 在手动模式下进行充电或放电操作时隐藏按钮
+            const shouldHideButtons = currentOperationMode === 'manual' && 
+                                     (regionStatus === 'charging' || regionStatus === 'discharging');
+            
+            if (shouldHideButtons) {
+                chargeBtn.style.display = 'none';
+                dischargeBtn.style.display = 'none';
+                console.log('Action buttons hidden - manual operation in progress');
+            } else {
+                chargeBtn.style.display = 'flex';
+                dischargeBtn.style.display = 'flex';
+                console.log('Action buttons visible - no manual operation or in auto mode');
             }
         }
 
