@@ -448,11 +448,158 @@
             animation: breathe 3s ease-in-out infinite;
         }
 
+        /* Water Wave Effect */
+        .water-wave-container {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            overflow: hidden;
+            background: linear-gradient(180deg, #001a2e 0%, #004080 50%, #0066cc 100%);
+        }
+
+        .water-wave {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 30%;
+            background: linear-gradient(180deg, rgba(0, 255, 136, 0.8) 0%, rgba(0, 255, 136, 0.6) 100%);
+            border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+            animation: waveAnimation 3s ease-in-out infinite;
+            transform-origin: center bottom;
+        }
+
+        .water-wave.wave2 {
+            animation-delay: -1.5s;
+            opacity: 0.7;
+            height: 25%;
+        }
+
+        @keyframes waveAnimation {
+            0%, 100% {
+                transform: scaleX(1) scaleY(1) translateY(0);
+            }
+            25% {
+                transform: scaleX(1.1) scaleY(1.2) translateY(-2px);
+            }
+            50% {
+                transform: scaleX(0.9) scaleY(0.8) translateY(2px);
+            }
+            75% {
+                transform: scaleX(1.1) scaleY(1.1) translateY(-1px);
+            }
+        }
+
         .circle-content {
             position: relative;
-            z-index: 2;
+            z-index: 3;
             text-align: center;
             color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+        }
+
+        .price-range {
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.7);
+            margin: 4px 0;
+            line-height: 1.2;
+        }
+
+        .price-percentage {
+            font-size: 14px;
+            color: #00ff88;
+            font-weight: 600;
+            margin-top: 2px;
+        }
+
+        /* Stop Button Overlay */
+        .stop-button-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 4;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .main-price-circle:hover .stop-button-overlay {
+            opacity: 1;
+        }
+
+        .stop-btn {
+            padding: 8px 16px;
+            background: linear-gradient(135deg, #ff4757, #c44569);
+            color: #fff;
+            border: none;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(255, 71, 87, 0.3);
+        }
+
+        .stop-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 71, 87, 0.4);
+        }
+
+        /* Circle Action Buttons */
+        .circle-action-btn {
+            width: 100%;
+            height: 80px;
+            border-radius: 16px;
+            font-size: 14px;
+            font-weight: 600;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .circle-action-btn.charge-btn {
+            background: linear-gradient(135deg, #00ff88, #00cc6a);
+            color: #000;
+        }
+
+        .circle-action-btn.charge-btn:hover {
+            background: linear-gradient(135deg, #00cc6a, #00aa55);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 255, 136, 0.3);
+        }
+
+        .circle-action-btn.discharge-btn {
+            background: linear-gradient(135deg, #ff9500, #e67e22);
+            color: #fff;
+        }
+
+        .circle-action-btn.discharge-btn:hover {
+            background: linear-gradient(135deg, #e67e22, #d35400);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 149, 0, 0.3);
+        }
+
+        /* Disabled state for circle action buttons */
+        .circle-action-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+            box-shadow: none !important;
         }
 
         .current-price {
@@ -1259,6 +1406,19 @@
             .current-price {
                 font-size: 28px;
             }
+            
+            .price-range {
+                font-size: 9px;
+            }
+            
+            .price-percentage {
+                font-size: 12px;
+            }
+            
+            .circle-action-btn {
+                height: 60px;
+                font-size: 12px;
+            }
         }
 
         @media (max-width: 768px) {
@@ -1316,8 +1476,17 @@
                 font-size: 24px;
             }
             
-            .side-price {
-                font-size: 16px;
+            .price-range {
+                font-size: 8px;
+            }
+            
+            .price-percentage {
+                font-size: 11px;
+            }
+            
+            .circle-action-btn {
+                height: 50px;
+                font-size: 11px;
             }
             
             .price-circle-layout {
@@ -1380,8 +1549,17 @@
                 font-size: 20px;
             }
             
-            .side-price {
-                font-size: 14px;
+            .price-range {
+                font-size: 7px;
+            }
+            
+            .price-percentage {
+                font-size: 10px;
+            }
+            
+            .circle-action-btn {
+                height: 45px;
+                font-size: 10px;
             }
             
             .metrics-grid {
@@ -2821,27 +2999,41 @@
                     </div>
                 </div>
                 
-                                                 <!-- Main Price Circle with Side Info -->
+                                                 <!-- Main Price Circle with Action Buttons -->
                 <div class="price-circle-layout">
-                    <!-- Left Side - Today's Low -->
+                    <!-- Left Side - Charge Button -->
                     <div class="price-side-info left-side">
-                        <div class="side-label"><span data-i18n-key="todayLow">今日最低</span></div>
-                        <div class="side-price low-price" id="todayLow">$120.50</div>
-                </div>
+                        <button class="action-btn charge-btn circle-action-btn" id="chargeBtn" onclick="window.handleCharge ? window.handleCharge() : handleCharge()">
+                            <span data-i18n-key="charge">充电</span>
+                        </button>
+                    </div>
                 
-                    <!-- Center Circle -->
-                    <div class="main-price-circle">
-                        <div class="circle-background"></div>
+                    <!-- Center Circle with Water Wave Effect -->
+                    <div class="main-price-circle" id="mainPriceCircle">
+                        <div class="water-wave-container">
+                            <div class="water-wave" id="waterWave"></div>
+                            <div class="water-wave wave2" id="waterWave2"></div>
+                        </div>
                         <div class="circle-content">
                             <div class="current-price" id="currentPrice">$163</div>
-                            <div class="price-unit" id="regionIndicator">NSW</div>
-                    </div>
+                            <div class="price-range" id="priceRange">
+                                <span id="todayLow">$120.50</span> - <span id="todayHigh">$185.75</span>
+                            </div>
+                            <div class="price-percentage" id="pricePercentage">68%</div>
+                        </div>
+                        <!-- Stop button (hidden by default, shown on hover) -->
+                        <div class="stop-button-overlay" id="stopButtonOverlay" style="display: none;">
+                            <button class="stop-btn" id="stopBtn" onclick="handleStop()">
+                                <span data-i18n-key="stop">停止</span>
+                            </button>
+                        </div>
                     </div>
                     
-                    <!-- Right Side - Today's High -->
+                    <!-- Right Side - Discharge Button -->
                     <div class="price-side-info right-side">
-                        <div class="side-label"><span data-i18n-key="todayHigh">今日最高</span></div>
-                        <div class="side-price high-price" id="todayHigh">$185.75</div>
+                        <button class="action-btn discharge-btn circle-action-btn" id="dischargeBtn" onclick="window.handleDischarge ? window.handleDischarge() : handleDischarge()">
+                            <span data-i18n-key="discharge">放电</span>
+                        </button>
                     </div>
                 </div>
                 
@@ -2964,11 +3156,6 @@
                     </div>
                 </div>
 
-                <!-- Action Buttons -->
-                <div class="action-buttons" id="actionButtonsContainer" style="margin-bottom: 16px;">
-                    <button class="action-btn charge-btn" id="chargeBtn" onclick="window.handleCharge ? window.handleCharge() : handleCharge()"><span data-i18n-key="charge">充电</span></button>
-                    <button class="action-btn discharge-btn" id="dischargeBtn" onclick="window.handleDischarge ? window.handleDischarge() : handleDischarge()"><span data-i18n-key="discharge">放电</span></button>
-                </div>
                 
                 <!-- 优化后：一排3个小毛玻璃卡片 -->
                 <div style="display:flex; gap:10px; margin: 6px 0; justify-content: space-between;">
@@ -3721,13 +3908,9 @@
                 // Hide automation conditions
                 autoConditionsDisplay.style.display = 'none';
                 
-                // Enable action buttons
+                // Enable action buttons (circle action buttons)
                 chargeBtn.disabled = false;
                 dischargeBtn.disabled = false;
-                chargeBtn.style.opacity = '1';
-                dischargeBtn.style.opacity = '1';
-                chargeBtn.style.cursor = 'pointer';
-                dischargeBtn.style.cursor = 'pointer';
                 
                 // Stop auto check interval
                 if (autoCheckInterval) {
@@ -3743,13 +3926,9 @@
                 // Show automation conditions
                 autoConditionsDisplay.style.display = 'block';
                 
-                // Disable action buttons
+                // Disable action buttons (circle action buttons)
                 chargeBtn.disabled = true;
                 dischargeBtn.disabled = true;
-                chargeBtn.style.opacity = '0.5';
-                dischargeBtn.style.opacity = '0.5';
-                chargeBtn.style.cursor = 'not-allowed';
-                dischargeBtn.style.cursor = 'not-allowed';
                 
                 // Update conditions display
                 updateAutoConditionsDisplay();
@@ -4251,8 +4430,13 @@
             // Use setTimeout to ensure all dependencies are loaded
             setTimeout(() => {
                 try {
-                    // Initialize price circle color
+                    // Initialize price circle color and water wave effect
                     updatePriceCircleColor();
+                    
+                    // 设置定时更新水波效果（每10秒更新一次）
+                    setInterval(() => {
+                        updateWaterWaveLevel();
+                    }, 10000);
                     
                     // Initialize HeaderNav component FIRST
                     console.log('Initializing HeaderNav...');
@@ -7659,65 +7843,79 @@
 
         // 更新价格圆圈颜色的函数
         function updatePriceCircleColor() {
-            const circleBackground = document.querySelector('.circle-background');
-            const circleContent = document.querySelector('.circle-content');
-            const currentPrice = document.querySelector('.current-price');
-            const priceUnit = document.querySelector('.price-unit');
-            if (!circleBackground) {
-                console.log('Circle background not found!');
-                return;
-            }
+            // Update water wave level based on current price percentage
+            updateWaterWaveLevel();
             
             // 获取当前选中地区的状态
             const regionStatus = getRegionOperationStatus(selectedMainRegion);
             console.log('UpdatePriceCircleColor - Region:', selectedMainRegion, 'Status:', regionStatus);
             
-            // 先移除所有动画类
-            circleBackground.classList.remove('charging', 'discharging', 'idle');
+            // Update water wave colors based on operation status
+            const waterWave = document.getElementById('waterWave');
+            const waterWave2 = document.getElementById('waterWave2');
+            
+            if (!waterWave || !waterWave2) {
+                console.log('Water wave elements not found!');
+                return;
+            }
             
             if (regionStatus === 'charging') {
-                // 充电状态 - 绿色（与充电按钮相同）
-                circleBackground.style.background = 'linear-gradient(135deg, #00D67A, #00FF88)';
-                circleBackground.classList.add('charging');
-                // 文字保持白色
-                if (circleContent) {
-                    circleContent.style.color = '#fff';
-                }
-                if (currentPrice) {
-                    currentPrice.style.color = '#fff';
-                }
-                if (priceUnit) {
-                    priceUnit.style.color = 'rgba(255, 255, 255, 0.8)';
-                }
+                // 充电状态 - 绿色水波
+                waterWave.style.background = 'linear-gradient(180deg, rgba(0, 255, 136, 0.9) 0%, rgba(0, 255, 136, 0.7) 100%)';
+                waterWave2.style.background = 'linear-gradient(180deg, rgba(0, 255, 136, 0.8) 0%, rgba(0, 255, 136, 0.6) 100%)';
+                console.log('Set charging water wave colors');
             } else if (regionStatus === 'discharging') {
-                // 放电状态 - 黄色（与放电按钮相同）
-                circleBackground.style.background = 'linear-gradient(135deg, #FFA500, #FFD700)';
-                circleBackground.classList.add('discharging');
-                // 文字保持白色
-                if (circleContent) {
-                    circleContent.style.color = '#fff';
-                }
-                if (currentPrice) {
-                    currentPrice.style.color = '#fff';
-                }
-                if (priceUnit) {
-                    priceUnit.style.color = 'rgba(255, 255, 255, 0.8)';
-                }
+                // 放电状态 - 金黄色水波
+                waterWave.style.background = 'linear-gradient(180deg, rgba(255, 215, 0, 0.9) 0%, rgba(255, 149, 0, 0.7) 100%)';
+                waterWave2.style.background = 'linear-gradient(180deg, rgba(255, 215, 0, 0.8) 0%, rgba(255, 149, 0, 0.6) 100%)';
+                console.log('Set discharging water wave colors');
             } else {
-                // 无操作状态 - 默认蓝绿色
-                circleBackground.style.background = 'linear-gradient(135deg, #00BFFF, #00CED1)';
-                circleBackground.classList.add('idle');
-                // 文字保持白色
-                if (circleContent) {
-                    circleContent.style.color = '#fff';
-                }
-                if (currentPrice) {
-                    currentPrice.style.color = '#fff';
-                }
-                if (priceUnit) {
-                    priceUnit.style.color = 'rgba(255, 255, 255, 0.8)';
-                }
+                // 空闲状态 - 蓝绿色水波
+                waterWave.style.background = 'linear-gradient(180deg, rgba(0, 255, 136, 0.8) 0%, rgba(0, 255, 136, 0.6) 100%)';
+                waterWave2.style.background = 'linear-gradient(180deg, rgba(0, 255, 136, 0.7) 0%, rgba(0, 255, 136, 0.5) 100%)';
+                console.log('Set idle water wave colors');
             }
+        }
+
+        // 计算当前价格在今日低高价格中的占比并更新水波高度
+        function updateWaterWaveLevel() {
+            const currentPriceElement = document.getElementById('currentPrice');
+            const todayLowElement = document.getElementById('todayLow');
+            const todayHighElement = document.getElementById('todayHigh');
+            const pricePercentageElement = document.getElementById('pricePercentage');
+            const waterWave = document.getElementById('waterWave');
+            const waterWave2 = document.getElementById('waterWave2');
+            
+            if (!currentPriceElement || !todayLowElement || !todayHighElement || !pricePercentageElement || !waterWave || !waterWave2) {
+                console.log('Required elements not found for water wave update');
+                return;
+            }
+            
+            // 提取价格数值
+            const currentPrice = parseFloat(currentPriceElement.textContent.replace('$', '').replace(/[^0-9.-]/g, '')) || 0;
+            const todayLow = parseFloat(todayLowElement.textContent.replace('$', '').replace(/[^0-9.-]/g, '')) || 0;
+            const todayHigh = parseFloat(todayHighElement.textContent.replace('$', '').replace(/[^0-9.-]/g, '')) || 0;
+            
+            console.log('Price calculation:', { currentPrice, todayLow, todayHigh });
+            
+            // 计算价格占比 (0-100%)
+            let percentage = 0;
+            if (todayHigh > todayLow) {
+                percentage = ((currentPrice - todayLow) / (todayHigh - todayLow)) * 100;
+                percentage = Math.max(0, Math.min(100, percentage)); // 限制在0-100%范围内
+            }
+            
+            // 更新百分比显示
+            pricePercentageElement.textContent = `${Math.round(percentage)}%`;
+            
+            // 更新水波高度 (10% - 80% 的范围，避免水波太满或太空)
+            const waveHeight = 10 + (percentage * 0.7); // 10% + (0-100% * 70%) = 10%-80%
+            const waveHeight2 = 8 + (percentage * 0.6); // 8% + (0-100% * 60%) = 8%-68%
+            
+            waterWave.style.height = `${waveHeight}%`;
+            waterWave2.style.height = `${waveHeight2}%`;
+            
+            console.log(`Updated water wave: ${percentage}% -> Wave1: ${waveHeight}%, Wave2: ${waveHeight2}%`);
         }
 
         function stopOperation() {
