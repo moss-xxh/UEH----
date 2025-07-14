@@ -1004,19 +1004,23 @@
             
             const data = [];
             let offlineCount = 0;
+            let standbyCount = 0;
             
             for (let i = 0; i < 50; i++) {
                 const status = statuses[Math.floor(Math.random() * statuses.length)];
                 const isActive = status === 'active';
                 
-                // Determine device status - only allow 3 offline devices
+                // Determine device status - only allow 3 offline, 2 standby, rest discharging
                 let deviceStatus;
-                if (offlineCount < 3 && Math.random() < 0.1) {
+                if (offlineCount < 3 && i < 3) {
                     deviceStatus = 'offline';
                     offlineCount++;
+                } else if (standbyCount < 2 && i < 5) {
+                    deviceStatus = 'standby';
+                    standbyCount++;
                 } else {
-                    // Force online status (charging, discharging, or standby)
-                    deviceStatus = deviceStatuses[Math.floor(Math.random() * 3)];
+                    // All others are discharging
+                    deviceStatus = 'discharging';
                 }
                 
                 data.push({
@@ -1034,16 +1038,6 @@
                     deviceStatus: deviceStatus,
                     usageDays: Math.floor(Math.random() * 300 + 30)
                 });
-            }
-            
-            // If we haven't generated 3 offline devices yet, force the remaining
-            if (offlineCount < 3) {
-                for (let i = 0; i < data.length && offlineCount < 3; i++) {
-                    if (data[i].deviceStatus !== 'offline') {
-                        data[i].deviceStatus = 'offline';
-                        offlineCount++;
-                    }
-                }
             }
             
             return data;
