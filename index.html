@@ -3916,7 +3916,7 @@
                 hours.push(`${time.getHours()}:00`);
                 
                 // Generate realistic performance metrics
-                efficiency.push(92 + Math.random() * 8); // 92-100% efficiency
+                efficiency.push(93.8 + Math.random() * 6.2); // 93.8-100% efficiency
                 availability.push(95 + Math.random() * 5); // 95-100% availability
             }
 
@@ -4942,15 +4942,18 @@
                 hours.push(`${i}:00`);
             }
             
-            // Generate historical data and track last values
-            let lastPrice = 150;
-            let lastDemand = 7500;
+            // Real AEMO data provided by user - 25 data points for 24 hours + 1 forecast
+            const realPriceData = [78.02, 76.8, 76.10569, 76.57985, 66.84455, 76.8, 76.8, 99.00002, 114, 92.95795, 48.21009, 30, 20, 16, 26, 46, 76.58012, 162.93242, 185.01, 135.92112, 116.50411, 90.50123, 50.35, 49.85281, 61.73511];
+            const realDemandData = [8643.99, 8140.06, 7637.91, 7386.94, 7060.29, 7447.28, 7824.33, 8524.53, 8852.48, 8693.11, 7725.83, 7244.6, 6908.53, 6898.11, 7364.28, 8512.75, 9479.01, 9963.7, 10770.01, 10573.32, 10312.64, 9887.83, 9365.22, 8557.16, 8182.48];
+            
+            let lastPrice = realPriceData[0]; // Start from real data
+            let lastDemand = realDemandData[0]; // Start from real data
             
             for (let i = 0; i < 24; i++) {
                 if (i < currentTime) {
-                    // Historical data before current time
-                    const price = Math.random() * 200 + 100;
-                    const demand = Math.random() * 2000 + 7000;
+                    // Historical data - use real data provided
+                    const price = realPriceData[i] !== undefined ? realPriceData[i] : lastPrice;
+                    const demand = realDemandData[i] !== undefined ? realDemandData[i] : lastDemand;
                     
                     prices.push(price);
                     demands.push(demand);
@@ -4960,9 +4963,9 @@
                     lastPrice = price;
                     lastDemand = demand;
                 } else if (i === currentTime) {
-                    // Current time - both actual and forecast start here for seamless connection
-                    const price = Math.random() * 200 + 100;
-                    const demand = Math.random() * 2000 + 7000;
+                    // Current time - use real data and start forecast from here
+                    const price = realPriceData[i] !== undefined ? realPriceData[i] : lastPrice;
+                    const demand = realDemandData[i] !== undefined ? realDemandData[i] : lastDemand;
                     
                     prices.push(price);
                     demands.push(demand);
@@ -4976,29 +4979,30 @@
                     prices.push(null);
                     demands.push(null);
                     
-                    // Generate realistic forecast with market characteristics
-                    const hoursAhead = i - currentTime;
+                    // Use real forecast data if available, otherwise generate
+                    let forecastPrice, forecastDemand;
                     
-                    // Price forecast with increasing uncertainty
-                    const priceBaseVariation = (Math.random() - 0.5) * (20 + hoursAhead * 3); // Uncertainty increases over time
-                    const priceTrendVariation = Math.cos((i / 24) * 2 * Math.PI) * 25; // Daily pricing cycle
-                    const priceVolatilitySpike = Math.random() < 0.2 ? (Math.random() - 0.5) * 80 : 0; // 20% chance of price spike
-                    const priceSeasonalFactor = Math.sin((i / 12) * Math.PI) * 15; // Peak/off-peak pricing
+                    if (i < realPriceData.length && i < realDemandData.length) {
+                        // Use real forecast data
+                        forecastPrice = realPriceData[i];
+                        forecastDemand = realDemandData[i];
+                    } else {
+                        // Generate forecast based on last known values
+                        const hoursAhead = i - currentTime;
+                        const uncertaintyMultiplier = 1 + (hoursAhead * 0.1);
+                        const prevForecastPrice = forecastPrices[i-1] || lastPrice;
+                        const prevForecastDemand = forecastDemands[i-1] || lastDemand;
+                        
+                        // Simple trend continuation with some variation
+                        const priceVariation = (Math.random() - 0.5) * 20 * uncertaintyMultiplier;
+                        const demandVariation = (Math.random() - 0.5) * 500 * uncertaintyMultiplier;
+                        
+                        forecastPrice = Math.max(-50, prevForecastPrice + priceVariation); // Allow negative prices
+                        forecastDemand = Math.max(6000, prevForecastDemand + demandVariation);
+                    }
                     
-                    const totalPriceVariation = priceBaseVariation + priceTrendVariation + priceVolatilitySpike + priceSeasonalFactor;
-                    const prevForecastPrice = forecastPrices[i-1];
-                    
-                    // Demand forecast with different patterns
-                    const demandBaseVariation = (Math.random() - 0.5) * (400 + hoursAhead * 50);
-                    const demandCycleFactor = Math.sin(((i - 6) / 24) * 2 * Math.PI) * 800; // Business hours demand
-                    const demandWeatherFactor = (Math.random() - 0.5) * 600; // Weather impact
-                    const demandEventFactor = Math.random() < 0.1 ? (Math.random() - 0.5) * 1500 : 0; // 10% chance of demand event
-                    
-                    const totalDemandVariation = demandBaseVariation + demandCycleFactor + demandWeatherFactor + demandEventFactor;
-                    const prevForecastDemand = forecastDemands[i-1];
-                    
-                    forecastPrices.push(Math.max(30, prevForecastPrice + totalPriceVariation));
-                    forecastDemands.push(Math.max(4000, prevForecastDemand + totalDemandVariation));
+                    forecastPrices.push(forecastPrice);
+                    forecastDemands.push(forecastDemand);
                 }
             }
 
