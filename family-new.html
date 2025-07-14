@@ -998,7 +998,7 @@
         // Generate family data immediately
         function generateFamilyData() {
             const names = ['张明', '李华', '王芳', '赵强', '陈晓', '刘静', '周涛', '吴敏', '郑伟', '林丽'];
-            const locations = ['Sydney NSW', 'Melbourne VIC', 'Brisbane QLD', 'Perth WA', 'Adelaide SA', 'Gold Coast QLD', 'Canberra ACT', 'Newcastle NSW', 'Hobart TAS', 'Darwin NT'];
+            const locations = ['NSW', 'NSW', 'NSW', 'Perth WA', 'Adelaide SA', 'Gold Coast QLD', 'Canberra ACT', 'Newcastle NSW', 'Hobart TAS', 'Darwin NT'];
             const statuses = ['active', 'inactive', 'not-participating'];
             const deviceStatuses = ['charging', 'discharging', 'standby', 'offline'];
             
@@ -1027,7 +1027,7 @@
                     id: i + 1,
                     name: names[i % names.length],
                     nameKey: `family.userName${(i % 10) + 1}`,
-                    location: locations[i % locations.length],
+                    location: deviceStatus === 'offline' ? 'NSW' : locations[i % locations.length],
                     status: status,
                     soc: isActive ? Math.floor(Math.random() * 40 + 60) : Math.floor(Math.random() * 50),
                     todayDischarge: isActive ? (Math.random() * 50 + 10).toFixed(1) : 0,
@@ -1039,6 +1039,17 @@
                     usageDays: Math.floor(Math.random() * 300 + 30)
                 });
             }
+            
+            // Sort data by device status: discharging first, then standby, then offline
+            data.sort((a, b) => {
+                const statusOrder = {
+                    'discharging': 1,
+                    'standby': 2,
+                    'offline': 3,
+                    'charging': 4
+                };
+                return (statusOrder[a.deviceStatus] || 5) - (statusOrder[b.deviceStatus] || 5);
+            });
             
             return data;
         }
