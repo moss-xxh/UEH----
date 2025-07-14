@@ -3038,111 +3038,111 @@
                         </h4>
                     </div>
                     
-                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px;">
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px;">
                         <!-- Auto Charge Conditions -->
-                        <div style="background: rgba(255,255,255,0.04); padding: 16px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.12);">
-                            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 16px;">
-                                <div style="width: 10px; height: 10px; background: #00ff88; border-radius: 50%;"></div>
-                                <h5 style="margin: 0; font-size: 14px; color: #00ff88; font-weight: 600;">
+                        <div style="background: rgba(255,255,255,0.03); padding: 8px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);">
+                            <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 8px;">
+                                <div style="width: 6px; height: 6px; background: #00ff88; border-radius: 50%;"></div>
+                                <h5 style="margin: 0; font-size: 11px; color: #00ff88; font-weight: 600;">
                                     <span data-i18n-key="autoChargeConditions">自动充电条件</span>
                                 </h5>
                             </div>
                             
                             <!-- Condition 1: Time -->
-                            <div style="margin-bottom: 14px;">
-                                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
-                                    <input type="checkbox" id="chargeTimeEnabled" checked onchange="updateConditionStatus('charge', 'time', this.checked)" style="margin: 0; width: 14px; height: 14px;">
-                                    <span style="font-size: 13px; color: rgba(255,255,255,0.7); font-weight: 500;" data-i18n-key="condition1Time">条件1：时间</span>
+                            <div style="margin-bottom: 6px;">
+                                <div style="display: flex; align-items: center; gap: 4px; margin-bottom: 4px;">
+                                    <input type="checkbox" id="chargeTimeEnabled" checked onchange="updateConditionStatus('charge', 'time', this.checked)" style="margin: 0; width: 10px; height: 10px;">
+                                    <span style="font-size: 10px; color: rgba(255,255,255,0.7);" data-i18n-key="condition1Time">条件1：时间</span>
                                 </div>
-                                <div style="display: flex; gap: 8px; align-items: center; margin-left: 24px;">
-                                    <input type="time" id="chargeStartTime" value="22:00" onchange="updateAutoSettings()" style="flex: 1; padding: 8px; border: 1px solid rgba(255,255,255,0.25); border-radius: 6px; background: rgba(255,255,255,0.08); color: #fff; font-size: 12px; font-weight: 500;">
-                                    <span style="color: rgba(255,255,255,0.7); font-size: 14px; font-weight: 600;">-</span>
-                                    <input type="time" id="chargeEndTime" value="06:00" onchange="updateAutoSettings()" style="flex: 1; padding: 8px; border: 1px solid rgba(255,255,255,0.25); border-radius: 6px; background: rgba(255,255,255,0.08); color: #fff; font-size: 12px; font-weight: 500;">
+                                <div style="display: flex; gap: 3px; align-items: center; margin-left: 14px;">
+                                    <input type="time" id="chargeStartTime" value="22:00" onchange="updateAutoSettings()" style="flex: 1; padding: 3px; border: 1px solid rgba(255,255,255,0.2); border-radius: 4px; background: rgba(255,255,255,0.05); color: #fff; font-size: 10px;">
+                                    <span style="color: rgba(255,255,255,0.6); font-size: 10px;">-</span>
+                                    <input type="time" id="chargeEndTime" value="06:00" onchange="updateAutoSettings()" style="flex: 1; padding: 3px; border: 1px solid rgba(255,255,255,0.2); border-radius: 4px; background: rgba(255,255,255,0.05); color: #fff; font-size: 10px;">
                                 </div>
                             </div>
                             
                             <!-- Condition 2: Price -->
-                            <div style="margin-bottom: 14px;">
-                                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
-                                    <input type="checkbox" id="chargePriceEnabled" checked onchange="updateConditionStatus('charge', 'price', this.checked)" style="margin: 0; width: 14px; height: 14px;">
-                                    <span style="font-size: 13px; color: rgba(255,255,255,0.7); font-weight: 500;" data-i18n-key="condition2Price">条件2：价格</span>
+                            <div style="margin-bottom: 6px;">
+                                <div style="display: flex; align-items: center; gap: 4px; margin-bottom: 4px;">
+                                    <input type="checkbox" id="chargePriceEnabled" checked onchange="updateConditionStatus('charge', 'price', this.checked)" style="margin: 0; width: 10px; height: 10px;">
+                                    <span style="font-size: 10px; color: rgba(255,255,255,0.7);" data-i18n-key="condition2Price">条件2：价格</span>
                                 </div>
-                                <div style="display: flex; gap: 8px; align-items: center; margin-left: 24px;">
-                                    <select id="chargePriceOperator" onchange="updateAutoSettings()" style="padding: 8px; border: 1px solid rgba(255,255,255,0.25); border-radius: 6px; background: rgba(255,255,255,0.08); color: #fff; font-size: 12px; font-weight: 500; min-width: 60px;">
+                                <div style="display: flex; gap: 3px; align-items: center; margin-left: 14px;">
+                                    <select id="chargePriceOperator" onchange="updateAutoSettings()" style="padding: 3px; border: 1px solid rgba(255,255,255,0.2); border-radius: 4px; background: rgba(255,255,255,0.05); color: #fff; font-size: 10px; min-width: 40px;">
                                         <option value="less" data-i18n-key="lessThan">低于</option>
                                         <option value="greater" data-i18n-key="greaterThan">高于</option>
                                     </select>
-                                    <input type="number" id="chargePriceValue" value="50" step="0.1" onchange="updateAutoSettings()" style="flex: 1; padding: 8px; border: 1px solid rgba(255,255,255,0.25); border-radius: 6px; background: rgba(255,255,255,0.08); color: #fff; font-size: 12px; font-weight: 500; text-align: center;">
-                                    <span style="color: rgba(255,255,255,0.7); font-size: 14px; font-weight: 600;">$</span>
+                                    <input type="number" id="chargePriceValue" value="50" step="0.1" onchange="updateAutoSettings()" style="flex: 1; padding: 3px; border: 1px solid rgba(255,255,255,0.2); border-radius: 4px; background: rgba(255,255,255,0.05); color: #fff; font-size: 10px; text-align: center;">
+                                    <span style="color: rgba(255,255,255,0.6); font-size: 10px;">$</span>
                                 </div>
                             </div>
                             
                             <!-- End Condition: SOC -->
                             <div>
-                                <div style="margin-bottom: 8px;">
-                                    <span style="font-size: 13px; color: rgba(255,255,255,0.7); font-weight: 500;" data-i18n-key="endConditionSoc">结束条件：SOC</span>
+                                <div style="margin-bottom: 4px;">
+                                    <span style="font-size: 10px; color: rgba(255,255,255,0.7);" data-i18n-key="endConditionSoc">结束条件：SOC</span>
                                 </div>
-                                <div style="display: flex; gap: 8px; align-items: center;">
-                                    <select id="chargeSocOperator" onchange="updateAutoSettings()" style="padding: 8px; border: 1px solid rgba(255,255,255,0.25); border-radius: 6px; background: rgba(255,255,255,0.08); color: #fff; font-size: 12px; font-weight: 500; min-width: 60px;">
+                                <div style="display: flex; gap: 3px; align-items: center;">
+                                    <select id="chargeSocOperator" onchange="updateAutoSettings()" style="padding: 3px; border: 1px solid rgba(255,255,255,0.2); border-radius: 4px; background: rgba(255,255,255,0.05); color: #fff; font-size: 10px; min-width: 40px;">
                                         <option value="less" data-i18n-key="lessThan">低于</option>
                                         <option value="greater" data-i18n-key="greaterThan">高于</option>
                                     </select>
-                                    <input type="number" id="chargeSocValue" value="90" min="0" max="100" onchange="updateAutoSettings()" style="flex: 1; padding: 8px; border: 1px solid rgba(255,255,255,0.25); border-radius: 6px; background: rgba(255,255,255,0.08); color: #fff; font-size: 12px; font-weight: 500; text-align: center;">
-                                    <span style="color: rgba(255,255,255,0.7); font-size: 14px; font-weight: 600;">%</span>
+                                    <input type="number" id="chargeSocValue" value="90" min="0" max="100" onchange="updateAutoSettings()" style="flex: 1; padding: 3px; border: 1px solid rgba(255,255,255,0.2); border-radius: 4px; background: rgba(255,255,255,0.05); color: #fff; font-size: 10px; text-align: center;">
+                                    <span style="color: rgba(255,255,255,0.6); font-size: 10px;">%</span>
                                 </div>
                             </div>
                         </div>
                         
                         <!-- Auto Discharge Conditions -->
-                        <div style="background: rgba(255,255,255,0.04); padding: 16px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.12);">
-                            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 16px;">
-                                <div style="width: 10px; height: 10px; background: #ffc107; border-radius: 50%;"></div>
-                                <h5 style="margin: 0; font-size: 14px; color: #ffc107; font-weight: 600;">
+                        <div style="background: rgba(255,255,255,0.03); padding: 8px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);">
+                            <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 8px;">
+                                <div style="width: 6px; height: 6px; background: #ffc107; border-radius: 50%;"></div>
+                                <h5 style="margin: 0; font-size: 11px; color: #ffc107; font-weight: 600;">
                                     <span data-i18n-key="autoDischargeConditions">自动放电条件</span>
                                 </h5>
                             </div>
                             
                             <!-- Condition 1: Time -->
-                            <div style="margin-bottom: 14px;">
-                                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
-                                    <input type="checkbox" id="dischargeTimeEnabled" checked onchange="updateConditionStatus('discharge', 'time', this.checked)" style="margin: 0; width: 14px; height: 14px;">
-                                    <span style="font-size: 13px; color: rgba(255,255,255,0.7); font-weight: 500;" data-i18n-key="condition1Time">条件1：时间</span>
+                            <div style="margin-bottom: 6px;">
+                                <div style="display: flex; align-items: center; gap: 4px; margin-bottom: 4px;">
+                                    <input type="checkbox" id="dischargeTimeEnabled" checked onchange="updateConditionStatus('discharge', 'time', this.checked)" style="margin: 0; width: 10px; height: 10px;">
+                                    <span style="font-size: 10px; color: rgba(255,255,255,0.7);" data-i18n-key="condition1Time">条件1：时间</span>
                                 </div>
-                                <div style="display: flex; gap: 8px; align-items: center; margin-left: 24px;">
-                                    <input type="time" id="dischargeStartTime" value="16:00" onchange="updateAutoSettings()" style="flex: 1; padding: 8px; border: 1px solid rgba(255,255,255,0.25); border-radius: 6px; background: rgba(255,255,255,0.08); color: #fff; font-size: 12px; font-weight: 500;">
-                                    <span style="color: rgba(255,255,255,0.7); font-size: 14px; font-weight: 600;">-</span>
-                                    <input type="time" id="dischargeEndTime" value="21:00" onchange="updateAutoSettings()" style="flex: 1; padding: 8px; border: 1px solid rgba(255,255,255,0.25); border-radius: 6px; background: rgba(255,255,255,0.08); color: #fff; font-size: 12px; font-weight: 500;">
+                                <div style="display: flex; gap: 3px; align-items: center; margin-left: 14px;">
+                                    <input type="time" id="dischargeStartTime" value="16:00" onchange="updateAutoSettings()" style="flex: 1; padding: 3px; border: 1px solid rgba(255,255,255,0.2); border-radius: 4px; background: rgba(255,255,255,0.05); color: #fff; font-size: 10px;">
+                                    <span style="color: rgba(255,255,255,0.6); font-size: 10px;">-</span>
+                                    <input type="time" id="dischargeEndTime" value="21:00" onchange="updateAutoSettings()" style="flex: 1; padding: 3px; border: 1px solid rgba(255,255,255,0.2); border-radius: 4px; background: rgba(255,255,255,0.05); color: #fff; font-size: 10px;">
                                 </div>
                             </div>
                             
                             <!-- Condition 2: Price -->
-                            <div style="margin-bottom: 14px;">
-                                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
-                                    <input type="checkbox" id="dischargePriceEnabled" checked onchange="updateConditionStatus('discharge', 'price', this.checked)" style="margin: 0; width: 14px; height: 14px;">
-                                    <span style="font-size: 13px; color: rgba(255,255,255,0.7); font-weight: 500;" data-i18n-key="condition2Price">条件2：价格</span>
+                            <div style="margin-bottom: 6px;">
+                                <div style="display: flex; align-items: center; gap: 4px; margin-bottom: 4px;">
+                                    <input type="checkbox" id="dischargePriceEnabled" checked onchange="updateConditionStatus('discharge', 'price', this.checked)" style="margin: 0; width: 10px; height: 10px;">
+                                    <span style="font-size: 10px; color: rgba(255,255,255,0.7);" data-i18n-key="condition2Price">条件2：价格</span>
                                 </div>
-                                <div style="display: flex; gap: 8px; align-items: center; margin-left: 24px;">
-                                    <select id="dischargePriceOperator" onchange="updateAutoSettings()" style="padding: 8px; border: 1px solid rgba(255,255,255,0.25); border-radius: 6px; background: rgba(255,255,255,0.08); color: #fff; font-size: 12px; font-weight: 500; min-width: 60px;">
+                                <div style="display: flex; gap: 3px; align-items: center; margin-left: 14px;">
+                                    <select id="dischargePriceOperator" onchange="updateAutoSettings()" style="padding: 3px; border: 1px solid rgba(255,255,255,0.2); border-radius: 4px; background: rgba(255,255,255,0.05); color: #fff; font-size: 10px; min-width: 40px;">
                                         <option value="less" data-i18n-key="lessThan">低于</option>
                                         <option value="greater" data-i18n-key="greaterThan">高于</option>
                                     </select>
-                                    <input type="number" id="dischargePriceValue" value="100" step="0.1" onchange="updateAutoSettings()" style="flex: 1; padding: 8px; border: 1px solid rgba(255,255,255,0.25); border-radius: 6px; background: rgba(255,255,255,0.08); color: #fff; font-size: 12px; font-weight: 500; text-align: center;">
-                                    <span style="color: rgba(255,255,255,0.7); font-size: 14px; font-weight: 600;">$</span>
+                                    <input type="number" id="dischargePriceValue" value="100" step="0.1" onchange="updateAutoSettings()" style="flex: 1; padding: 3px; border: 1px solid rgba(255,255,255,0.2); border-radius: 4px; background: rgba(255,255,255,0.05); color: #fff; font-size: 10px; text-align: center;">
+                                    <span style="color: rgba(255,255,255,0.6); font-size: 10px;">$</span>
                                 </div>
                             </div>
                             
                             <!-- End Condition: SOC -->
                             <div>
-                                <div style="margin-bottom: 8px;">
-                                    <span style="font-size: 13px; color: rgba(255,255,255,0.7); font-weight: 500;" data-i18n-key="endConditionSoc">结束条件：SOC</span>
+                                <div style="margin-bottom: 4px;">
+                                    <span style="font-size: 10px; color: rgba(255,255,255,0.7);" data-i18n-key="endConditionSoc">结束条件：SOC</span>
                                 </div>
-                                <div style="display: flex; gap: 8px; align-items: center;">
-                                    <select id="dischargeSocOperator" onchange="updateAutoSettings()" style="padding: 8px; border: 1px solid rgba(255,255,255,0.25); border-radius: 6px; background: rgba(255,255,255,0.08); color: #fff; font-size: 12px; font-weight: 500; min-width: 60px;">
+                                <div style="display: flex; gap: 3px; align-items: center;">
+                                    <select id="dischargeSocOperator" onchange="updateAutoSettings()" style="padding: 3px; border: 1px solid rgba(255,255,255,0.2); border-radius: 4px; background: rgba(255,255,255,0.05); color: #fff; font-size: 10px; min-width: 40px;">
                                         <option value="less" data-i18n-key="lessThan">低于</option>
                                         <option value="greater" data-i18n-key="greaterThan">高于</option>
                                     </select>
-                                    <input type="number" id="dischargeSocValue" value="20" min="0" max="100" onchange="updateAutoSettings()" style="flex: 1; padding: 8px; border: 1px solid rgba(255,255,255,0.25); border-radius: 6px; background: rgba(255,255,255,0.08); color: #fff; font-size: 12px; font-weight: 500; text-align: center;">
-                                    <span style="color: rgba(255,255,255,0.7); font-size: 14px; font-weight: 600;">%</span>
+                                    <input type="number" id="dischargeSocValue" value="20" min="0" max="100" onchange="updateAutoSettings()" style="flex: 1; padding: 3px; border: 1px solid rgba(255,255,255,0.2); border-radius: 4px; background: rgba(255,255,255,0.05); color: #fff; font-size: 10px; text-align: center;">
+                                    <span style="color: rgba(255,255,255,0.6); font-size: 10px;">%</span>
                                 </div>
                             </div>
                         </div>
