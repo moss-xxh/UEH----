@@ -3016,10 +3016,10 @@
                         </div>
                         <div class="circle-content">
                             <div class="current-price" id="currentPrice">$163</div>
-                            <div class="price-range" id="priceRange">
+                            <div class="price-range" id="priceRange" style="display: none;">
                                 <span id="todayLow">$120.50</span> - <span id="todayHigh">$185.75</span>
                             </div>
-                            <div class="price-percentage" id="pricePercentage">68%</div>
+                            <div class="price-percentage" id="pricePercentage" style="display: none;">68%</div>
                         </div>
                         <!-- Stop button (hidden by default, shown on hover) -->
                         <div class="stop-button-overlay" id="stopButtonOverlay" style="display: none;">
@@ -3037,8 +3037,8 @@
                     </div>
                 </div>
                 
-                <!-- Automation Conditions Display (shown in auto mode) -->
-                <div id="autoConditionsDisplay" style="display: none; margin-bottom: 16px;">
+                <!-- Automation Conditions Display (always shown) -->
+                <div id="autoConditionsDisplay" style="display: block; margin-bottom: 16px;">
                     <div style="margin-bottom: 12px;">
                         <h4 style="margin: 0; font-size: 14px; color: rgba(255,255,255,0.8); font-weight: 600;">
                             <span data-i18n-key="autoConditions">自动化条件</span>
@@ -3894,7 +3894,6 @@
             currentOperationMode = mode;
             
             const autoToggleKnob = document.getElementById('autoToggleKnob');
-            const autoConditionsDisplay = document.getElementById('autoConditionsDisplay');
             const chargeBtn = document.getElementById('chargeBtn');
             const dischargeBtn = document.getElementById('dischargeBtn');
             const toggleSwitch = document.querySelector('.auto-toggle-switch');
@@ -3904,9 +3903,6 @@
                 autoToggleKnob.style.left = '2px';
                 autoToggleKnob.style.background = 'rgba(255,255,255,0.7)';
                 toggleSwitch.style.background = 'rgba(255,255,255,0.1)';
-                
-                // Hide automation conditions
-                autoConditionsDisplay.style.display = 'none';
                 
                 // Enable action buttons (circle action buttons)
                 chargeBtn.disabled = false;
@@ -3922,9 +3918,6 @@
                 autoToggleKnob.style.left = '22px';
                 autoToggleKnob.style.background = '#00ff88';
                 toggleSwitch.style.background = 'rgba(0, 255, 136, 0.2)';
-                
-                // Show automation conditions
-                autoConditionsDisplay.style.display = 'block';
                 
                 // Disable action buttons (circle action buttons)
                 chargeBtn.disabled = true;
@@ -4437,6 +4430,9 @@
                     setInterval(() => {
                         updateWaterWaveLevel();
                     }, 10000);
+                    
+                    // Initialize auto conditions display (always shown)
+                    updateAutoConditionsDisplay();
                     
                     // Initialize HeaderNav component FIRST
                     console.log('Initializing HeaderNav...');
