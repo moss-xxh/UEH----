@@ -455,39 +455,45 @@
             height: 100%;
             border-radius: 50%;
             overflow: hidden;
-            background: linear-gradient(180deg, #001a2e 0%, #004080 50%, #0066cc 100%);
+            background: linear-gradient(180deg, #666666 0%, #555555 50%, #444444 100%);
         }
 
         .water-wave {
             position: absolute;
             bottom: 0;
-            left: 0;
-            width: 100%;
+            left: -50%;
+            width: 200%;
             height: 30%;
-            background: linear-gradient(180deg, rgba(0, 255, 136, 0.8) 0%, rgba(0, 255, 136, 0.6) 100%);
+            background: linear-gradient(180deg, rgba(75, 123, 255, 0.9) 0%, rgba(75, 123, 255, 0.7) 100%);
             border-radius: 50% 50% 0 0 / 100% 100% 0 0;
-            animation: waveAnimation 3s ease-in-out infinite;
+            animation: horizontalWaveAnimation 2s ease-in-out infinite;
             transform-origin: center bottom;
         }
 
         .water-wave.wave2 {
-            animation-delay: -1.5s;
-            opacity: 0.7;
+            animation-delay: -1s;
+            opacity: 0.8;
             height: 25%;
+            left: -45%;
+            animation: horizontalWaveAnimation 2.5s ease-in-out infinite;
         }
 
-        @keyframes waveAnimation {
+        @keyframes horizontalWaveAnimation {
             0%, 100% {
-                transform: scaleX(1) scaleY(1) translateY(0);
+                transform: translateX(0) translateY(0);
+                border-radius: 50% 50% 0 0 / 100% 100% 0 0;
             }
             25% {
-                transform: scaleX(1.1) scaleY(1.2) translateY(-2px);
+                transform: translateX(-5px) translateY(-1px);
+                border-radius: 45% 55% 0 0 / 95% 105% 0 0;
             }
             50% {
-                transform: scaleX(0.9) scaleY(0.8) translateY(2px);
+                transform: translateX(0) translateY(1px);
+                border-radius: 55% 45% 0 0 / 105% 95% 0 0;
             }
             75% {
-                transform: scaleX(1.1) scaleY(1.1) translateY(-1px);
+                transform: translateX(5px) translateY(-1px);
+                border-radius: 50% 50% 0 0 / 100% 100% 0 0;
             }
         }
 
@@ -7861,14 +7867,14 @@
                 waterWave2.style.background = 'linear-gradient(180deg, rgba(0, 255, 136, 0.8) 0%, rgba(0, 255, 136, 0.6) 100%)';
                 console.log('Set charging water wave colors');
             } else if (regionStatus === 'discharging') {
-                // 放电状态 - 金黄色水波
-                waterWave.style.background = 'linear-gradient(180deg, rgba(255, 215, 0, 0.9) 0%, rgba(255, 149, 0, 0.7) 100%)';
-                waterWave2.style.background = 'linear-gradient(180deg, rgba(255, 215, 0, 0.8) 0%, rgba(255, 149, 0, 0.6) 100%)';
+                // 放电状态 - 黄色水波
+                waterWave.style.background = 'linear-gradient(180deg, rgba(255, 193, 7, 0.9) 0%, rgba(255, 149, 0, 0.7) 100%)';
+                waterWave2.style.background = 'linear-gradient(180deg, rgba(255, 193, 7, 0.8) 0%, rgba(255, 149, 0, 0.6) 100%)';
                 console.log('Set discharging water wave colors');
             } else {
-                // 空闲状态 - 蓝绿色水波
-                waterWave.style.background = 'linear-gradient(180deg, rgba(0, 255, 136, 0.8) 0%, rgba(0, 255, 136, 0.6) 100%)';
-                waterWave2.style.background = 'linear-gradient(180deg, rgba(0, 255, 136, 0.7) 0%, rgba(0, 255, 136, 0.5) 100%)';
+                // 无状态 - 蓝色水波
+                waterWave.style.background = 'linear-gradient(180deg, rgba(75, 123, 255, 0.9) 0%, rgba(75, 123, 255, 0.7) 100%)';
+                waterWave2.style.background = 'linear-gradient(180deg, rgba(75, 123, 255, 0.8) 0%, rgba(75, 123, 255, 0.6) 100%)';
                 console.log('Set idle water wave colors');
             }
         }
