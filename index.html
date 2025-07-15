@@ -3091,7 +3091,7 @@
                     <div style="display: flex; align-items: center; gap: 8px;">
                         <span style="font-size: 12px; color: rgba(255,255,255,0.8); font-weight: 500;" data-i18n="autoMode">自动</span>
                         <div class="auto-toggle-switch" onclick="toggleAutoMode()" style="position: relative; width: 36px; height: 20px; background: rgba(255,255,255,0.1); border-radius: 10px; cursor: pointer; transition: all 0.3s; border: 1px solid rgba(255,255,255,0.2);">
-                            <div id="autoToggleKnob" style="position: absolute; top: 1px; right: 1px; width: 16px; height: 16px; background: rgba(255,255,255,0.7); border-radius: 50%; transition: all 0.3s; box-shadow: 0 2px 4px rgba(0,0,0,0.2);"></div>
+                            <div id="autoToggleKnob" style="position: absolute; top: 1px; right: 1px; width: 16px; height: 16px; background: #fff; border-radius: 50%; transition: all 0.3s; box-shadow: 0 2px 4px rgba(0,0,0,0.2);"></div>
                         </div>
                     </div>
                 </div>
@@ -4003,7 +4003,7 @@
             if (mode === 'manual') {
                 // Update toggle switch to off position
                 autoToggleKnob.style.left = '2px';
-                autoToggleKnob.style.background = 'rgba(255,255,255,0.7)';
+                autoToggleKnob.style.background = '#fff';
                 toggleSwitch.style.background = 'rgba(255,255,255,0.1)';
                 
                 // Enable action buttons in manual mode
@@ -4022,8 +4022,8 @@
             } else {
                 // Update toggle switch to on position
                 autoToggleKnob.style.left = '22px';
-                autoToggleKnob.style.background = '#00ff88';
-                toggleSwitch.style.background = 'rgba(0, 255, 136, 0.2)';
+                autoToggleKnob.style.background = '#fff';
+                toggleSwitch.style.background = '#4CD964';
                 
                 // Disable action buttons in auto mode
                 chargeBtn.disabled = true;
@@ -5288,16 +5288,16 @@
             // 更新自动开关状态 - 根据自动/手动状态控制
             if (autoToggle) {
                 if (status === 'autoCharge' || status === 'autoDischarge') {
-                    // 自动模式：开关向右（开启状态）- 全绿色背景，黑色圆点
+                    // 自动模式：开关向右（开启状态）- 纯绿色背景，白色圆点
                     autoToggle.style.right = '1px';
                     autoToggle.style.left = 'auto';
-                    autoToggle.style.background = '#000'; // 圆点显示黑色
-                    autoToggle.parentElement.style.background = '#4CD964'; // 背景全绿色（主题色）
+                    autoToggle.style.background = '#fff';
+                    autoToggle.parentElement.style.background = '#4CD964';
                 } else {
                     // 手动模式或无状态：开关向左（关闭状态）
                     autoToggle.style.left = '1px';
                     autoToggle.style.right = 'auto';
-                    autoToggle.style.background = '#fff'; // 圆点恢复白色
+                    autoToggle.style.background = '#fff';
                     autoToggle.parentElement.style.background = 'rgba(255,255,255,0.1)';
                 }
             }
