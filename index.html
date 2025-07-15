@@ -3118,6 +3118,7 @@
                         <!-- Price text -->
                         <div id="priceDisplay" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; z-index: 10; transition: opacity 0.3s ease;">
                             <div style="font-size: 28px; font-weight: 700; color: #fff;" id="currentPrice">$163</div>
+                            <div style="font-size: 10px; color: rgba(255,255,255,0.7); margin-top: 4px;" id="priceHeightLabel" data-i18n="priceHeight">价格高度</div>
                         </div>
                         <!-- Stop text (hidden by default) -->
                         <div id="stopDisplay" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; z-index: 10; display: none; opacity: 0; transition: opacity 0.3s ease;">
@@ -5315,24 +5316,34 @@
                 }
             }
             
-            // 更新水波和圆圈颜色
+            // 更新水波颜色和高度
             if (circle) {
                 const waterWaveContainer = circle.querySelector('#waterWaveContainer');
+                const waterLevelContainer = circle.querySelector('#waterLevelContainer');
                 
                 if (status === 'autoCharge' || status === 'manualCharge') {
-                    // 充电状态 - 绿色水波
+                    // 充电状态 - 使用菜单栏选中主题色，水波高度30%
                     if (waterWaveContainer) {
-                        waterWaveContainer.style.background = '#4CD964';
+                        waterWaveContainer.style.background = 'var(--color-primary, #00ff88)';
+                    }
+                    if (waterLevelContainer) {
+                        waterLevelContainer.style.height = '30%';
                     }
                 } else if (status === 'autoDischarge' || status === 'manualDischarge') {
-                    // 放电状态 - 黄色水波
+                    // 放电状态 - 黄色水波，水波高度80%
                     if (waterWaveContainer) {
                         waterWaveContainer.style.background = '#FFC107';
                     }
+                    if (waterLevelContainer) {
+                        waterLevelContainer.style.height = '80%';
+                    }
                 } else {
-                    // 无状态 - 蓝色水波
+                    // 无状态 - 蓝色水波，默认高度50%
                     if (waterWaveContainer) {
                         waterWaveContainer.style.background = '#5AC8FA';
+                    }
+                    if (waterLevelContainer) {
+                        waterLevelContainer.style.height = '50%';
                     }
                 }
             }
