@@ -249,7 +249,7 @@
             }
             
             .region-selector-fixed {
-                padding: 0 8px;
+                padding: 0 16px;
                 padding-bottom: 20px;
             }
             
@@ -284,7 +284,7 @@
             right: 0;
             z-index: 999;
             background: #000; /* Solid background to prevent transparency */
-            padding: 0 10px;
+            padding: 0 20px;
             padding-bottom: 20px; /* Add bottom padding */
             border-bottom: 1px solid rgba(255,255,255,0.1); /* Add subtle border */
             width: 100%;
@@ -295,11 +295,11 @@
         .region-selector-fixed::after {
             content: '';
             position: absolute;
-            bottom: -20px;
+            bottom: -5px;
             left: 0;
             right: 0;
-            height: 20px;
-            background: #000; /* Solid black instead of gradient */
+            height: 5px;
+            background: linear-gradient(to bottom, #000, transparent);
             pointer-events: none;
             z-index: 1000;
         }
@@ -1700,7 +1700,7 @@
             }
             
             .region-selector-fixed {
-                padding: 0 12px;
+                padding: 0 20px;
                 padding-bottom: 20px;
             }
             
@@ -1751,7 +1751,7 @@
             }
             
             .region-selector-fixed {
-                padding: 0 10px;
+                padding: 0 20px;
                 padding-bottom: 20px;
             }
             
@@ -1830,7 +1830,7 @@
             }
             
             .region-selector-fixed {
-                padding: 0 8px;
+                padding: 0 16px;
                 padding-bottom: 20px;
             }
             
@@ -3558,14 +3558,14 @@
     <!-- Main Container -->
     <!-- Fixed Region Selector -->
     <div class="region-selector-fixed">
-        <div id="regionSelectorContainer" style="display: flex; align-items: stretch; width: 100%; margin: 0 auto; background: rgba(255,255,255,0.03); border-radius: 16px; border: 1px solid rgba(255,255,255,0.08); padding: 10px 20px; box-shadow: 0 2px 16px rgba(0,0,0,0.2); min-height: 80px; height: auto; transition: all 0.15s ease; box-sizing: border-box;">
+        <div id="regionSelectorContainer" style="display: flex; align-items: stretch; width: 100%; margin: 0; background: rgba(255,255,255,0.03); border-radius: 16px; border: 1px solid rgba(255,255,255,0.08); padding: 10px 20px; box-shadow: 0 2px 16px rgba(0,0,0,0.2); min-height: 80px; height: auto; transition: all 0.15s ease; box-sizing: border-box;">
             
             <!-- 充电/放电条件按钮组 (最左侧，垂直排列) -->
-            <div class="condition-switch-group" style="display: flex; flex-direction: column; align-items: stretch; gap: 8px; margin-right: 20px; justify-content: center; width: 120px;">
-                <button id="chargeConditionBtn" class="switch-btn" onclick="showChargeCondition()" style="padding: 10px 18px; border: none; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.3s; background: rgba(255,255,255,0.08); color: var(--color-text-secondary); border: 1px solid rgba(255,255,255,0.1); width: 100%; text-align: center; line-height: 1.2;">
+            <div class="condition-switch-group" style="display: flex; flex-direction: column; align-items: stretch; gap: 6px; margin-right: 20px; justify-content: center; width: 120px; height: auto; min-height: 68px;">
+                <button id="chargeConditionBtn" class="switch-btn" onclick="showChargeCondition()" style="padding: 8px 18px; border: none; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.3s; background: rgba(255,255,255,0.08); color: var(--color-text-secondary); border: 1px solid rgba(255,255,255,0.1); width: 100%; text-align: center; line-height: 1.2; height: auto; min-height: 30px; display: flex; align-items: center; justify-content: center;">
                     <span data-i18n="chargeCondition" style="display: inline-block; white-space: pre-line;">充电条件</span>
                 </button>
-                <button id="dischargeConditionBtn" class="switch-btn" onclick="showDischargeCondition()" style="padding: 10px 18px; border: none; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.3s; background: rgba(255,255,255,0.08); color: var(--color-text-secondary); border: 1px solid rgba(255,255,255,0.1); width: 100%; text-align: center; line-height: 1.2;">
+                <button id="dischargeConditionBtn" class="switch-btn" onclick="showDischargeCondition()" style="padding: 8px 18px; border: none; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.3s; background: rgba(255,255,255,0.08); color: var(--color-text-secondary); border: 1px solid rgba(255,255,255,0.1); width: 100%; text-align: center; line-height: 1.2; height: auto; min-height: 30px; display: flex; align-items: center; justify-content: center;">
                     <span data-i18n="dischargeCondition" style="display: inline-block; white-space: pre-line;">放电条件</span>
                 </button>
             </div>
@@ -3606,7 +3606,7 @@
     
     <!-- Scrollable Main Content -->
     <div class="main-content-scrollable">
-        <div class="container" style="padding-top: 20px; padding-left: 10px; padding-right: 10px; margin-top: 0; width: 100%; max-width: 100%; box-sizing: border-box;">
+        <div class="container" style="padding-top: 20px; padding-left: 10px; padding-right: 10px; margin-top: -10px; width: 100%; max-width: 100%; box-sizing: border-box;">
             <!-- Top Stats Row -->
         <div class="stats-row" style="align-items: flex-start; margin-left: 0; margin-right: 0; width: 100%;">
             <!-- Power Station Management Card -->
@@ -3672,7 +3672,7 @@
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
                             <span style="font-size: 11px; color: #00ff88; font-weight: 600;" data-i18n="chargeStopSOC">充电停止SOC</span>
                             <div style="display: flex; align-items: center; gap: 4px;">
-                                <span id="chargeStopSOCDisplay" style="color: #00ff88; font-size: 12px; font-weight: 700; padding: 2px 6px;">90</span>
+                                <span id="chargeStopSOCDisplay" style="color: #00ff88; font-size: 12px; font-weight: 700; padding: 4px 8px; background: rgba(0, 255, 136, 0.1); border: 1px solid rgba(0, 255, 136, 0.2); border-radius: 4px;">90</span>
                                 <span style="font-size: 10px; color: #00ff88;">%</span>
                             </div>
                         </div>
@@ -3691,7 +3691,7 @@
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
                             <span style="font-size: 11px; color: #ffc107; font-weight: 600;" data-i18n="dischargeStopSOC">放电停止SOC</span>
                             <div style="display: flex; align-items: center; gap: 4px;">
-                                <span id="dischargeStopSOCDisplay" style="color: #ffc107; font-size: 12px; font-weight: 700; padding: 2px 6px;">20</span>
+                                <span id="dischargeStopSOCDisplay" style="color: #ffc107; font-size: 12px; font-weight: 700; padding: 4px 8px; background: rgba(255, 193, 7, 0.1); border: 1px solid rgba(255, 193, 7, 0.2); border-radius: 4px;">20</span>
                                 <span style="font-size: 10px; color: #ffc107;">%</span>
                             </div>
                         </div>
@@ -3707,7 +3707,7 @@
                 <div style="margin-bottom: 15px; height: 160px; flex-shrink: 0;">
                     <h4 style="margin: 0 0 10px 0; font-size: 13px; color: rgba(255,255,255,0.8); font-weight: 600; display: flex; justify-content: space-between; align-items: center;">
                         <span data-i18n="autoConditions">自动化条件</span>
-                        <button onclick="openConditionSettingsModal()" style="background: rgba(0,255,136,0.1); border: 1px solid rgba(0,255,136,0.3); color: #00ff88; padding: 4px 8px; border-radius: 4px; font-size: 10px; cursor: pointer; transition: all 0.3s;" data-i18n="settings">设置</button>
+                        <button onclick="openConditionSettingsModal()" style="background: rgba(0,255,136,0.15); border: 1px solid rgba(0,255,136,0.4); color: #00ff88; padding: 6px 12px; border-radius: 6px; font-size: 11px; font-weight: 600; cursor: pointer; transition: all 0.3s; box-shadow: 0 2px 4px rgba(0,255,136,0.1);" onmouseover="this.style.background='rgba(0,255,136,0.2)'; this.style.borderColor='rgba(0,255,136,0.5)'; this.style.transform='translateY(-1px)'" onmouseout="this.style.background='rgba(0,255,136,0.15)'; this.style.borderColor='rgba(0,255,136,0.4)'; this.style.transform='translateY(0)'" data-i18n="edit">编辑</button>
                     </h4>
                     
                     <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; height: 135px;">
@@ -5171,6 +5171,47 @@
                             containerId: 'languageSelector'
                         });
                         console.log('i18n system initialized for homepage');
+                    }
+                    
+                    // Ensure simulation buttons are translated after i18n is ready
+                    setTimeout(() => {
+                        if (window.i18n && window.i18n.isReady) {
+                            console.log('Manually updating simulation buttons translation');
+                            window.i18n.updatePageTexts();
+                            updateSimulationButtonsText();
+                        }
+                    }, 2000);
+                    
+                    // Listen for language change events to update simulation buttons
+                    document.addEventListener('languageChanged', function(event) {
+                        console.log('Language changed, updating simulation buttons');
+                        setTimeout(() => {
+                            updateSimulationButtonsText();
+                        }, 100);
+                    });
+                    
+                    // Function to specifically update simulation buttons text
+                    function updateSimulationButtonsText() {
+                        if (!window.i18n) return;
+                        
+                        const buttons = [
+                            { selector: '[data-i18n="simulateCharge"]', key: 'simulateCharge' },
+                            { selector: '[data-i18n="simulateDischarge"]', key: 'simulateDischarge' },
+                            { selector: '[data-i18n="simulateOptimal"]', key: 'simulateOptimal' },
+                            { selector: '[data-i18n="simulatePriceAlert"]', key: 'simulatePriceAlert' },
+                            { selector: '[data-i18n="settings"]', key: 'settings' }
+                        ];
+                        
+                        buttons.forEach(button => {
+                            const element = document.querySelector(button.selector);
+                            if (element) {
+                                const text = window.i18n.getText(button.key);
+                                if (text !== button.key) {
+                                    element.textContent = text;
+                                    console.log(`Updated ${button.key} to: ${text}`);
+                                }
+                            }
+                        });
                     }
                     
                     // Initialize auto settings event listeners
@@ -12522,7 +12563,7 @@
                 button.className = 'condition-region-btn';
                 button.dataset.region = region;
                 button.style.cssText = `
-                    padding: 16px 16px;
+                    padding: 14px 16px;
                     background: ${isSelected ? bgColor : 'transparent'};
                     color: ${isSelected ? '#000' : 'var(--color-text-secondary)'};
                     border: ${isSelected ? '2px solid #000' : '1px solid var(--color-border)'};
@@ -12534,7 +12575,7 @@
                     align-items: flex-start;
                     justify-content: flex-start;
                     flex: 1;
-                    min-height: 120px;
+                    min-height: 100px;
                     flex-direction: column;
                     gap: 4px;
                 `;
@@ -15231,7 +15272,7 @@
         <div class="modal-content" style="background: linear-gradient(145deg, #1e1e2e 0%, #252535 100%); border: none; padding: 0; overflow: hidden; width: 900px; max-width: 95%; max-height: 90vh; border-radius: 24px; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8), 0 0 1px rgba(255, 255, 255, 0.1); overflow-y: auto;">
             <div class="modal-header" style="padding: 24px 32px 20px; border-bottom: 1px solid rgba(255, 255, 255, 0.08); display: flex; align-items: center; justify-content: space-between; background: rgba(255, 255, 255, 0.02); position: sticky; top: 0; z-index: 1;">
                 <div style="display: flex; align-items: center; gap: 12px;">
-                    <h3 style="margin: 0; font-size: 18px; font-weight: 700; color: #fff;">自动化条件设置</h3>
+                    <h3 style="margin: 0; font-size: 18px; font-weight: 700; color: #fff;" data-i18n="automationConditionsSettings">自动化条件设置</h3>
                     <span id="modalRegionName" style="padding: 4px 12px; background: var(--color-primary); color: #000; border-radius: 20px; font-size: 12px; font-weight: 600;">NSW</span>
                 </div>
                 <button onclick="closeConditionSettingsModal()" style="background: none; border: none; color: rgba(255,255,255,0.6); font-size: 24px; cursor: pointer; padding: 0; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 50%; transition: all 0.3s;" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='none'">×</button>
@@ -15244,17 +15285,17 @@
                     <div style="min-width: 0;">
                         <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 16px;">
                             <span style="font-size: 18px;">⚡</span>
-                            <h4 style="margin: 0; color: #00ff88; font-size: 16px; font-weight: 600;">充电条件</h4>
+                            <h4 style="margin: 0; color: #00ff88; font-size: 16px; font-weight: 600;" data-i18n="chargeConditionSingle">充电条件</h4>
                         </div>
                         
                         <!-- Price Condition -->
                         <div style="margin-bottom: 16px;">
                             <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px; cursor: pointer;">
                                 <input type="checkbox" id="modalChargePriceEnabled" checked style="width: 16px; height: 16px; accent-color: #00ff88; cursor: pointer;">
-                                <span style="color: rgba(255,255,255,0.8); font-size: 14px; font-weight: 500;">Price Condition</span>
+                                <span style="color: rgba(255,255,255,0.8); font-size: 14px; font-weight: 500;" data-i18n="priceCondition">Price Condition</span>
                             </label>
                             <div id="chargePriceSettings" style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
-                                <span style="color: rgba(255,255,255,0.8); font-size: 13px; font-weight: 500;">低于</span>
+                                <span style="color: rgba(255,255,255,0.8); font-size: 13px; font-weight: 500;" data-i18n="lessThan">低于</span>
                                 <input type="number" id="modalChargePriceValue" value="50" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff; padding: 6px 8px; border-radius: 4px; font-size: 13px; outline: none; width: 70px; min-width: 70px;">
                                 <span style="color: rgba(255,255,255,0.8); font-size: 13px;">$</span>
                             </div>
@@ -15264,7 +15305,7 @@
                         <div>
                             <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px; cursor: pointer;">
                                 <input type="checkbox" id="modalChargeTimeEnabled" checked style="width: 16px; height: 16px; accent-color: #00ff88; cursor: pointer;">
-                                <span style="color: rgba(255,255,255,0.8); font-size: 14px; font-weight: 500;">Time Condition</span>
+                                <span style="color: rgba(255,255,255,0.8); font-size: 14px; font-weight: 500;" data-i18n="timeCondition">Time Condition</span>
                             </label>
                             <div id="chargeTimeSettings" style="min-width: 0; display: none;">
                                 <div id="chargeTimeSegments" style="display: flex; flex-direction: column; gap: 6px; margin-bottom: 8px; min-width: 0;">
@@ -15278,17 +15319,17 @@
                     <div style="min-width: 0;">
                         <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 16px;">
                             <span style="font-size: 18px;">🔋</span>
-                            <h4 style="margin: 0; color: #FFC107; font-size: 16px; font-weight: 600;">放电条件</h4>
+                            <h4 style="margin: 0; color: #FFC107; font-size: 16px; font-weight: 600;" data-i18n="dischargeConditionSingle">放电条件</h4>
                         </div>
                         
                         <!-- Price Condition -->
                         <div style="margin-bottom: 16px;">
                             <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px; cursor: pointer;">
                                 <input type="checkbox" id="modalDischargePriceEnabled" checked style="width: 16px; height: 16px; accent-color: #FFC107; cursor: pointer;">
-                                <span style="color: rgba(255,255,255,0.8); font-size: 14px; font-weight: 500;">Price Condition</span>
+                                <span style="color: rgba(255,255,255,0.8); font-size: 14px; font-weight: 500;" data-i18n="priceCondition">Price Condition</span>
                             </label>
                             <div id="dischargePriceSettings" style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
-                                <span style="color: rgba(255,255,255,0.8); font-size: 13px; font-weight: 500;">高于</span>
+                                <span style="color: rgba(255,255,255,0.8); font-size: 13px; font-weight: 500;" data-i18n="greaterThan">高于</span>
                                 <input type="number" id="modalDischargePriceValue" value="100" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff; padding: 6px 8px; border-radius: 4px; font-size: 13px; outline: none; width: 70px; min-width: 70px;">
                                 <span style="color: rgba(255,255,255,0.8); font-size: 13px;">$</span>
                             </div>
@@ -15298,7 +15339,7 @@
                         <div>
                             <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px; cursor: pointer;">
                                 <input type="checkbox" id="modalDischargeTimeEnabled" checked style="width: 16px; height: 16px; accent-color: #FFC107; cursor: pointer;">
-                                <span style="color: rgba(255,255,255,0.8); font-size: 14px; font-weight: 500;">Time Condition</span>
+                                <span style="color: rgba(255,255,255,0.8); font-size: 14px; font-weight: 500;" data-i18n="timeCondition">Time Condition</span>
                             </label>
                             <div id="dischargeTimeSettings" style="min-width: 0; display: none;">
                                 <div id="dischargeTimeSegments" style="display: flex; flex-direction: column; gap: 6px; margin-bottom: 8px; min-width: 0;">
@@ -15313,16 +15354,16 @@
                 <div style="background: rgba(255,255,255,0.03); border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); padding: 20px;">
                     <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
                         <div style="color: rgba(255,255,255,0.9); font-size: 16px; font-weight: 600; display: flex; align-items: center; gap: 8px;">
-                            ⏰ 时间条件
+                            ⏰ <span data-i18n="timeCondition">时间条件</span>
                         </div>
                         <div style="display: flex; gap: 12px;">
                             <div style="display: flex; align-items: center; gap: 4px;">
                                 <div style="width: 12px; height: 6px; background: linear-gradient(135deg, #00ff88, #00dd77); border-radius: 3px;"></div>
-                                <span style="color: rgba(255,255,255,0.8); font-size: 11px;">充电</span>
+                                <span style="color: rgba(255,255,255,0.8); font-size: 11px;" data-i18n="charge">充电</span>
                             </div>
                             <div style="display: flex; align-items: center; gap: 4px;">
                                 <div style="width: 12px; height: 6px; background: linear-gradient(135deg, #FFC107, #FFB300); border-radius: 3px;"></div>
-                                <span style="color: rgba(255,255,255,0.8); font-size: 11px;">放电</span>
+                                <span style="color: rgba(255,255,255,0.8); font-size: 11px;" data-i18n="discharge">放电</span>
                             </div>
                         </div>
                     </div>
@@ -15330,10 +15371,10 @@
                     <!-- 操作按钮 -->
                     <div style="display: flex; gap: 12px; margin-bottom: 16px; justify-content: center;">
                         <button id="chargeSelectBtn" onclick="setTimeSelectionMode('charge')" style="padding: 8px 16px; background: rgba(0,255,136,0.15); border: 1px solid rgba(0,255,136,0.3); color: #00ff88; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.3s;">
-                            🔋 选择充电时间
+                            🔋 <span data-i18n="selectChargeTime">选择充电时间</span>
                         </button>
                         <button id="dischargeSelectBtn" onclick="setTimeSelectionMode('discharge')" style="padding: 8px 16px; background: rgba(255,193,7,0.15); border: 1px solid rgba(255,193,7,0.3); color: #FFC107; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.3s;">
-                            ⚡ 选择放电时间
+                            ⚡ <span data-i18n="selectDischargeTime">选择放电时间</span>
                         </button>
                     </div>
                     
@@ -15371,7 +15412,7 @@
                         
                         <!-- 操作说明 -->
                         <div style="margin-top: 8px; text-align: center; color: rgba(255,255,255,0.6); font-size: 11px;">
-                            在时间轴上拖拽即可添加时间段
+                            <span data-i18n="dragToAddTimeSlot">在时间轴上拖拽即可添加时间段</span>
                         </div>
                     </div>
                     
@@ -15380,7 +15421,7 @@
                         <!-- 充电时间段 -->
                         <div style="margin-bottom: 16px;">
                             <div style="color: #00ff88; font-size: 13px; font-weight: 600; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
-                                🔋 充电时间段
+                                🔋 <span data-i18n="chargeTimeSlot">充电时间段</span>
                             </div>
                             <div id="chargeTimeSegmentsList" style="display: flex; flex-direction: column; gap: 6px;">
                                 <!-- 充电时间段将在这里显示 -->
@@ -15390,7 +15431,7 @@
                         <!-- 放电时间段 -->
                         <div>
                             <div style="color: #FFC107; font-size: 13px; font-weight: 600; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
-                                ⚡ 放电时间段
+                                ⚡ <span data-i18n="dischargeTimeSlot">放电时间段</span>
                             </div>
                             <div id="dischargeTimeSegmentsList" style="display: flex; flex-direction: column; gap: 6px;">
                                 <!-- 放电时间段将在这里显示 -->
@@ -15401,8 +15442,8 @@
             </div>
             
             <div class="modal-footer" style="padding: 16px 32px; background: rgba(0, 0, 0, 0.2); border-top: 1px solid rgba(255, 255, 255, 0.08); display: flex; justify-content: flex-end; gap: 12px; position: sticky; bottom: 0;">
-                <button onclick="closeConditionSettingsModal()" style="background: rgba(255, 255, 255, 0.08); color: rgba(255, 255, 255, 0.8); border: 1px solid rgba(255, 255, 255, 0.1); padding: 10px 20px; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.3s;">取消</button>
-                <button onclick="saveCurrentRegionSettings()" style="background: linear-gradient(135deg, #00ff88, #00dd77); color: #000; padding: 10px 20px; border-radius: 6px; font-size: 13px; font-weight: 700; cursor: pointer; transition: all 0.3s; border: none;">保存设置</button>
+                <button onclick="closeConditionSettingsModal()" style="background: rgba(255, 255, 255, 0.08); color: rgba(255, 255, 255, 0.8); border: 1px solid rgba(255, 255, 255, 0.1); padding: 10px 20px; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.3s;" data-i18n="cancel">取消</button>
+                <button onclick="saveCurrentRegionSettings()" style="background: linear-gradient(135deg, #00ff88, #00dd77); color: #000; padding: 10px 20px; border-radius: 6px; font-size: 13px; font-weight: 700; cursor: pointer; transition: all 0.3s; border: none;" data-i18n="saveSettings">保存设置</button>
             </div>
         </div>
     </div>
@@ -15603,6 +15644,28 @@
             
             const notification = document.getElementById('normalChargeNotification');
             if (notification) {
+                const currentLang = window.i18n ? window.i18n.getCurrentLanguage() : 'zh';
+                
+                // 更新标题
+                const titleElement = notification.querySelector('.push-notification-title span:last-child');
+                if (titleElement) {
+                    if (currentLang === 'en') {
+                        titleElement.textContent = `Charge Reminder - ${region}`;
+                    } else {
+                        titleElement.textContent = `充电提醒——${region}`;
+                    }
+                }
+                
+                // 更新内容
+                const contentElement = notification.querySelector('.push-notification-content p');
+                if (contentElement) {
+                    if (currentLang === 'en') {
+                        contentElement.innerHTML = `Current price <span class="highlight-number">$${price}</span> below threshold <span class="highlight-value">$${threshold}</span>, please charge`;
+                    } else {
+                        contentElement.innerHTML = `当前价格<span class="highlight-number">$${price}</span>，低于阈值<span class="highlight-value">$${threshold}</span>，请充电`;
+                    }
+                }
+                
                 // 更新所有地区元素
                 const regionElements = notification.querySelectorAll('.notification-region');
                 regionElements.forEach(elem => elem.textContent = region);
@@ -15628,6 +15691,28 @@
             
             const notification = document.getElementById('normalDischargeNotification');
             if (notification) {
+                const currentLang = window.i18n ? window.i18n.getCurrentLanguage() : 'zh';
+                
+                // 更新标题
+                const titleElement = notification.querySelector('.push-notification-title span:last-child');
+                if (titleElement) {
+                    if (currentLang === 'en') {
+                        titleElement.textContent = `Discharge Reminder - ${region}`;
+                    } else {
+                        titleElement.textContent = `放电提醒——${region}`;
+                    }
+                }
+                
+                // 更新内容
+                const contentElement = notification.querySelector('.push-notification-content p');
+                if (contentElement) {
+                    if (currentLang === 'en') {
+                        contentElement.innerHTML = `Current price <span class="highlight-number">$${price}</span> above threshold <span class="highlight-value">$${threshold}</span>, please discharge`;
+                    } else {
+                        contentElement.innerHTML = `当前价格<span class="highlight-number">$${price}</span>，高于阈值<span class="highlight-value">$${threshold}</span>，请放电`;
+                    }
+                }
+                
                 // 更新所有地区元素
                 const regionElements = notification.querySelectorAll('.notification-region');
                 regionElements.forEach(elem => elem.textContent = region);
@@ -15655,6 +15740,8 @@
             
             const notification = document.getElementById('optimalNotification');
             if (notification) {
+                const currentLang = window.i18n ? window.i18n.getCurrentLanguage() : 'zh';
+                
                 // 更新所有地区元素
                 const regionElements = notification.querySelectorAll('.notification-region');
                 regionElements.forEach(elem => elem.textContent = region);
@@ -15662,8 +15749,26 @@
                 // 更新标题中的提醒类型
                 const titleElement = notification.querySelector('[data-i18n="optimalReminder"]');
                 if (titleElement) {
-                    titleElement.setAttribute('data-i18n', action === '充电' ? 'optimalChargeReminder' : 'optimalDischargeReminder');
-                    titleElement.textContent = `最佳${action}提醒`;
+                    if (currentLang === 'en') {
+                        const actionEn = action === '充电' ? 'Charge' : 'Discharge';
+                        titleElement.textContent = `Optimal ${actionEn} Reminder`;
+                    } else {
+                        titleElement.textContent = `最佳${action}提醒`;
+                    }
+                }
+                
+                // 更新内容
+                const contentElement = notification.querySelector('.push-notification-content p');
+                if (contentElement) {
+                    const highlightPrice = `<span class="highlight-number">$${price}</span>`;
+                    const highlightTime = `<span class="highlight-value">${time}</span>`;
+                    
+                    if (currentLang === 'en') {
+                        const actionEn = action === '充电' ? 'charge' : 'discharge';
+                        contentElement.innerHTML = `${region} region ${actionEn} price ${highlightPrice}, ${highlightTime} minutes until optimal ${actionEn} time, please prepare`;
+                    } else {
+                        contentElement.innerHTML = `${region}地区${action}价格${highlightPrice}，还有${highlightTime}分钟到达最佳${action}时机，请做好准备`;
+                    }
                 }
                 
                 // 更新价格
@@ -15691,6 +15796,35 @@
             
             const notification = document.getElementById('priceAlertNotification');
             if (notification) {
+                const currentLang = window.i18n ? window.i18n.getCurrentLanguage() : 'zh';
+                
+                // 更新标题
+                const titleElement = notification.querySelector('.push-notification-title span:last-child');
+                if (titleElement) {
+                    if (currentLang === 'en') {
+                        const priceTypeEn = priceType === '高价' ? 'High Price' : 'Low Price';
+                        const actionTypeEn = actionType === '充电' ? 'Charge' : 'Discharge';
+                        titleElement.textContent = `${priceTypeEn} ${actionTypeEn} Reminder - ${region}`;
+                    } else {
+                        titleElement.textContent = `${priceType}${actionType}提醒——${region}`;
+                    }
+                }
+                
+                // 更新内容
+                const contentElement = notification.querySelector('.push-notification-content p');
+                if (contentElement) {
+                    const highlightPrice = `<span class="highlight-number">$${price}</span>`;
+                    const highlightTime = `<span class="highlight-value">${time}</span>`;
+                    
+                    if (currentLang === 'en') {
+                        const actionTypeEn = actionType === '充电' ? 'charge' : 'discharge';
+                        const priceTypeEn = priceType === '高价' ? 'high price' : 'low price';
+                        contentElement.innerHTML = `${region} region ${actionTypeEn} price ${highlightPrice}, ${highlightTime} minutes until ${priceTypeEn} ${actionTypeEn} time, please prepare`;
+                    } else {
+                        contentElement.innerHTML = `${region}地区${actionType}价格${highlightPrice}，还有${highlightTime}分钟到达${priceType}${actionType}时机，请做好准备`;
+                    }
+                }
+                
                 // 更新所有地区元素
                 const regionElements = notification.querySelectorAll('.notification-region');
                 regionElements.forEach(elem => elem.textContent = region);
@@ -15734,16 +15868,28 @@
                 
                 // 普通：放电/充电提醒——地区
                 if (titleElement) {
-                    titleElement.textContent = data.customTitle || `${action}提醒——${region}`;
+                    if (currentLang === 'en') {
+                        const actionEn = action === '充电' ? 'Charge' : 'Discharge';
+                        titleElement.textContent = data.customTitleEn || `${actionEn} Reminder - ${region}`;
+                    } else {
+                        titleElement.textContent = data.customTitle || `${action}提醒——${region}`;
+                    }
                 }
                 
                 // 内容：当前价格多少，超过/低于阈值，请放电/充电
-                const comparison = action === '充电' ? '低于' : '超过';
                 const highlightPrice = `<span class="highlight-number">$${price}</span>`;
                 const highlightThreshold = `<span class="highlight-number">$${threshold}</span>`;
-                const highlightAction = `<span class="highlight-action">${action}</span>`;
                 
-                contentElement.innerHTML = `当前价格${highlightPrice}，${comparison}阈值${highlightThreshold}，请${highlightAction}`;
+                if (currentLang === 'en') {
+                    const comparison = action === '充电' ? 'below threshold' : 'above threshold';
+                    const actionEn = action === '充电' ? 'charge' : 'discharge';
+                    const highlightAction = `<span class="highlight-action">${actionEn}</span>`;
+                    contentElement.innerHTML = `Current price ${highlightPrice} ${comparison} ${highlightThreshold}, please ${highlightAction}`;
+                } else {
+                    const comparison = action === '充电' ? '低于' : '超过';
+                    const highlightAction = `<span class="highlight-action">${action}</span>`;
+                    contentElement.innerHTML = `当前价格${highlightPrice}，${comparison}阈值${highlightThreshold}，请${highlightAction}`;
+                }
                 
             } else if (notificationId === 'advancedPushNotification') {
                 const region = data.region || 'NSW';
@@ -15753,15 +15899,26 @@
                 
                 // 高级：最佳放电时机——地区
                 if (titleElement) {
-                    titleElement.textContent = data.customTitle || `最佳${action}时机——${region}`;
+                    if (currentLang === 'en') {
+                        const actionEn = action === '充电' ? 'Charge' : 'Discharge';
+                        titleElement.textContent = data.customTitleEn || `Optimal ${actionEn} Reminder - ${region}`;
+                    } else {
+                        titleElement.textContent = data.customTitle || `最佳${action}时机——${region}`;
+                    }
                 }
                 
                 // 内容：当前价格多少，还有多久到达最佳放电时间，请做好准备
                 const highlightPrice = `<span class="highlight-number">$${price}</span>`;
                 const highlightTime = `<span class="highlight-time">${timeRemaining}</span>`;
-                const opportunityText = `最佳${action}时间`;
                 
-                contentElement.innerHTML = `当前价格${highlightPrice}，还有${highlightTime}到达${opportunityText}，请做好准备`;
+                if (currentLang === 'en') {
+                    const actionEn = action === '充电' ? 'charge' : 'discharge';
+                    const timeEn = timeRemaining.replace('分钟', ' minutes');
+                    contentElement.innerHTML = `${region} region ${actionEn} price ${highlightPrice}, ${timeEn} until optimal ${actionEn} time, please prepare`;
+                } else {
+                    const opportunityText = `最佳${action}时间`;
+                    contentElement.innerHTML = `当前价格${highlightPrice}，还有${highlightTime}到达${opportunityText}，请做好准备`;
+                }
             }
         }
 
