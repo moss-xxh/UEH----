@@ -539,6 +539,16 @@
                 clip-path: polygon(0% 100%, 0% 25%, 15% 18%, 30% 12%, 45% 20%, 60% 25%, 75% 18%, 90% 22%, 100% 12%, 100% 100%);
             }
         }
+        
+        @keyframes chargePulse {
+            0%, 100% { opacity: 0.9; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.02); }
+        }
+        
+        @keyframes dischargePulse {
+            0%, 100% { opacity: 0.9; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.05); }
+        }
 
         .circle-content {
             position: relative;
@@ -3176,8 +3186,9 @@
                 
                 <!-- Automation Conditions -->
                 <div style="margin-bottom: 15px; height: 160px; flex-shrink: 0;">
-                    <h4 style="margin: 0 0 10px 0; font-size: 13px; color: rgba(255,255,255,0.8); font-weight: 600;">
+                    <h4 style="margin: 0 0 10px 0; font-size: 13px; color: rgba(255,255,255,0.8); font-weight: 600; display: flex; justify-content: space-between; align-items: center;">
                         <span data-i18n="autoConditions">自动化条件</span>
+                        <button onclick="openConditionSettingsModal()" style="background: rgba(0,255,136,0.1); border: 1px solid rgba(0,255,136,0.3); color: #00ff88; padding: 4px 8px; border-radius: 4px; font-size: 10px; cursor: pointer; transition: all 0.3s;" data-i18n="settings">设置</button>
                     </h4>
                     
                     <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; height: 135px;">
@@ -5322,25 +5333,28 @@
                 const waterLevelContainer = circle.querySelector('#waterLevelContainer');
                 
                 if (status === 'autoCharge' || status === 'manualCharge') {
-                    // 充电状态 - 使用菜单栏选中主题色，水波高度30%
+                    // 充电状态 - 使用菜单栏选中主题色，水波高度30%，添加动效
                     if (waterWaveContainer) {
                         waterWaveContainer.style.background = 'var(--color-primary, #00ff88)';
+                        waterWaveContainer.style.animation = 'waveFlow 2s ease-in-out infinite, chargePulse 1.5s ease-in-out infinite';
                     }
                     if (waterLevelContainer) {
                         waterLevelContainer.style.height = '30%';
                     }
                 } else if (status === 'autoDischarge' || status === 'manualDischarge') {
-                    // 放电状态 - 黄色水波，水波高度80%
+                    // 放电状态 - 黄色水波，水波高度80%，添加动效
                     if (waterWaveContainer) {
                         waterWaveContainer.style.background = '#FFC107';
+                        waterWaveContainer.style.animation = 'waveFlow 2s ease-in-out infinite, dischargePulse 1.5s ease-in-out infinite';
                     }
                     if (waterLevelContainer) {
                         waterLevelContainer.style.height = '80%';
                     }
                 } else {
-                    // 无状态 - 蓝色水波，默认高度50%
+                    // 无状态 - 蓝色水波，默认高度50%，无动效
                     if (waterWaveContainer) {
                         waterWaveContainer.style.background = '#5AC8FA';
+                        waterWaveContainer.style.animation = 'waveFlow 4s ease-in-out infinite'; // 只保留基础波浪
                     }
                     if (waterLevelContainer) {
                         waterLevelContainer.style.height = '50%';
@@ -12009,7 +12023,156 @@
                 }
             }, 150);
         };
+        
+        // 条件设置弹窗功能
+        function openConditionSettingsModal() {
+            document.getElementById('conditionSettingsModal').style.display = 'flex';
+        }
+        
+        function closeConditionSettingsModal() {
+            document.getElementById('conditionSettingsModal').style.display = 'none';
+        }
+        
+        function saveConditionSettings() {
+            // 获取设置值
+            const chargeStartTime = document.getElementById('chargeStartTime').value;
+            const chargeEndTime = document.getElementById('chargeEndTime').value;
+            const chargePriceCondition = document.getElementById('chargePriceCondition').value;
+            const chargePriceValue = document.getElementById('chargePriceValue').value;
+            
+            const dischargeStartTime = document.getElementById('dischargeStartTime').value;
+            const dischargeEndTime = document.getElementById('dischargeEndTime').value;
+            const dischargePriceCondition = document.getElementById('dischargePriceCondition').value;
+            const dischargePriceValue = document.getElementById('dischargePriceValue').value;
+            
+            // 这里可以保存到localStorage或发送到服务器
+            const settings = {
+                charge: {
+                    timeStart: chargeStartTime,
+                    timeEnd: chargeEndTime,
+                    priceCondition: chargePriceCondition,
+                    priceValue: chargePriceValue
+                },
+                discharge: {
+                    timeStart: dischargeStartTime,
+                    timeEnd: dischargeEndTime,
+                    priceCondition: dischargePriceCondition,
+                    priceValue: dischargePriceValue
+                }
+            };
+            
+            localStorage.setItem('autoConditionSettings', JSON.stringify(settings));
+            
+            // 关闭弹窗
+            closeConditionSettingsModal();
+            
+            console.log('条件设置已保存:', settings);
+        }
+        
+        // 页面加载时恢复设置
+        function loadConditionSettings() {
+            const savedSettings = localStorage.getItem('autoConditionSettings');
+            if (savedSettings) {
+                const settings = JSON.parse(savedSettings);
+                
+                // 恢复充电条件
+                if (settings.charge) {
+                    document.getElementById('chargeStartTime').value = settings.charge.timeStart || '22:00';
+                    document.getElementById('chargeEndTime').value = settings.charge.timeEnd || '06:00';
+                    document.getElementById('chargePriceCondition').value = settings.charge.priceCondition || 'below';
+                    document.getElementById('chargePriceValue').value = settings.charge.priceValue || '50';
+                }
+                
+                // 恢复放电条件
+                if (settings.discharge) {
+                    document.getElementById('dischargeStartTime').value = settings.discharge.timeStart || '06:00';
+                    document.getElementById('dischargeEndTime').value = settings.discharge.timeEnd || '22:00';
+                    document.getElementById('dischargePriceCondition').value = settings.discharge.priceCondition || 'above';
+                    document.getElementById('dischargePriceValue').value = settings.discharge.priceValue || '300';
+                }
+            }
+        }
+        
+        // 在页面加载完成后恢复设置
+        window.addEventListener('load', function() {
+            setTimeout(loadConditionSettings, 500);
+        });
     </script>
+    
+    <!-- Condition Settings Modal -->
+    <div id="conditionSettingsModal" class="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.9); z-index: 10003; align-items: center; justify-content: center; backdrop-filter: blur(5px);">
+        <div class="modal-content" style="background: linear-gradient(145deg, #1e1e2e 0%, #252535 100%); border: none; padding: 0; overflow: hidden; width: 520px; max-width: 90%; border-radius: 24px; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8), 0 0 1px rgba(255, 255, 255, 0.1);">
+            <div class="modal-header" style="padding: 32px 36px 28px; border-bottom: 1px solid rgba(255, 255, 255, 0.08); display: flex; align-items: center; justify-content: space-between; background: rgba(255, 255, 255, 0.02);">
+                <h3 style="margin: 0; font-size: 20px; font-weight: 700; color: #fff;" data-i18n="autoConditions">自动化条件设置</h3>
+                <button onclick="closeConditionSettingsModal()" style="background: none; border: none; color: rgba(255,255,255,0.6); font-size: 24px; cursor: pointer; padding: 0; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 50%; transition: all 0.3s;" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='none'">×</button>
+            </div>
+            
+            <div class="modal-body" style="padding: 32px 36px;">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+                    <!-- Charge Conditions -->
+                    <div style="background: rgba(0,255,136,0.05); padding: 20px; border-radius: 12px; border: 1px solid rgba(0,255,136,0.2);">
+                        <h4 style="margin: 0 0 16px 0; color: #00ff88; font-size: 14px; font-weight: 600;" data-i18n="chargeCondition">充电条件</h4>
+                        
+                        <!-- Time Condition -->
+                        <div style="margin-bottom: 16px;">
+                            <label style="display: block; color: rgba(255,255,255,0.8); font-size: 12px; margin-bottom: 8px;" data-i18n="timeCondition">时间条件</label>
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <input type="time" id="chargeStartTime" value="22:00" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff; padding: 6px; border-radius: 4px; font-size: 12px;">
+                                <span style="color: rgba(255,255,255,0.6);">-</span>
+                                <input type="time" id="chargeEndTime" value="06:00" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff; padding: 6px; border-radius: 4px; font-size: 12px;">
+                            </div>
+                        </div>
+                        
+                        <!-- Price Condition -->
+                        <div style="margin-bottom: 16px;">
+                            <label style="display: block; color: rgba(255,255,255,0.8); font-size: 12px; margin-bottom: 8px;" data-i18n="priceCondition">价格条件</label>
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <select id="chargePriceCondition" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff; padding: 6px; border-radius: 4px; font-size: 12px;">
+                                    <option value="below" data-i18n="lessThanPrice">低于</option>
+                                    <option value="above" data-i18n="greaterThanPrice">高于</option>
+                                </select>
+                                <input type="number" id="chargePriceValue" value="50" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff; padding: 6px; border-radius: 4px; font-size: 12px; width: 60px;">
+                                <span style="color: rgba(255,255,255,0.6); font-size: 12px;">$</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Discharge Conditions -->
+                    <div style="background: rgba(255,193,7,0.05); padding: 20px; border-radius: 12px; border: 1px solid rgba(255,193,7,0.2);">
+                        <h4 style="margin: 0 0 16px 0; color: #FFC107; font-size: 14px; font-weight: 600;" data-i18n="dischargeCondition">放电条件</h4>
+                        
+                        <!-- Time Condition -->
+                        <div style="margin-bottom: 16px;">
+                            <label style="display: block; color: rgba(255,255,255,0.8); font-size: 12px; margin-bottom: 8px;" data-i18n="timeCondition">时间条件</label>
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <input type="time" id="dischargeStartTime" value="06:00" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff; padding: 6px; border-radius: 4px; font-size: 12px;">
+                                <span style="color: rgba(255,255,255,0.6);">-</span>
+                                <input type="time" id="dischargeEndTime" value="22:00" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff; padding: 6px; border-radius: 4px; font-size: 12px;">
+                            </div>
+                        </div>
+                        
+                        <!-- Price Condition -->
+                        <div style="margin-bottom: 16px;">
+                            <label style="display: block; color: rgba(255,255,255,0.8); font-size: 12px; margin-bottom: 8px;" data-i18n="priceCondition">价格条件</label>
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <select id="dischargePriceCondition" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff; padding: 6px; border-radius: 4px; font-size: 12px;">
+                                    <option value="above" data-i18n="greaterThanPrice">高于</option>
+                                    <option value="below" data-i18n="lessThanPrice">低于</option>
+                                </select>
+                                <input type="number" id="dischargePriceValue" value="300" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff; padding: 6px; border-radius: 4px; font-size: 12px; width: 60px;">
+                                <span style="color: rgba(255,255,255,0.6); font-size: 12px;">$</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="modal-footer" style="padding: 28px 36px 32px; background: rgba(0, 0, 0, 0.2); border-top: 1px solid rgba(255, 255, 255, 0.08); display: flex; justify-content: flex-end; gap: 16px;">
+                <button onclick="closeConditionSettingsModal()" style="background: rgba(255, 255, 255, 0.08); color: rgba(255, 255, 255, 0.8); border: 1px solid rgba(255, 255, 255, 0.1); padding: 14px 36px; border-radius: 999px; font-size: 15px; font-weight: 600; cursor: pointer; transition: all 0.3s;" data-i18n="cancel">取消</button>
+                <button onclick="saveConditionSettings()" style="background: linear-gradient(135deg, #00ff88, #00dd77); color: #000; padding: 14px 36px; border-radius: 999px; font-size: 15px; font-weight: 700; cursor: pointer; transition: all 0.3s; border: none;" data-i18n="save">保存</button>
+            </div>
+        </div>
+    </div>
     
     <!-- 立即尝试初始化HeaderNav -->
     <script>
