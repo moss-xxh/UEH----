@@ -540,14 +540,26 @@
             }
         }
         
-        @keyframes chargePulse {
-            0%, 100% { opacity: 0.9; transform: scale(1); }
-            50% { opacity: 1; transform: scale(1.02); }
+        @keyframes chargeCirclePulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(0, 255, 136, 0.4); }
+            50% { transform: scale(1.02); box-shadow: 0 0 0 8px rgba(0, 255, 136, 0.1); }
         }
         
-        @keyframes dischargePulse {
-            0%, 100% { opacity: 0.9; transform: scale(1); }
-            50% { opacity: 1; transform: scale(1.05); }
+        @keyframes dischargeCirclePulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 193, 7, 0.4); }
+            50% { transform: scale(1.03); box-shadow: 0 0 0 10px rgba(255, 193, 7, 0.1); }
+        }
+        
+        @keyframes softWaveFlow {
+            0%, 100% {
+                clip-path: polygon(0% 100%, 0% 22%, 12% 18%, 25% 24%, 38% 20%, 52% 26%, 65% 18%, 78% 22%, 88% 19%, 100% 23%, 100% 100%);
+            }
+            33% {
+                clip-path: polygon(0% 100%, 0% 18%, 15% 24%, 28% 16%, 42% 22%, 55% 18%, 68% 25%, 82% 19%, 95% 21%, 100% 17%, 100% 100%);
+            }
+            66% {
+                clip-path: polygon(0% 100%, 0% 26%, 18% 21%, 32% 19%, 45% 25%, 58% 22%, 71% 16%, 85% 24%, 92% 18%, 100% 20%, 100% 100%);
+            }
         }
 
         .circle-content {
@@ -5333,32 +5345,38 @@
                 const waterLevelContainer = circle.querySelector('#waterLevelContainer');
                 
                 if (status === 'autoCharge' || status === 'manualCharge') {
-                    // 充电状态 - 使用菜单栏选中主题色，水波高度30%，添加动效
+                    // 充电状态 - 使用菜单栏选中主题色，水波高度30%，添加大圆和水波动效
                     if (waterWaveContainer) {
                         waterWaveContainer.style.background = 'var(--color-primary, #00ff88)';
-                        waterWaveContainer.style.animation = 'waveFlow 2s ease-in-out infinite, chargePulse 1.5s ease-in-out infinite';
+                        waterWaveContainer.style.animation = 'softWaveFlow 3s ease-in-out infinite';
                     }
                     if (waterLevelContainer) {
                         waterLevelContainer.style.height = '30%';
                     }
+                    // 给大圆添加向外微动效
+                    circle.style.animation = 'chargeCirclePulse 2s ease-in-out infinite';
                 } else if (status === 'autoDischarge' || status === 'manualDischarge') {
-                    // 放电状态 - 黄色水波，水波高度80%，添加动效
+                    // 放电状态 - 黄色水波，水波高度80%，添加大圆和水波动效
                     if (waterWaveContainer) {
                         waterWaveContainer.style.background = '#FFC107';
-                        waterWaveContainer.style.animation = 'waveFlow 2s ease-in-out infinite, dischargePulse 1.5s ease-in-out infinite';
+                        waterWaveContainer.style.animation = 'softWaveFlow 2.5s ease-in-out infinite';
                     }
                     if (waterLevelContainer) {
                         waterLevelContainer.style.height = '80%';
                     }
+                    // 给大圆添加向外微动效
+                    circle.style.animation = 'dischargeCirclePulse 2.2s ease-in-out infinite';
                 } else {
                     // 无状态 - 蓝色水波，默认高度50%，无动效
                     if (waterWaveContainer) {
                         waterWaveContainer.style.background = '#5AC8FA';
-                        waterWaveContainer.style.animation = 'waveFlow 4s ease-in-out infinite'; // 只保留基础波浪
+                        waterWaveContainer.style.animation = 'softWaveFlow 4s ease-in-out infinite'; // 柔和波浪
                     }
                     if (waterLevelContainer) {
                         waterLevelContainer.style.height = '50%';
                     }
+                    // 移除大圆动效
+                    circle.style.animation = 'none';
                 }
             }
             
