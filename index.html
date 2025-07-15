@@ -5288,10 +5288,10 @@
             // 更新自动开关状态 - 根据自动/手动状态控制
             if (autoToggle) {
                 if (status === 'autoCharge' || status === 'autoDischarge') {
-                    // 自动模式：开关向右（开启状态）
+                    // 自动模式：开关向右（开启状态）- 更高不透明度
                     autoToggle.style.right = '1px';
                     autoToggle.style.left = 'auto';
-                    autoToggle.parentElement.style.background = 'rgba(76, 217, 100, 0.3)';
+                    autoToggle.parentElement.style.background = 'rgba(76, 217, 100, 0.8)';
                 } else {
                     // 手动模式或无状态：开关向左（关闭状态）
                     autoToggle.style.left = '1px';
