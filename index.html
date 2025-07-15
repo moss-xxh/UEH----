@@ -5288,14 +5288,16 @@
             // 更新自动开关状态 - 根据自动/手动状态控制
             if (autoToggle) {
                 if (status === 'autoCharge' || status === 'autoDischarge') {
-                    // 自动模式：开关向右（开启状态）- 更高不透明度
+                    // 自动模式：开关向右（开启状态）- 全绿色背景，黑色圆点
                     autoToggle.style.right = '1px';
                     autoToggle.style.left = 'auto';
-                    autoToggle.parentElement.style.background = 'rgba(76, 217, 100, 0.8)';
+                    autoToggle.style.background = '#000'; // 圆点显示黑色
+                    autoToggle.parentElement.style.background = '#4CD964'; // 背景全绿色（主题色）
                 } else {
                     // 手动模式或无状态：开关向左（关闭状态）
                     autoToggle.style.left = '1px';
                     autoToggle.style.right = 'auto';
+                    autoToggle.style.background = '#fff'; // 圆点恢复白色
                     autoToggle.parentElement.style.background = 'rgba(255,255,255,0.1)';
                 }
             }
