@@ -5354,36 +5354,22 @@
         
         // 根据状态更新价格
         function updatePriceByStatus(region, status) {
-            let priceRange;
+            let price;
             
             if (status === 'autoCharge' || status === 'manualCharge') {
-                // 充电状态：价格设置50-100
-                priceRange = {
-                    min: 50,
-                    max: 100,
-                    current: Math.floor(Math.random() * 51) + 50 // 50-100随机
-                };
+                // 充电状态：固定价格75
+                price = 75;
             } else if (status === 'autoDischarge' || status === 'manualDischarge') {
-                // 放电状态：价格设置300-400
-                priceRange = {
-                    min: 300,
-                    max: 400,
-                    current: Math.floor(Math.random() * 101) + 300 // 300-400随机
-                };
+                // 放电状态：固定价格350
+                price = 350;
             } else {
-                // 无状态：保持原有价格逻辑
-                updatePriceCircleRegion(region);
-                return;
+                // 无状态：固定价格75
+                price = 75;
             }
             
             // 更新价格显示
             const currentPriceElement = document.getElementById('currentPrice');
-            const todayLowElement = document.getElementById('todayLow');
-            const todayHighElement = document.getElementById('todayHigh');
-            
-            if (currentPriceElement) currentPriceElement.textContent = '$' + priceRange.current;
-            if (todayLowElement) todayLowElement.textContent = '$' + priceRange.min;
-            if (todayHighElement) todayHighElement.textContent = '$' + priceRange.max;
+            if (currentPriceElement) currentPriceElement.textContent = '$' + price;
         }
         
         // 更新操作按钮为停止状态
@@ -7428,21 +7414,8 @@
         function updatePriceCircleRegion(region) {
             document.getElementById('regionIndicator').textContent = region;
             
-            // 无状态时使用充电价格范围 (50-100)
-            const priceRange = {
-                min: 50,
-                max: 100,
-                current: Math.floor(Math.random() * 51) + 50 // 50-100随机
-            };
-            
-            // Update main price circle
-            document.getElementById('currentPrice').textContent = '$' + priceRange.current;
-            
-            // Update price range if elements exist
-            const todayLowElement = document.getElementById('todayLow');
-            const todayHighElement = document.getElementById('todayHigh');
-            if (todayLowElement) todayLowElement.textContent = '$' + priceRange.min;
-            if (todayHighElement) todayHighElement.textContent = '$' + priceRange.max;
+            // 无状态时固定价格75
+            document.getElementById('currentPrice').textContent = '$75';
             
             // Add smooth transition effect
             const priceElement = document.getElementById('currentPrice');
