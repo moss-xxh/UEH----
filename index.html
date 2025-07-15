@@ -5347,6 +5347,43 @@
                     }
                 }
             }
+            
+            // 根据状态更新价格显示
+            updatePriceByStatus(region, status);
+        }
+        
+        // 根据状态更新价格
+        function updatePriceByStatus(region, status) {
+            let priceRange;
+            
+            if (status === 'autoCharge' || status === 'manualCharge') {
+                // 充电状态：价格设置50-100
+                priceRange = {
+                    min: 50,
+                    max: 100,
+                    current: Math.floor(Math.random() * 51) + 50 // 50-100随机
+                };
+            } else if (status === 'autoDischarge' || status === 'manualDischarge') {
+                // 放电状态：价格设置300-400
+                priceRange = {
+                    min: 300,
+                    max: 400,
+                    current: Math.floor(Math.random() * 101) + 300 // 300-400随机
+                };
+            } else {
+                // 无状态：保持原有价格逻辑
+                updatePriceCircleRegion(region);
+                return;
+            }
+            
+            // 更新价格显示
+            const currentPriceElement = document.getElementById('currentPrice');
+            const todayLowElement = document.getElementById('todayLow');
+            const todayHighElement = document.getElementById('todayHigh');
+            
+            if (currentPriceElement) currentPriceElement.textContent = '$' + priceRange.current;
+            if (todayLowElement) todayLowElement.textContent = '$' + priceRange.min;
+            if (todayHighElement) todayHighElement.textContent = '$' + priceRange.max;
         }
         
         // 更新操作按钮为停止状态
