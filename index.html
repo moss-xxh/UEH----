@@ -4644,6 +4644,11 @@
                             
                             // Update default region display
                             updateRegionDisplay();
+                            
+                            // 语言切换后重新调整间距
+                            setTimeout(() => {
+                                adjustSpacingForRegionSelector();
+                            }, 300);
                         });
                     }
                 } catch (error) {
@@ -11810,6 +11815,11 @@
             const mainContent = document.querySelector('.main-content-scrollable');
             
             if (regionSelector && mainContent) {
+                // 强制浏览器重新计算布局
+                regionSelector.style.display = 'none';
+                regionSelector.offsetHeight; // 触发重排
+                regionSelector.style.display = '';
+                
                 // 获取地区选择栏的实际高度
                 const selectorHeight = regionSelector.offsetHeight;
                 // 基础间距 + 地区选择栏高度 + 额外间距
