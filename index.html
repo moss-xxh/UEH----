@@ -3140,7 +3140,7 @@
                         <!-- Price text -->
                         <div id="priceDisplay" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; z-index: 10; transition: opacity 0.3s ease;">
                             <div style="font-size: 28px; font-weight: 700; color: #fff;" id="currentPrice">$163</div>
-                            <div style="font-size: 10px; color: rgba(255,255,255,0.7); margin-top: 4px;" id="priceHeightLabel" data-i18n="priceHeight">价格高度</div>
+                            <div style="font-size: 10px; color: rgba(255,255,255,0.7); margin-top: 4px;" id="stationStatusLabel">电站状态</div>
                         </div>
                         <!-- Stop text (hidden by default) -->
                         <div id="stopDisplay" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; z-index: 10; display: none; opacity: 0; transition: opacity 0.3s ease;">
@@ -4673,6 +4673,10 @@
                             setTimeout(() => {
                                 adjustSpacingForRegionSelector();
                             }, 300);
+                            
+                            // 更新大圆中的状态标签
+                            const currentRegionStatus = regionData[selectedMainRegion] ? regionData[selectedMainRegion].status : 'none';
+                            updateStationStatusLabel(currentRegionStatus);
                         });
                     }
                 } catch (error) {
@@ -5382,6 +5386,31 @@
             
             // 根据状态更新价格显示
             updatePriceByStatus(region, status);
+            
+            // 更新大圆中的状态标签
+            updateStationStatusLabel(status);
+        }
+        
+        // 更新电站状态标签
+        function updateStationStatusLabel(status) {
+            const statusLabel = document.getElementById('stationStatusLabel');
+            if (!statusLabel) return;
+            
+            let statusText = '';
+            
+            if (status === 'none') {
+                statusText = window.i18n ? window.i18n.getText('priceHeight') : '电站状态';
+            } else if (status === 'autoCharge') {
+                statusText = window.i18n ? window.i18n.getText('autoCharge') : '自动充电';
+            } else if (status === 'manualCharge') {
+                statusText = window.i18n ? window.i18n.getText('manualCharge') : '手动充电';
+            } else if (status === 'autoDischarge') {
+                statusText = window.i18n ? window.i18n.getText('autoDischarge') : '自动放电';
+            } else if (status === 'manualDischarge') {
+                statusText = window.i18n ? window.i18n.getText('manualDischarge') : '手动放电';
+            }
+            
+            statusLabel.textContent = statusText;
         }
         
         // 根据状态更新价格
