@@ -5250,6 +5250,8 @@
             const statusText = document.getElementById('regionStatusText');
             const autoToggle = document.getElementById('autoToggleKnob');
             const circle = document.getElementById('mainPriceCircle');
+            const chargeBtn = document.getElementById('chargeBtn');
+            const dischargeBtn = document.getElementById('dischargeBtn');
             
             // 更新状态文字
             if (statusText) {
@@ -5257,25 +5259,25 @@
                     statusText.textContent = '';
                     statusText.style.display = 'none';
                 } else if (status === 'autoCharge') {
-                    statusText.textContent = window.i18n ? window.i18n.getText('status.autoCharge') : '自动充电';
+                    statusText.textContent = window.i18n ? window.i18n.getText('autoCharge') : '自动充电';
                     statusText.style.color = '#4CD964';
                     statusText.style.background = 'rgba(76, 217, 100, 0.1)';
                     statusText.style.border = '1px dashed rgba(76, 217, 100, 0.3)';
                     statusText.style.display = 'inline-block';
                 } else if (status === 'manualCharge') {
-                    statusText.textContent = window.i18n ? window.i18n.getText('status.manualCharge') : '手动充电';
+                    statusText.textContent = window.i18n ? window.i18n.getText('manualCharge') : '手动充电';
                     statusText.style.color = '#4CD964';
                     statusText.style.background = 'rgba(76, 217, 100, 0.1)';
                     statusText.style.border = '1px solid rgba(76, 217, 100, 0.3)';
                     statusText.style.display = 'inline-block';
                 } else if (status === 'autoDischarge') {
-                    statusText.textContent = window.i18n ? window.i18n.getText('status.autoDischarge') : '自动放电';
+                    statusText.textContent = window.i18n ? window.i18n.getText('autoDischarge') : '自动放电';
                     statusText.style.color = '#FFC107';
                     statusText.style.background = 'rgba(255, 193, 7, 0.1)';
                     statusText.style.border = '1px dashed rgba(255, 193, 7, 0.3)';
                     statusText.style.display = 'inline-block';
                 } else if (status === 'manualDischarge') {
-                    statusText.textContent = window.i18n ? window.i18n.getText('status.manualDischarge') : '手动放电';
+                    statusText.textContent = window.i18n ? window.i18n.getText('manualDischarge') : '手动放电';
                     statusText.style.color = '#FFC107';
                     statusText.style.background = 'rgba(255, 193, 7, 0.1)';
                     statusText.style.border = '1px solid rgba(255, 193, 7, 0.3)';
@@ -5283,55 +5285,52 @@
                 }
             }
             
-            // 更新自动开关状态
+            // 更新自动开关状态 - 根据自动/手动状态控制
             if (autoToggle) {
                 if (status === 'autoCharge' || status === 'autoDischarge') {
-                    // 自动模式：开关向右
+                    // 自动模式：开关向右（开启状态）
                     autoToggle.style.right = '1px';
                     autoToggle.style.left = 'auto';
                     autoToggle.parentElement.style.background = 'rgba(76, 217, 100, 0.3)';
                 } else {
-                    // 手动模式或无状态：开关向左
+                    // 手动模式或无状态：开关向左（关闭状态）
                     autoToggle.style.left = '1px';
                     autoToggle.style.right = 'auto';
                     autoToggle.parentElement.style.background = 'rgba(255,255,255,0.1)';
                 }
             }
             
-            // 更新圆圈颜色
+            // 控制充放电按钮的显示/隐藏
+            if (chargeBtn && dischargeBtn) {
+                if (status === 'none') {
+                    // 无状态时显示充放电按钮
+                    chargeBtn.style.display = 'flex';
+                    dischargeBtn.style.display = 'flex';
+                } else {
+                    // 有状态时隐藏充放电按钮
+                    chargeBtn.style.display = 'none';
+                    dischargeBtn.style.display = 'none';
+                }
+            }
+            
+            // 更新水波和圆圈颜色
             if (circle) {
-                const waterWave = circle.querySelector('.water-wave');
-                const circleBackground = circle.querySelector('.circle-background');
+                const waterWaveContainer = circle.querySelector('#waterWaveContainer');
                 
                 if (status === 'autoCharge' || status === 'manualCharge') {
-                    // 充电状态 - 绿色
-                    if (circleBackground) {
-                        circleBackground.style.background = 'linear-gradient(135deg, #4CD964, #00cc6a)';
-                        circleBackground.classList.remove('discharging', 'idle');
-                        circleBackground.classList.add('charging');
-                    }
-                    if (waterWave) {
-                        waterWave.style.background = 'linear-gradient(180deg, rgba(76, 217, 100, 0.9) 0%, rgba(76, 217, 100, 0.7) 100%)';
+                    // 充电状态 - 绿色水波
+                    if (waterWaveContainer) {
+                        waterWaveContainer.style.background = '#4CD964';
                     }
                 } else if (status === 'autoDischarge' || status === 'manualDischarge') {
-                    // 放电状态 - 黄色
-                    if (circleBackground) {
-                        circleBackground.style.background = 'linear-gradient(135deg, #FFC107, #ffaa00)';
-                        circleBackground.classList.remove('charging', 'idle');
-                        circleBackground.classList.add('discharging');
-                    }
-                    if (waterWave) {
-                        waterWave.style.background = 'linear-gradient(180deg, rgba(255, 193, 7, 0.9) 0%, rgba(255, 193, 7, 0.7) 100%)';
+                    // 放电状态 - 黄色水波
+                    if (waterWaveContainer) {
+                        waterWaveContainer.style.background = '#FFC107';
                     }
                 } else {
-                    // 无状态 - 灰色
-                    if (circleBackground) {
-                        circleBackground.style.background = 'linear-gradient(180deg, #666666 0%, #555555 50%, #444444 100%)';
-                        circleBackground.classList.remove('charging', 'discharging');
-                        circleBackground.classList.add('idle');
-                    }
-                    if (waterWave) {
-                        waterWave.style.background = 'linear-gradient(180deg, rgba(90, 200, 250, 0.9) 0%, rgba(90, 200, 250, 0.7) 100%)';
+                    // 无状态 - 蓝色水波
+                    if (waterWaveContainer) {
+                        waterWaveContainer.style.background = '#5AC8FA';
                     }
                 }
             }
