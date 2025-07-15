@@ -4978,18 +4978,26 @@
         
         function updateAutoSettings() {
             // Update charge settings
-            autoSettings.charge.timeRange.start = document.getElementById('chargeStartTime').textContent;
-            autoSettings.charge.timeRange.end = document.getElementById('chargeEndTime').textContent;
+            const chargeStartTimeEl = document.getElementById('chargeStartTime');
+            const chargeEndTimeEl = document.getElementById('chargeEndTime');
+            const chargePriceValueEl = document.getElementById('chargePriceValue');
+            
+            autoSettings.charge.timeRange.start = chargeStartTimeEl ? chargeStartTimeEl.textContent : '22:00';
+            autoSettings.charge.timeRange.end = chargeEndTimeEl ? chargeEndTimeEl.textContent : '06:00';
             autoSettings.charge.priceCondition.operator = document.getElementById('chargePriceOperator') ? document.getElementById('chargePriceOperator').value : 'below';
-            autoSettings.charge.priceCondition.value = parseFloat(document.getElementById('chargePriceValue').textContent);
+            autoSettings.charge.priceCondition.value = parseFloat(chargePriceValueEl ? chargePriceValueEl.textContent : '50');
             autoSettings.charge.socEndCondition.operator = document.getElementById('chargeSocOperator') ? document.getElementById('chargeSocOperator').value : 'equals';
             autoSettings.charge.socEndCondition.value = parseFloat(document.getElementById('chargeSocValue') ? document.getElementById('chargeSocValue').value : 90);
             
             // Update discharge settings
-            autoSettings.discharge.timeRange.start = document.getElementById('dischargeStartTime').textContent;
-            autoSettings.discharge.timeRange.end = document.getElementById('dischargeEndTime').textContent;
+            const dischargeStartTimeEl = document.getElementById('dischargeStartTime');
+            const dischargeEndTimeEl = document.getElementById('dischargeEndTime');
+            const dischargePriceValueEl = document.getElementById('dischargePriceValue');
+            
+            autoSettings.discharge.timeRange.start = dischargeStartTimeEl ? dischargeStartTimeEl.textContent : '16:00';
+            autoSettings.discharge.timeRange.end = dischargeEndTimeEl ? dischargeEndTimeEl.textContent : '21:00';
             autoSettings.discharge.priceCondition.operator = document.getElementById('dischargePriceOperator') ? document.getElementById('dischargePriceOperator').value : 'above';
-            autoSettings.discharge.priceCondition.value = parseFloat(document.getElementById('dischargePriceValue').textContent);
+            autoSettings.discharge.priceCondition.value = parseFloat(dischargePriceValueEl ? dischargePriceValueEl.textContent : '100');
             autoSettings.discharge.socEndCondition.operator = document.getElementById('dischargeSocOperator') ? document.getElementById('dischargeSocOperator').value : 'equals';
             autoSettings.discharge.socEndCondition.value = parseFloat(document.getElementById('dischargeSocValue') ? document.getElementById('dischargeSocValue').value : 10);
             
@@ -5323,10 +5331,15 @@
                 setInterval(updateRegionStatusIndicators, 30000); // 每30秒更新一次
                 
                 // Initialize UI with correct device count
-                document.getElementById('totalDevices').textContent = '500';
-                document.getElementById('activeDevices').textContent = '0';
-                document.getElementById('progressPercent').textContent = '0%';
-                document.getElementById('currentOperationText').textContent = '无';
+                const totalDevicesEl = document.getElementById('totalDevices');
+                const activeDevicesEl = document.getElementById('activeDevices');
+                const progressPercentEl = document.getElementById('progressPercent');
+                const currentOperationTextEl = document.getElementById('currentOperationText');
+                
+                if (totalDevicesEl) totalDevicesEl.textContent = '500';
+                if (activeDevicesEl) activeDevicesEl.textContent = '0';
+                if (progressPercentEl) progressPercentEl.textContent = '0%';
+                if (currentOperationTextEl) currentOperationTextEl.textContent = '无';
                 
                 console.log('Starting chart initialization...');
                 console.log('ECharts available:', typeof echarts !== 'undefined');
@@ -5451,9 +5464,13 @@
                 // updateHighestPriceRegion(); // Removed - using fixed text now
                 
                 // Initialize other station data
-                document.getElementById('availableHomes').textContent = '235';
-                document.getElementById('availablePower').textContent = '23547kWh';
-                document.getElementById('estimatedProfit').textContent = '$12435';
+                const availableHomesEl = document.getElementById('availableHomes');
+                const availablePowerEl = document.getElementById('availablePower');
+                const estimatedProfitEl = document.getElementById('estimatedProfit');
+                
+                if (availableHomesEl) availableHomesEl.textContent = '235';
+                if (availablePowerEl) availablePowerEl.textContent = '23547kWh';
+                if (estimatedProfitEl) estimatedProfitEl.textContent = '$12435';
                 
                 // Start real-time updates
                 setInterval(updateRealtimeData, 5000);
@@ -6124,13 +6141,19 @@
             const data = regionData[region] || regionData['NSW'];
             
             // 更新价格显示
-            document.getElementById('currentPrice').textContent = data.price;
-            document.getElementById('todayLow').textContent = data.low;
-            document.getElementById('todayHigh').textContent = data.high;
-            document.getElementById('regionIndicator').textContent = region;
+            const currentPriceEl = document.getElementById('currentPrice');
+            const todayLowEl = document.getElementById('todayLow');
+            const todayHighEl = document.getElementById('todayHigh');
+            const regionIndicatorEl = document.getElementById('regionIndicator');
+            
+            if (currentPriceEl) currentPriceEl.textContent = data.price;
+            if (todayLowEl) todayLowEl.textContent = data.low;
+            if (todayHighEl) todayHighEl.textContent = data.high;
+            if (regionIndicatorEl) regionIndicatorEl.textContent = region;
             
             // 更新统计数据
-            document.getElementById('totalFamiliesCard').textContent = data.families;
+            const totalFamiliesCardEl = document.getElementById('totalFamiliesCard');
+            if (totalFamiliesCardEl) totalFamiliesCardEl.textContent = data.families;
             // 更新电站管理中的三个小卡片
             const powerStationCards = document.querySelectorAll('.power-station-container .stat-value');
             if (powerStationCards.length >= 3) {
@@ -6623,18 +6646,21 @@
         // Real-time data updates
         function updateRealtimeData() {
             // Get current region from the price circle indicator
-            const currentDisplayRegion = document.getElementById('regionIndicator').textContent;
+            const regionIndicatorEl = document.getElementById('regionIndicator');
+            const currentDisplayRegion = regionIndicatorEl ? regionIndicatorEl.textContent : 'NSW';
             
             // Update price data based on current region
             updatePriceCircleRegion(currentDisplayRegion);
             
             // Update spot price with animation
             const spotPrice = Math.floor(Math.random() * 100 + 100);
-            document.getElementById('spotPrice').textContent = '$' + spotPrice + '.73';
+            const spotPriceEl = document.getElementById('spotPrice');
+            if (spotPriceEl) spotPriceEl.textContent = '$' + spotPrice + '.73';
             
             // Update demand
             const demand = Math.floor(Math.random() * 1000 + 7500);
-            document.getElementById('currentDemand').textContent = demand.toLocaleString();
+            const currentDemandEl = document.getElementById('currentDemand');
+            if (currentDemandEl) currentDemandEl.textContent = demand.toLocaleString();
             
             // Update power station management data with realistic values
             const baseHomes = 235;
@@ -6650,9 +6676,13 @@
             const unit = currentLang === 'en' ? '' : 
                         currentLang === 'ja' ? '個' :
                         currentLang === 'ko' ? '개' : '个';
-            document.getElementById('availableHomes').textContent = (baseHomes + homesVariation);
-            document.getElementById('availablePower').textContent = (basePower + powerVariation) + 'kWh';
-            document.getElementById('estimatedProfit').textContent = '$' + (baseProfit + profitVariation);
+            const availableHomesEl = document.getElementById('availableHomes');
+            const availablePowerEl = document.getElementById('availablePower');
+            const estimatedProfitEl = document.getElementById('estimatedProfit');
+            
+            if (availableHomesEl) availableHomesEl.textContent = (baseHomes + homesVariation);
+            if (availablePowerEl) availablePowerEl.textContent = (basePower + powerVariation) + 'kWh';
+            if (estimatedProfitEl) estimatedProfitEl.textContent = '$' + (baseProfit + profitVariation);
             
             // Add pulse effect to updated values (excluding today's high/low to avoid constant color change)
             const elements = ['currentPrice', 'spotPrice', 'currentDemand'];
@@ -8070,7 +8100,8 @@
         
         // Update price circle region
         function updatePriceCircleRegion(region) {
-            document.getElementById('regionIndicator').textContent = region;
+            const regionIndicatorEl = document.getElementById('regionIndicator');
+            if (regionIndicatorEl) regionIndicatorEl.textContent = region;
             
             // 各地区固定价格
             const regionPrices = {
@@ -13300,6 +13331,21 @@
                 
                 modal.style.display = 'flex';
                 
+                // 更新模态框的i18n翻译
+                if (window.i18n && window.i18n.isReady) {
+                    console.log('Updating modal i18n translations');
+                    window.i18n.updatePageTexts();
+                    // 立即更新模态框翻译
+                    updateModalTranslations();
+                    // 再次强制更新以确保生效
+                    setTimeout(() => {
+                        updateModalTranslations();
+                    }, 100);
+                    setTimeout(() => {
+                        updateModalTranslations();
+                    }, 300);
+                }
+                
                 // 确保时间段列表容器存在
                 setTimeout(() => {
                     const chargeContainer = document.getElementById('chargeTimeSegmentsList');
@@ -13335,10 +13381,163 @@
                     bindTimeInputEvents();
                     // 确保时间选择事件也绑定
                     bindTimeSelectionEvents();
+                    
+                    // 再次更新i18n以确保所有动态内容都被翻译
+                    if (window.i18n && window.i18n.isReady) {
+                        console.log('Final i18n update for modal');
+                        window.i18n.updatePageTexts();
+                        updateModalTranslations();
+                    }
                 }, 200);
             } catch (error) {
                 console.error('Error opening modal:', error);
                 alert('打开设置弹窗时出错：' + error.message);
+            }
+        }
+        
+        // 专门用于更新模态框翻译的函数 - 强制版本
+        function updateModalTranslations() {
+            if (!window.i18n || !window.i18n.isReady) {
+                console.log('i18n not ready, skipping modal translation update');
+                return;
+            }
+            
+            const currentLang = window.i18n.getCurrentLanguage();
+            console.log('FORCE updating modal translations for language:', currentLang);
+            
+            // 直接强制更新每个有问题的元素
+            const forcedUpdates = [
+                // 模态框标题
+                {
+                    selector: '#conditionSettingsModal h3[data-i18n="automationConditionsSettings"]',
+                    chinese: '自动化条件设置',
+                    english: 'Automation Conditions Settings'
+                },
+                // 选择充电时间按钮
+                {
+                    selector: '#chargeSelectBtn span[data-i18n="selectChargeTime"]',
+                    chinese: '选择充电时间',
+                    english: 'Select Charge Time'
+                },
+                // 选择放电时间按钮
+                {
+                    selector: '#dischargeSelectBtn span[data-i18n="selectDischargeTime"]',
+                    chinese: '选择放电时间',
+                    english: 'Select Discharge Time'
+                },
+                // 充电时间段标签
+                {
+                    selector: 'span[data-i18n="chargeTimeSlot"]',
+                    chinese: '充电时间段',
+                    english: 'Charge Time Slot'
+                },
+                // 放电时间段标签
+                {
+                    selector: 'span[data-i18n="dischargeTimeSlot"]',
+                    chinese: '放电时间段',
+                    english: 'Discharge Time Slot'
+                },
+                // 拖拽提示
+                {
+                    selector: 'span[data-i18n="dragToAddTimeSlot"]',
+                    chinese: '在时间轴上拖拽即可添加时间段',
+                    english: 'Drag on the timeline to add time slots'
+                },
+                // 时间条件
+                {
+                    selector: 'span[data-i18n="timeCondition"]',
+                    chinese: '时间条件',
+                    english: 'Time Condition'
+                },
+                // 充电
+                {
+                    selector: 'span[data-i18n="charge"]',
+                    chinese: '充电',
+                    english: 'Charge'
+                },
+                // 放电
+                {
+                    selector: 'span[data-i18n="discharge"]',
+                    chinese: '放电',
+                    english: 'Discharge'
+                },
+                // 充电条件
+                {
+                    selector: 'h4[data-i18n="chargeConditionSingle"]',
+                    chinese: '充电条件',
+                    english: 'Charge Condition'
+                },
+                // 放电条件
+                {
+                    selector: 'h4[data-i18n="dischargeConditionSingle"]',
+                    chinese: '放电条件',
+                    english: 'Discharge Condition'
+                },
+                // 价格条件
+                {
+                    selector: 'span[data-i18n="priceCondition"]',
+                    chinese: '价格条件',
+                    english: 'Price Condition'
+                },
+                // 低于
+                {
+                    selector: 'span[data-i18n="lessThan"]',
+                    chinese: '低于',
+                    english: 'Less than'
+                },
+                // 高于
+                {
+                    selector: 'span[data-i18n="greaterThan"]',
+                    chinese: '高于',
+                    english: 'Greater than'
+                },
+                // 取消
+                {
+                    selector: 'button[data-i18n="cancel"]',
+                    chinese: '取消',
+                    english: 'Cancel'
+                },
+                // 保存设置
+                {
+                    selector: 'button[data-i18n="saveSettings"]',
+                    chinese: '保存设置',
+                    english: 'Save Settings'
+                }
+            ];
+            
+            forcedUpdates.forEach(update => {
+                const elements = document.querySelectorAll(update.selector);
+                elements.forEach(element => {
+                    if (element) {
+                        const oldText = element.textContent;
+                        const newText = currentLang === 'en' ? update.english : update.chinese;
+                        element.textContent = newText;
+                        console.log(`FORCED UPDATE ${update.selector}: "${oldText}" → "${newText}"`);
+                    }
+                });
+            });
+            
+            // 额外处理时间段列表中的动态内容
+            updateTimeSegmentListTranslations();
+        }
+        
+        // 更新时间段列表中的动态翻译内容
+        function updateTimeSegmentListTranslations() {
+            if (!window.i18n || !window.i18n.isReady) return;
+            
+            const currentLang = window.i18n.getCurrentLanguage();
+            
+            // 更新空状态提示文本
+            const chargeContainer = document.getElementById('chargeTimeSegmentsList');
+            if (chargeContainer && chargeContainer.innerHTML.includes('暂无充电时间段')) {
+                const emptyText = currentLang === 'en' ? 'No charge time slots' : '暂无充电时间段';
+                chargeContainer.innerHTML = `<div style="color: rgba(255,255,255,0.5); font-size: 12px; padding: 8px;">${emptyText}</div>`;
+            }
+            
+            const dischargeContainer = document.getElementById('dischargeTimeSegmentsList');
+            if (dischargeContainer && dischargeContainer.innerHTML.includes('暂无放电时间段')) {
+                const emptyText = currentLang === 'en' ? 'No discharge time slots' : '暂无放电时间段';
+                dischargeContainer.innerHTML = `<div style="color: rgba(255,255,255,0.5); font-size: 12px; padding: 8px;">${emptyText}</div>`;
             }
         }
         
@@ -13361,6 +13560,33 @@
         window.openConditionSettingsModal = openConditionSettingsModal;
         window.closeConditionSettingsModal = closeConditionSettingsModal;
         window.saveCurrentRegionSettings = saveCurrentRegionSettings;
+        window.updateModalTranslations = updateModalTranslations;
+        
+        // 调试函数 - 可以在控制台手动调用
+        window.forceModalTranslation = function() {
+            console.log('Manual force translation called');
+            updateModalTranslations();
+        };
+        
+        // 添加语言变化监听器，确保模态框内容也会更新
+        document.addEventListener('languageChanged', function(event) {
+            console.log('Language changed event received, updating modal translations');
+            // 如果模态框是打开的，更新其翻译
+            const modal = document.getElementById('conditionSettingsModal');
+            if (modal && modal.style.display === 'flex') {
+                console.log('Modal is open, forcing translation update');
+                updateModalTranslations();
+                setTimeout(() => {
+                    updateModalTranslations();
+                }, 50);
+                setTimeout(() => {
+                    updateModalTranslations();
+                }, 200);
+                setTimeout(() => {
+                    updateModalTranslations();
+                }, 500);
+            }
+        });
         
         // 加载当前地区的条件设置
         function loadCurrentRegionConditionSettings() {
@@ -14529,7 +14755,9 @@
             container.style.cssText = 'display: flex; flex-wrap: wrap; gap: 8px; min-height: 30px;';
             
             if (segments.length === 0) {
-                container.innerHTML = '<div style="color: rgba(255,255,255,0.5); font-size: 12px; padding: 8px;">暂无充电时间段</div>';
+                const currentLang = window.i18n ? window.i18n.getCurrentLanguage() : 'zh';
+                const emptyText = currentLang === 'en' ? 'No charge time slots' : '暂无充电时间段';
+                container.innerHTML = `<div style="color: rgba(255,255,255,0.5); font-size: 12px; padding: 8px;">${emptyText}</div>`;
                 return;
             }
             
@@ -14537,6 +14765,11 @@
                 const segmentElement = createTimeSegmentListItem(segment, index, 'charge');
                 container.appendChild(segmentElement);
             });
+            
+            // 确保翻译已更新
+            if (window.i18n && window.i18n.isReady) {
+                updateTimeSegmentListTranslations();
+            }
         }
 
         // 更新放电时间段列表
@@ -14561,7 +14794,9 @@
             container.style.cssText = 'display: flex; flex-wrap: wrap; gap: 8px; min-height: 30px;';
             
             if (segments.length === 0) {
-                container.innerHTML = '<div style="color: rgba(255,255,255,0.5); font-size: 12px; padding: 8px;">暂无放电时间段</div>';
+                const currentLang = window.i18n ? window.i18n.getCurrentLanguage() : 'zh';
+                const emptyText = currentLang === 'en' ? 'No discharge time slots' : '暂无放电时间段';
+                container.innerHTML = `<div style="color: rgba(255,255,255,0.5); font-size: 12px; padding: 8px;">${emptyText}</div>`;
                 return;
             }
             
@@ -14570,6 +14805,11 @@
                 const segmentElement = createTimeSegmentListItem(segment, index, 'discharge');
                 container.appendChild(segmentElement);
             });
+            
+            // 确保翻译已更新
+            if (window.i18n && window.i18n.isReady) {
+                updateTimeSegmentListTranslations();
+            }
         }
 
         // 创建时间段列表项
