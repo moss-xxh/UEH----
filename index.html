@@ -5455,10 +5455,10 @@
         function updatePowerStationData(region) {
             const regionData = {
                 'NSW': { price: '$163', low: '$120.50', high: '$185.75', families: 120, power: '65kWh', profit: '$3500' },
-                'QLD': { price: '$145', low: '$110.00', high: '$170.00', families: 90, power: '48kWh', profit: '$2800' },
-                'VIC': { price: '$155', low: '$115.50', high: '$175.50', families: 100, power: '52kWh', profit: '$3100' },
-                'SA': { price: '$170', low: '$125.00', high: '$190.00', families: 70, power: '38kWh', profit: '$2200' },
-                'TAS': { price: '$135', low: '$100.00', high: '$160.00', families: 355, power: '32kWh', profit: '$1835' }
+                'QLD': { price: '$34', low: '$110.00', high: '$170.00', families: 90, power: '48kWh', profit: '$2800' },
+                'VIC': { price: '$21', low: '$115.50', high: '$175.50', families: 100, power: '52kWh', profit: '$3100' },
+                'SA': { price: '$403', low: '$125.00', high: '$190.00', families: 70, power: '38kWh', profit: '$2200' },
+                'TAS': { price: '$390', low: '$100.00', high: '$160.00', families: 355, power: '32kWh', profit: '$1835' }
             };
             
             const data = regionData[region] || regionData['NSW'];
@@ -6014,10 +6014,10 @@
             // 使用实际的地区价格数据
             const regionPrices = {
                 'NSW': 163,
-                'QLD': 145,
-                'VIC': 155,
-                'SA': 170,
-                'TAS': 135
+                'QLD': 34,
+                'VIC': 21,
+                'SA': 403,
+                'TAS': 390
             };
             
             // Find region with highest price

@@ -54,7 +54,8 @@
       "Bash(git config:*)",
       "Bash(git fetch:*)",
       "WebFetch(domain:medium.com)",
-      "WebFetch(domain:aemo.com.au)"
+      "WebFetch(domain:aemo.com.au)",
+      "Bash(echo:*)"
     ],
     "deny": []
   }
