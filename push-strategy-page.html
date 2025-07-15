@@ -16,20 +16,8 @@
     <script src="components/user-menu-link.js"></script>
     <script src="components/user-dropdown-simple-new.js"></script>
     <style>
-        /* 基础样式 */
+        /* 基础样式 - 默认暗色主题 */
         :root {
-            --color-bg: #f7f8fa;
-            --color-bg-card: #fff;
-            --color-text: #1d2129;
-            --color-text-secondary: #4e5969;
-            --color-primary: #00b96b;
-            --color-accent: #1e7fff;
-            --color-border: #e5e6eb;
-            --color-shadow: 0 2px 8px rgba(0,0,0,0.06);
-            --radius: 12px;
-        }
-
-        body.theme-dark {
             --color-bg: #000;
             --color-bg-card: rgba(255, 255, 255, 0.03);
             --color-text: rgba(255, 255, 255, 0.9);
@@ -38,6 +26,7 @@
             --color-accent: #1e7fff;
             --color-border: rgba(255, 255, 255, 0.08);
             --color-shadow: 0 2px 8px rgba(0,0,0,0.32);
+            --radius: 12px;
         }
 
         html, body {
@@ -50,9 +39,15 @@
             color: var(--color-text);
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }
-
+        
+        /* 强制应用正确的主题 */
+        /* 确保页面始终为黑色背景 */
+        body {
+            background: #000 !important;
+        }
+        
         .container {
-            background: var(--color-bg);
+            background: transparent !important;
             width: 100%;
             max-width: 95%;
             min-height: 100vh;
@@ -575,9 +570,1270 @@
             background: rgba(255, 255, 255, 0.1);
             color: rgba(255, 255, 255, 0.8);
         }
+
+        /* 策略切换标签样式 - 仿照分析页面 */
+        .strategy-toggle {
+            display: flex;
+            gap: 32px;
+            margin-bottom: 50px;
+            padding-left: 0;
+            padding-top: 20px;
+            margin-top: -50px;
+        }
+
+        .toggle-btn {
+            position: relative;
+            background: none;
+            color: rgba(255, 255, 255, 0.6);
+            border: none;
+            padding: 12px 0;
+            font-size: 28px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            letter-spacing: -1px;
+        }
+
+        .toggle-btn:hover:not(.active) {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .toggle-btn.active {
+            color: #00ff88;
+            font-size: 36px;
+        }
+
+        .toggle-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: #00ff88;
+            border-radius: 1px;
+        }
+
+        /* 策略头部样式 */
+        .strategy-header {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        .strategy-info {
+            flex: 1;
+        }
+
+        .strategy-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--color-text);
+            margin: 0 0 8px 0;
+        }
+
+        .strategy-description {
+            font-size: 14px;
+            color: var(--color-text-secondary);
+            margin: 0;
+            line-height: 1.5;
+        }
+
+        .strategy-actions {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+
+        /* 峰值预测设置样式 */
+        .peak-settings-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .peak-setting-card {
+            background: var(--color-bg-card);
+            border: 1px solid var(--color-border);
+            border-radius: 12px;
+            padding: 24px;
+            transition: all 0.3s ease;
+        }
+
+        .peak-setting-card:hover {
+            box-shadow: var(--color-shadow);
+            transform: translateY(-1px);
+        }
+
+        .peak-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .peak-icon {
+            font-size: 24px;
+        }
+
+        .peak-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--color-text);
+        }
+
+        .peak-content {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .time-range-input {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .time-separator {
+            color: var(--color-text-secondary);
+            font-weight: 500;
+        }
+
+        /* 机器学习配置样式 */
+        .ml-config-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .config-item {
+            background: var(--color-bg-card);
+            border: 1px solid var(--color-border);
+            border-radius: 12px;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .config-label {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--color-text);
+        }
+
+        .config-value {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .range-input {
+            flex: 1;
+            -webkit-appearance: none;
+            appearance: none;
+            height: 6px;
+            background: var(--color-border);
+            border-radius: 3px;
+            outline: none;
+        }
+
+        .range-input::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            background: var(--color-primary);
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .range-input::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            background: var(--color-primary);
+            border-radius: 50%;
+            cursor: pointer;
+            border: none;
+        }
+
+        .range-value {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--color-primary);
+            min-width: 60px;
+            text-align: center;
+        }
+
+        .accuracy-display {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .accuracy-circle {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: conic-gradient(var(--color-primary) 0deg 315deg, var(--color-border) 315deg 360deg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .accuracy-circle::before {
+            content: '';
+            position: absolute;
+            width: 46px;
+            height: 46px;
+            background: var(--color-bg-card);
+            border-radius: 50%;
+        }
+
+        .accuracy-percentage {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--color-text);
+            z-index: 1;
+        }
+
+        .accuracy-status {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--color-primary);
+        }
+
+        .data-stats {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .data-count {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--color-text);
+        }
+
+        .data-unit {
+            font-size: 14px;
+            color: var(--color-text-secondary);
+        }
+
+        .btn-sm {
+            padding: 8px 16px;
+            font-size: 12px;
+        }
+
+        /* 高级用户选择样式 */
+        .user-selection-advanced {
+            display: flex;
+            gap: 32px;
+            margin-bottom: 32px;
+        }
+
+        .selection-filters {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .selected-users-preview {
+            flex: 1;
+            background: var(--color-bg-card);
+            border: 1px solid var(--color-border);
+            border-radius: 12px;
+            padding: 24px;
+        }
+
+        .preview-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .user-count {
+            background: var(--color-primary);
+            color: #000;
+            padding: 4px 12px;
+            border-radius: 16px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .preview-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .user-preview-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background: var(--color-bg);
+            border-radius: 8px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--color-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .user-info {
+            flex: 1;
+        }
+
+        .user-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--color-text);
+        }
+
+        .user-role {
+            font-size: 12px;
+            color: var(--color-text-secondary);
+        }
+
+        .activity-level {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .activity-level.high {
+            background: rgba(52, 199, 89, 0.1);
+            color: #34c759;
+        }
+
+        .activity-level.medium {
+            background: rgba(255, 193, 7, 0.1);
+            color: #ffc107;
+        }
+
+        .activity-level.low {
+            background: rgba(255, 59, 48, 0.1);
+            color: #ff3b30;
+        }
+
+        /* 普通策略内容区向上移动 */
+        #normalStrategy {
+            margin-top: -30px;
+        }
+
+        /* 高级策略内容区向上移动 */
+        #advancedStrategy {
+            margin-top: -30px;
+        }
+
+        /* 策略内容区域的表单区域与编辑按钮对齐 */
+        .strategy-content-section .form-section:first-child {
+            margin-top: 0;
+        }
+
+        /* 编辑按钮与tab水平对齐 */
+        .strategy-header {
+            position: absolute;
+            top: -70px;
+            right: 0;
+            z-index: 10;
+            margin: 0;
+            height: 0;
+        }
+
+        .strategy-header .strategy-actions {
+            position: relative;
+            top: 0;
+            right: 0;
+        }
+
+        /* 策略内容区域整体调整 */
+        .strategy-content {
+            margin-top: 80px;
+            position: relative;
+        }
+
+        /* 策略卡片样式 */
+        .strategy-cards-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-bottom: 32px;
+            margin-top: 40px;
+        }
+
+        .strategy-card {
+            background: var(--color-bg-card);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius);
+            padding: 24px;
+            transition: all 0.3s ease;
+            box-shadow: var(--color-shadow);
+        }
+
+        .strategy-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+
+        .card-title-section {
+            display: flex;
+            gap: 16px;
+            align-items: flex-start;
+        }
+
+        .card-icon {
+            font-size: 32px;
+            line-height: 1;
+            flex-shrink: 0;
+        }
+
+        .card-title-info {
+            flex: 1;
+        }
+
+        .card-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--color-text);
+            margin: 0 0 8px 0;
+        }
+
+        .card-description {
+            font-size: 14px;
+            color: var(--color-text-secondary);
+            margin: 0;
+            line-height: 1.4;
+        }
+
+        .card-controls {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .toggle-switch {
+            width: 44px;
+            height: 24px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 12px;
+            position: relative;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .toggle-switch.disabled {
+            cursor: not-allowed;
+            opacity: 0.7;
+            background: rgba(255,255,255,0.05);
+        }
+
+        .toggle-switch.active {
+            background: var(--color-primary);
+        }
+
+        .toggle-knob {
+            width: 20px;
+            height: 20px;
+            background: #fff;
+            border-radius: 50%;
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            transition: transform 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .toggle-knob.active {
+            transform: translateX(20px);
+        }
+
+        .card-edit-btn {
+            width: 32px;
+            height: 32px;
+            background: rgba(0,0,0,0.05);
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .card-edit-btn:hover {
+            background: rgba(0,0,0,0.1);
+            transform: scale(1.05);
+        }
+
+        .card-edit-btn span {
+            font-size: 14px;
+        }
+
+        .card-content {
+            margin-bottom: 20px;
+        }
+
+        .strategy-status {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+        }
+
+        .strategy-status.disabled {
+            background: rgba(0,0,0,0.05);
+            color: var(--color-text-secondary);
+        }
+
+        .strategy-status.active {
+            background: rgba(0, 185, 107, 0.1);
+            color: var(--color-primary);
+        }
+
+        .status-text {
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .status-badge {
+            background: var(--color-primary);
+            color: #fff;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .strategy-config {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .config-row {
+            display: flex;
+            gap: 20px;
+        }
+
+        .config-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .config-label {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--color-text);
+        }
+
+        .method-checkboxes {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .method-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: var(--color-text);
+            cursor: pointer;
+        }
+
+        .method-checkbox input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            margin: 0;
+        }
+
+        .card-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            border-top: 1px solid var(--color-border);
+            padding-top: 20px;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border-radius: 6px;
+            border: none;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary {
+            background: rgba(0,0,0,0.05);
+            color: var(--color-text);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(0,0,0,0.1);
+        }
+
+        .btn-primary {
+            background: var(--color-primary);
+            color: #000 !important;
+        }
+
+        .btn-primary:hover {
+            background: #00a85f;
+        }
+
+        /* 保存/取消按钮跟随编辑按钮 */
+        .strategy-actions .save-actions {
+            display: inline-flex;
+            gap: 12px;
+        }
+
+        .save-actions .btn {
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        /* 为固定底部按钮预留空间 */
+        .container {
+            padding-bottom: 100px;
+        }
+        
+        /* 固定底部保存/取消按钮 */
+        .fixed-bottom-actions {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid var(--color-border);
+            padding: 20px 50px 20px 0;
+            display: none;
+            justify-content: flex-end;
+            gap: 16px;
+            z-index: 1000;
+        }
+        
+        .fixed-bottom-actions.show {
+            display: flex;
+        }
+        
+        .fixed-bottom-actions .btn {
+            padding: 12px 32px;
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        /* 高级策略子模块样式 */
+        .strategy-sub-section {
+            margin-bottom: 24px;
+            padding: 0;
+            background: transparent;
+            border-radius: 0;
+            border: none;
+        }
+
+        .sub-section-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--color-text);
+            margin: 0 0 16px 0;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .strategy-config-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            align-items: end;
+        }
+
+        .input-group {
+            display: flex;
+            align-items: center;
+            background: var(--color-bg);
+            border: 1px solid var(--color-border);
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .input-prefix {
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--color-text-secondary);
+            border-right: 1px solid var(--color-border);
+            font-size: 14px;
+        }
+
+        .form-input {
+            flex: 1;
+            padding: 12px 16px;
+            border: none;
+            background: transparent;
+            color: var(--color-text);
+            font-size: 14px;
+        }
+
+        .form-input:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(0, 255, 136, 0.1);
+        }
+
+        .form-input:disabled {
+            background: transparent;
+            cursor: not-allowed;
+            opacity: 0.8;
+        }
+
+        /* 充电放电模块样式 */
+        .charge-discharge-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-top: 20px;
+        }
+
+        .charge-discharge-module {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--color-border);
+            border-radius: 12px;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .charge-discharge-module:hover {
+            box-shadow: var(--color-shadow);
+        }
+
+        .module-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .module-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--color-text);
+            margin: 0;
+        }
+
+        .module-toggle {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .toggle-label {
+            font-size: 14px;
+            color: var(--color-text-secondary);
+            font-weight: 500;
+            min-width: 40px;
+            text-align: right;
+        }
+
+        .module-content {
+            transition: all 0.3s ease;
+        }
+
+        .module-content.disabled {
+            /* 移除pointer-events限制，允许交互 */
+            position: relative;
+        }
+        
+        /* 禁用状态下的容器样式 */
+        .module-content.disabled {
+            opacity: 0.95;
+        }
+        
+        /* 禁用状态下的卡片保持与启用状态完全相同的样式 */
+        .module-content.disabled .point-card {
+            /* 卡片保持启用状态的所有交互效果 */
+            cursor: pointer;
+        }
+        
+        /* 禁用状态下的按钮仍可点击 */
+        .module-content.disabled .btn-icon {
+            opacity: 1;
+            cursor: pointer;
+        }
+
+        /* 点卡片样式 */
+        .point-cards-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-top: 16px;
+        }
+
+        .point-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .point-card:hover {
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateY(-1px);
+        }
+        
+
+        .point-card-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--color-text);
+            margin: 0 0 16px 0;
+            padding-bottom: 8px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .point-card-icon {
+            font-size: 16px;
+            line-height: 1;
+        }
+
+
+        .point-card-content {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .fixed-text {
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+            color: var(--color-text-secondary);
+            font-size: 14px;
+            font-style: italic;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .charge-discharge-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .point-cards-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* 充电提醒弹窗样式 */
+        .charge-reminder-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .charge-reminder-modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--color-bg-card);
+            border-radius: var(--radius);
+            width: 600px;
+            max-width: 90vw;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            animation: modalSlideIn 0.3s ease-out;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 24px 24px 0 24px;
+            border-bottom: 1px solid var(--color-border);
+            margin-bottom: 24px;
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--color-text);
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--color-text-secondary);
+            padding: 0;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .modal-close:hover {
+            background: rgba(0, 0, 0, 0.1);
+            color: var(--color-text);
+        }
+
+        .modal-body {
+            padding: 0 24px 24px;
+        }
+
+        .peak-prediction-section {
+            background: rgba(0, 185, 107, 0.05);
+            border: 1px solid rgba(0, 185, 107, 0.2);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 24px;
+        }
+
+        .peak-prediction-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--color-text);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .peak-info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .peak-info-item {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .peak-info-label {
+            font-size: 12px;
+            color: var(--color-text-secondary);
+            font-weight: 500;
+        }
+
+        .peak-info-value {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--color-primary);
+        }
+
+        .peak-percentage {
+            background: var(--color-bg-card);
+            border: 1px solid var(--color-border);
+            border-radius: 6px;
+            padding: 12px;
+            text-align: center;
+        }
+
+        .peak-percentage-label {
+            font-size: 12px;
+            color: var(--color-text-secondary);
+            margin-bottom: 4px;
+        }
+
+        .peak-percentage-value {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--color-text);
+        }
+
+        .modal-form-section {
+            margin-bottom: 24px;
+        }
+
+        .modal-form-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--color-text);
+            margin-bottom: 16px;
+        }
+
+        .modal-form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .modal-form-item {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .modal-form-label {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--color-text);
+        }
+
+        .user-selection-modal {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .user-filter-row {
+            display: flex;
+            gap: 16px;
+        }
+
+        .user-filter-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            border-top: 1px solid var(--color-border);
+            padding-top: 20px;
+        }
+
+        /* 全局推送弹窗样式 */
+        .push-notification {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            width: 360px;
+            max-width: calc(100vw - 40px);
+            background: var(--color-bg-card);
+            border: 1px solid var(--color-border);
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            z-index: 10000;
+            opacity: 0;
+            transform: translateX(100%);
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            border-left: 4px solid var(--color-primary);
+        }
+
+        .push-notification.show {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .push-notification.hide {
+            opacity: 0;
+            transform: translateX(100%);
+        }
+
+        .push-notification-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 20px 12px;
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .push-notification-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--color-text);
+        }
+
+        .push-notification-icon {
+            font-size: 20px;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .push-notification-close {
+            background: none;
+            border: none;
+            color: var(--color-text-secondary);
+            font-size: 20px;
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+        }
+
+        .push-notification-close:hover {
+            background: rgba(0, 0, 0, 0.1);
+            color: var(--color-text);
+        }
+
+        .push-notification-content {
+            padding: 16px 20px 20px;
+        }
+
+        .push-notification-content p {
+            margin: 0;
+            font-size: 14px;
+            line-height: 1.5;
+            color: var(--color-text);
+        }
+
+        /* 关键数字强调样式 */
+        .highlight-number {
+            background: linear-gradient(135deg, #00ff88, #00dd77);
+            color: #000;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 700;
+            font-size: 15px;
+            margin: 0 2px;
+            display: inline-block;
+            box-shadow: 0 2px 4px rgba(0, 255, 136, 0.3);
+        }
+
+        .highlight-time {
+            background: linear-gradient(135deg, #ff6b6b, #ff5252);
+            color: #fff;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 700;
+            font-size: 15px;
+            margin: 0 2px;
+            display: inline-block;
+            box-shadow: 0 2px 4px rgba(255, 107, 107, 0.3);
+        }
+
+        .highlight-action {
+            background: linear-gradient(135deg, #ffc107, #ff9800);
+            color: #000;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 700;
+            font-size: 15px;
+            margin: 0 2px;
+            display: inline-block;
+            box-shadow: 0 2px 4px rgba(255, 193, 7, 0.3);
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .strategy-cards-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .config-row {
+                flex-direction: column;
+                gap: 16px;
+            }
+
+            .modal-content {
+                width: 95vw;
+                margin: 20px;
+            }
+
+            .peak-info-grid,
+            .modal-form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .user-filter-row {
+                flex-direction: column;
+            }
+
+            .push-notification {
+                right: 10px;
+                left: 10px;
+                width: auto;
+                max-width: none;
+            }
+        }
     </style>
 </head>
-<body>
+<body class="theme-dark">
     <!-- Header Container -->
     <div id="headerContainer"></div>
 
@@ -585,14 +1841,37 @@
     <div class="container">
         <!-- Page Header -->
         <div class="page-header">
-            <h1 class="page-title" data-i18n-key="pushStrategy.title">推送策略</h1>
-            <button class="edit-button" onclick="editStrategy()" data-i18n-key="pushStrategy.buttons.edit">编辑</button>
+            <!-- 移除页面标题 -->
+        </div>
+
+        <!-- Strategy Toggle -->
+        <div class="strategy-toggle">
+            <button class="toggle-btn active" onclick="console.log('普通策略按钮被点击'); if(window.switchStrategy) { window.switchStrategy('normal', this); } else { alert('switchStrategy函数未加载'); }" data-i18n-key="pushStrategy.categories.normal">
+                <span data-i18n="pushStrategy.tabs.normal">普通策略</span>
+            </button>
+            <button class="toggle-btn" onclick="console.log('高级策略按钮被点击'); if(window.switchStrategy) { window.switchStrategy('advanced', this); } else { alert('switchStrategy函数未加载'); }" data-i18n-key="pushStrategy.categories.advanced">
+                <span data-i18n="pushStrategy.tabs.advanced">高级策略</span>
+            </button>
         </div>
 
         <!-- Strategy Content Area -->
         <div class="strategy-content">
-            <!-- 地区价格设置 -->
-            <div class="form-section">
+            
+            <!-- 普通策略内容 -->
+            <div class="strategy-content-section" id="normalStrategy">
+                <!-- 策略头部操作 -->
+                <div class="strategy-header">
+                    <div class="strategy-info">
+                        <!-- 移除标题和描述 -->
+                    </div>
+                    <div class="strategy-actions">
+                        <button class="edit-button" id="normalEditBtn" onclick="console.log('编辑按钮被点击'); if(window.editNormalStrategy) { window.editNormalStrategy(); } else { alert('editNormalStrategy函数未加载'); }" data-i18n-key="pushStrategy.buttons.edit">编辑</button>
+                        <!-- Save actions moved to bottom -->
+                    </div>
+                </div>
+
+                <!-- 地区价格设置 -->
+                <div class="form-section">
                 <div class="section-title">
                     <span class="required">*</span>
                     <span data-i18n-key="pushStrategy.regionPriceSettings">地区价格设置</span>
@@ -674,6 +1953,10 @@
                         <input type="checkbox" class="checkbox-input" id="sendEmail">
                         <label class="checkbox-label" for="sendEmail" data-i18n-key="pushStrategy.methods.email">邮件</label>
                     </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" class="checkbox-input" id="sendPopup">
+                        <label class="checkbox-label" for="sendPopup" data-i18n-key="pushStrategy.methods.popup">弹窗</label>
+                    </div>
                 </div>
             </div>
 
@@ -725,10 +2008,400 @@
                 </div>
             </div>
 
-            <!-- Form Actions -->
-            <div class="form-actions">
-                <button type="button" class="btn btn-secondary" onclick="cancelEdit()" data-i18n-key="pushStrategy.buttons.cancel">取消</button>
-                <button type="button" class="btn btn-primary" onclick="saveStrategy()" data-i18n-key="pushStrategy.buttons.save">保存</button>
+            </div>
+            
+            <!-- 高级策略内容 -->
+            <div class="strategy-content-section" id="advancedStrategy" style="display: none;">
+                <!-- 策略头部操作 -->
+                <div class="strategy-header">
+                    <div class="strategy-info">
+                        <!-- 移除标题和描述 -->
+                    </div>
+                    <div class="strategy-actions">
+                        <button class="edit-button" id="advancedEditBtn" onclick="console.log('高级策略编辑按钮被点击'); if(window.editAdvancedStrategy) { window.editAdvancedStrategy(); } else { alert('editAdvancedStrategy函数未加载'); }" data-i18n-key="pushStrategy.buttons.edit">编辑</button>
+                        <!-- Save actions moved to bottom -->
+                    </div>
+                </div>
+
+                <!-- 设置 -->
+                <div class="form-section">
+                    <div class="section-title">
+                        <span class="required">*</span>
+                        <span data-i18n="pushStrategy.settings">设置</span>
+                    </div>
+                    
+                    <!-- 充电和放电模块 -->
+                    <div class="charge-discharge-container">
+                        <!-- 充电模块 -->
+                        <div class="charge-discharge-module">
+                            <div class="module-header">
+                                <h3 class="module-title" data-i18n="pushStrategy.charge">充电</h3>
+                                <div class="module-toggle">
+                                    <span class="toggle-label" id="chargeToggleLabel" data-i18n="toggle.disabled">禁用</span>
+                                    <div class="toggle-switch disabled" onclick="toggleChargeModule()">
+                                        <div class="toggle-knob" id="chargeModuleToggle"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="module-content" id="chargeModuleContent">
+                                <div class="point-cards-container">
+                                    <!-- 最佳点卡片 -->
+                                    <div class="point-card">
+                                        <h4 class="point-card-title">
+                                            <span style="font-size: 20px; margin-right: 8px;">🏆</span>
+                                            <span data-i18n="pushStrategy.points.optimal">最佳点</span>
+                                        </h4>
+                                        <div class="section-description">
+                                            <span data-i18n="pushStrategy.priceDescriptions.valleyPlus10">价格：超过谷值10%之内</span>
+                                        </div>
+                                        <div class="section-description">
+                                            <span data-i18n="pushStrategy.reminderSettings.advanceReminder">提前多久提醒</span>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="counter-input">
+                                                <button type="button" class="counter-btn" onclick="adjustChargeOptimalAdvance(-1)">−</button>
+                                                <input type="number" class="counter-value" value="15" min="5" max="180" id="chargeOptimalAdvance">
+                                                <span class="counter-unit">min</span>
+                                                <button type="button" class="counter-btn" onclick="adjustChargeOptimalAdvance(1)">+</button>
+                                            </div>
+                                        </div>
+                                        <div class="section-description">
+                                            <span data-i18n="pushStrategy.reminderSettings.frequency">提醒频率：满足条件，无人响应，多久发送一次提醒</span>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="counter-input">
+                                                <button type="button" class="counter-btn" onclick="adjustChargeOptimalFrequency(-1)">−</button>
+                                                <input type="number" class="counter-value" value="5" min="1" max="60" id="chargeOptimalFrequency">
+                                                <span class="counter-unit">min</span>
+                                                <button type="button" class="counter-btn" onclick="adjustChargeOptimalFrequency(1)">+</button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- 低点卡片 -->
+                                    <div class="point-card">
+                                        <h4 class="point-card-title">
+                                            <span style="font-size: 20px; margin-right: 8px;">🥈</span>
+                                            <span data-i18n="pushStrategy.points.low">低点</span>
+                                        </h4>
+                                        <div class="section-description">
+                                            <span data-i18n="pushStrategy.priceDescriptions.valleyPlus20">价格：超过谷值20%之内</span>
+                                        </div>
+                                        <div class="section-description">
+                                            <span data-i18n="pushStrategy.reminderSettings.advanceReminder">提前多久提醒</span>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="counter-input">
+                                                <button type="button" class="counter-btn" onclick="adjustChargeLowAdvance(-1)">−</button>
+                                                <input type="number" class="counter-value" value="15" min="5" max="180" id="chargeLowAdvance">
+                                                <span class="counter-unit">min</span>
+                                                <button type="button" class="counter-btn" onclick="adjustChargeLowAdvance(1)">+</button>
+                                            </div>
+                                        </div>
+                                        <div class="section-description">
+                                            <span data-i18n="pushStrategy.reminderSettings.frequency">提醒频率：满足条件，无人响应，多久发送一次提醒</span>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="counter-input">
+                                                <button type="button" class="counter-btn" onclick="adjustChargeLowFrequency(-1)">−</button>
+                                                <input type="number" class="counter-value" value="5" min="1" max="60" id="chargeLowFrequency">
+                                                <span class="counter-unit">min</span>
+                                                <button type="button" class="counter-btn" onclick="adjustChargeLowFrequency(1)">+</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 放电模块 -->
+                        <div class="charge-discharge-module">
+                            <div class="module-header">
+                                <h3 class="module-title" data-i18n="pushStrategy.discharge">放电</h3>
+                                <div class="module-toggle">
+                                    <span class="toggle-label" id="dischargeToggleLabel" data-i18n="toggle.enabled">启用</span>
+                                    <div class="toggle-switch active disabled" onclick="toggleDischargeModule()">
+                                        <div class="toggle-knob active" id="dischargeModuleToggle"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="module-content" id="dischargeModuleContent">
+                                <div class="point-cards-container">
+                                    <!-- 最佳点卡片 -->
+                                    <div class="point-card">
+                                        <h4 class="point-card-title">
+                                            <span style="font-size: 20px; margin-right: 8px;">🏆</span>
+                                            <span data-i18n="pushStrategy.points.optimal">最佳点</span>
+                                        </h4>
+                                        <div class="section-description">
+                                            <span data-i18n="pushStrategy.priceDescriptions.peakAbove95">价格：峰值95%以上</span>
+                                        </div>
+                                        <div class="section-description">
+                                            <span data-i18n="pushStrategy.reminderSettings.advanceReminder">提前多久提醒</span>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="counter-input">
+                                                <button type="button" class="counter-btn" onclick="adjustDischargeOptimalAdvance(-1)">−</button>
+                                                <input type="number" class="counter-value" value="15" min="5" max="180" id="dischargeOptimalAdvance">
+                                                <span class="counter-unit">min</span>
+                                                <button type="button" class="counter-btn" onclick="adjustDischargeOptimalAdvance(1)">+</button>
+                                            </div>
+                                        </div>
+                                        <div class="section-description">
+                                            <span data-i18n="pushStrategy.reminderSettings.frequency">提醒频率：满足条件，无人响应，多久发送一次提醒</span>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="counter-input">
+                                                <button type="button" class="counter-btn" onclick="adjustDischargeOptimalFrequency(-1)">−</button>
+                                                <input type="number" class="counter-value" value="10" min="1" max="60" id="dischargeOptimalFrequency">
+                                                <span class="counter-unit">min</span>
+                                                <button type="button" class="counter-btn" onclick="adjustDischargeOptimalFrequency(1)">+</button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- 高点卡片 -->
+                                    <div class="point-card">
+                                        <h4 class="point-card-title">
+                                            <span style="font-size: 20px; margin-right: 8px;">🥈</span>
+                                            <span data-i18n="pushStrategy.points.high">高点</span>
+                                        </h4>
+                                        <div class="section-description">
+                                            <span data-i18n="pushStrategy.priceDescriptions.peak90to95">价格：峰值90-95%</span>
+                                        </div>
+                                        <div class="section-description">
+                                            <span data-i18n="pushStrategy.reminderSettings.advanceReminder">提前多久提醒</span>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="counter-input">
+                                                <button type="button" class="counter-btn" onclick="adjustDischargeHighAdvance(-1)">−</button>
+                                                <input type="number" class="counter-value" value="30" min="5" max="180" id="dischargeHighAdvance">
+                                                <span class="counter-unit">min</span>
+                                                <button type="button" class="counter-btn" onclick="adjustDischargeHighAdvance(1)">+</button>
+                                            </div>
+                                        </div>
+                                        <div class="section-description">
+                                            <span data-i18n="pushStrategy.reminderSettings.frequency">提醒频率：满足条件，无人响应，多久发送一次提醒</span>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="counter-input">
+                                                <button type="button" class="counter-btn" onclick="adjustDischargeHighFrequency(-1)">−</button>
+                                                <input type="number" class="counter-value" value="15" min="1" max="60" id="dischargeHighFrequency">
+                                                <span class="counter-unit">min</span>
+                                                <button type="button" class="counter-btn" onclick="adjustDischargeHighFrequency(1)">+</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 发送方式 -->
+                <div class="form-section">
+                    <div class="section-title">
+                        <span class="required">*</span>
+                        <span data-i18n-key="pushStrategy.sendingMethod">发送方式</span>
+                    </div>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" class="checkbox-input" id="advancedSendInApp" checked>
+                            <label class="checkbox-label" for="advancedSendInApp" data-i18n-key="pushStrategy.methods.inSiteMessage">站内信</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" class="checkbox-input" id="advancedSendEmail">
+                            <label class="checkbox-label" for="advancedSendEmail" data-i18n-key="pushStrategy.methods.email">邮件</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" class="checkbox-input" id="advancedSendPopup">
+                            <label class="checkbox-label" for="advancedSendPopup" data-i18n-key="pushStrategy.methods.popup">弹窗</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 选择用户 -->
+                <div class="form-section">
+                    <div class="section-title">
+                        <span class="required">*</span>
+                        <span data-i18n-key="pushStrategy.selectUsers">选择用户</span>
+                    </div>
+                    <div class="user-table-wrapper">
+                        <table class="user-table">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th data-i18n-key="pushStrategy.table.userName">用户名称</th>
+                                    <th data-i18n-key="pushStrategy.table.userEmail">用户邮箱</th>
+                                    <th data-i18n-key="pushStrategy.table.status">状态</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <input type="checkbox" class="checkbox-input" id="advancedUser1" checked>
+                                    </td>
+                                    <td data-i18n-key="userName1">用户名称1</td>
+                                    <td>bigbang@163.com</td>
+                                    <td>
+                                        <span class="status-badge status-active">
+                                            <span class="status-icon"></span>
+                                            <span data-i18n-key="pushStrategy.status.enabled">启用</span>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <input type="checkbox" class="checkbox-input" id="advancedUser2">
+                                    </td>
+                                    <td data-i18n-key="userName2">用户名称2</td>
+                                    <td>g.hjkl@163.com</td>
+                                    <td>
+                                        <span class="status-badge status-inactive">
+                                            <span class="status-icon"></span>
+                                            <span data-i18n-key="pushStrategy.status.disabled">禁用</span>
+                                        </span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- 充电提醒弹窗 -->
+    <div class="charge-reminder-modal" id="chargeReminderModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">
+                    <span>🔋</span>
+                    <span data-i18n="pushStrategy.modal.chargeReminderTitle">充电提醒设置</span>
+                </h3>
+                <button class="modal-close" onclick="closeChargeReminderModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <!-- 放电最佳点预测信息 -->
+                <div class="peak-prediction-section">
+                    <div class="peak-prediction-title">
+                        <span>📈</span>
+                        <span data-i18n="pushStrategy.modal.dischargePeakPrediction">放电最佳点预测</span>
+                    </div>
+                    <div class="peak-info-grid">
+                        <div class="peak-info-item">
+                            <span class="peak-info-label" data-i18n="pushStrategy.modal.todayPeak">今日峰值</span>
+                            <span class="peak-info-value">$1.85</span>
+                        </div>
+                        <div class="peak-info-item">
+                            <span class="peak-info-label" data-i18n="pushStrategy.modal.todaySellHigh">今日卖点高点</span>
+                            <span class="peak-info-value">$1.62</span>
+                        </div>
+                    </div>
+                    <div class="peak-percentage">
+                        <div class="peak-percentage-label" data-i18n="pushStrategy.modal.todayPeakPercentage">今日峰值百分比</div>
+                        <div class="peak-percentage-value">87.6%</div>
+                    </div>
+                </div>
+
+                <!-- 最佳卖点设置 -->
+                <div class="modal-form-section">
+                    <div class="modal-form-title" data-i18n="pushStrategy.modal.bestSellSettings">最佳卖点设置</div>
+                    <div class="modal-form-grid">
+                        <div class="modal-form-item">
+                            <label class="modal-form-label" data-i18n="pushStrategy.modal.bestSellAdvanceTime">最佳卖点提前时间</label>
+                            <div class="counter-input">
+                                <button type="button" class="counter-btn" onclick="adjustModalAdvance(-1)">−</button>
+                                <input type="number" class="counter-value" value="30" min="5" max="180" id="modalAdvanceTime">
+                                <span class="counter-unit">min</span>
+                                <button type="button" class="counter-btn" onclick="adjustModalAdvance(1)">+</button>
+                            </div>
+                        </div>
+                        <div class="modal-form-item">
+                            <label class="modal-form-label" data-i18n="pushStrategy.modal.reminderFrequency">提醒频率</label>
+                            <div class="counter-input">
+                                <button type="button" class="counter-btn" onclick="adjustModalFrequency(-1)">−</button>
+                                <input type="number" class="counter-value" value="15" min="1" max="60" id="modalFrequency">
+                                <span class="counter-unit">min</span>
+                                <button type="button" class="counter-btn" onclick="adjustModalFrequency(1)">+</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 发送方式 -->
+                <div class="modal-form-section">
+                    <div class="modal-form-title" data-i18n="pushStrategy.sendingMethod">发送方式</div>
+                    <div class="method-checkboxes">
+                        <label class="method-checkbox">
+                            <input type="checkbox" checked id="modalInApp"> <span data-i18n="pushStrategy.methods.inSiteMessage">站内信</span>
+                        </label>
+                        <label class="method-checkbox">
+                            <input type="checkbox" id="modalEmail"> <span data-i18n="pushStrategy.methods.email">邮件</span>
+                        </label>
+                        <label class="method-checkbox">
+                            <input type="checkbox" id="modalSMS"> <span data-i18n="pushStrategy.methods.sms">短信</span>
+                        </label>
+                        <label class="method-checkbox">
+                            <input type="checkbox" id="modalWebhook"> Webhook
+                        </label>
+                    </div>
+                </div>
+
+                <!-- 选择用户 -->
+                <div class="modal-form-section">
+                    <div class="modal-form-title" data-i18n="pushStrategy.selectUsers">选择用户</div>
+                    <div class="user-selection-modal">
+                        <div class="user-filter-row">
+                            <div class="user-filter-item">
+                                <label class="modal-form-label" data-i18n="pushStrategy.modal.userGroup">用户分组</label>
+                                <select class="form-input" multiple id="modalUserGroups">
+                                    <option value="admin" selected data-i18n="pushStrategy.modal.admin">管理员</option>
+                                    <option value="operator" data-i18n="pushStrategy.modal.operator">操作员</option>
+                                    <option value="viewer" data-i18n="pushStrategy.modal.viewer">观察者</option>
+                                    <option value="vip" data-i18n="pushStrategy.modal.vipUser">VIP用户</option>
+                                </select>
+                            </div>
+                            <div class="user-filter-item">
+                                <label class="modal-form-label" data-i18n="pushStrategy.modal.activityLevel">活跃度</label>
+                                <select class="form-input" id="modalActivityLevel">
+                                    <option value="all" data-i18n="pushStrategy.modal.all">全部</option>
+                                    <option value="high" selected data-i18n="pushStrategy.modal.highActivity">高活跃</option>
+                                    <option value="medium" data-i18n="pushStrategy.modal.mediumActivity">中活跃</option>
+                                    <option value="low" data-i18n="pushStrategy.modal.lowActivity">低活跃</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="user-filter-row">
+                            <div class="user-filter-item">
+                                <label class="modal-form-label" data-i18n="pushStrategy.modal.region">地区</label>
+                                <select class="form-input" id="modalRegion">
+                                    <option value="all" selected data-i18n="pushStrategy.modal.allRegions">全部地区</option>
+                                    <option value="NSW">NSW</option>
+                                    <option value="QLD">QLD</option>
+                                    <option value="VIC">VIC</option>
+                                    <option value="SA">SA</option>
+                                    <option value="TAS">TAS</option>
+                                </select>
+                            </div>
+                            <div class="user-filter-item">
+                                <label class="modal-form-label">用户数量</label>
+                                <div class="form-input" style="display: flex; align-items: center; justify-content: center; background: rgba(0, 185, 107, 0.1); color: var(--color-primary); font-weight: 600;">
+                                    <span id="modalSelectedUserCount">12</span> 位用户
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 弹窗操作按钮 -->
+                <div class="modal-actions">
+                    <button class="btn btn-secondary" onclick="closeChargeReminderModal()">取消</button>
+                    <button class="btn btn-primary" onclick="saveChargeReminderModal()">保存设置</button>
+                </div>
             </div>
         </div>
     </div>
@@ -736,7 +2409,196 @@
     <!-- Toast Container -->
     <div class="toast-container" id="toastContainer"></div>
 
+    <!-- 全局推送弹窗 -->
+    <!-- 普通推送弹窗 -->
+    <div class="push-notification" id="normalPushNotification">
+        <div class="push-notification-header">
+            <div class="push-notification-title">
+                <span class="push-notification-icon">⚡</span>
+                <span data-i18n="pushNotification.normal.title">充电提醒——普通</span>
+            </div>
+            <button class="push-notification-close" onclick="closePushNotification('normalPushNotification')">
+                <span>×</span>
+            </button>
+        </div>
+        <div class="push-notification-content">
+            <p data-i18n="pushNotification.normal.content">NSW地区充电价格$300，超过阈值$250，请充电</p>
+        </div>
+    </div>
+
+    <!-- 高级推送弹窗 -->
+    <div class="push-notification" id="advancedPushNotification">
+        <div class="push-notification-header">
+            <div class="push-notification-title">
+                <span class="push-notification-icon">🔋</span>
+                <span data-i18n="pushNotification.advanced.title">最佳充电提醒——高级</span>
+            </div>
+            <button class="push-notification-close" onclick="closePushNotification('advancedPushNotification')">
+                <span>×</span>
+            </button>
+        </div>
+        <div class="push-notification-content">
+            <p data-i18n="pushNotification.advanced.content">NSW地区充电价格$300，还有15分钟到达最佳放电时机，请做好准备</p>
+        </div>
+    </div>
+
     <script>
+        // 立即在全局作用域定义所需函数
+        window.switchStrategy = function(strategy, button) {
+            try {
+                console.log('切换策略:', strategy);
+                const tabs = document.querySelectorAll('.toggle-btn');
+                const normalStrategy = document.getElementById('normalStrategy');
+                const advancedStrategy = document.getElementById('advancedStrategy');
+                
+                if (!normalStrategy || !advancedStrategy) {
+                    console.error('找不到策略内容区域');
+                    alert('找不到策略内容区域，请刷新页面');
+                    return;
+                }
+                
+                // Update tab states
+                tabs.forEach(tab => {
+                    tab.classList.remove('active');
+                });
+                button.classList.add('active');
+                
+                // Show/hide strategy sections
+                if (strategy === 'normal') {
+                    normalStrategy.style.display = 'block';
+                    advancedStrategy.style.display = 'none';
+                } else {
+                    normalStrategy.style.display = 'none';
+                    advancedStrategy.style.display = 'block';
+                }
+                
+                console.log('切换成功到', strategy);
+                // Toast removed
+            } catch (error) {
+                console.error('切换策略失败:', error);
+                alert('切换失败: ' + error.message);
+            }
+        };
+        
+        window.editNormalStrategy = function() {
+            try {
+                console.log('进入普通策略编辑模式');
+                const inputs = document.querySelectorAll('#normalStrategy .region-input, #normalStrategy .counter-value, #normalStrategy .checkbox-input');
+                const editButton = document.getElementById('normalEditBtn');
+                const counterBtns = document.querySelectorAll('#normalStrategy .counter-btn');
+                
+                if (!editButton) {
+                    console.error('找不到编辑按钮');
+                    alert('找不到必要的界面元素，请刷新页面');
+                    return;
+                }
+                
+                // Enable all inputs
+                inputs.forEach(input => {
+                    input.disabled = false;
+                });
+                
+                // Enable counter buttons
+                counterBtns.forEach(btn => {
+                    btn.disabled = false;
+                });
+                
+                // Hide edit button
+                editButton.style.display = 'none';
+                
+                // Show bottom save/cancel buttons
+                const bottomActions = document.getElementById('fixedBottomActions');
+                const bottomCancelBtn = document.getElementById('bottomCancelBtn');
+                const bottomSaveBtn = document.getElementById('bottomSaveBtn');
+                
+                if (bottomActions) {
+                    bottomActions.classList.add('show');
+                    bottomCancelBtn.onclick = cancelNormalEdit;
+                    bottomSaveBtn.onclick = saveNormalStrategy;
+                }
+                
+                console.log('成功进入编辑模式');
+                // Toast removed
+            } catch (error) {
+                console.error('进入编辑模式失败:', error);
+                alert('进入编辑模式失败: ' + error.message);
+            }
+        };
+        
+        window.editAdvancedStrategy = function() {
+            try {
+                console.log('进入高级策略编辑模式');
+                const inputs = document.querySelectorAll('#advancedStrategy .form-input, #advancedStrategy .counter-value, #advancedStrategy .checkbox-input');
+                const editButton = document.getElementById('advancedEditBtn');
+                const counterBtns = document.querySelectorAll('#advancedStrategy .counter-btn');
+                
+                if (!editButton) {
+                    console.error('找不到编辑按钮');
+                    alert('找不到必要的界面元素，请刷新页面');
+                    return;
+                }
+                
+                // Enable all inputs
+                inputs.forEach(input => {
+                    input.disabled = false;
+                });
+                
+                // Enable counter buttons
+                counterBtns.forEach(btn => {
+                    btn.disabled = false;
+                });
+                
+                // Enable toggle switches
+                const toggleSwitches = document.querySelectorAll('#advancedStrategy .toggle-switch');
+                toggleSwitches.forEach(toggle => {
+                    toggle.classList.remove('disabled');
+                });
+                
+                // Hide edit button
+                editButton.style.display = 'none';
+                
+                // Show bottom save/cancel buttons
+                const bottomActions = document.getElementById('fixedBottomActions');
+                const bottomCancelBtn = document.getElementById('bottomCancelBtn');
+                const bottomSaveBtn = document.getElementById('bottomSaveBtn');
+                
+                if (bottomActions) {
+                    bottomActions.classList.add('show');
+                    bottomCancelBtn.onclick = cancelAdvancedEdit;
+                    bottomSaveBtn.onclick = saveAdvancedStrategy;
+                }
+                
+                console.log('成功进入高级策略编辑模式');
+                // Toast removed
+            } catch (error) {
+                console.error('进入编辑模式失败:', error);
+                alert('进入编辑模式失败: ' + error.message);
+            }
+        };
+        
+        // 立即验证函数是否已定义
+        console.log('=== 函数定义验证 ===');
+        console.log('window.switchStrategy:', typeof window.switchStrategy);
+        console.log('window.editNormalStrategy:', typeof window.editNormalStrategy);
+        console.log('window.editAdvancedStrategy:', typeof window.editAdvancedStrategy);
+        console.log('===================');
+        
+        // 全局错误处理
+        window.onerror = function(msg, url, lineNo, columnNo, error) {
+            console.error('JavaScript错误:', {
+                message: msg,
+                source: url,
+                lineno: lineNo,
+                colno: columnNo,
+                error: error
+            });
+            // 显示错误提示给用户
+            if (typeof showErrorToast === 'function') {
+                showErrorToast('页面错误', '请刷新页面或联系管理员');
+            }
+            return false;
+        };
+        
         // Toast functionality
         let toastCounter = 0;
 
@@ -837,8 +2699,9 @@
             // Check if at least one sending method is selected
             const sendInApp = document.getElementById('sendInApp').checked;
             const sendEmail = document.getElementById('sendEmail').checked;
+            const sendPopup = document.getElementById('sendPopup').checked;
             
-            if (!sendInApp && !sendEmail) {
+            if (!sendInApp && !sendEmail && !sendPopup) {
                 showErrorToast('验证失败', '请至少选择一种发送方式');
                 return;
             }
@@ -852,23 +2715,16 @@
             
             // Simulate saving
             const btn = event.target;
-            const originalText = btn.textContent;
-            btn.textContent = window.i18n ? window.i18n.getText('saving') : '保存中...';
             btn.disabled = true;
             
             setTimeout(() => {
-                showSuccessToast(
-                    window.i18n ? window.i18n.getText('pushStrategy.messages.saveSuccess') : '保存成功',
-                    window.i18n ? window.i18n.getText('pushStrategy.messages.strategyUpdated') : '推送策略已成功更新'
-                );
-                btn.textContent = originalText;
                 btn.disabled = false;
                 
-                // Exit edit mode
-                const inputs = document.querySelectorAll('.region-input, .counter-value, .checkbox-input');
-                const editButton = document.querySelector('.edit-button');
-                const formActions = document.querySelector('.form-actions');
-                const counterBtns = document.querySelectorAll('.counter-btn');
+                // Exit edit mode for normal strategy
+                const inputs = document.querySelectorAll('#normalStrategy .region-input, #normalStrategy .counter-value, #normalStrategy .checkbox-input');
+                const editButton = document.getElementById('normalEditBtn');
+                const saveActions = document.getElementById('normalSaveActions');
+                const counterBtns = document.querySelectorAll('#normalStrategy .counter-btn');
                 
                 // Disable all inputs
                 inputs.forEach(input => {
@@ -880,9 +2736,12 @@
                     btn.disabled = true;
                 });
                 
-                // Show edit button and hide form actions
+                // Show edit button and hide bottom actions
                 editButton.style.display = 'block';
-                formActions.style.display = 'none';
+                const bottomActions = document.getElementById('fixedBottomActions');
+                if (bottomActions) {
+                    bottomActions.classList.remove('show');
+                }
             }, 1500);
         }
 
@@ -893,36 +2752,798 @@
             }
         }
 
-        // Edit strategy
-        function editStrategy() {
-            // Toggle edit mode
-            const inputs = document.querySelectorAll('.region-input, .counter-value, .checkbox-input');
-            const editButton = document.querySelector('.edit-button');
-            const formActions = document.querySelector('.form-actions');
-            const counterBtns = document.querySelectorAll('.counter-btn');
-            
-            // Enable all inputs
-            inputs.forEach(input => {
-                input.disabled = false;
-            });
-            
-            // Enable counter buttons
-            counterBtns.forEach(btn => {
-                btn.disabled = false;
-            });
-            
-            // Hide edit button and show save/cancel buttons
-            editButton.style.display = 'none';
-            formActions.style.display = 'flex';
-            
-            showSuccessToast(
-                window.i18n ? window.i18n.getText('pushStrategy.messages.editMode') : '编辑模式',
-                window.i18n ? window.i18n.getText('pushStrategy.messages.editModeEnabled') : '已进入编辑模式，请修改配置'
-            );
+        // Edit normal strategy - 已在顶部定义为window.editNormalStrategy
+
+        // Cancel normal strategy edit
+        function cancelNormalEdit() {
+            window.location.reload();
         }
 
+        // Save normal strategy
+        function saveNormalStrategy() {
+            // Use the existing saveStrategy function logic
+            saveStrategy();
+        }
+
+        // Edit advanced strategy - 已在顶部定义为window.editAdvancedStrategy
+
+        // Cancel advanced strategy edit
+        function cancelAdvancedEdit() {
+            window.location.reload();
+        }
+
+        // Switch between strategy tabs - 已在顶部定义为window.switchStrategy
+
+        // Peak prediction adjustment functions
+        function adjustOptimalAdvance(delta) {
+            const input = document.getElementById('optimalAdvance');
+            const currentValue = parseInt(input.value);
+            const newValue = Math.max(5, Math.min(180, currentValue + delta));
+            input.value = newValue;
+            
+            const decreaseBtn = input.parentElement.querySelector('.counter-btn:first-child');
+            const increaseBtn = input.parentElement.querySelector('.counter-btn:last-child');
+            
+            decreaseBtn.disabled = newValue <= 5;
+            increaseBtn.disabled = newValue >= 180;
+        }
+
+        function adjustHighAdvance(delta) {
+            const input = document.getElementById('highAdvance');
+            const currentValue = parseInt(input.value);
+            const newValue = Math.max(5, Math.min(180, currentValue + delta));
+            input.value = newValue;
+            
+            const decreaseBtn = input.parentElement.querySelector('.counter-btn:first-child');
+            const increaseBtn = input.parentElement.querySelector('.counter-btn:last-child');
+            
+            decreaseBtn.disabled = newValue <= 5;
+            increaseBtn.disabled = newValue >= 180;
+        }
+
+        function adjustStandardAdvance(delta) {
+            const input = document.getElementById('standardAdvance');
+            const currentValue = parseInt(input.value);
+            const newValue = Math.max(5, Math.min(180, currentValue + delta));
+            input.value = newValue;
+            
+            const decreaseBtn = input.parentElement.querySelector('.counter-btn:first-child');
+            const increaseBtn = input.parentElement.querySelector('.counter-btn:last-child');
+            
+            decreaseBtn.disabled = newValue <= 5;
+            increaseBtn.disabled = newValue >= 180;
+        }
+
+        // Advanced frequency adjustment
+        function adjustAdvancedFrequency(delta) {
+            const input = document.getElementById('advancedFrequency');
+            const currentValue = parseInt(input.value);
+            const newValue = Math.max(1, Math.min(60, currentValue + delta));
+            input.value = newValue;
+            
+            const decreaseBtn = input.parentElement.querySelector('.counter-btn:first-child');
+            const increaseBtn = input.parentElement.querySelector('.counter-btn:last-child');
+            
+            decreaseBtn.disabled = newValue <= 1;
+            increaseBtn.disabled = newValue >= 60;
+        }
+
+        // Discharge optimal point adjustment functions
+        function adjustDischargeOptimalAdvance(delta) {
+            const input = document.getElementById('dischargeOptimalAdvance');
+            const currentValue = parseInt(input.value);
+            const newValue = Math.max(5, Math.min(180, currentValue + delta));
+            input.value = newValue;
+            
+            const decreaseBtn = input.parentElement.querySelector('.counter-btn:first-child');
+            const increaseBtn = input.parentElement.querySelector('.counter-btn:last-child');
+            
+            decreaseBtn.disabled = newValue <= 5;
+            increaseBtn.disabled = newValue >= 180;
+        }
+
+        function adjustDischargeOptimalFrequency(delta) {
+            const input = document.getElementById('dischargeOptimalFrequency');
+            const currentValue = parseInt(input.value);
+            const newValue = Math.max(1, Math.min(60, currentValue + delta));
+            input.value = newValue;
+            
+            const decreaseBtn = input.parentElement.querySelector('.counter-btn:first-child');
+            const increaseBtn = input.parentElement.querySelector('.counter-btn:last-child');
+            
+            decreaseBtn.disabled = newValue <= 1;
+            increaseBtn.disabled = newValue >= 60;
+        }
+
+        // Discharge high point adjustment functions
+        function adjustDischargeHighAdvance(delta) {
+            const input = document.getElementById('dischargeHighAdvance');
+            const currentValue = parseInt(input.value);
+            const newValue = Math.max(5, Math.min(180, currentValue + delta));
+            input.value = newValue;
+            
+            const decreaseBtn = input.parentElement.querySelector('.counter-btn:first-child');
+            const increaseBtn = input.parentElement.querySelector('.counter-btn:last-child');
+            
+            decreaseBtn.disabled = newValue <= 5;
+            increaseBtn.disabled = newValue >= 180;
+        }
+
+        function adjustDischargeHighFrequency(delta) {
+            const input = document.getElementById('dischargeHighFrequency');
+            const currentValue = parseInt(input.value);
+            const newValue = Math.max(1, Math.min(60, currentValue + delta));
+            input.value = newValue;
+            
+            const decreaseBtn = input.parentElement.querySelector('.counter-btn:first-child');
+            const increaseBtn = input.parentElement.querySelector('.counter-btn:last-child');
+            
+            decreaseBtn.disabled = newValue <= 1;
+            increaseBtn.disabled = newValue >= 60;
+        }
+
+        // Charge optimal point adjustment functions
+        function adjustChargeOptimalAdvance(delta) {
+            const input = document.getElementById('chargeOptimalAdvance');
+            const currentValue = parseInt(input.value);
+            const newValue = Math.max(5, Math.min(180, currentValue + delta));
+            input.value = newValue;
+            
+            const decreaseBtn = input.parentElement.querySelector('.counter-btn:first-child');
+            const increaseBtn = input.parentElement.querySelector('.counter-btn:last-child');
+            
+            decreaseBtn.disabled = newValue <= 5;
+            increaseBtn.disabled = newValue >= 180;
+        }
+
+        function adjustChargeOptimalFrequency(delta) {
+            const input = document.getElementById('chargeOptimalFrequency');
+            const currentValue = parseInt(input.value);
+            const newValue = Math.max(1, Math.min(60, currentValue + delta));
+            input.value = newValue;
+            
+            const decreaseBtn = input.parentElement.querySelector('.counter-btn:first-child');
+            const increaseBtn = input.parentElement.querySelector('.counter-btn:last-child');
+            
+            decreaseBtn.disabled = newValue <= 1;
+            increaseBtn.disabled = newValue >= 60;
+        }
+
+        // Charge low point adjustment functions
+        function adjustChargeLowAdvance(delta) {
+            const input = document.getElementById('chargeLowAdvance');
+            const currentValue = parseInt(input.value);
+            const newValue = Math.max(5, Math.min(180, currentValue + delta));
+            input.value = newValue;
+            
+            const decreaseBtn = input.parentElement.querySelector('.counter-btn:first-child');
+            const increaseBtn = input.parentElement.querySelector('.counter-btn:last-child');
+            
+            decreaseBtn.disabled = newValue <= 5;
+            increaseBtn.disabled = newValue >= 180;
+        }
+
+        function adjustChargeLowFrequency(delta) {
+            const input = document.getElementById('chargeLowFrequency');
+            const currentValue = parseInt(input.value);
+            const newValue = Math.max(1, Math.min(60, currentValue + delta));
+            input.value = newValue;
+            
+            const decreaseBtn = input.parentElement.querySelector('.counter-btn:first-child');
+            const increaseBtn = input.parentElement.querySelector('.counter-btn:last-child');
+            
+            decreaseBtn.disabled = newValue <= 1;
+            increaseBtn.disabled = newValue >= 60;
+        }
+
+        // 模块状态管理
+        const moduleStates = {
+            charge: {
+                enabled: false
+            },
+            discharge: {
+                enabled: true
+            }
+        };
+
+        // 切换充电模块
+        function toggleChargeModule() {
+            // Check if we're in edit mode
+            const editButton = document.getElementById('advancedEditBtn');
+            if (editButton && editButton.style.display !== 'none') {
+                // Not in edit mode, ignore click
+                return;
+            }
+            
+            const isEnabled = moduleStates.charge.enabled;
+            moduleStates.charge.enabled = !isEnabled;
+            
+            const toggleSwitch = document.querySelector('#chargeModuleToggle').parentElement;
+            const toggleKnob = document.getElementById('chargeModuleToggle');
+            const moduleContent = document.getElementById('chargeModuleContent');
+            
+            const toggleLabel = document.getElementById('chargeToggleLabel');
+            
+            if (moduleStates.charge.enabled) {
+                toggleSwitch.classList.add('active');
+                toggleKnob.classList.add('active');
+                moduleContent.classList.remove('disabled');
+                if (toggleLabel) {
+                    toggleLabel.textContent = window.i18n ? window.i18n.getText('toggle.enabled') : '启用';
+                    toggleLabel.setAttribute('data-i18n', 'toggle.enabled');
+                }
+                // Toast removed
+            } else {
+                toggleSwitch.classList.remove('active');
+                toggleKnob.classList.remove('active');
+                moduleContent.classList.add('disabled');
+                if (toggleLabel) {
+                    toggleLabel.textContent = window.i18n ? window.i18n.getText('toggle.disabled') : '禁用';
+                    toggleLabel.setAttribute('data-i18n', 'toggle.disabled');
+                }
+                // Toast removed
+            }
+        }
+
+        // 切换放电模块
+        function toggleDischargeModule() {
+            // Check if we're in edit mode
+            const editButton = document.getElementById('advancedEditBtn');
+            if (editButton && editButton.style.display !== 'none') {
+                // Not in edit mode, ignore click
+                return;
+            }
+            
+            const isEnabled = moduleStates.discharge.enabled;
+            moduleStates.discharge.enabled = !isEnabled;
+            
+            const toggleSwitch = document.querySelector('#dischargeModuleToggle').parentElement;
+            const toggleKnob = document.getElementById('dischargeModuleToggle');
+            const moduleContent = document.getElementById('dischargeModuleContent');
+            
+            const toggleLabel = document.getElementById('dischargeToggleLabel');
+            
+            if (moduleStates.discharge.enabled) {
+                toggleSwitch.classList.add('active');
+                toggleKnob.classList.add('active');
+                moduleContent.classList.remove('disabled');
+                if (toggleLabel) {
+                    toggleLabel.textContent = window.i18n ? window.i18n.getText('toggle.enabled') : '启用';
+                    toggleLabel.setAttribute('data-i18n', 'toggle.enabled');
+                }
+                // Toast removed
+            } else {
+                toggleSwitch.classList.remove('active');
+                toggleKnob.classList.remove('active');
+                moduleContent.classList.add('disabled');
+                if (toggleLabel) {
+                    toggleLabel.textContent = window.i18n ? window.i18n.getText('toggle.disabled') : '禁用';
+                    toggleLabel.setAttribute('data-i18n', 'toggle.disabled');
+                }
+                // Toast removed
+            }
+        }
+
+        // Save advanced strategy
+        function saveAdvancedStrategy() {
+            // Simulate saving without validation
+            const btn = event.target;
+            btn.disabled = true;
+            
+            setTimeout(() => {
+                btn.disabled = false;
+                
+                // Exit edit mode for advanced strategy
+                const inputs = document.querySelectorAll('#advancedStrategy .form-input, #advancedStrategy .counter-value, #advancedStrategy .checkbox-input');
+                const editButton = document.getElementById('advancedEditBtn');
+                const counterBtns = document.querySelectorAll('#advancedStrategy .counter-btn');
+                
+                // Disable all inputs
+                inputs.forEach(input => {
+                    input.disabled = true;
+                });
+                
+                // Disable counter buttons
+                counterBtns.forEach(btn => {
+                    btn.disabled = true;
+                });
+                
+                // Disable toggle switches
+                const toggleSwitches = document.querySelectorAll('#advancedStrategy .toggle-switch');
+                toggleSwitches.forEach(toggle => {
+                    toggle.classList.add('disabled');
+                });
+                
+                // Show edit button and hide bottom actions
+                editButton.style.display = 'block';
+                const bottomActions = document.getElementById('fixedBottomActions');
+                if (bottomActions) {
+                    bottomActions.classList.remove('show');
+                }
+            }, 1500);
+        }
+
+        // Refresh training data
+        function refreshTrainingData() {
+            const dataCount = document.querySelector('.data-count');
+            const refreshBtn = event.target;
+            
+            refreshBtn.textContent = '刷新中...';
+            refreshBtn.disabled = true;
+            
+            setTimeout(() => {
+                // Simulate new data
+                const newCount = Math.floor(Math.random() * 5000) + 10000;
+                dataCount.textContent = newCount.toLocaleString();
+                
+                refreshBtn.textContent = '刷新';
+                refreshBtn.disabled = false;
+                
+                // Toast removed
+            }, 1000);
+        }
+
+        // Update range input value display
+        function updateRangeValue(input, valueDisplay) {
+            valueDisplay.textContent = input.value;
+        }
+
+        // Strategy card functionality
+        const strategyStates = {
+            chargeReminder: {
+                enabled: false,
+                editing: false
+            },
+            dischargeReminder: {
+                enabled: true,
+                editing: false
+            }
+        };
+
+        // Toggle strategy on/off
+        function toggleStrategy(strategyType) {
+            const isEnabled = strategyStates[strategyType].enabled;
+            strategyStates[strategyType].enabled = !isEnabled;
+            
+            const toggleSwitch = document.querySelector(`#${strategyType}Toggle`).parentElement;
+            const toggleKnob = document.getElementById(`${strategyType}Toggle`);
+            const statusElement = document.getElementById(`${strategyType}Status`);
+            
+            if (strategyStates[strategyType].enabled) {
+                // Enable strategy
+                toggleSwitch.classList.add('active');
+                toggleKnob.classList.add('active');
+                statusElement.classList.remove('disabled');
+                statusElement.classList.add('active');
+                statusElement.innerHTML = `
+                    <span class="status-text">策略已启用</span>
+                    <span class="status-badge">运行中</span>
+                `;
+                // Toast removed
+            } else {
+                // Disable strategy
+                toggleSwitch.classList.remove('active');
+                toggleKnob.classList.remove('active');
+                statusElement.classList.remove('active');
+                statusElement.classList.add('disabled');
+                statusElement.innerHTML = `
+                    <span class="status-text">策略已关闭</span>
+                `;
+                // Toast removed
+            }
+        }
+
+        // Edit strategy configuration
+        function editStrategy(strategyType) {
+            strategyStates[strategyType].editing = true;
+            
+            if (strategyType === 'chargeReminder') {
+                // Show modal for charging reminder
+                openChargeReminderModal();
+            } else {
+                // Use inline editing for other strategies
+                const configElement = document.getElementById(`${strategyType}Config`);
+                const actionsElement = document.getElementById(`${strategyType}Actions`);
+                const editButton = document.getElementById(`${strategyType}EditBtn`);
+                
+                // Show config form and actions
+                configElement.style.display = 'block';
+                actionsElement.style.display = 'flex';
+                
+                // Hide edit button
+                editButton.style.display = 'none';
+                
+                // Enable all inputs
+                const inputs = configElement.querySelectorAll('input, select');
+                inputs.forEach(input => {
+                    input.disabled = false;
+                });
+                
+                // Enable counter buttons
+                const counterBtns = configElement.querySelectorAll('.counter-btn');
+                counterBtns.forEach(btn => {
+                    btn.disabled = false;
+                });
+            }
+        }
+
+        // Cancel edit strategy
+        function cancelEditStrategy(strategyType) {
+            strategyStates[strategyType].editing = false;
+            
+            const configElement = document.getElementById(`${strategyType}Config`);
+            const actionsElement = document.getElementById(`${strategyType}Actions`);
+            const editButton = document.getElementById(`${strategyType}EditBtn`);
+            
+            // Hide config form and actions
+            configElement.style.display = 'none';
+            actionsElement.style.display = 'none';
+            
+            // Show edit button
+            editButton.style.display = 'flex';
+        }
+
+        // Save strategy configuration
+        function saveStrategy(strategyType) {
+            const configElement = document.getElementById(`${strategyType}Config`);
+            
+            // Validate configuration
+            const thresholdInput = document.getElementById(`${strategyType}Threshold`);
+            const advanceInput = document.getElementById(`${strategyType}Advance`);
+            const frequencyInput = document.getElementById(`${strategyType}Frequency`);
+            
+            if (!thresholdInput.value || !advanceInput.value || !frequencyInput.value) {
+                showErrorToast('配置错误', '请填写所有必填项');
+                return;
+            }
+            
+            // Check if at least one sending method is selected
+            const methodInputs = configElement.querySelectorAll('input[type="checkbox"]');
+            const hasSelectedMethod = Array.from(methodInputs).some(input => input.checked);
+            
+            if (!hasSelectedMethod) {
+                showErrorToast('配置错误', '请至少选择一种发送方式');
+                return;
+            }
+            
+            // Simulate saving
+            const saveButton = event.target;
+            saveButton.disabled = true;
+            
+            setTimeout(() => {
+                // Save successful
+                saveButton.disabled = false;
+                
+                // Exit edit mode
+                cancelEditStrategy(strategyType);
+                
+                // Toast removed
+            }, 1000);
+        }
+
+        // Counter adjustment functions for strategy cards
+        function adjustChargeAdvance(delta) {
+            const input = document.getElementById('chargeAdvance');
+            const currentValue = parseInt(input.value);
+            const newValue = Math.max(5, Math.min(180, currentValue + delta));
+            input.value = newValue;
+            
+            const decreaseBtn = input.parentElement.querySelector('.counter-btn:first-child');
+            const increaseBtn = input.parentElement.querySelector('.counter-btn:last-child');
+            
+            decreaseBtn.disabled = newValue <= 5;
+            increaseBtn.disabled = newValue >= 180;
+        }
+
+        function adjustChargeFrequency(delta) {
+            const input = document.getElementById('chargeFrequency');
+            const currentValue = parseInt(input.value);
+            const newValue = Math.max(1, Math.min(60, currentValue + delta));
+            input.value = newValue;
+            
+            const decreaseBtn = input.parentElement.querySelector('.counter-btn:first-child');
+            const increaseBtn = input.parentElement.querySelector('.counter-btn:last-child');
+            
+            decreaseBtn.disabled = newValue <= 1;
+            increaseBtn.disabled = newValue >= 60;
+        }
+
+        function adjustDischargeAdvance(delta) {
+            const input = document.getElementById('dischargeAdvance');
+            const currentValue = parseInt(input.value);
+            const newValue = Math.max(5, Math.min(180, currentValue + delta));
+            input.value = newValue;
+            
+            const decreaseBtn = input.parentElement.querySelector('.counter-btn:first-child');
+            const increaseBtn = input.parentElement.querySelector('.counter-btn:last-child');
+            
+            decreaseBtn.disabled = newValue <= 5;
+            increaseBtn.disabled = newValue >= 180;
+        }
+
+        function adjustDischargeFrequency(delta) {
+            const input = document.getElementById('dischargeFrequency');
+            const currentValue = parseInt(input.value);
+            const newValue = Math.max(1, Math.min(60, currentValue + delta));
+            input.value = newValue;
+            
+            const decreaseBtn = input.parentElement.querySelector('.counter-btn:first-child');
+            const increaseBtn = input.parentElement.querySelector('.counter-btn:last-child');
+            
+            decreaseBtn.disabled = newValue <= 1;
+            increaseBtn.disabled = newValue >= 60;
+        }
+
+        // Charging reminder modal functions
+        function openChargeReminderModal() {
+            const modal = document.getElementById('chargeReminderModal');
+            modal.classList.add('show');
+            
+            // Update peak prediction data with random values
+            updatePeakPredictionData();
+            
+            // Update translations for modal content
+            if (window.i18n && window.i18n.updatePageTexts) {
+                setTimeout(() => {
+                    window.i18n.updatePageTexts();
+                }, 10);
+            }
+            
+            // Disable background scrolling
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeChargeReminderModal() {
+            const modal = document.getElementById('chargeReminderModal');
+            modal.classList.remove('show');
+            
+            // Re-enable background scrolling
+            document.body.style.overflow = 'auto';
+            
+            // Reset strategy editing state
+            strategyStates.chargeReminder.editing = false;
+        }
+
+        function updatePeakPredictionData() {
+            // Generate realistic peak prediction data
+            const peakValue = (Math.random() * 0.5 + 1.5).toFixed(2);
+            const highPoint = (peakValue * 0.85 + Math.random() * 0.1).toFixed(2);
+            const percentage = (Math.random() * 20 + 80).toFixed(1);
+            
+            document.querySelector('.peak-info-value').textContent = `$${peakValue}`;
+            document.querySelectorAll('.peak-info-value')[1].textContent = `$${highPoint}`;
+            document.querySelector('.peak-percentage-value').textContent = `${percentage}%`;
+        }
+
+        function adjustModalAdvance(delta) {
+            const input = document.getElementById('modalAdvanceTime');
+            const currentValue = parseInt(input.value);
+            const newValue = Math.max(5, Math.min(180, currentValue + delta));
+            input.value = newValue;
+            
+            const decreaseBtn = input.parentElement.querySelector('.counter-btn:first-child');
+            const increaseBtn = input.parentElement.querySelector('.counter-btn:last-child');
+            
+            decreaseBtn.disabled = newValue <= 5;
+            increaseBtn.disabled = newValue >= 180;
+        }
+
+        function adjustModalFrequency(delta) {
+            const input = document.getElementById('modalFrequency');
+            const currentValue = parseInt(input.value);
+            const newValue = Math.max(1, Math.min(60, currentValue + delta));
+            input.value = newValue;
+            
+            const decreaseBtn = input.parentElement.querySelector('.counter-btn:first-child');
+            const increaseBtn = input.parentElement.querySelector('.counter-btn:last-child');
+            
+            decreaseBtn.disabled = newValue <= 1;
+            increaseBtn.disabled = newValue >= 60;
+            
+            // Update user count based on settings
+            updateModalUserCount();
+        }
+
+        function updateModalUserCount() {
+            // Simulate user count calculation based on filters
+            const userGroups = document.getElementById('modalUserGroups').selectedOptions.length;
+            const activityLevel = document.getElementById('modalActivityLevel').value;
+            const region = document.getElementById('modalRegion').value;
+            
+            let baseCount = 20;
+            if (activityLevel === 'high') baseCount = 15;
+            else if (activityLevel === 'medium') baseCount = 25;
+            else if (activityLevel === 'low') baseCount = 8;
+            
+            if (region !== 'all') baseCount = Math.floor(baseCount * 0.6);
+            
+            const totalCount = baseCount + userGroups * 3;
+            document.getElementById('modalSelectedUserCount').textContent = totalCount;
+        }
+
+        function saveChargeReminderModal() {
+            // Validate modal form
+            const advanceTime = document.getElementById('modalAdvanceTime').value;
+            const frequency = document.getElementById('modalFrequency').value;
+            
+            if (!advanceTime || !frequency) {
+                showErrorToast('配置错误', '请填写所有必填项');
+                return;
+            }
+            
+            // Check if at least one sending method is selected
+            const methodInputs = document.querySelectorAll('#chargeReminderModal input[type="checkbox"]');
+            const hasSelectedMethod = Array.from(methodInputs).some(input => input.checked);
+            
+            if (!hasSelectedMethod) {
+                showErrorToast('配置错误', '请至少选择一种发送方式');
+                return;
+            }
+            
+            // Simulate saving
+            const saveButton = event.target;
+            saveButton.disabled = true;
+            
+            setTimeout(() => {
+                saveButton.disabled = false;
+                
+                // Close modal
+                closeChargeReminderModal();
+                
+                // Update strategy card to show enabled state
+                if (!strategyStates.chargeReminder.enabled) {
+                    toggleStrategy('chargeReminder');
+                }
+                
+                // Toast removed
+            }, 1000);
+        }
+
+        // Update user count when filters change
+        document.addEventListener('change', function(e) {
+            if (e.target.matches('#modalUserGroups, #modalActivityLevel, #modalRegion')) {
+                updateModalUserCount();
+            }
+        });
+
+        // Close modal when clicking outside
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('charge-reminder-modal')) {
+                closeChargeReminderModal();
+            }
+        });
+
+        // Close modal with Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && document.getElementById('chargeReminderModal').classList.contains('show')) {
+                closeChargeReminderModal();
+            }
+        });
+
+        // 全局推送弹窗功能
+        let pushNotificationTimeouts = {};
+
+        // 显示推送弹窗
+        function showPushNotification(type, data = {}) {
+            const notificationId = type === 'normal' ? 'normalPushNotification' : 'advancedPushNotification';
+            const notification = document.getElementById(notificationId);
+            
+            if (!notification) return;
+            
+            // 更新内容
+            if (data.region || data.price || data.threshold || data.action || data.timeRemaining) {
+                updateNotificationContent(notificationId, data);
+            }
+            
+            // 显示弹窗
+            notification.classList.add('show');
+            notification.classList.remove('hide');
+            
+            // 不设置自动隐藏定时器，只能手动关闭
+            // 清除之前的定时器（如果有的话）
+            if (pushNotificationTimeouts[notificationId]) {
+                clearTimeout(pushNotificationTimeouts[notificationId]);
+                delete pushNotificationTimeouts[notificationId];
+            }
+        }
+
+        // 关闭推送弹窗
+        function closePushNotification(notificationId) {
+            const notification = document.getElementById(notificationId);
+            if (!notification) return;
+            
+            notification.classList.add('hide');
+            notification.classList.remove('show');
+            
+            // 清除定时器
+            if (pushNotificationTimeouts[notificationId]) {
+                clearTimeout(pushNotificationTimeouts[notificationId]);
+                delete pushNotificationTimeouts[notificationId];
+            }
+        }
+
+        // 更新弹窗内容
+        function updateNotificationContent(notificationId, data) {
+            const notification = document.getElementById(notificationId);
+            if (!notification) return;
+            
+            const contentElement = notification.querySelector('.push-notification-content p');
+            const titleElement = notification.querySelector('.push-notification-title span:last-child');
+            if (!contentElement) return;
+            
+            const currentLang = window.i18n ? window.i18n.getCurrentLanguage() : 'zh';
+            
+            if (notificationId === 'normalPushNotification') {
+                const action = data.action || '充电';
+                const region = data.region || 'NSW';
+                const price = data.price || '300';
+                const threshold = data.threshold || '250';
+                
+                if (currentLang === 'en') {
+                    if (titleElement) {
+                        titleElement.textContent = `${action === '充电' ? 'Charging' : 'Discharging'} Alert - Normal`;
+                    }
+                    contentElement.textContent = `${region} region ${action === '充电' ? 'charging' : 'discharging'} price $${price}, exceeds threshold $${threshold}, please ${action === '充电' ? 'charge' : 'discharge'}`;
+                } else {
+                    if (titleElement) {
+                        titleElement.textContent = `${action}提醒——普通`;
+                    }
+                    contentElement.textContent = `${region}地区${action}价格$${price}，超过阈值$${threshold}，请${action}`;
+                }
+            } else if (notificationId === 'advancedPushNotification') {
+                const region = data.region || 'NSW';
+                const price = data.price || '300';
+                const timeRemaining = data.timeRemaining || '15分钟';
+                
+                if (currentLang === 'en') {
+                    if (titleElement) {
+                        titleElement.textContent = 'Optimal Charging Alert - Advanced';
+                    }
+                    contentElement.textContent = `${region} region charging price $${price}, ${timeRemaining} until optimal discharge time, please prepare`;
+                } else {
+                    if (titleElement) {
+                        titleElement.textContent = '最佳充电提醒——高级';
+                    }
+                    contentElement.textContent = `${region}地区充电价格$${price}，还有${timeRemaining}到达最佳放电时机，请做好准备`;
+                }
+            }
+        }
+
+        // 模拟推送通知函数（供测试使用）
+        function simulatePushNotifications() {
+            // 模拟普通推送
+            setTimeout(() => {
+                showPushNotification('normal', {
+                    region: 'NSW',
+                    price: '300',
+                    threshold: '250',
+                    action: '充电'
+                });
+            }, 3000);
+            
+            // 模拟高级推送
+            setTimeout(() => {
+                showPushNotification('advanced', {
+                    region: 'NSW',
+                    price: '300',
+                    timeRemaining: '15分钟'
+                });
+            }, 8000);
+        }
+
+        // 函数已在页面顶部定义
+        
+        // 将toggle函数也添加到全局作用域
+        window.toggleChargeModule = toggleChargeModule;
+        window.toggleDischargeModule = toggleDischargeModule;
+        
         // Initialize
         document.addEventListener('DOMContentLoaded', function() {
+            // 确保应用黑色主题
+            if (!document.body.classList.contains('theme-dark')) {
+                document.body.classList.add('theme-dark');
+            }
+            
             // Initialize HeaderNav component
             const headerNav = new HeaderNav({
                 currentPage: 'pushStrategy',
@@ -930,11 +3551,30 @@
             });
             
             // Initialize frequency counter
-            adjustFrequency(0);
+            const frequencyInput = document.getElementById('frequency');
+            if (frequencyInput) {
+                adjustFrequency(0);
+            }
+            
+            // Initialize modal user count (only if modal exists)
+            const modalUserGroups = document.getElementById('modalUserGroups');
+            if (modalUserGroups) {
+                updateModalUserCount();
+            }
+            
+            // Initialize range input
+            const learningRateInput = document.getElementById('learningRate');
+            const learningRateValue = document.getElementById('learningRateValue');
+            
+            if (learningRateInput && learningRateValue) {
+                learningRateInput.addEventListener('input', function() {
+                    learningRateValue.textContent = this.value;
+                });
+            }
             
             // Initialize form in view mode
-            const inputs = document.querySelectorAll('.region-input, .counter-value, .checkbox-input');
-            const formActions = document.querySelector('.form-actions');
+            const inputs = document.querySelectorAll('.region-input, .counter-value, .checkbox-input, .form-input, .range-input');
+            const saveActions = document.querySelectorAll('.save-actions');
             const counterBtns = document.querySelectorAll('.counter-btn');
             
             // Disable all inputs initially
@@ -947,11 +3587,61 @@
                 btn.disabled = true;
             });
             
-            // Hide form actions initially
-            formActions.style.display = 'none';
+            // Hide save actions initially
+            saveActions.forEach(actions => {
+                actions.style.display = 'none';
+            });
+            
+            // Initialize module states based on moduleStates
+            const chargeModuleContent = document.getElementById('chargeModuleContent');
+            const dischargeModuleContent = document.getElementById('dischargeModuleContent');
+            
+            // 设置充电模块初始状态
+            if (chargeModuleContent) {
+                if (!moduleStates.charge.enabled) {
+                    chargeModuleContent.classList.add('disabled');
+                }
+            }
+            
+            // 设置放电模块初始状态
+            if (dischargeModuleContent) {
+                if (!moduleStates.discharge.enabled) {
+                    dischargeModuleContent.classList.add('disabled');
+                }
+            }
             
             console.log('推送策略页面初始化完成');
+            
+            // 确保初始显示普通策略
+            const normalStrategy = document.getElementById('normalStrategy');
+            const advancedStrategy = document.getElementById('advancedStrategy');
+            if (normalStrategy && advancedStrategy) {
+                normalStrategy.style.display = 'block';
+                advancedStrategy.style.display = 'none';
+            }
+            
+            // Toast removed
+            
+            // 验证函数是否已注册
+            console.log('验证函数注册状态:');
+            console.log('editNormalStrategy:', typeof window.editNormalStrategy);
+            console.log('editAdvancedStrategy:', typeof window.editAdvancedStrategy);
+            console.log('switchStrategy:', typeof window.switchStrategy);
+            
+            // 启动模拟推送（仅供测试，可注释掉）
+            // simulatePushNotifications();
         });
+
+        // 显示开发中消息
+        function showDevelopmentMessage() {
+            showSuccessToast('功能开发中', '该功能正在开发中，敬请期待...');
+        }
     </script>
+    
+    <!-- 固定底部保存/取消按钮 -->
+    <div class="fixed-bottom-actions" id="fixedBottomActions">
+        <button type="button" class="btn btn-secondary" id="bottomCancelBtn" data-i18n-key="pushStrategy.buttons.cancel">取消</button>
+        <button type="button" class="btn btn-primary" id="bottomSaveBtn" data-i18n-key="pushStrategy.buttons.save">保存</button>
+    </div>
 </body>
 </html>

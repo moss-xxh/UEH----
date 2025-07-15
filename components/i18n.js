@@ -167,6 +167,10 @@ class I18n {
                 autoConditions: "自动化条件",
                 settings: "设置",
                 edit: "编辑",
+                toggle: {
+                    enabled: "启用",
+                    disabled: "禁用"
+                },
                 operationType: "操作类型",
                 timeRange: "时间范围",
                 priceCondition: "价格条件",
@@ -196,6 +200,10 @@ class I18n {
                 lessThanPrice: "低于",
                 greaterThanPrice: "高于",
                 autoConditions: "自动条件",
+                timeSchedule: "时间安排",
+                chargeTime: "充电时间",
+                dischargeTime: "放电时间",
+                clickToSelectTime: "点击时间轴选择充电或放电时间段",
                 
                 autoModeType: "自动模式类型",
                 autoChargeConditions: "自动充电条件",
@@ -1218,7 +1226,8 @@ class I18n {
                     selectUsers: "选择用户",
                     methods: {
                         inSiteMessage: "站内信",
-                        email: "邮件"
+                        email: "邮件",
+                        sms: "短信"
                     },
                     placeholder: {
                         price: "价格",
@@ -1238,6 +1247,61 @@ class I18n {
                         notConfigured: "未配置",
                         enabled: "启用",
                         disabled: "禁用"
+                    },
+                    tabs: {
+                        normal: "普通策略",
+                        advanced: "高级策略"
+                    },
+                    settings: "设置",
+                    charge: "充电",
+                    discharge: "放电",
+                    points: {
+                        lowest: "最低点",
+                        low: "低点",
+                        optimal: "最佳点",
+                        high: "高点"
+                    },
+                    priceDescriptions: {
+                        valleyPlus10: "价格：超过谷值10%之内",
+                        valleyPlus20: "价格：超过谷值20%之内",
+                        peakAbove95: "价格：峰值95%以上",
+                        peak90to95: "价格：峰值90-95%"
+                    },
+                    reminderSettings: {
+                        advanceReminder: "提前多久提醒",
+                        frequency: "提醒频率：满足条件，无人响应，多久发送一次提醒"
+                    },
+                    pushNotification: {
+                        normal: {
+                            title: "充电提醒——普通",
+                            content: "NSW地区充电价格$300，超过阈值$250，请充电"
+                        },
+                        advanced: {
+                            title: "最佳充电提醒——高级",
+                            content: "NSW地区充电价格预测将在15分钟后到达最低点$180，建议立即准备充电"
+                        }
+                    },
+                    modal: {
+                        chargeReminderTitle: "充电提醒设置",
+                        dischargePeakPrediction: "放电最佳点预测",
+                        todayPeak: "今日峰值",
+                        todaySellHigh: "今日卖点高点",
+                        todayPeakPercentage: "今日峰值百分比",
+                        bestSellSettings: "最佳卖点设置",
+                        bestSellAdvanceTime: "最佳卖点提前时间",
+                        reminderFrequency: "提醒频率",
+                        userGroup: "用户分组",
+                        activityLevel: "活跃度",
+                        region: "地区",
+                        allRegions: "全部地区",
+                        admin: "管理员",
+                        operator: "操作员",
+                        viewer: "观察者",
+                        vipUser: "VIP用户",
+                        all: "全部",
+                        highActivity: "高活跃",
+                        mediumActivity: "中活跃",
+                        lowActivity: "低活跃"
                     },
                     messages: {
                         saveSuccess: "保存成功",
@@ -1520,6 +1584,10 @@ class I18n {
                 autoConditions: "Auto Conditions",
                 settings: "Settings",
                 edit: "Edit",
+                toggle: {
+                    enabled: "Enable",
+                    disabled: "Disable"
+                },
                 operationType: "Operation Type",
                 timeRange: "Time Range",
                 priceCondition: "Price Condition",
@@ -1549,6 +1617,10 @@ class I18n {
                 lessThanPrice: "Less than",
                 greaterThanPrice: "Greater than",
                 autoConditions: "Auto Conditions",
+                timeSchedule: "Time Schedule",
+                chargeTime: "Charge Time",
+                dischargeTime: "Discharge Time",
+                clickToSelectTime: "Click timeline to select charge or discharge time period",
                 
                 autoModeType: "Auto Mode Type",
                 autoChargeConditions: "Auto Charge Conditions",
@@ -2524,7 +2596,8 @@ class I18n {
                     selectUsers: "Select Users",
                     methods: {
                         inSiteMessage: "In-site Message",
-                        email: "Email"
+                        email: "Email",
+                        sms: "SMS"
                     },
                     placeholder: {
                         price: "Price",
@@ -2544,6 +2617,61 @@ class I18n {
                         notConfigured: "Not Configured",
                         enabled: "Enabled",
                         disabled: "Disabled"
+                    },
+                    tabs: {
+                        normal: "Normal Strategy",
+                        advanced: "Advanced Strategy"
+                    },
+                    settings: "Settings",
+                    charge: "Charge",
+                    discharge: "Discharge",
+                    points: {
+                        lowest: "Lowest Point",
+                        low: "Low Point",
+                        optimal: "Optimal Point",
+                        high: "High Point"
+                    },
+                    priceDescriptions: {
+                        valleyPlus10: "Price: Within 10% above valley",
+                        valleyPlus20: "Price: Within 20% above valley",
+                        peakAbove95: "Price: Above 95% of peak",
+                        peak90to95: "Price: 90-95% of peak"
+                    },
+                    reminderSettings: {
+                        advanceReminder: "Advance Reminder Time",
+                        frequency: "Reminder Frequency: When conditions are met and no response, how often to send reminders"
+                    },
+                    pushNotification: {
+                        normal: {
+                            title: "Charge Reminder - Normal",
+                            content: "NSW region charging price $300 exceeds threshold $250, please charge"
+                        },
+                        advanced: {
+                            title: "Optimal Charge Reminder - Advanced",
+                            content: "NSW region charging price predicted to reach lowest point $180 in 15 minutes, recommend immediate preparation for charging"
+                        }
+                    },
+                    modal: {
+                        chargeReminderTitle: "Charge Reminder Settings",
+                        dischargePeakPrediction: "Discharge Peak Prediction",
+                        todayPeak: "Today's Peak",
+                        todaySellHigh: "Today's Sell High",
+                        todayPeakPercentage: "Today's Peak Percentage",
+                        bestSellSettings: "Best Sell Point Settings",
+                        bestSellAdvanceTime: "Best Sell Point Advance Time",
+                        reminderFrequency: "Reminder Frequency",
+                        userGroup: "User Group",
+                        activityLevel: "Activity Level",
+                        region: "Region",
+                        allRegions: "All Regions",
+                        admin: "Admin",
+                        operator: "Operator",
+                        viewer: "Viewer",
+                        vipUser: "VIP User",
+                        all: "All",
+                        highActivity: "High Activity",
+                        mediumActivity: "Medium Activity",
+                        lowActivity: "Low Activity"
                     },
                     messages: {
                         saveSuccess: "Save Successful",
