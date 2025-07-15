@@ -20,6 +20,119 @@
     <script src="components/drawer-component.js"></script>
     <script src="fix-charts-dom-ready.js" defer></script>
     <style>
+        /* SOC Modal Slider Styles */
+        #socEditModal input[type="range"] {
+            -webkit-appearance: none;
+            appearance: none;
+            background: transparent;
+            cursor: pointer;
+        }
+        
+        #socEditModal input[type="range"]::-webkit-slider-track {
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        #socEditModal input[type="range"]::-moz-range-track {
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        #socEditModal input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            background: radial-gradient(circle at 30% 30%, #00ff88, #00cc6a);
+            cursor: pointer;
+            border-radius: 50%;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3), inset 0 1px 2px rgba(255, 255, 255, 0.3);
+            transition: all 0.15s ease;
+            margin-top: -6px;
+        }
+        
+        #socEditModal input[type="range"]::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            background: radial-gradient(circle at 30% 30%, #00ff88, #00cc6a);
+            cursor: pointer;
+            border-radius: 50%;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3), inset 0 1px 2px rgba(255, 255, 255, 0.3);
+            transition: all 0.15s ease;
+        }
+        
+        #modalChargeSOCSlider::-webkit-slider-thumb {
+            background: radial-gradient(circle at 30% 30%, #00ff88, #00cc6a);
+        }
+        
+        #modalChargeSOCSlider::-moz-range-thumb {
+            background: radial-gradient(circle at 30% 30%, #00ff88, #00cc6a);
+        }
+        
+        #modalDischargeSOCSlider::-webkit-slider-thumb {
+            background: radial-gradient(circle at 30% 30%, #ffc107, #ff9800);
+        }
+        
+        #modalDischargeSOCSlider::-moz-range-thumb {
+            background: radial-gradient(circle at 30% 30%, #ffc107, #ff9800);
+        }
+        
+        #socEditModal input[type="range"]:hover::-webkit-slider-thumb {
+            transform: scale(1.15);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4), inset 0 1px 2px rgba(255, 255, 255, 0.4);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+        
+        #socEditModal input[type="range"]:hover::-moz-range-thumb {
+            transform: scale(1.15);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4), inset 0 1px 2px rgba(255, 255, 255, 0.4);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+        
+        #socEditModal input[type="range"]:active::-webkit-slider-thumb {
+            transform: scale(1.05);
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4), inset 0 1px 2px rgba(0, 0, 0, 0.2);
+        }
+        
+        #socEditModal input[type="range"]:active::-moz-range-thumb {
+            transform: scale(1.05);
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4), inset 0 1px 2px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* 充电滑块发光效果 */
+        #modalChargeSOCSlider:hover::-webkit-slider-thumb {
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.6), 0 4px 12px rgba(0, 0, 0, 0.4), inset 0 1px 2px rgba(255, 255, 255, 0.4);
+        }
+        
+        #modalChargeSOCSlider:hover::-moz-range-thumb {
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.6), 0 4px 12px rgba(0, 0, 0, 0.4), inset 0 1px 2px rgba(255, 255, 255, 0.4);
+        }
+        
+        /* 放电滑块发光效果 */
+        #modalDischargeSOCSlider:hover::-webkit-slider-thumb {
+            box-shadow: 0 0 20px rgba(255, 193, 7, 0.6), 0 4px 12px rgba(0, 0, 0, 0.4), inset 0 1px 2px rgba(255, 255, 255, 0.4);
+        }
+        
+        #modalDischargeSOCSlider:hover::-moz-range-thumb {
+            box-shadow: 0 0 20px rgba(255, 193, 7, 0.6), 0 4px 12px rgba(0, 0, 0, 0.4), inset 0 1px 2px rgba(255, 255, 255, 0.4);
+        }
+        
+        /* Shimmer animation for progress bars */
+        @keyframes shimmer {
+            0% {
+                left: -100%;
+            }
+            100% {
+                left: 200%;
+            }
+        }
+        
         /* 强制抽屉组件在最顶层 */
         .drawer-overlay {
             z-index: 2147483647 !important;
@@ -2520,6 +2633,17 @@
             display: inline-block;
             box-shadow: 0 2px 4px rgba(0, 255, 136, 0.3);
         }
+        .highlight-value {
+            background: linear-gradient(135deg, #ffc107, #ff9800);
+            color: #000;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 700;
+            font-size: 15px;
+            margin: 0 2px;
+            display: inline-block;
+            box-shadow: 0 2px 4px rgba(255, 193, 7, 0.3);
+        }
 
         .highlight-time {
             background: linear-gradient(135deg, #ff6b6b, #ff5252);
@@ -3334,23 +3458,24 @@
                 </div>
                 
                 <!-- SOC Control Section -->
-                <div style="display: flex; gap: 15px; margin-bottom: 15px; height: 60px; flex-shrink: 0;">
+                <div style="display: flex; gap: 15px; margin-bottom: 15px; height: 60px; flex-shrink: 0; position: relative;" onmouseover="showSOCEditOverlay()" onmouseout="hideSOCEditOverlay()" onclick="openSOCEditModal()">
+                    <!-- Edit Overlay -->
+                    <div id="socEditOverlay" style="position: absolute; top: -40px; left: 50%; transform: translateX(-50%); background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; padding: 8px 16px; display: none; align-items: center; justify-content: center; cursor: pointer; z-index: 10; transition: all 0.3s ease;">
+                        <span style="color: var(--color-text); font-size: 13px; font-weight: 600;" data-i18n="edit">编辑</span>
+                    </div>
                     <!-- Charge Stop SOC -->
                     <div style="flex: 1;">
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
                             <span style="font-size: 11px; color: #00ff88; font-weight: 600;" data-i18n="chargeStopSOC">充电停止SOC</span>
                             <div style="display: flex; align-items: center; gap: 4px;">
-                                <span id="chargeStopSOCDisplay" onclick="editChargeStopSOC()" style="color: #00ff88; font-size: 12px; font-weight: 700; cursor: pointer; padding: 2px 6px; border-radius: 4px; transition: background 0.2s;" onmouseover="this.style.background='rgba(0,255,136,0.1)'" onmouseout="this.style.background='transparent'">90</span>
-                                <input id="chargeStopSOCInput" type="number" min="0" max="100" value="90" onchange="updateChargeSOCFromInput(this.value)" onblur="hideChargeSOCInput()" onkeyup="if(event.key==='Enter') hideChargeSOCInput()" style="width: 40px; background: rgba(0,255,136,0.1); border: 1px solid rgba(0,255,136,0.3); border-radius: 4px; color: #00ff88; font-size: 12px; font-weight: 700; text-align: center; padding: 2px; display: none;">
+                                <span id="chargeStopSOCDisplay" style="color: #00ff88; font-size: 12px; font-weight: 700; padding: 2px 6px;">90</span>
                                 <span style="font-size: 10px; color: #00ff88;">%</span>
                             </div>
                         </div>
                         <div style="position: relative; margin-top: 12px;">
-                            <div id="chargeSOCProgressContainer" onclick="handleChargeSOCBarClick(event)" style="width: 100%; height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px; cursor: pointer;">
-                                <div id="chargeSOCProgressBar" style="width: 90%; height: 100%; background: #00ff88; border-radius: 2px; pointer-events: none;"></div>
+                            <div id="chargeSOCProgressContainer" style="width: 100%; height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px;">
+                                <div id="chargeSOCProgressBar" style="width: 90%; height: 100%; background: #00ff88; border-radius: 2px;"></div>
                             </div>
-                            <div id="chargeSOCProgressDot" style="position: absolute; top: -4px; left: 90%; transform: translateX(-50%); width: 12px; height: 12px; background: #00ff88; border-radius: 50%; cursor: pointer; pointer-events: none;"></div>
-                            <input id="chargeSOCSlider" type="range" min="0" max="100" value="90" oninput="updateChargeSOC(this.value)" style="position: absolute; width: 100%; height: 12px; top: -4px; left: 0; opacity: 0; cursor: pointer;">
                         </div>
                     </div>
                     
@@ -3362,17 +3487,14 @@
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
                             <span style="font-size: 11px; color: #ffc107; font-weight: 600;" data-i18n="dischargeStopSOC">放电停止SOC</span>
                             <div style="display: flex; align-items: center; gap: 4px;">
-                                <span id="dischargeStopSOCDisplay" onclick="editDischargeStopSOC()" style="color: #ffc107; font-size: 12px; font-weight: 700; cursor: pointer; padding: 2px 6px; border-radius: 4px; transition: background 0.2s;" onmouseover="this.style.background='rgba(255,193,7,0.1)'" onmouseout="this.style.background='transparent'">20</span>
-                                <input id="dischargeStopSOCInput" type="number" min="0" max="100" value="20" onchange="updateDischargeSOCFromInput(this.value)" onblur="hideDischargeSOCInput()" onkeyup="if(event.key==='Enter') hideDischargeSOCInput()" style="width: 40px; background: rgba(255,193,7,0.1); border: 1px solid rgba(255,193,7,0.3); border-radius: 4px; color: #ffc107; font-size: 12px; font-weight: 700; text-align: center; padding: 2px; display: none;">
+                                <span id="dischargeStopSOCDisplay" style="color: #ffc107; font-size: 12px; font-weight: 700; padding: 2px 6px;">20</span>
                                 <span style="font-size: 10px; color: #ffc107;">%</span>
                             </div>
                         </div>
                         <div style="position: relative; margin-top: 12px;">
-                            <div id="dischargeSOCProgressContainer" onclick="handleDischargeSOCBarClick(event)" style="width: 100%; height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px; cursor: pointer;">
-                                <div id="dischargeSOCProgressBar" style="position: absolute; left: 20%; width: 80%; height: 100%; background: #ffc107; border-radius: 2px; pointer-events: none;"></div>
+                            <div id="dischargeSOCProgressContainer" style="width: 100%; height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px;">
+                                <div id="dischargeSOCProgressBar" style="position: absolute; left: 20%; width: 80%; height: 100%; background: #ffc107; border-radius: 2px;"></div>
                             </div>
-                            <div id="dischargeSOCProgressDot" style="position: absolute; top: -4px; left: 20%; transform: translateX(-50%); width: 12px; height: 12px; background: #ffc107; border-radius: 50%; cursor: pointer; pointer-events: none;"></div>
-                            <input id="dischargeSOCSlider" type="range" min="0" max="100" value="20" oninput="updateDischargeSOC(this.value)" style="position: absolute; width: 100%; height: 12px; top: -4px; left: 0; opacity: 0; cursor: pointer;">
                         </div>
                     </div>
                 </div>
@@ -3408,7 +3530,7 @@
                                     <span style="font-size: 12px; color: rgba(255,255,255,0.8); white-space: nowrap;" data-i18n="priceCondition">价格条件</span>
                                 </div>
                                 <div style="display: flex; gap: 6px; align-items: center; margin-left: 14px;">
-                                    <span style="color: rgba(255,255,255,0.6); font-size: 12px; white-space: nowrap;">低于</span>
+                                    <span style="color: rgba(255,255,255,0.6); font-size: 12px; white-space: nowrap;" data-i18n="lessThan">低于</span>
                                     <span id="chargePriceValue" style="color: #00ff88; font-size: 12px; font-weight: 700;">50</span>
                                     <span style="color: rgba(255,255,255,0.6); font-size: 12px;">$</span>
                                 </div>
@@ -3438,7 +3560,7 @@
                                     <span style="font-size: 12px; color: rgba(255,255,255,0.8); white-space: nowrap;" data-i18n="priceCondition">价格条件</span>
                                 </div>
                                 <div style="display: flex; gap: 6px; align-items: center; margin-left: 14px;">
-                                    <span style="color: rgba(255,255,255,0.6); font-size: 12px; white-space: nowrap;">高于</span>
+                                    <span style="color: rgba(255,255,255,0.6); font-size: 12px; white-space: nowrap;" data-i18n="greaterThan">高于</span>
                                     <span id="dischargePriceValue" style="color: #ffc107; font-size: 12px; font-weight: 700;">100</span>
                                     <span style="color: rgba(255,255,255,0.6); font-size: 12px;">$</span>
                                 </div>
@@ -8686,6 +8808,142 @@
                 // 更新显示的值
                 display.textContent = input.value;
             }
+        }
+        
+        // 显示SOC编辑蒙版
+        function showSOCEditOverlay() {
+            const overlay = document.getElementById('socEditOverlay');
+            if (overlay) {
+                overlay.style.display = 'flex';
+            }
+        }
+        
+        // 隐藏SOC编辑蒙版
+        function hideSOCEditOverlay() {
+            const overlay = document.getElementById('socEditOverlay');
+            if (overlay) {
+                overlay.style.display = 'none';
+            }
+        }
+        
+        // 打开SOC编辑弹窗
+        function openSOCEditModal() {
+            const modal = document.getElementById('socEditModal');
+            if (!modal) return;
+            
+            // 获取当前值
+            const chargeDisplay = document.getElementById('chargeStopSOCDisplay');
+            const dischargeDisplay = document.getElementById('dischargeStopSOCDisplay');
+            const currentCharge = chargeDisplay ? parseInt(chargeDisplay.textContent) : 90;
+            const currentDischarge = dischargeDisplay ? parseInt(dischargeDisplay.textContent) : 20;
+            
+            // 设置弹窗初始值
+            const chargeSlider = document.getElementById('modalChargeSOCSlider');
+            const chargeInput = document.getElementById('modalChargeSOCInput');
+            const dischargeSlider = document.getElementById('modalDischargeSOCSlider');
+            const dischargeInput = document.getElementById('modalDischargeSOCInput');
+            
+            if (chargeSlider) chargeSlider.value = currentCharge;
+            if (chargeInput) chargeInput.value = currentCharge;
+            if (dischargeSlider) dischargeSlider.value = currentDischarge;
+            if (dischargeInput) dischargeInput.value = currentDischarge;
+            
+            // 更新进度条
+            updateModalChargeSOC(currentCharge);
+            updateModalDischargeSOC(currentDischarge);
+            
+            // 显示弹窗
+            modal.style.display = 'flex';
+            
+            // 更新i18n
+            if (window.i18n && window.i18n.updatePageTexts) {
+                setTimeout(() => {
+                    window.i18n.updatePageTexts();
+                }, 50);
+            }
+        }
+        
+        // 关闭SOC编辑弹窗
+        function closeSOCEditModal() {
+            const modal = document.getElementById('socEditModal');
+            if (modal) {
+                modal.style.display = 'none';
+            }
+        }
+        
+        // 更新弹窗中的充电SOC
+        function updateModalChargeSOC(value) {
+            const progressBar = document.getElementById('modalChargeSOCProgressBar');
+            const input = document.getElementById('modalChargeSOCInput');
+            const slider = document.getElementById('modalChargeSOCSlider');
+            const thumb = document.getElementById('modalChargeSOCThumb');
+            
+            if (progressBar) progressBar.style.width = value + '%';
+            if (input) input.value = value;
+            if (slider) slider.value = value;
+            if (thumb) thumb.style.left = value + '%';
+        }
+        
+        function updateModalChargeSOCFromInput(value) {
+            const validValue = Math.max(0, Math.min(100, parseInt(value) || 0));
+            const input = document.getElementById('modalChargeSOCInput');
+            if (input) input.value = validValue;
+            updateModalChargeSOC(validValue);
+        }
+        
+        // 更新弹窗中的放电SOC
+        function updateModalDischargeSOC(value) {
+            const progressBar = document.getElementById('modalDischargeSOCProgressBar');
+            const input = document.getElementById('modalDischargeSOCInput');
+            const slider = document.getElementById('modalDischargeSOCSlider');
+            const thumb = document.getElementById('modalDischargeSOCThumb');
+            
+            if (progressBar) {
+                progressBar.style.left = value + '%';
+                progressBar.style.width = (100 - value) + '%';
+            }
+            if (input) input.value = value;
+            if (slider) slider.value = value;
+            if (thumb) thumb.style.left = value + '%';
+        }
+        
+        function updateModalDischargeSOCFromInput(value) {
+            const validValue = Math.max(0, Math.min(100, parseInt(value) || 0));
+            const input = document.getElementById('modalDischargeSOCInput');
+            if (input) input.value = validValue;
+            updateModalDischargeSOC(validValue);
+        }
+        
+        // 保存SOC设置
+        function saveSOCSettings() {
+            // 获取新值
+            const chargeSOC = document.getElementById('modalChargeSOCInput').value;
+            const dischargeSOC = document.getElementById('modalDischargeSOCInput').value;
+            
+            // 更新主页面显示
+            const chargeDisplay = document.getElementById('chargeStopSOCDisplay');
+            const dischargeDisplay = document.getElementById('dischargeStopSOCDisplay');
+            const chargeProgressBar = document.getElementById('chargeSOCProgressBar');
+            const dischargeProgressBar = document.getElementById('dischargeSOCProgressBar');
+            
+            if (chargeDisplay) chargeDisplay.textContent = chargeSOC;
+            if (dischargeDisplay) dischargeDisplay.textContent = dischargeSOC;
+            if (chargeProgressBar) chargeProgressBar.style.width = chargeSOC + '%';
+            if (dischargeProgressBar) {
+                dischargeProgressBar.style.left = dischargeSOC + '%';
+                dischargeProgressBar.style.width = (100 - dischargeSOC) + '%';
+            }
+            
+            // 更新全局设置
+            if (window.autoSettings) {
+                window.autoSettings.charge.stopSOC = parseInt(chargeSOC);
+                window.autoSettings.discharge.stopSOC = parseInt(dischargeSOC);
+            }
+            
+            // 关闭弹窗
+            closeSOCEditModal();
+            
+            console.log(`SOC settings updated - Charge: ${chargeSOC}%, Discharge: ${dischargeSOC}%`);
         }
 
         // 点击充电SOC进度条设置值
@@ -14945,36 +15203,147 @@
         </div>
     </div>
     
+    <!-- SOC Edit Modal -->
+    <div id="socEditModal" class="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.9); z-index: 10003; align-items: center; justify-content: center; backdrop-filter: blur(5px);">
+        <div class="modal-content" style="background: linear-gradient(145deg, #1e1e2e 0%, #252535 100%); border: none; padding: 0; overflow: hidden; width: 480px; max-width: 90%; border-radius: 24px; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8), 0 0 1px rgba(255, 255, 255, 0.1);">
+            <div class="modal-header" style="padding: 28px 32px; border-bottom: 1px solid rgba(255, 255, 255, 0.08); display: flex; align-items: center; justify-content: space-between; background: rgba(255, 255, 255, 0.02);">
+                <h3 style="margin: 0; font-size: 20px; font-weight: 700; color: #fff; letter-spacing: 0.3px;" data-i18n="socSettings">SOC 设置</h3>
+                <button onclick="closeSOCEditModal()" style="background: none; border: none; color: rgba(255,255,255,0.6); font-size: 24px; cursor: pointer; padding: 0; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 50%; transition: all 0.3s;" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='none'">×</button>
+            </div>
+            
+            <div class="modal-body" style="padding: 32px;">
+                <!-- Charge Stop SOC Setting -->
+                <div style="margin-bottom: 28px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                        <label style="color: #00ff88; font-size: 14px; font-weight: 600;" data-i18n="chargeStopSOC">充电停止SOC</label>
+                        <div style="display: flex; align-items: center; gap: 4px;">
+                            <input type="number" id="modalChargeSOCInput" min="0" max="100" value="90" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff; padding: 6px 8px; border-radius: 4px; width: 50px; font-size: 13px; outline: none; transition: all 0.2s;" oninput="updateModalChargeSOCFromInput(this.value)" onfocus="this.style.borderColor='rgba(0,255,136,0.5)'; this.style.background='rgba(255,255,255,0.15)'" onblur="this.style.borderColor='rgba(255,255,255,0.2)'; this.style.background='rgba(255,255,255,0.1)'">
+                            <span style="color: rgba(255,255,255,0.7); font-size: 14px;">%</span>
+                        </div>
+                    </div>
+                    <div style="position: relative; width: 100%; height: 32px; display: flex; align-items: center;">
+                        <div style="width: 100%; height: 8px; background: linear-gradient(to bottom, rgba(0, 0, 0, 0.2), rgba(255, 255, 255, 0.05)); border-radius: 4px; position: absolute; box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.3); border: 1px solid rgba(255, 255, 255, 0.05);">
+                            <div id="modalChargeSOCProgressBar" style="width: 90%; height: 100%; background: linear-gradient(90deg, #00ff88 0%, #00dd77 50%, #00ff88 100%); border-radius: 4px; transition: width 0.3s ease; box-shadow: 0 0 15px rgba(0, 255, 136, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3); position: relative; overflow: hidden;">
+                                <div style="position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.3) 50%, transparent 100%); animation: shimmer 2s infinite;"></div>
+                            </div>
+                        </div>
+                        <!-- 滑块圆点 -->
+                        <div id="modalChargeSOCThumb" style="position: absolute; left: 90%; width: 20px; height: 20px; background: radial-gradient(circle at 30% 30%, #00ff88, #00cc6a); border-radius: 50%; transform: translateX(-50%); border: 2px solid rgba(255, 255, 255, 0.2); box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3), inset 0 1px 2px rgba(255, 255, 255, 0.3); transition: box-shadow 0.15s ease, transform 0.15s ease; pointer-events: none; z-index: 1;"></div>
+                        <input type="range" id="modalChargeSOCSlider" min="0" max="100" value="90" style="position: absolute; width: 100%; height: 32px; opacity: 0; cursor: pointer; z-index: 2;" oninput="updateModalChargeSOC(this.value)" onmouseover="document.getElementById('modalChargeSOCThumb').style.transform='translateX(-50%) scale(1.15)'; document.getElementById('modalChargeSOCThumb').style.boxShadow='0 0 20px rgba(0, 255, 136, 0.6), 0 4px 12px rgba(0, 0, 0, 0.4), inset 0 1px 2px rgba(255, 255, 255, 0.4)'" onmouseout="document.getElementById('modalChargeSOCThumb').style.transform='translateX(-50%)'; document.getElementById('modalChargeSOCThumb').style.boxShadow='0 2px 8px rgba(0, 0, 0, 0.3), inset 0 1px 2px rgba(255, 255, 255, 0.3)'">
+                    </div>
+                </div>
+                
+                <!-- Discharge Stop SOC Setting -->
+                <div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                        <label style="color: #ffc107; font-size: 14px; font-weight: 600;" data-i18n="dischargeStopSOC">放电停止SOC</label>
+                        <div style="display: flex; align-items: center; gap: 4px;">
+                            <input type="number" id="modalDischargeSOCInput" min="0" max="100" value="20" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff; padding: 6px 8px; border-radius: 4px; width: 50px; font-size: 13px; outline: none; transition: all 0.2s;" oninput="updateModalDischargeSOCFromInput(this.value)" onfocus="this.style.borderColor='rgba(255,193,7,0.5)'; this.style.background='rgba(255,255,255,0.15)'" onblur="this.style.borderColor='rgba(255,255,255,0.2)'; this.style.background='rgba(255,255,255,0.1)'">
+                            <span style="color: rgba(255,255,255,0.7); font-size: 14px;">%</span>
+                        </div>
+                    </div>
+                    <div style="position: relative; width: 100%; height: 32px; display: flex; align-items: center;">
+                        <div style="width: 100%; height: 8px; background: linear-gradient(to bottom, rgba(0, 0, 0, 0.2), rgba(255, 255, 255, 0.05)); border-radius: 4px; position: absolute; box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.3); border: 1px solid rgba(255, 255, 255, 0.05);">
+                            <div id="modalDischargeSOCProgressBar" style="position: absolute; left: 20%; width: 80%; height: 100%; background: linear-gradient(90deg, #ffc107 0%, #ff9800 50%, #ffc107 100%); border-radius: 4px; transition: all 0.3s ease; box-shadow: 0 0 15px rgba(255, 193, 7, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3); position: relative; overflow: hidden;">
+                                <div style="position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.3) 50%, transparent 100%); animation: shimmer 2s infinite;"></div>
+                            </div>
+                        </div>
+                        <!-- 滑块圆点 -->
+                        <div id="modalDischargeSOCThumb" style="position: absolute; left: 20%; width: 20px; height: 20px; background: radial-gradient(circle at 30% 30%, #ffc107, #ff9800); border-radius: 50%; transform: translateX(-50%); border: 2px solid rgba(255, 255, 255, 0.2); box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3), inset 0 1px 2px rgba(255, 255, 255, 0.3); transition: box-shadow 0.15s ease, transform 0.15s ease; pointer-events: none; z-index: 1;"></div>
+                        <input type="range" id="modalDischargeSOCSlider" min="0" max="100" value="20" style="position: absolute; width: 100%; height: 32px; opacity: 0; cursor: pointer; z-index: 2;" oninput="updateModalDischargeSOC(this.value)" onmouseover="document.getElementById('modalDischargeSOCThumb').style.transform='translateX(-50%) scale(1.15)'; document.getElementById('modalDischargeSOCThumb').style.boxShadow='0 0 20px rgba(255, 193, 7, 0.6), 0 4px 12px rgba(0, 0, 0, 0.4), inset 0 1px 2px rgba(255, 255, 255, 0.4)'" onmouseout="document.getElementById('modalDischargeSOCThumb').style.transform='translateX(-50%)'; document.getElementById('modalDischargeSOCThumb').style.boxShadow='0 2px 8px rgba(0, 0, 0, 0.3), inset 0 1px 2px rgba(255, 255, 255, 0.3)'">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="modal-footer" style="padding: 28px 36px 32px; background: rgba(0, 0, 0, 0.2); border-top: 1px solid rgba(255, 255, 255, 0.08); display: flex; justify-content: flex-end; gap: 16px;">
+                <button onclick="closeSOCEditModal()" style="background: rgba(255, 255, 255, 0.08); color: rgba(255, 255, 255, 0.8); border: 1px solid rgba(255, 255, 255, 0.1); padding: 14px 36px; border-radius: 999px; font-size: 15px; font-weight: 600; cursor: pointer; transition: all 0.3s; backdrop-filter: blur(10px); letter-spacing: 0.5px;" onmouseover="this.style.background='rgba(255, 255, 255, 0.12)'; this.style.borderColor='rgba(255, 255, 255, 0.2)'" onmouseout="this.style.background='rgba(255, 255, 255, 0.08)'; this.style.borderColor='rgba(255, 255, 255, 0.1)'" data-i18n="cancel">取消</button>
+                <button onclick="saveSOCSettings()" style="background: linear-gradient(135deg, #00ff88, #00dd77); color: #000; padding: 14px 36px; border-radius: 999px; font-size: 15px; font-weight: 700; cursor: pointer; transition: all 0.3s; border: none; box-shadow: 0 4px 16px rgba(0, 255, 136, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.3); letter-spacing: 0.5px;" onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 6px 20px rgba(0, 255, 136, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 16px rgba(0, 255, 136, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.3)'" data-i18n="save">保存</button>
+            </div>
+        </div>
+    </div>
+    
     <!-- 全局推送弹窗 -->
-    <!-- 普通推送弹窗 -->
-    <div class="push-notification" id="normalPushNotification">
+    <!-- 普通充电提醒 -->
+    <div class="push-notification" id="normalChargeNotification">
         <div class="push-notification-header">
             <div class="push-notification-title">
                 <span class="push-notification-icon">⚡</span>
-                <span data-i18n="pushNotification.normal.title">充电提醒——普通</span>
+                <span><span data-i18n="chargeReminder">充电提醒</span>——<span class="notification-region">NSW</span></span>
             </div>
-            <button class="push-notification-close" onclick="closePushNotification('normalPushNotification')">
+            <button class="push-notification-close" onclick="closePushNotification('normalChargeNotification')">
                 <span>×</span>
             </button>
         </div>
         <div class="push-notification-content">
-            <p data-i18n="pushNotification.normal.content">NSW地区充电价格$300，超过阈值$250，请充电</p>
+            <p><span data-i18n="currentPrice">当前价格</span><span class="highlight-number notification-price">$300</span><span data-i18n="belowThreshold">，低于阈值</span><span class="highlight-value notification-threshold">$250</span><span data-i18n="pleaseCharge">，请充电</span></p>
         </div>
     </div>
 
-    <!-- 高级推送弹窗 -->
-    <div class="push-notification" id="advancedPushNotification">
+    <!-- 普通放电提醒 -->
+    <div class="push-notification" id="normalDischargeNotification">
         <div class="push-notification-header">
             <div class="push-notification-title">
                 <span class="push-notification-icon">🔋</span>
-                <span data-i18n="pushNotification.advanced.title">最佳充电提醒——高级</span>
+                <span><span data-i18n="dischargeReminder">放电提醒</span>——<span class="notification-region">NSW</span></span>
             </div>
-            <button class="push-notification-close" onclick="closePushNotification('advancedPushNotification')">
+            <button class="push-notification-close" onclick="closePushNotification('normalDischargeNotification')">
                 <span>×</span>
             </button>
         </div>
         <div class="push-notification-content">
-            <p data-i18n="pushNotification.advanced.content">NSW地区充电价格$300，还有15分钟到达最佳放电时机，请做好准备</p>
+            <p><span data-i18n="currentPrice">当前价格</span><span class="highlight-number notification-price">$300</span><span data-i18n="aboveThreshold">，高于阈值</span><span class="highlight-value notification-threshold">$250</span><span data-i18n="pleaseDischarge">，请放电</span></p>
+        </div>
+    </div>
+
+    <!-- 最佳充电/放电提醒 -->
+    <div class="push-notification" id="optimalNotification">
+        <div class="push-notification-header">
+            <div class="push-notification-title">
+                <span class="push-notification-icon">🎯</span>
+                <span><span data-i18n="optimalReminder">最佳充电提醒</span>——<span class="notification-region">NSW</span></span>
+            </div>
+            <button class="push-notification-close" onclick="closePushNotification('optimalNotification')">
+                <span>×</span>
+            </button>
+        </div>
+        <div class="push-notification-content">
+            <p><span class="notification-region">NSW</span><span data-i18n="regionPrice">地区充电价格</span><span class="highlight-number notification-price">$319</span><span data-i18n="timeRemaining">，还有</span><span class="highlight-value notification-time">27</span><span data-i18n="minutesToOptimal">分钟到达最佳放电时机，请做好准备</span></p>
+        </div>
+    </div>
+
+    <!-- 高价/低价充电/放电提醒 -->
+    <div class="push-notification" id="priceAlertNotification">
+        <div class="push-notification-header">
+            <div class="push-notification-title">
+                <span class="push-notification-icon">💰</span>
+                <span><span class="notification-price-type">高价</span><span class="notification-action-type">充电</span><span data-i18n="priceAlert">提醒</span>——<span class="notification-region">NSW</span></span>
+            </div>
+            <button class="push-notification-close" onclick="closePushNotification('priceAlertNotification')">
+                <span>×</span>
+            </button>
+        </div>
+        <div class="push-notification-content">
+            <p><span class="notification-region">NSW</span><span data-i18n="regionPrice">地区充电价格</span><span class="highlight-number notification-price">$319</span><span data-i18n="timeRemaining">，还有</span><span class="highlight-value notification-time">27</span><span data-i18n="minutesToPrice">分钟到达</span><span class="notification-price-type">高价</span><span class="notification-action-type">充电</span><span data-i18n="timeOpportunity">时机，请做好准备</span></p>
+        </div>
+    </div>
+    
+    <!-- 模拟推送按钮 -->
+    <div style="position: fixed; bottom: 20px; left: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 8px;">
+        <div style="display: flex; gap: 8px;">
+            <button onclick="simulateChargeNotification()" style="background: linear-gradient(135deg, #00ff88, #00dd77); color: #000; padding: 10px 16px; border-radius: 999px; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.3s; border: none; box-shadow: 0 4px 16px rgba(0, 255, 136, 0.3);" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
+                <span data-i18n="simulateCharge">模拟充电提醒</span>
+            </button>
+            <button onclick="simulateDischargeNotification()" style="background: linear-gradient(135deg, #ffc107, #ff9800); color: #000; padding: 10px 16px; border-radius: 999px; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.3s; border: none; box-shadow: 0 4px 16px rgba(255, 193, 7, 0.3);" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
+                <span data-i18n="simulateDischarge">模拟放电提醒</span>
+            </button>
+        </div>
+        <div style="display: flex; gap: 8px;">
+            <button onclick="simulateOptimalNotification()" style="background: linear-gradient(135deg, #1e7fff, #0066ff); color: #fff; padding: 10px 16px; border-radius: 999px; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.3s; border: none; box-shadow: 0 4px 16px rgba(30, 127, 255, 0.3);" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
+                <span data-i18n="simulateOptimal">模拟最佳提醒</span>
+            </button>
+            <button onclick="simulatePriceAlertNotification()" style="background: linear-gradient(135deg, #ff6b6b, #ff5252); color: #fff; padding: 10px 16px; border-radius: 999px; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.3s; border: none; box-shadow: 0 4px 16px rgba(255, 107, 107, 0.3);" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
+                <span data-i18n="simulatePriceAlert">模拟价格提醒</span>
+            </button>
         </div>
     </div>
 
@@ -14984,8 +15353,7 @@
         let pushNotificationTimeouts = {};
 
         // 显示推送弹窗
-        function showPushNotification(type, data = {}) {
-            const notificationId = type === 'normal' ? 'normalPushNotification' : 'advancedPushNotification';
+        function showPushNotification(notificationId, data = {}) {
             const notification = document.getElementById(notificationId);
             
             if (!notification) return;
@@ -15020,6 +15388,127 @@
                 clearTimeout(pushNotificationTimeouts[notificationId]);
                 delete pushNotificationTimeouts[notificationId];
             }
+        }
+        
+        // 模拟充电提醒
+        function simulateChargeNotification() {
+            const regions = ['NSW', 'VIC', 'QLD', 'SA'];
+            const region = regions[Math.floor(Math.random() * regions.length)];
+            const price = Math.floor(Math.random() * 200) + 200; // 200-400
+            const threshold = Math.floor(Math.random() * 100) + 250; // 250-350
+            
+            const notification = document.getElementById('normalChargeNotification');
+            if (notification) {
+                // 更新所有地区元素
+                const regionElements = notification.querySelectorAll('.notification-region');
+                regionElements.forEach(elem => elem.textContent = region);
+                
+                // 更新价格
+                const priceElement = notification.querySelector('.notification-price');
+                if (priceElement) priceElement.textContent = `$${price}`;
+                
+                // 更新阈值
+                const thresholdElement = notification.querySelector('.notification-threshold');
+                if (thresholdElement) thresholdElement.textContent = `$${threshold}`;
+            }
+            
+            showPushNotification('normalChargeNotification');
+        }
+        
+        // 模拟放电提醒
+        function simulateDischargeNotification() {
+            const regions = ['NSW', 'VIC', 'QLD', 'SA'];
+            const region = regions[Math.floor(Math.random() * regions.length)];
+            const price = Math.floor(Math.random() * 200) + 300; // 300-500 (higher for discharge)
+            const threshold = Math.floor(Math.random() * 100) + 200; // 200-300
+            
+            const notification = document.getElementById('normalDischargeNotification');
+            if (notification) {
+                // 更新所有地区元素
+                const regionElements = notification.querySelectorAll('.notification-region');
+                regionElements.forEach(elem => elem.textContent = region);
+                
+                // 更新价格
+                const priceElement = notification.querySelector('.notification-price');
+                if (priceElement) priceElement.textContent = `$${price}`;
+                
+                // 更新阈值
+                const thresholdElement = notification.querySelector('.notification-threshold');
+                if (thresholdElement) thresholdElement.textContent = `$${threshold}`;
+            }
+            
+            showPushNotification('normalDischargeNotification');
+        }
+        
+        // 模拟最佳提醒
+        function simulateOptimalNotification() {
+            const regions = ['NSW', 'VIC', 'QLD', 'SA'];
+            const region = regions[Math.floor(Math.random() * regions.length)];
+            const price = Math.floor(Math.random() * 200) + 200; // 200-400
+            const time = Math.floor(Math.random() * 30) + 5; // 5-35分钟
+            const actions = ['充电', '放电'];
+            const action = actions[Math.floor(Math.random() * actions.length)];
+            
+            const notification = document.getElementById('optimalNotification');
+            if (notification) {
+                // 更新所有地区元素
+                const regionElements = notification.querySelectorAll('.notification-region');
+                regionElements.forEach(elem => elem.textContent = region);
+                
+                // 更新标题中的提醒类型
+                const titleElement = notification.querySelector('[data-i18n="optimalReminder"]');
+                if (titleElement) {
+                    titleElement.setAttribute('data-i18n', action === '充电' ? 'optimalChargeReminder' : 'optimalDischargeReminder');
+                    titleElement.textContent = `最佳${action}提醒`;
+                }
+                
+                // 更新价格
+                const priceElement = notification.querySelector('.notification-price');
+                if (priceElement) priceElement.textContent = `$${price}`;
+                
+                // 更新时间
+                const timeElement = notification.querySelector('.notification-time');
+                if (timeElement) timeElement.textContent = time;
+            }
+            
+            showPushNotification('optimalNotification');
+        }
+        
+        // 模拟价格提醒
+        function simulatePriceAlertNotification() {
+            const regions = ['NSW', 'VIC', 'QLD', 'SA'];
+            const region = regions[Math.floor(Math.random() * regions.length)];
+            const price = Math.floor(Math.random() * 200) + 200; // 200-400
+            const time = Math.floor(Math.random() * 30) + 5; // 5-35分钟
+            const priceTypes = ['高价', '低价'];
+            const actionTypes = ['充电', '放电'];
+            const priceType = priceTypes[Math.floor(Math.random() * priceTypes.length)];
+            const actionType = actionTypes[Math.floor(Math.random() * actionTypes.length)];
+            
+            const notification = document.getElementById('priceAlertNotification');
+            if (notification) {
+                // 更新所有地区元素
+                const regionElements = notification.querySelectorAll('.notification-region');
+                regionElements.forEach(elem => elem.textContent = region);
+                
+                // 更新价格类型
+                const priceTypeElements = notification.querySelectorAll('.notification-price-type');
+                priceTypeElements.forEach(elem => elem.textContent = priceType);
+                
+                // 更新动作类型
+                const actionTypeElements = notification.querySelectorAll('.notification-action-type');
+                actionTypeElements.forEach(elem => elem.textContent = actionType);
+                
+                // 更新价格
+                const priceElement = notification.querySelector('.notification-price');
+                if (priceElement) priceElement.textContent = `$${price}`;
+                
+                // 更新时间
+                const timeElement = notification.querySelector('.notification-time');
+                if (timeElement) timeElement.textContent = time;
+            }
+            
+            showPushNotification('priceAlertNotification');
         }
 
         // 更新弹窗内容
