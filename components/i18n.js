@@ -170,8 +170,31 @@ class I18n {
                 priceCondition: "价格条件",
                 batteryLevel: "电池电量",
                 autoCharge: "自动充电",
+                manualCharge: "手动充电",
                 autoDischarge: "自动放电",
+                manualDischarge: "手动放电",
                 autoSettings: "自动化设置",
+                
+                // Status translations for region badges
+                status: {
+                    none: "",
+                    autoCharge: "自动充电",
+                    manualCharge: "手动充电",
+                    autoDischarge: "自动放电",
+                    manualDischarge: "手动放电"
+                },
+                
+                // Charge/Discharge condition labels
+                chargeCondition: "充电条件",
+                dischargeCondition: "放电条件",
+                timeCondition: "时间条件",
+                priceCondition: "价格条件",
+                chargeStopSOC: "充电停止SOC",
+                dischargeStopSOC: "放电停止SOC",
+                lessThanPrice: "低于",
+                greaterThanPrice: "高于",
+                autoConditions: "自动条件",
+                
                 autoModeType: "自动模式类型",
                 autoChargeConditions: "自动充电条件",
                 autoDischargeConditions: "自动放电条件",
@@ -1497,8 +1520,31 @@ class I18n {
                 priceCondition: "Price Condition",
                 batteryLevel: "Battery Level",
                 autoCharge: "Auto Charge",
+                manualCharge: "Manual Charge",
                 autoDischarge: "Auto Discharge",
+                manualDischarge: "Manual Discharge",
                 autoSettings: "Auto Settings",
+                
+                // Status translations for region badges
+                status: {
+                    none: "",
+                    autoCharge: "Auto Charge",
+                    manualCharge: "Manual Charge",
+                    autoDischarge: "Auto Discharge",
+                    manualDischarge: "Manual Discharge"
+                },
+                
+                // Charge/Discharge condition labels
+                chargeCondition: "Charge\nCondition",
+                dischargeCondition: "Discharge\nCondition",
+                timeCondition: "Time Condition",
+                priceCondition: "Price Condition",
+                chargeStopSOC: "Charge Stop SOC",
+                dischargeStopSOC: "Discharge Stop SOC",
+                lessThanPrice: "Less than",
+                greaterThanPrice: "Greater than",
+                autoConditions: "Auto Conditions",
+                
                 autoModeType: "Auto Mode Type",
                 autoChargeConditions: "Auto Charge Conditions",
                 autoDischargeConditions: "Auto Discharge Conditions",
