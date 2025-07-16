@@ -81,7 +81,8 @@ class I18n {
                     organization: "组织",
                     pushStrategy: "推送策略",
                     operationLog: "操作记录",
-                    messageCenter: "消息中心"
+                    messageCenter: "消息中心",
+                    settings: "设置"
                 },
                 analysis: {
                     realtime: "实时分析",
@@ -1375,8 +1376,65 @@ class I18n {
                 // Settings translations
                 settings: {
                     title: "设置",
-                    save: "保存更改",
-                    cancel: "取消",
+                    buttons: {
+                        edit: "编辑",
+                        exitEdit: "退出编辑",
+                        save: "保存",
+                        cancel: "取消"
+                    },
+                    pricePredict: {
+                        title: "价格预测",
+                        accurate: "准确预测",
+                        accurateDesc: "价格偏差上下",
+                        moderate: "较准预测",
+                        moderateDesc: "价格偏差（自动计算）",
+                        large: "偏差较大",
+                        largeDesc: "价格偏差大于",
+                        deviationRange: "±偏差范围",
+                        greaterThan: "大于此值"
+                    },
+                    operationAnalysis: {
+                        title: "操作分析",
+                        sellTitle: "卖电分析",
+                        sellOptimal: "卖在最佳点",
+                        sellOptimalDesc: "峰值95%以上区间",
+                        sellHigh: "卖在高点",
+                        sellHighDesc: "峰值区间",
+                        sellNormal: "卖在一般",
+                        sellNormalDesc: "峰值区间",
+                        sellLow: "低价",
+                        sellLowDesc: "峰值以下",
+                        buyTitle: "充电分析",
+                        buyOptimal: "充电最佳点",
+                        buyOptimalDesc: "超过谷值95%以内",
+                        buyLow: "充电低价",
+                        buyLowDesc: "超过谷值区间",
+                        buyNormal: "充电一般",
+                        buyNormalDesc: "超过谷值区间",
+                        buyHigh: "充电高价",
+                        buyHighDesc: "超过谷值以上",
+                        belowPeak: "峰值以下",
+                        peakRange: "峰值区间",
+                        abovePeak: "峰值以上",
+                        valley: "谷值",
+                        aboveValley: "超过谷值",
+                        normal: "一般",
+                        highPoint: "高点",
+                        optimalPoint: "最佳点",
+                        lowPrice: "低价",
+                        buyLowestPoint: "充电最低点"
+                    },
+                    validation: {
+                        moderateRangeError: "较准预测范围设置错误",
+                        sellHighRangeError: "卖在高点范围设置错误",
+                        sellNormalRangeError: "卖在一般范围设置错误",
+                        buyLowRangeError: "充电低价范围设置错误",
+                        buyNormalRangeError: "充电一般范围设置错误",
+                        pricePredictError: "准确预测阈值必须小于偏差较大阈值"
+                    },
+                    messages: {
+                        saveSuccess: "设置保存成功"
+                    },
                     profile: {
                         title: "个人信息",
                         basic: "基本信息",
@@ -1538,7 +1596,8 @@ class I18n {
                     organization: "Organization",
                     pushStrategy: "Push Strategy",
                     operationLog: "Operation Log",
-                    messageCenter: "Message Center"
+                    messageCenter: "Message Center",
+                    settings: "Settings"
                 },
                 analysis: {
                     realtime: "Real-time Analysis",
@@ -2786,8 +2845,65 @@ class I18n {
                 // Settings translations
                 settings: {
                     title: "Settings",
-                    save: "Save Changes",
-                    cancel: "Cancel",
+                    buttons: {
+                        edit: "Edit",
+                        exitEdit: "Exit Edit",
+                        save: "Save",
+                        cancel: "Cancel"
+                    },
+                    pricePredict: {
+                        title: "Price Prediction",
+                        accurate: "Accurate Prediction",
+                        accurateDesc: "Price deviation within",
+                        moderate: "Moderate Prediction",
+                        moderateDesc: "Price deviation (auto-calculated)",
+                        large: "Large Deviation",
+                        largeDesc: "Price deviation greater than",
+                        deviationRange: "±Deviation range",
+                        greaterThan: "Greater than"
+                    },
+                    operationAnalysis: {
+                        title: "Operation Analysis",
+                        sellTitle: "Sell Analysis",
+                        sellOptimal: "Sell at Optimal Point",
+                        sellOptimalDesc: "Above 95% of peak range",
+                        sellHigh: "Sell at High Point",
+                        sellHighDesc: "Peak range",
+                        sellNormal: "Sell at Normal Point",
+                        sellNormalDesc: "Peak range",
+                        sellLow: "Low Price",
+                        sellLowDesc: "Below peak",
+                        buyTitle: "Charge Analysis",
+                        buyOptimal: "Charge at Optimal Point",
+                        buyOptimalDesc: "Within 95% above valley",
+                        buyLow: "Charge at Low Price",
+                        buyLowDesc: "Above valley range",
+                        buyNormal: "Charge at Normal Point",
+                        buyNormalDesc: "Above valley range",
+                        buyHigh: "Charge at High Price",
+                        buyHighDesc: "Above valley",
+                        belowPeak: "Below peak",
+                        peakRange: "Peak range",
+                        abovePeak: "Above peak",
+                        valley: "Valley",
+                        aboveValley: "Above valley",
+                        normal: "Normal",
+                        highPoint: "High point",
+                        optimalPoint: "Optimal point",
+                        lowPrice: "Low price",
+                        buyLowestPoint: "Charge lowest point"
+                    },
+                    validation: {
+                        moderateRangeError: "Moderate prediction range setting error",
+                        sellHighRangeError: "Sell high point range setting error",
+                        sellNormalRangeError: "Sell normal point range setting error",
+                        buyLowRangeError: "Charge low price range setting error",
+                        buyNormalRangeError: "Charge normal price range setting error",
+                        pricePredictError: "Accurate prediction threshold must be less than large deviation threshold"
+                    },
+                    messages: {
+                        saveSuccess: "Settings saved successfully"
+                    },
                     profile: {
                         title: "Profile",
                         basic: "Basic Information",
@@ -3607,11 +3723,26 @@ class I18n {
     updatePageTexts() {
         console.log('updatePageTexts called, current language:', this.currentLanguage);
         
-        // 更新所有标记了 data-i18n 的元素
+        // 首先处理强制翻译元素 (data-text-zh 和 data-text-en)
+        const forceTranslateElements = document.querySelectorAll('[data-text-zh][data-text-en]');
+        console.log('Found', forceTranslateElements.length, 'elements with forced translation');
+        
+        forceTranslateElements.forEach(element => {
+            const zhText = element.getAttribute('data-text-zh');
+            const enText = element.getAttribute('data-text-en');
+            element.textContent = this.currentLanguage === 'zh' ? zhText : enText;
+        });
+        
+        // 然后更新所有标记了 data-i18n 的元素
         const dataI18nElements = document.querySelectorAll('[data-i18n]');
         console.log('Found', dataI18nElements.length, 'elements with data-i18n');
         
         dataI18nElements.forEach(element => {
+            // 如果元素已经有强制翻译属性，跳过
+            if (element.hasAttribute('data-text-zh') && element.hasAttribute('data-text-en')) {
+                return;
+            }
+            
             const key = element.getAttribute('data-i18n');
             const text = this.getText(key);
             console.log('data-i18n:', key, '->', text);
