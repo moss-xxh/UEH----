@@ -297,6 +297,13 @@ class I18n {
                 executionEfficiency: "执行效率",
                 systemAvailability: "系统可用性",
                 actualDischargeRate: "实际放电率",
+                
+                // 测试卡片翻译
+                testTitle: "测试专用",
+                chargeAlert: "充电提醒",
+                dischargeAlert: "放电提醒", 
+                optimalChargeTiming: "最佳充电时机",
+                lowPriceChargeAlert: "低价充电提醒",
                 today: "今日",
                 week: "本周",
                 month: "本月",
@@ -1816,6 +1823,13 @@ class I18n {
                 executionEfficiency: "Execution Efficiency",
                 systemAvailability: "System Availability",
                 actualDischargeRate: "Actual Discharge Rate",
+                
+                // Test card translations
+                testTitle: "Test Only",
+                chargeAlert: "Charge Alert",
+                dischargeAlert: "Discharge Alert",
+                optimalChargeTiming: "Optimal Charge Timing", 
+                lowPriceChargeAlert: "Low Price Charge Alert",
                 today: "Today",
                 week: "This Week",
                 month: "This Month",
