@@ -10,7 +10,7 @@
                 <div class="push-notification-header">
                     <div class="push-notification-title">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M13 10V3L4 14h7v7l9-11h-7z" fill="#00ff88" stroke="#00ff88" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M13 10V3L4 14h7v7l9-11h-7z" fill="#52c41a" stroke="#52c41a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                         </svg>
                         <span data-i18n="chargeReminder">充电提醒</span><span>——</span><span class="notification-region">NSW</span>
                     </div>
@@ -174,7 +174,7 @@
             }
 
             #chargeNotification .highlight-number {
-                color: #00ff88;
+                color: #52c41a;
             }
 
             #dischargeNotification .highlight-number {
@@ -325,7 +325,7 @@
 
     // 初始化拖拽功能
     function initTestCardDrag() {
-        // const container = document.getElementById('testCardContainer');
+        const container = document.getElementById('testCardContainer');
         const dragHandle = document.getElementById('testCardDragHandle');
         
         if (!container || !dragHandle) return;
@@ -429,14 +429,123 @@
 
     // 重置测试卡片位置
     window.resetTestCardPosition = function() {
-        // const container = document.getElementById('testCardContainer');
+        const container = document.getElementById('testCardContainer');
         if (container) {
             container.style.bottom = '20px';
             container.style.left = '20px';
             container.style.top = 'auto';
             container.style.transform = 'none';
             localStorage.removeItem('testCardPosition');
+            updateTestCardPosition();
             console.log('Test card position reset to bottom-left corner');
+        }
+    };
+
+    // 更新测试卡片位置显示
+    function updateTestCardPosition() {
+        const container = document.getElementById('testCardContainer');
+        const positionSpan = document.getElementById('testCardPosition');
+        if (container && positionSpan) {
+            const rect = container.getBoundingClientRect();
+            positionSpan.textContent = `(${Math.round(rect.left)}, ${Math.round(rect.top)})`;
+        }
+    }
+
+    // 测试工具相关函数
+    window.toggleTestTools = function() {
+        const panel = document.getElementById('testToolsPanel');
+        const toggle = document.getElementById('testToolsToggle');
+        if (panel && toggle) {
+            if (panel.style.display === 'none' || !panel.style.display) {
+                panel.style.display = 'block';
+                toggle.style.transform = 'rotate(45deg)';
+            } else {
+                panel.style.display = 'none';
+                toggle.style.transform = 'rotate(0deg)';
+            }
+        }
+    };
+
+    window.closeTestTools = function() {
+        const panel = document.getElementById('testToolsPanel');
+        const toggle = document.getElementById('testToolsToggle');
+        if (panel && toggle) {
+            panel.style.display = 'none';
+            toggle.style.transform = 'rotate(0deg)';
+        }
+    };
+
+    window.showTestCard = function() {
+        const container = document.getElementById('testCardContainer');
+        if (container) {
+            container.style.display = 'block';
+            updateTestCardPosition();
+            console.log('Test card shown');
+        }
+    };
+
+    window.hideTestCard = function() {
+        const container = document.getElementById('testCardContainer');
+        if (container) {
+            container.style.display = 'none';
+            console.log('Test card hidden');
+        }
+    };
+
+    window.randomTestCard = function() {
+        const container = document.getElementById('testCardContainer');
+        if (container) {
+            const maxX = window.innerWidth - 300;
+            const maxY = window.innerHeight - 150;
+            const randomX = Math.max(0, Math.floor(Math.random() * maxX));
+            const randomY = Math.max(0, Math.floor(Math.random() * maxY));
+            
+            container.style.bottom = 'auto';
+            container.style.left = '0';
+            container.style.top = '0';
+            container.style.transform = `translate3d(${randomX}px, ${randomY}px, 0)`;
+            
+            localStorage.setItem('testCardPosition', JSON.stringify({
+                x: randomX,
+                y: randomY
+            }));
+            
+            updateTestCardPosition();
+            console.log(`Test card moved to random position: (${randomX}, ${randomY})`);
+        }
+    };
+
+    // 自动测试相关
+    let autoTestInterval = null;
+    const autoTestFunctions = [
+        'simulateChargeNotification',
+        'simulateDischargeNotification', 
+        'simulateOptimalNotification',
+        'simulatePriceAlertNotification'
+    ];
+
+    window.startAutoTest = function() {
+        if (autoTestInterval) {
+            clearInterval(autoTestInterval);
+        }
+        
+        console.log('Starting auto test...');
+        autoTestInterval = setInterval(() => {
+            const randomFunc = autoTestFunctions[Math.floor(Math.random() * autoTestFunctions.length)];
+            if (window[randomFunc]) {
+                window[randomFunc]();
+                console.log(`Auto test triggered: ${randomFunc}`);
+            }
+        }, 3000); // 每3秒触发一次
+        
+        console.log('Auto test started - notifications every 3 seconds');
+    };
+
+    window.stopAutoTest = function() {
+        if (autoTestInterval) {
+            clearInterval(autoTestInterval);
+            autoTestInterval = null;
+            console.log('Auto test stopped');
         }
     };
 
@@ -458,7 +567,7 @@
         
         // 检查卡片是否可见
         setTimeout(() => {
-            // const testCard = document.getElementById('testCardContainer');
+            const testCard = document.getElementById('testCardContainer');
             if (testCard) {
                 const rect = testCard.getBoundingClientRect();
                 if (rect.right < 0 || rect.bottom < 0 || rect.left > window.innerWidth || rect.top > window.innerHeight) {
