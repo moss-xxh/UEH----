@@ -128,6 +128,20 @@ function fixI18nSystem() {
         });
 
         console.log('Fixed updatePageTexts completed');
+        
+        // 强制更新测试工具面板（即使它是隐藏的）
+        const testPanel = document.getElementById('testToolsPanel');
+        if (testPanel) {
+            console.log('Force updating test tools panel translations');
+            testPanel.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                const text = this.getText(key);
+                if (text !== key) {
+                    el.textContent = text;
+                    console.log(`Updated test panel element: ${key} -> ${text}`);
+                }
+            });
+        }
     };
 
     // 新增DOM观察方法
