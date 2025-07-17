@@ -18,7 +18,14 @@
     <script src="components/header-nav.js"></script>
     <script src="components/user-menu-link.js"></script>
     <script src="components/user-dropdown-simple-new.js"></script>
+    <script src="components/condition-settings-modal.js"></script>
     <style>
+        /* 确保模态框始终在最顶层 */
+        #modalContent {
+            z-index: 2147483648 !important;
+            position: fixed !important;
+        }
+        
         /* Page-specific styles only - common styles are in common-styles.css */
 
         /* Override container for this page */
@@ -1125,13 +1132,13 @@
                     // Regenerate message content with new language
                     allMessages.forEach(msg => {
                         msg.title = getMessageTitle(msg.type);
-                        msg.message = getMessageContent(msg.type, msg.price, msg.threshold);
+                        msg.message = getMessageContent(msg.type, msg.price, msg.threshold, msg);
                     });
                     
                     // Update filtered messages to match
                     filteredMessages.forEach(msg => {
                         msg.title = getMessageTitle(msg.type);
-                        msg.message = getMessageContent(msg.type, msg.price, msg.threshold);
+                        msg.message = getMessageContent(msg.type, msg.price, msg.threshold, msg);
                     });
                     
                     // Refresh messages display with new language
@@ -1156,8 +1163,8 @@
                 {
                     id: 1,
                     type: 'charge',
-                    price: 0.31,
-                    threshold: 0.35,
+                    price: 300,
+                    threshold: 250,
                     time: new Date(now.getTime() - 15 * 60000), // 15分钟前
                     read: false,
                     level: 'high',
@@ -1166,8 +1173,8 @@
                 {
                     id: 2,
                     type: 'discharge',
-                    price: 0.68,
-                    threshold: 0.65,
+                    price: 450,
+                    threshold: 400,
                     time: new Date(now.getTime() - 45 * 60000), // 45分钟前
                     read: false,
                     level: 'medium',
@@ -1175,29 +1182,32 @@
                 },
                 {
                     id: 3,
-                    type: 'charge',
-                    price: 0.28,
-                    threshold: 0.30,
+                    type: 'optimal',
+                    price: 319,
+                    threshold: null,
                     time: new Date(now.getTime() - 3 * 3600000), // 3小时前
                     read: true,
                     level: 'high',
-                    region: 'QLD'
+                    region: 'QLD',
+                    minutes: 27
                 },
                 {
                     id: 4,
-                    type: 'discharge',
-                    price: 0.72,
-                    threshold: 0.70,
+                    type: 'priceAlert',
+                    price: 520,
+                    threshold: null,
                     time: new Date(now.getTime() - 8 * 3600000), // 8小时前
                     read: true,
                     level: 'medium',
-                    region: 'NSW'
+                    region: 'NSW',
+                    priceType: '高价',
+                    actionType: '放电'
                 },
                 {
                     id: 5,
                     type: 'charge',
-                    price: 0.25,
-                    threshold: 0.28,
+                    price: 280,
+                    threshold: 320,
                     time: new Date(now.getTime() - 16 * 3600000), // 16小时前
                     read: false,
                     level: 'medium',
@@ -1206,8 +1216,8 @@
                 {
                     id: 6,
                     type: 'discharge',
-                    price: 0.75,
-                    threshold: 0.72,
+                    price: 380,
+                    threshold: 350,
                     time: new Date(now.getTime() - 26 * 3600000), // 26小时前
                     read: true,
                     level: 'high',
@@ -1219,7 +1229,7 @@
             allMessages = messageData.map(data => ({
                 ...data,
                 title: getMessageTitle(data.type),
-                message: getMessageContent(data.type, data.price, data.threshold)
+                message: getMessageContent(data.type, data.price, data.threshold, data)
             }));
             
             filteredMessages = [...allMessages];
@@ -1328,30 +1338,67 @@
         
         // Helper functions
         function getTypeName(type) {
-            // All types are now "警告" (Warning)
-            return window.i18n ? window.i18n.getText('type') : '预警';
+            const currentLang = window.i18n ? window.i18n.getCurrentLanguage() : 'zh';
+            
+            const typeNames = {
+                charge: currentLang === 'en' ? 'Charge Alert' : '充电预警',
+                discharge: currentLang === 'en' ? 'Discharge Alert' : '放电预警',
+                optimal: currentLang === 'en' ? 'Optimal Alert' : '最佳预警',
+                priceAlert: currentLang === 'en' ? 'Price Alert' : '价格预警'
+            };
+            
+            return typeNames[type] || (currentLang === 'en' ? 'Warning' : '预警');
         }
 
         function getMessageTitle(type) {
+            const currentLang = window.i18n ? window.i18n.getCurrentLanguage() : 'zh';
+            
             const titles = {
-                charge: window.i18n ? window.i18n.getText('messageCenter.types.chargeReminder') : '充电提醒',
-                discharge: window.i18n ? window.i18n.getText('messageCenter.types.dischargeReminder') : '放电提醒',
-                alert: window.i18n ? window.i18n.getText('alertMessage') : '告警消息',
-                system: window.i18n ? window.i18n.getText('systemMessage') : '系统消息',
-                operation: window.i18n ? window.i18n.getText('operationMessage') : '操作消息',
-                warning: window.i18n ? window.i18n.getText('warning') : '预警'
+                charge: currentLang === 'en' ? 'Charge Reminder' : '充电提醒',
+                discharge: currentLang === 'en' ? 'Discharge Reminder' : '放电提醒',
+                optimal: currentLang === 'en' ? 'Optimal Charge Reminder' : '最佳充电提醒',
+                priceAlert: currentLang === 'en' ? 'Price Alert' : '价格提醒',
+                alert: currentLang === 'en' ? 'Alert Message' : '告警消息',
+                system: currentLang === 'en' ? 'System Message' : '系统消息',
+                operation: currentLang === 'en' ? 'Operation Message' : '操作消息',
+                warning: currentLang === 'en' ? 'Warning' : '预警'
             };
-            return titles[type] || (window.i18n ? window.i18n.getText('unknown') : '未知');
+            return titles[type] || (currentLang === 'en' ? 'Unknown' : '未知');
         }
 
         // Generate dynamic message content with translations
-        function getMessageContent(type, price, threshold) {
+        function getMessageContent(type, price, threshold, extraData) {
+            const currentLang = window.i18n ? window.i18n.getCurrentLanguage() : 'zh';
+            
             if (type === 'charge') {
-                const template = window.i18n ? window.i18n.getText('messageCenter.messages.chargeAlert') : '当前价格 {price} 元，低于预设阀值 {threshold} 元，请立即充电';
-                return template.replace('{price}', price).replace('{threshold}', threshold);
+                if (currentLang === 'en') {
+                    return `Current price $${price} below threshold $${threshold}, please charge`;
+                } else {
+                    return `当前价格$${price}，低于阈值$${threshold}，请充电`;
+                }
             } else if (type === 'discharge') {
-                const template = window.i18n ? window.i18n.getText('messageCenter.messages.dischargeAlert') : '当前价格 {price} 元，超过预设阀值 {threshold} 元，请立即放电';
-                return template.replace('{price}', price).replace('{threshold}', threshold);
+                if (currentLang === 'en') {
+                    return `Current price $${price} above threshold $${threshold}, please discharge`;
+                } else {
+                    return `当前价格$${price}，高于阈值$${threshold}，请放电`;
+                }
+            } else if (type === 'optimal') {
+                const minutes = extraData?.minutes || 27;
+                if (currentLang === 'en') {
+                    return `${extraData?.region || 'NSW'} region price $${price}, ${minutes} minutes until optimal discharge timing, please prepare`;
+                } else {
+                    return `${extraData?.region || 'NSW'}地区价格$${price}，还有${minutes}分钟到达最佳放电时机，请做好准备`;
+                }
+            } else if (type === 'priceAlert') {
+                const priceType = extraData?.priceType || '高价';
+                const actionType = extraData?.actionType || '放电';
+                if (currentLang === 'en') {
+                    const priceTypeEn = priceType === '高价' ? 'High Price' : 'Low Price';
+                    const actionTypeEn = actionType === '充电' ? 'Charge' : 'Discharge';
+                    return `${priceTypeEn} ${actionTypeEn} Alert - Current price $${price} reached alert threshold`;
+                } else {
+                    return `${priceType}${actionType}提醒 - 当前价格$${price}达到预警阈值`;
+                }
             }
             return '';
         }
@@ -1539,5 +1586,6 @@
 
     <!-- 抽屉容器 -->
     <div id="drawerContainer"></div>
+    <script src="components/global-notifications.js"></script>
 </body>
 </html>

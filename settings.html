@@ -952,6 +952,9 @@
         .readonly-item .settings-item-label {
             color: rgba(255, 255, 255, 0.7) !important;
         }
+
+
+
     </style>
 </head>
 <body>
@@ -1185,6 +1188,7 @@
             <input type="hidden" id="buyHighThreshold" value="50">
         </div>
 
+
     </div>
 
     <!-- 固定底部保存按钮 -->
@@ -1201,6 +1205,7 @@
         // 全局变量
         let isEditMode = false;
         let originalSettings = {};
+        
 
         // 更新价格预测可视化
         function updatePricePredictVisual() {
@@ -1674,6 +1679,8 @@
             updateBuyVisual();
             // 初始化滑块
             initSliders();
+            // 加载时间条件
+            loadTimePeriods();
         });
 
         // 切换编辑模式
@@ -1694,9 +1701,15 @@
             allInputs.forEach(input => {
                 input.disabled = false;
             });
+            
+            // 启用时间条件按钮
+            document.querySelectorAll('.add-period-btn').forEach(btn => {
+                btn.disabled = false;
+            });
 
             // 备份原始设置
             backupSettings();
+            // 备份时间条件
         }
 
         // 退出编辑模式
@@ -1716,6 +1729,13 @@
             allInputs.forEach(input => {
                 input.disabled = true;
             });
+            
+            // 禁用时间条件按钮
+            document.querySelectorAll('.add-period-btn').forEach(btn => {
+                btn.disabled = true;
+            });
+            
+            // 重新渲染时间条件（更新按钮状态）
         }
 
         // 备份设置
@@ -1736,6 +1756,8 @@
                     input.value = originalSettings[id];
                 }
             });
+            
+            // 恢复时间条件
             
             exitEditMode();
         }
@@ -1776,6 +1798,9 @@
             if (validateSettings(settings)) {
                 // 保存到localStorage
                 localStorage.setItem('uEnergySettings', JSON.stringify(settings));
+                
+                // 保存时间条件
+                saveTimePeriods();
                 
                 // 显示保存成功消息
                 showSuccessMessage();
@@ -1898,6 +1923,7 @@
             alert(message);
         }
 
+
         // 在 window.onload 时再次更新文本
         window.addEventListener('load', function() {
             console.log('Window loaded, updating texts again...');
@@ -1935,5 +1961,6 @@
             }
         }
     </script>
+    <script src="components/global-notifications.js"></script>
 </body>
 </html>

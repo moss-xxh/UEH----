@@ -122,38 +122,71 @@ class TimeSelector {
         // 时间标签点击事件
         document.querySelectorAll('.time-tab').forEach(tab => {
             tab.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
                 const period = e.target.dataset.period;
                 if (period) {
                     this.switchPeriod(period, e.target);
                 }
+            });
+            
+            // 添加mousedown事件防止被拖拽干扰
+            tab.addEventListener('mousedown', (e) => {
+                e.stopPropagation();
             });
         });
 
         // 自定义日期应用按钮
         const applyBtn = document.getElementById('apply-date-btn');
         if (applyBtn) {
-            applyBtn.addEventListener('click', () => this.applyCustomDateRange());
+            applyBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                this.applyCustomDateRange();
+            });
+            applyBtn.addEventListener('mousedown', (e) => {
+                e.stopPropagation();
+            });
         }
 
         // 重置按钮
         const resetBtn = document.getElementById('reset-date-btn');
         if (resetBtn) {
-            resetBtn.addEventListener('click', () => this.resetToDefault());
+            resetBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                this.resetToDefault();
+            });
+            resetBtn.addEventListener('mousedown', (e) => {
+                e.stopPropagation();
+            });
         }
 
         // 刷新按钮
         const refreshBtn = document.getElementById('refresh-data-btn');
         if (refreshBtn) {
-            refreshBtn.addEventListener('click', () => this.refreshData());
+            refreshBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                this.refreshData();
+            });
+            refreshBtn.addEventListener('mousedown', (e) => {
+                e.stopPropagation();
+            });
         }
 
         // 快速选择按钮
         document.querySelectorAll('.quick-select-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
                 const days = parseInt(e.target.dataset.days);
                 if (days) {
                     this.setQuickRange(days);
                 }
+            });
+            btn.addEventListener('mousedown', (e) => {
+                e.stopPropagation();
             });
         });
 
@@ -164,6 +197,22 @@ class TimeSelector {
         if (startInput && endInput) {
             startInput.addEventListener('change', () => this.validateDateRange());
             endInput.addEventListener('change', () => this.validateDateRange());
+            
+            // 防止拖拽干扰日期输入
+            startInput.addEventListener('mousedown', (e) => {
+                e.stopPropagation();
+            });
+            endInput.addEventListener('mousedown', (e) => {
+                e.stopPropagation();
+            });
+            
+            // 防止点击事件冒泡
+            startInput.addEventListener('click', (e) => {
+                e.stopPropagation();
+            });
+            endInput.addEventListener('click', (e) => {
+                e.stopPropagation();
+            });
         }
 
         // 页面可见性变化处理

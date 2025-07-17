@@ -55,7 +55,10 @@
       "Bash(git fetch:*)",
       "WebFetch(domain:medium.com)",
       "WebFetch(domain:aemo.com.au)",
-      "Bash(echo:*)"
+      "Bash(echo:*)",
+      "Bash(killall:*)",
+      "Bash(./add-global-notifications.sh:*)",
+      "Bash(git log:*)"
     ],
     "deny": []
   }

@@ -101,6 +101,13 @@ class HeaderNav {
                 <span style="font-size: 20px;">🔔</span>
             </div>
         `;
+        
+        // 创建设置图标
+        const settingsIcon = `
+            <div class="settings-icon" onclick="window.location.href='settings.html'" style="cursor: pointer; padding: 0 10px;">
+                <span style="font-size: 20px;">⚙️</span>
+            </div>
+        `;
         const languageSelector = this.showLanguageSelector ? '<div id="headerLanguageSelector"></div>' : '';
         const themeToggleBtn = '';
         const userAvatar = this.showUserAvatar ? '<div id="userDropdownContainer"></div>' : '';
@@ -116,6 +123,7 @@ class HeaderNav {
                 </div>
                 <div class="header-right">
                     ${messageCenter}
+                    ${settingsIcon}
                     ${languageSelector}
                     ${themeToggleBtn}
                     ${userAvatar}

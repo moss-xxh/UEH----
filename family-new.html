@@ -73,12 +73,102 @@
             padding: 20px;
         }
         
-        /* Table Wrapper */
+        /* Table Wrapper with Fixed Action Column */
         .table-wrapper {
-            overflow-x: auto;
+            position: relative;
+            overflow: hidden;
             border-radius: var(--radius);
             border: 1px solid var(--color-border);
         }
+        
+        /* Scrollable table container */
+        .table-scrollable {
+            overflow-x: auto;
+            width: 100%;
+            position: relative;
+        }
+        
+        /* Table with fixed action column */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            position: relative;
+            min-width: 1200px; /* Ensure horizontal scrolling */
+        }
+        
+        /* Fixed action column */
+        .data-table .fixed-action-column {
+            position: sticky;
+            right: 0;
+            background: rgba(0, 0, 0, 0.95) !important;
+            z-index: 10;
+            border-left: 1px solid var(--color-border);
+            min-width: 120px;
+            max-width: 120px;
+            width: 120px;
+            text-align: center;
+        }
+        
+        /* Ensure header has solid background */
+        .data-table thead .fixed-action-column {
+            background: rgba(255, 255, 255, 0.08) !important;
+            backdrop-filter: blur(10px);
+        }
+        
+        /* Ensure table rows have solid background */
+        .data-table tbody .fixed-action-column {
+            background: rgba(0, 0, 0, 0.95) !important;
+            backdrop-filter: blur(10px);
+        }
+        
+        /* Override hover effects to maintain background */
+        .data-table tr:hover .fixed-action-column {
+            background: rgba(0, 0, 0, 0.98) !important;
+        }
+        
+        /* Shadow for fixed column */
+        .data-table .fixed-action-column::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -15px;
+            width: 15px;
+            height: 100%;
+            background: linear-gradient(to right, transparent, rgba(0,0,0,0.3));
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        /* Ensure other columns have proper widths */
+        .data-table th:not(.fixed-action-column),
+        .data-table td:not(.fixed-action-column) {
+            min-width: 100px;
+            white-space: nowrap;
+        }
+        
+        /* Specific column widths for better layout */
+        .data-table th:nth-child(1),
+        .data-table td:nth-child(1) { min-width: 80px; }
+        .data-table th:nth-child(2),
+        .data-table td:nth-child(2) { min-width: 100px; }
+        .data-table th:nth-child(3),
+        .data-table td:nth-child(3) { min-width: 120px; }
+        .data-table th:nth-child(4),
+        .data-table td:nth-child(4) { min-width: 120px; }
+        .data-table th:nth-child(5),
+        .data-table td:nth-child(5) { min-width: 120px; }
+        .data-table th:nth-child(6),
+        .data-table td:nth-child(6) { min-width: 120px; }
+        .data-table th:nth-child(7),
+        .data-table td:nth-child(7) { min-width: 100px; }
+        .data-table th:nth-child(8),
+        .data-table td:nth-child(8) { min-width: 80px; }
+        .data-table th:nth-child(9),
+        .data-table td:nth-child(9) { min-width: 120px; }
+        .data-table th:nth-child(10),
+        .data-table td:nth-child(10) { min-width: 200px; }
+        .data-table th:nth-child(11),
+        .data-table td:nth-child(11) { min-width: 100px; }
 
         /* Page Header */
         .page-header {
@@ -302,8 +392,44 @@
                 flex: 1;
             }
 
-            .table-container {
-                overflow-x: scroll;
+            .table-scrollable {
+                overflow-x: auto;
+            }
+            
+            /* Adjust table for mobile */
+            .data-table {
+                min-width: 900px;
+            }
+            
+            /* Reduce column widths on mobile */
+            .data-table th:nth-child(1),
+            .data-table td:nth-child(1) { min-width: 60px; }
+            .data-table th:nth-child(2),
+            .data-table td:nth-child(2) { min-width: 80px; }
+            .data-table th:nth-child(3),
+            .data-table td:nth-child(3) { min-width: 100px; }
+            .data-table th:nth-child(4),
+            .data-table td:nth-child(4) { min-width: 100px; }
+            .data-table th:nth-child(5),
+            .data-table td:nth-child(5) { min-width: 100px; }
+            .data-table th:nth-child(6),
+            .data-table td:nth-child(6) { min-width: 100px; }
+            .data-table th:nth-child(7),
+            .data-table td:nth-child(7) { min-width: 80px; }
+            .data-table th:nth-child(8),
+            .data-table td:nth-child(8) { min-width: 60px; }
+            .data-table th:nth-child(9),
+            .data-table td:nth-child(9) { min-width: 100px; }
+            .data-table th:nth-child(10),
+            .data-table td:nth-child(10) { min-width: 150px; }
+            .data-table th:nth-child(11),
+            .data-table td:nth-child(11) { min-width: 80px; }
+            
+            /* Fixed action column on mobile */
+            .data-table .fixed-action-column {
+                min-width: 100px;
+                max-width: 100px;
+                width: 100px;
             }
         }
 
@@ -340,10 +466,7 @@
         
         
 
-        .data-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
+        /* Remove duplicate data-table definition */
 
         .data-table td {
             padding: 16px;
@@ -649,6 +772,7 @@
             overflow-y: auto;
             flex: 1;
             background: var(--color-bg-card);
+            padding-bottom: 80px; /* Add space for fixed actions */
         }
 
         /* Drawer Info Grid */
@@ -680,6 +804,65 @@
             font-weight: 600;
             color: var(--color-text);
             line-height: 1.2;
+        }
+
+        /* Fixed Action Buttons at Bottom of Drawer */
+        .drawer-actions {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--color-bg-card);
+            border-top: 1px solid var(--color-border);
+            padding: 16px 24px;
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+            backdrop-filter: blur(10px);
+            z-index: 10;
+        }
+
+        .drawer-action-btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: 1px solid var(--color-border);
+            background: var(--color-bg-secondary);
+            color: var(--color-text);
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            min-width: 80px;
+        }
+
+        .drawer-action-btn:hover {
+            background: var(--color-bg-hover);
+            border-color: var(--color-primary);
+            transform: translateY(-1px);
+        }
+
+        .drawer-action-btn.primary {
+            background: var(--color-primary);
+            border-color: var(--color-primary);
+            color: #fff;
+        }
+
+        .drawer-action-btn.primary:hover {
+            background: #00e67a;
+            border-color: #00e67a;
+            box-shadow: 0 4px 12px rgba(0, 255, 136, 0.3);
+        }
+
+        .drawer-action-btn.danger {
+            background: #ff4757;
+            border-color: #ff4757;
+            color: #fff;
+        }
+
+        .drawer-action-btn.danger:hover {
+            background: #ff3742;
+            border-color: #ff3742;
+            box-shadow: 0 4px 12px rgba(255, 71, 87, 0.3);
         }
 
         /* Revenue Cards */
@@ -874,6 +1057,8 @@
                     
                     <input type="text" class="search-input" id="searchInput" data-i18n-placeholder="family.placeholder.userName" placeholder="请输入用户名称..." onkeyup="handleSearch(this.value)">
                     
+                    <input type="text" class="search-input" id="meterInput" data-i18n-placeholder="family.placeholder.meterNumber" placeholder="请输入电表编号..." onkeyup="handleMeterSearch(this.value)">
+                    
                     <select class="filter-select" id="activityFilter" onchange="handleActivityFilter(this.value)">
                         <option value="" data-i18n-key="family.placeholder.allActivity">所有活跃度</option>
                         <option value="active" data-i18n-key="family.activityStatus.active">活跃</option>
@@ -922,7 +1107,8 @@
                 
                 <!-- Table -->
                 <div class="table-wrapper">
-                    <table class="data-table">
+                    <div class="table-scrollable">
+                        <table class="data-table">
                         <thead>
                             <tr>
                                 <th data-i18n-key="family.table.user">用户</th>
@@ -951,6 +1137,7 @@
                                         <button class="sort-btn sort-desc" onclick="sortTable('soc', 'desc', this)" title="降序">▼</button>
                                     </span>
                                 </th>
+                                <th data-i18n-key="family.table.meterNumber">表号</th>
                                 <th data-i18n-key="family.table.location">地址</th>
                                 <th>
                                     <span data-i18n-key="family.table.usageDays">使用天数 (天)</span>
@@ -959,13 +1146,14 @@
                                         <button class="sort-btn sort-desc" onclick="sortTable('usageDays', 'desc', this)" title="降序">▼</button>
                                     </span>
                                 </th>
-                                <th data-i18n-key="family.table.action">操作</th>
+                                <th data-i18n-key="family.table.action" class="fixed-action-column">操作</th>
                             </tr>
                         </thead>
                         <tbody id="familyTableBody">
                             <!-- Table data will be dynamically generated -->
                         </tbody>
-                    </table>
+                        </table>
+                    </div>
                 </div>
             </div>
 
@@ -990,6 +1178,13 @@
             
             <div class="drawer-content" id="drawerContent">
                 <!-- Drawer content will be dynamically populated -->
+            </div>
+            
+            <!-- Fixed Action Buttons -->
+            <div class="drawer-actions">
+                <button class="drawer-action-btn" onclick="closeFamilyDrawer()" data-i18n-key="family.drawer.actions.cancel">取消</button>
+                <button class="drawer-action-btn primary" onclick="saveFamilyChanges()" data-i18n-key="family.drawer.actions.save">保存</button>
+                <button class="drawer-action-btn danger" onclick="deleteFamilyRecord()" data-i18n-key="family.drawer.actions.delete">删除</button>
             </div>
         </div>
     </div>
@@ -1027,6 +1222,7 @@
                     id: i + 1,
                     name: names[i % names.length],
                     nameKey: `family.userName${(i % 10) + 1}`,
+                    meterNumber: `M${String(i + 1).padStart(6, '0')}`,
                     location: deviceStatus === 'offline' ? 'NSW' : locations[i % locations.length],
                     status: status,
                     soc: isActive ? Math.floor(Math.random() * 40 + 60) : Math.floor(Math.random() * 50),
@@ -1087,14 +1283,35 @@
                 }
             };
             
+            // Function to update all i18n elements
+            const updateI18nElements = () => {
+                // Update all elements with data-i18n-key
+                document.querySelectorAll('[data-i18n-key]').forEach(element => {
+                    const key = element.getAttribute('data-i18n-key');
+                    if (key && window.i18n) {
+                        element.textContent = window.i18n.getText(key);
+                    }
+                });
+                
+                // Update all elements with data-i18n-placeholder
+                document.querySelectorAll('[data-i18n-placeholder]').forEach(element => {
+                    const key = element.getAttribute('data-i18n-placeholder');
+                    if (key && window.i18n) {
+                        element.placeholder = window.i18n.getText(key);
+                    }
+                });
+            };
+            
             // Listen for language changes
             window.i18n.addObserver(() => {
                 updateTitle();
+                updateI18nElements();
                 // Reload data to update dynamic content
                 loadFamilyCards(1);
             });
             
             updateTitle();
+            updateI18nElements();
             
             // Initialize header navigation
             if (typeof HeaderNav !== 'undefined') {
@@ -1228,9 +1445,10 @@
                     </span>
                 </td>
                 <td>${family.soc}%</td>
+                <td>${family.meterNumber}</td>
                 <td>${family.location}</td>
                 <td>${family.usageDays}</td>
-                <td>
+                <td class="fixed-action-column">
                     <div class="action-buttons">
                         <button class="action-btn edit" onclick="viewFamilyDetails(${family.id})">
                             ${window.i18n ? window.i18n.getText('family.buttons.viewDetails') : '查看详情'}
@@ -1262,6 +1480,14 @@
                 filteredData = filteredData.filter(family => 
                     family.name.toLowerCase().includes(searchValue) ||
                     family.deviceCode.toLowerCase().includes(searchValue)
+                );
+            }
+            
+            // Apply meter number filter
+            const meterValue = document.getElementById('meterInput').value.toLowerCase();
+            if (meterValue) {
+                filteredData = filteredData.filter(family => 
+                    family.meterNumber.toLowerCase().includes(meterValue)
                 );
             }
             
@@ -1334,6 +1560,13 @@
                     filteredData = filteredData.filter(family => 
                         family.name.toLowerCase().includes(searchValue) ||
                         family.deviceCode.toLowerCase().includes(searchValue)
+                    );
+                }
+                
+                const meterValue = document.getElementById('meterInput').value.toLowerCase();
+                if (meterValue) {
+                    filteredData = filteredData.filter(family => 
+                        family.meterNumber.toLowerCase().includes(meterValue)
                     );
                 }
                 
@@ -1412,6 +1645,49 @@
             document.getElementById('familyDrawer').classList.remove('show');
         }
 
+        // Save family changes
+        function saveFamilyChanges() {
+            // Get the current family ID from the drawer
+            const drawerId = document.querySelector('.drawer-container').getAttribute('data-family-id');
+            
+            // Add save logic here
+            console.log('Saving changes for family ID:', drawerId);
+            
+            // Show success message
+            alert(window.i18n ? window.i18n.getText('family.drawer.messages.saveSuccess') : '保存成功');
+            
+            // Close drawer after successful save
+            closeFamilyDrawer();
+        }
+
+        // Delete family record
+        function deleteFamilyRecord() {
+            // Get the current family ID from the drawer
+            const drawerId = document.querySelector('.drawer-container').getAttribute('data-family-id');
+            
+            // Confirm deletion
+            const confirmMessage = window.i18n ? window.i18n.getText('family.drawer.messages.deleteConfirm') : '确定要删除这条记录吗？';
+            if (confirm(confirmMessage)) {
+                // Add delete logic here
+                console.log('Deleting family ID:', drawerId);
+                
+                // Remove from familyData array
+                const index = familyData.findIndex(f => f.id == drawerId);
+                if (index > -1) {
+                    familyData.splice(index, 1);
+                    // Refresh the table
+                    displayFamilyData();
+                }
+                
+                // Show success message
+                const successMessage = window.i18n ? window.i18n.getText('family.drawer.messages.deleteSuccess') : '删除成功';
+                alert(successMessage);
+                
+                // Close drawer after successful deletion
+                closeFamilyDrawer();
+            }
+        }
+
         // Switch drawer tab
         function switchDrawerTab(tab, element) {
             document.querySelectorAll('.drawer-tab').forEach(t => t.classList.remove('active'));
@@ -1461,10 +1737,18 @@
                                 <div class="drawer-info-value">${window.i18n ? window.i18n.getText(family.nameKey) : family.name}</div>
                             </div>
                             <div class="drawer-info-item full-width">
-                                <div class="drawer-info-label">${window.i18n ? window.i18n.getText('family.drawer.address') : '地址'}</div>
-                                <div class="drawer-info-value" style="font-size: 16px; font-weight: 500;">
-                                    ${family.location}
-                                    <span style="margin-left: 12px; color: var(--color-primary); cursor: pointer; font-size: 16px;">📍</span>
+                                <div style="display: flex; flex-direction: column; gap: 8px;">
+                                    <div style="display: flex; align-items: center; gap: 24px; color: var(--color-text-secondary); font-size: 13px;">
+                                        <span>${window.i18n ? window.i18n.getText('family.drawer.meterNumber') : '电表'}</span>
+                                        <span>${window.i18n ? window.i18n.getText('family.drawer.address') : '地址'}</span>
+                                    </div>
+                                    <div style="display: flex; align-items: center; gap: 24px;">
+                                        <div class="drawer-info-value">${family.meterNumber}</div>
+                                        <div class="drawer-info-value" style="font-size: 16px; font-weight: 500; flex: 1;">
+                                            ${family.location}
+                                            <span style="margin-left: 12px; color: var(--color-primary); cursor: pointer; font-size: 16px;">📍</span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -1562,6 +1846,10 @@
         function handleDeviceCodeSearch(value) {
             console.log('Device code search:', value);
         }
+        
+        function handleMeterSearch(value) {
+            console.log('Meter search:', value);
+        }
 
         function handleDeviceStatusFilter(value) {
             console.log('Device status filter:', value);
@@ -1592,6 +1880,7 @@
         function resetFilters() {
             document.getElementById('regionFilter').value = '';
             document.getElementById('searchInput').value = '';
+            document.getElementById('meterInput').value = '';
             document.getElementById('activityFilter').value = '';
             document.getElementById('deviceCodeInput').value = '';
             document.getElementById('deviceStatusFilter').value = '';
@@ -1839,5 +2128,6 @@
             initProfitChart();
         }
     </script>
+    <script src="components/global-notifications.js"></script>
 </body>
 </html>
