@@ -10,7 +10,7 @@
                 <div class="push-notification-header">
                     <div class="push-notification-title">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M13 10V3L4 14h7v7l9-11h-7z" fill="#52c41a" stroke="#52c41a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M13 10V3L4 14h7v7l9-11h-7z" fill="#00ff88" stroke="#00ff88" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                         </svg>
                         <span data-i18n="chargeReminder">充电提醒</span><span>——</span><span class="notification-region">NSW</span>
                     </div>
@@ -174,7 +174,7 @@
             }
 
             #chargeNotification .highlight-number {
-                color: #52c41a;
+                color: #00ff88;
             }
 
             #dischargeNotification .highlight-number {
